@@ -1,0 +1,644 @@
+{
+  "sample": "eval/heldout-b seed 20261022 n=40",
+  "code": "commit after e54e96e + import-name/local-version fix",
+  "criteria": "see docs/ACCURACY.md",
+  "items": [
+    {
+      "n": 1,
+      "id": "mwaskom/seaborn#3834",
+      "package": "seaborn@0.13.2",
+      "title": "`scatterplot` assigns incorrect dot size when `size` has only two unique values (0 and another number)",
+      "armedSymbols": [
+        "scatterplot",
+        "sns.scatterplot"
+      ],
+      "evidence": "seaborn: 0.13.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "yes",
+      "note": ""
+    },
+    {
+      "n": 2,
+      "id": "networkx/networkx#7951",
+      "package": "networkx@3.4.2",
+      "title": "multiple self loop edges overlapped",
+      "armedSymbols": [
+        "edges"
+      ],
+      "evidence": "NetworkX version: 3.4.2",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "no",
+      "note": "edges is too broad; quoted text explains the bug, no workaround"
+    },
+    {
+      "n": 3,
+      "id": "mwaskom/seaborn#3860",
+      "package": "seaborn@0.13.2",
+      "title": "sns.histplot() and sns.displot() take very long time or don't finish at all.",
+      "armedSymbols": [
+        "displot",
+        "histplot",
+        "sns.displot",
+        "sns.histplot"
+      ],
+      "evidence": "seaborn '0.13.2'",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 4,
+      "id": "rollup/rollup#5693",
+      "package": "rollup@4.24.0",
+      "title": "RollupError: A polyfill is required for one or more node builtins",
+      "armedSymbols": [
+        "RollupError"
+      ],
+      "evidence": "Rollup Version v4.24.0",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "RollupError is an error class"
+    },
+    {
+      "n": 5,
+      "id": "knex/knex#6032",
+      "package": "knex@3.1.0",
+      "title": "Stream postProcessResponse error is not catchable with .on('error')",
+      "armedSymbols": [
+        "postProcessResponse",
+        "stream",
+        "process",
+        "process.on"
+      ],
+      "evidence": "Knex version: 3.1.0",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 6,
+      "id": "scikit-learn/scikit-learn#30310",
+      "package": "scikit-learn@1.5.2",
+      "title": "Error with set_output(transform='pandas') in ColumnTransformer when using OneHotEncoder with sparse output in intermediate steps",
+      "armedSymbols": [
+        "ColumnTransformer",
+        "OneHotEncoder"
+      ],
+      "evidence": "sklearn: 1.5.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 7,
+      "id": "plotly/plotly.py#4825",
+      "package": "plotly@5.24.1",
+      "title": "`choropleth_map` missing the `locationmode` parameter in its signature",
+      "armedSymbols": [
+        "choropleth_map",
+        "locationmode",
+        "locations"
+      ],
+      "evidence": "I'm using plotly v5.24.1",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 8,
+      "id": "pytorch/pytorch#132029",
+      "package": "torch@2.5.0",
+      "title": "torch.QUInt4x2Storage: RuntimeError cuda_dispatch_ptr INTERNAL ASSERT FAILED on torch 2.5.0.dev20240708+cu121",
+      "armedSymbols": [
+        "cuda_dispatch_ptr",
+        "dev20240708",
+        "QUInt4x2Storage",
+        "RuntimeError"
+      ],
+      "evidence": "torch.QUInt4x2Storage: RuntimeError cuda_dispatch_ptr INTERNAL ASSERT FAILED on torch 2.5.0.dev20240708+cu121",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "version is a 2.5.0.dev nightly"
+    },
+    {
+      "n": 9,
+      "id": "redis/redis-py#3454",
+      "package": "redis@5.2.0",
+      "title": "socket_timeout parameter on async connections actually apply to multiple socket read operations",
+      "armedSymbols": [
+        "socket_timeout",
+        "_parser",
+        "_parser.read_response",
+        "_stream"
+      ],
+      "evidence": "I'm having the same issue with `redis@5.2.0`, macos, python:3.10:",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 10,
+      "id": "scikit-learn/scikit-learn#30332",
+      "package": "scikit-learn@1.5.2",
+      "title": "NuSVC argument `class_weight` is not used",
+      "armedSymbols": [
+        "class_weight",
+        "dual_coef_",
+        "NuSVC",
+        "NuSVM"
+      ],
+      "evidence": "sklearn: 1.5.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 11,
+      "id": "pytorch/pytorch#132041",
+      "package": "torch@2.5.0",
+      "title": "`torch.nn.functional.max_unpool2d`'s behavior is different on cpu and gpu on torch 2.5.0.dev20240708+cu121",
+      "armedSymbols": [
+        "dev20240708",
+        "functional",
+        "functional.max_unpool2d",
+        "max_unpool2d"
+      ],
+      "evidence": "`torch.nn.functional.max_unpool2d`'s behavior is different on cpu and gpu on torch 2.5.0.dev20240708+cu121",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "version is a 2.5.0.dev nightly; top symbol is the dev tag"
+    },
+    {
+      "n": 12,
+      "id": "mwaskom/seaborn#3875",
+      "package": "seaborn@0.13.2",
+      "title": "Conflict between norm and log_scale in 2d histplot",
+      "armedSymbols": [
+        "histplot",
+        "log_scale"
+      ],
+      "evidence": "Using Seaborn 0.13.2, I am trying to create a seaborn 2d histplot with a log colorscale as well as a log scale on the y ",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 13,
+      "id": "mwaskom/seaborn#3973",
+      "package": "seaborn@0.13.2",
+      "title": "lmplot with refline produces unexpected markers on both ends of the lines",
+      "armedSymbols": [
+        "lmplot",
+        "refline",
+        "FacetGrid",
+        "FacetGrid.refline"
+      ],
+      "evidence": "The following simple example which calls `lmplot` and then calls `FacetGrid.refline` produces some unexpected gray marke",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 14,
+      "id": "scipy/scipy#21134",
+      "package": "scipy@1.14.1",
+      "title": "MAINT: spatial.distance: consistent handling of non-0/1 input for Boolean metrics",
+      "armedSymbols": [
+        "distance",
+        "spatial",
+        "spatial.distance",
+        "crisp"
+      ],
+      "evidence": "The following table summarizes the treatment of non-0/1 numeric inputs by the Boolean metrics as of SciPy 1.14.1. The co",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 15,
+      "id": "python-pillow/Pillow#7935",
+      "package": "pillow@11.0.0",
+      "title": "Memory of copied PIL Images is not released",
+      "armedSymbols": [
+        "containers",
+        "containers.pop",
+        "image",
+        "image.close"
+      ],
+      "evidence": "I tested with Python 3.11 and Python 3.12 on Ubuntu 20.04 (WSL) and Pillow 11.0.0 from pypi (same behavior when I compil",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "yes",
+      "note": "symbols are user variables"
+    },
+    {
+      "n": 16,
+      "id": "jestjs/jest#11868",
+      "package": "jest@29.7.0",
+      "title": "[Bug]: HTML Coverage does not understand template strings",
+      "armedSymbols": [
+        "coverage",
+        "internal"
+      ],
+      "evidence": "still a issue with jest 29.7.0.",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are config words"
+    },
+    {
+      "n": 17,
+      "id": "mwaskom/seaborn#3892",
+      "package": "seaborn@0.13.2",
+      "title": "seaborn@0.13.1: 3 tests fail with NumPy 2.3.1",
+      "armedSymbols": [
+        "NumPy"
+      ],
+      "evidence": "Those are from the current development branch. The reporter talks about 0.13.1. But this is still an issue in the most r",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "NumPy is not a seaborn API"
+    },
+    {
+      "n": 18,
+      "id": "evanw/esbuild#3934",
+      "package": "esbuild@0.24.0",
+      "title": "Could not resolve file without extension from node_modules when using ts and tsx loader for js files",
+      "armedSymbols": [
+        "node_modules",
+        "stable"
+      ],
+      "evidence": "\"esbuild\": \"^0.24.0\"",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are paths"
+    },
+    {
+      "n": 19,
+      "id": "plotly/plotly.py#4801",
+      "package": "plotly@5.24.1",
+      "title": "Hover data not showing correctly for px.scatter inside go.FigureWidget",
+      "armedSymbols": [
+        "FigureWidget",
+        "go.FigureWidget",
+        "px.scatter",
+        "scatter"
+      ],
+      "evidence": "plotly: 5.24.1",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 20,
+      "id": "pytorch/pytorch#152028",
+      "package": "torch@2.5.0",
+      "title": "[CUDA] MultiheadAttention with masks and dropout produces NaNs",
+      "armedSymbols": [
+        "MultiheadAttention",
+        "NaNs"
+      ],
+      "evidence": "torch==2.5.0",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "no",
+      "note": ""
+    },
+    {
+      "n": 21,
+      "id": "pytorch/pytorch#135011",
+      "package": "torch@2.5.0",
+      "title": "dynamo (re)compilation issues: shape (1,1), nn.Parameter, mark_dynamic",
+      "armedSymbols": [
+        "_dynamo",
+        "_dynamo.mark_dynamic",
+        "mark_dynamic",
+        "nn.Parameter"
+      ],
+      "evidence": "PyTorch version: 2.5.0.dev20240902+cu118",
+      "version": "no",
+      "symbol": "yes",
+      "workaround": "yes",
+      "note": "version is a 2.5.0.dev nightly"
+    },
+    {
+      "n": 22,
+      "id": "pytorch/pytorch#133795",
+      "package": "torch@2.5.0",
+      "title": "RuntimeError: createStatus == pytorch_qnnp_status_success INTERNAL ASSERT FAILED at \"../aten/src/ATen/native/quantized/cpu/BinaryOps.cpp\":204, please report a bug to PyTorch. failed to create QNNPACK Add operator",
+      "armedSymbols": [
+        "BinaryOps",
+        "BinaryOps.cpp",
+        "createStatus",
+        "jit.trace"
+      ],
+      "evidence": "PyTorch version: 2.5.0.dev20240815+cu121",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "version is a 2.5.0.dev nightly"
+    },
+    {
+      "n": 23,
+      "id": "yaml/pyyaml#845",
+      "package": "pyyaml@6.0.2",
+      "title": "Update setup.py for Pyyaml v6.0.2",
+      "armedSymbols": [
+        "legacy_tests",
+        "sys.path"
+      ],
+      "evidence": "In version 6.0.2, the 'run' function for class 'test' in the setup.py file contains the line `sys.path.insert(0, 'tests/",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "packaging issue; symbols are paths"
+    },
+    {
+      "n": 24,
+      "id": "pytorch/pytorch#131312",
+      "package": "torch@2.5.0",
+      "title": "Pytorch Error: ImportError: /home/dp/anaconda3/envs/ComfyUI/lib/python3.11/site-packages/torch/lib/../../nvidia/cusparse/lib/libcusparse.so.12: undefined symbol: __nvJitLinkComplete_12_4, version libnvJitLink.so.12",
+      "armedSymbols": [
+        "__nvJitLinkComplete_12_4",
+        "ComfyUI",
+        "ImportError",
+        "libcusparse"
+      ],
+      "evidence": "torch 2.5.0.dev20240720+cu124",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "version is a 2.5.0.dev nightly"
+    },
+    {
+      "n": 25,
+      "id": "pytorch/pytorch#140909",
+      "package": "torch@2.5.0",
+      "title": "[2.5.0+] Running a compiled model under FlopCounterMode regresses its performance",
+      "armedSymbols": [
+        "FlopCounterMode",
+        "ms_per_iter"
+      ],
+      "evidence": "I noticed this problem when I upgraded from torch 2.4.x to 2.5.0.",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 26,
+      "id": "pytorch/pytorch#190626",
+      "package": "torch@2.5.0",
+      "title": "[FSDP2] MixedPrecisionPolicy reduce_dtype is not applied to the TP-mesh Partial -> Replicate gradient all-reduce",
+      "armedSymbols": [
+        "bfloat16",
+        "distributed",
+        "float32",
+        "fsdp"
+      ],
+      "evidence": "- torch v2.5.0 (`_composable/fsdp/_fsdp_param.py:674-682`) carries the same unguarded `Partial -> Replicate` redistribut",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "bfloat16 would fire on common dtype usage"
+    },
+    {
+      "n": 27,
+      "id": "pytorch/pytorch#130359",
+      "package": "torch@2.5.0",
+      "title": "FP8 Rowwise Scaling does not work on L4 GPU",
+      "armedSymbols": [
+        "_scaled_mm"
+      ],
+      "evidence": "PyTorch version: 2.5.0.dev20240709+cu121",
+      "version": "no",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": "version is a 2.5.0.dev nightly"
+    },
+    {
+      "n": 28,
+      "id": "knex/knex#6161",
+      "package": "knex@3.1.0",
+      "title": "better-sqlite doesn't handle array value in an object",
+      "armedSymbols": [
+        "sqlite3",
+        "whereIn"
+      ],
+      "evidence": "Knex version: 3.1.0",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "no",
+      "note": "top symbol is a dialect word; quoted text explains the bug"
+    },
+    {
+      "n": 29,
+      "id": "plotly/plotly.py#2395",
+      "package": "plotly@5.24.1",
+      "title": "tickvals and ticktext don't work with subcategory axes",
+      "armedSymbols": [
+        "ticktext",
+        "tickvals"
+      ],
+      "evidence": "I have been struggling with the same issue while plotting grouped bar chart over longer horizon. I am using plotly versi",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 30,
+      "id": "mwaskom/seaborn#3891",
+      "package": "seaborn@0.13.2",
+      "title": "FutureWarning from `observed` parameter of pandas' `groupby` used in relplot",
+      "armedSymbols": [
+        "FutureWarning",
+        "groupby",
+        "observed",
+        "relplot"
+      ],
+      "evidence": "- seaborn: 0.13.2",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "top symbol is FutureWarning"
+    },
+    {
+      "n": 31,
+      "id": "pytorch/pytorch#141836",
+      "package": "torch@2.5.0",
+      "title": "StrideAPI caused regression in channels-last logic",
+      "armedSymbols": [
+        "StrideAPI"
+      ],
+      "evidence": "Versions 2.5.0, 2.5.1, nightly",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "internal name"
+    },
+    {
+      "n": 32,
+      "id": "plotly/plotly.py#4846",
+      "package": "plotly@5.24.1",
+      "title": "`plotly.express.imshow` blurry when exported to pdf",
+      "armedSymbols": [
+        "express",
+        "express.imshow",
+        "imshow",
+        "plotly.express"
+      ],
+      "evidence": "I am using `plotly` version `5.24.1` and `kaleido` version `0.2.1`.",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "plotly.express would fire on any px usage"
+    },
+    {
+      "n": 33,
+      "id": "mwaskom/seaborn#4014",
+      "package": "seaborn@0.13.2",
+      "title": "so.Stack move distorts bar heights and causes the first bar to disappear when baseline is non-zero`",
+      "armedSymbols": [
+        "_stack",
+        "baseline",
+        "so.Bar",
+        "so.Stack"
+      ],
+      "evidence": "- **Seaborn Version:** `0.13.2` / `0.14.0.dev0` (current `main` commit `c1cb287`)",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 34,
+      "id": "pytorch/pytorch#140687",
+      "package": "torch@2.5.0",
+      "title": "“Can't swap an already initialized allocator” when calling torch.cuda.memory.change_current_allocator",
+      "armedSymbols": [
+        "change_current_allocator",
+        "cuda",
+        "cuda.memory",
+        "memory"
+      ],
+      "evidence": "PyTorch version: 2.5.0+cu121",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": "cuda/memory are broad namespaces"
+    },
+    {
+      "n": 35,
+      "id": "yaml/pyyaml#601",
+      "package": "pyyaml@6.0.2",
+      "title": "\"AttributeError: cython_sources\" with Cython 3.0.0a10",
+      "armedSymbols": [
+        "AttributeError",
+        "cython_sources"
+      ],
+      "evidence": "Query: is this issue now moot with 6.0.2? The 6.0.2 release notes say:",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "yes",
+      "note": "comment asks whether 6.0.2 fixed it"
+    },
+    {
+      "n": 36,
+      "id": "knex/knex#6282",
+      "package": "knex@3.1.0",
+      "title": "Regression in 3.1.0: isConnectionError does not treat NJS-500 / NJS-521 as connection errors (npm published from older commit)",
+      "armedSymbols": [
+        "isConnectionError",
+        "dialects",
+        "gitHead",
+        "master"
+      ],
+      "evidence": "1. `npm view knex@3.1.0 gitHead` — shows `4ca3dd5b...` (the published gitHead)",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 37,
+      "id": "pytorch/pytorch#141822",
+      "package": "torch@2.5.0",
+      "title": "F.cross_entropy unexpectedly slower than F.log_softmax + torch.gather",
+      "armedSymbols": [
+        "cross_entropy",
+        "F.cross_entropy",
+        "F.log_softmax",
+        "gather"
+      ],
+      "evidence": "I thought it might be due to the `reduction='none'`, but commenting it out doesn’t lead to any noticeable speedup. I'm o",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 38,
+      "id": "scikit-learn/scikit-learn#30935",
+      "package": "scikit-learn@1.5.2",
+      "title": "The default token pattern in CountVectorizer breaks Indic sentences into non-sensical tokens",
+      "armedSymbols": [
+        "CountVectorizer",
+        "token_pattern"
+      ],
+      "evidence": "sklearn: 1.5.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 39,
+      "id": "scikit-learn/scikit-learn#32614",
+      "package": "scikit-learn@1.5.2",
+      "title": "StackingRegressor is incompatible with TimeSeriesSplit as cv parameter, raising \"ValueError: cross_val_predict only works for partitions\"",
+      "armedSymbols": [
+        "cross_val_predict",
+        "StackingRegressor",
+        "TimeSeriesSplit",
+        "ValueError"
+      ],
+      "evidence": "scikit-learn version: 1.5.2 (also affects 1.4.x)",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "no",
+      "note": "quoted workaround is described as leaky, not recommended"
+    },
+    {
+      "n": 40,
+      "id": "mwaskom/seaborn#3922",
+      "package": "seaborn@0.13.2",
+      "title": "Violinplot shows groups swapped contrary to boxplot",
+      "armedSymbols": [
+        "boxplot"
+      ],
+      "evidence": "I am using pandas 3.0.0 and seaborn 0.13.2.",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "no",
+      "note": "boxplot is the working comparison, violinplot is the bug"
+    }
+  ]
+}

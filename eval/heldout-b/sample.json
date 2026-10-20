@@ -1,0 +1,978 @@
+{
+  "root": "eval/heldout-b",
+  "armedTotal": 158,
+  "sampled": 40,
+  "seed": 20261022,
+  "items": [
+    {
+      "n": 1,
+      "id": "mwaskom/seaborn#3834",
+      "package": "seaborn@0.13.2",
+      "title": "`scatterplot` assigns incorrect dot size when `size` has only two unique values (0 and another number)",
+      "url": "https://github.com/mwaskom/seaborn/issues/3834",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "seaborn: 0.13.2"
+      },
+      "armedSymbols": [
+        "scatterplot",
+        "sns.scatterplot"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "136s",
+        "excerpt": "- A workaround is to include additional unique values in `size`, but this should not be necessary.\n\nWould appreciate any insights on whether this is an intended behavior or a bug in `size` scaling. Thanks!"
+      },
+      "body": "#### **Description**\n\nWhen using `sns.scatterplot` with the `size` parameter, if the unique values in `size` are **only 0 and one other number**, the size assigned to 0 is unexpectedly large. This issue does not occur when the `size` list includes more than two unique nonzero values.\n\n#### **Steps to reproduce**\n\n```python\nimport sys\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport seaborn as sns\n\nprint(f\"Python: {sys.version}\")\nprint(f\"matplotlib: {plt.matplotlib.__version__}\")\nprint(f\"pandas: {pd.__version__}\")\nprint(f\"seaborn: {sns.__version__}\")\n\n\ndef plot_dot(val: list):\n    _, ax = plt.subplots(figsize=(2, 2))\n    data = pd.DataFrame({\"X\": [\"x1\", \"x2\", \"x1\", \"x2\"], \"Y\": [\"y1\", \"y1\", \"y2\", \"y2\"], \"size\": val})\n    g = sns.scatterplot(data=data, x=\"X\", y=\"Y\", size=\"size\", ax=ax)\n    g.legend(loc=\"upper left\", bbox_to_anchor=(1.05, 1.0))\n    g.title.set_text(f\"size={val}\")\n\n\nplot_dot([0, 0, 1, 1])  # 0 appears abnormally large\nplot_dot([None, 0, 1, 1])  # 0 appears abnormally large\nplot_dot([0, 0, 1, 2])  # 0 appears correctly\nplot_dot([1, 1, 2, 2])  # non zero values appears correctly\n```\n\n#### **Observed behavior**\n\n```sh\nPython: 3.13.2 | packaged by conda-forge | (m"
+    },
+    {
+      "n": 2,
+      "id": "networkx/networkx#7951",
+      "package": "networkx@3.4.2",
+      "title": "multiple self loop edges overlapped",
+      "url": "https://github.com/networkx/networkx/issues/7951",
+      "labels": [
+        "Visualization"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "NetworkX version: 3.4.2"
+      },
+      "armedSymbols": [
+        "edges"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "dschult",
+        "excerpt": "That one looks like a historical bug to me -- but I can explain what's going on. The historical bug is that for multigraphs we have switched between adding each node-pairs edges separately, to adding all the edges and indicating which multiedge by indexing the list of all edges.\n\nThe bug is that when processing connectionstyle, we index into the list of connectionstyles using the edge_key where the 3-tuple edge is (u, v, edge_key).  But we should be indexing based on where that edge is in the li"
+      },
+      "body": "\n\n\n\nI want to use different colors to separate multiple self-loop edges attached to a single node. I tried calling draw_network_edges with connectionstyle='arc3, rad=xxx' respectively for each edge. But they overlap even with different rad values.\n\nIs this a bug? \n\n\n\n### Expected Behavior\n\n\n\n```python\nimport itertools as it\nimport numpy as np\nimport networkx as nx\nimport matplotlib.pyplot as plt\n\nrad_values = {\n    0: 0.1,\n    1: 0.2,\n    2: 0.3,\n    3: 0.4\n}\n\nedge_colors = {\n    0: \"green\",\n    1: \"red\",\n    2: \"purple\",\n    3: \"blue\"\n}\n\ndef draw_labeled_multigraph_non_overlap(G, attr_name, ax=None):\n    pos = nx.shell_layout(G)\n    nx.draw_networkx_nodes(G, pos, ax=ax, node_size=1000, node_color='lightblue')\n    nx.draw_networkx_labels(G, pos, font_size=18, ax=ax)\n\n    #connectionstyle = [f\"arc3,rad={r}\" for r in it.accumulate([0.15] * 4)]\n    nx.draw_networkx_edges(G, pos, edge_color=\"grey\", width=3)\n\ndef draw_labeled_multigraph_overlap(G, attr_name, ax=None):\n    pos = nx.shell_layout(G)\n    nx.draw_networkx_nodes(G, pos, ax=ax, node_size=1000, node_color='lightblue')\n    nx.draw_networkx_labels(G, pos, font_size=18, ax=ax)\n\n    for u, v, k, d in G.edges(keys=True, data=True):\n"
+    },
+    {
+      "n": 3,
+      "id": "mwaskom/seaborn#3860",
+      "package": "seaborn@0.13.2",
+      "title": "sns.histplot() and sns.displot() take very long time or don't finish at all.",
+      "url": "https://github.com/mwaskom/seaborn/issues/3860",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "seaborn '0.13.2'"
+      },
+      "armedSymbols": [
+        "displot",
+        "histplot",
+        "sns.displot",
+        "sns.histplot"
+      ],
+      "workaround": null,
+      "body": "<img width=\"803\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/97042029-dd39-4e98-85bd-39f7acf4fb3a\" />\n\nThis is a dataframe with only 1000 rows. matplotlib plots the histogram very fast, but seaborn for some reason cannot handle it. Can someone reproduce this? I cannot even stop the cell in my JupyterLab, I have to restart the kernel.\n\nseaborn '0.13.2'\n\nThe Error column has dtype: float64\n"
+    },
+    {
+      "n": 4,
+      "id": "rollup/rollup#5693",
+      "package": "rollup@4.24.0",
+      "title": "RollupError: A polyfill is required for one or more node builtins",
+      "url": "https://github.com/rollup/rollup/issues/5693",
+      "labels": [
+        "t¹ 🐞 bug",
+        "t⁸ ⋅ triage"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "Rollup Version v4.24.0"
+      },
+      "armedSymbols": [
+        "RollupError"
+      ],
+      "workaround": null,
+      "body": "### Rollup Version\n\nv4.24.0\n\n### Operating System (or Browser)\n\nmac chrome\n\n### Node Version (if applicable)\n\n18.18.0\n\n### Link To Reproduction\n\n//import { readFileSync } from 'node:fs'; import { createModule } from '@vp/ubik-rollup'; import { typescriptPaths } from 'rollup-plugin-typescript-paths';  // Import typescriptPaths plugin import nodePolyfills from 'rollup-plugin-node-polyfills'; import { createRequire } from 'node:module'; const require = createRequire(import.meta.url); const pkg = require('./package.json');  // ... /* const pkg = JSON.parse( \treadFileSync(new URL('./package.json', import.meta.url)) ); */  const packageName = pkg.name; const external = [...Object.keys(pkg.peerDependencies ?? {})];  export default [     // Multiple output formats (esm, system, cjs) and types for web target     createModule({         input: './src/web/index.tsx',         packageName,         external,         platform: 'web',         tsconfig: 'tsconfig.web.json',         format: 'systemjs',         plugins: [             typescriptPaths({ tsconfig: './tsconfig.json' }),  // Resolve TS paths             nodePolyfills()  // Add polyfills for node built-ins in web environment         ]     }"
+    },
+    {
+      "n": 5,
+      "id": "knex/knex#6032",
+      "package": "knex@3.1.0",
+      "title": "Stream postProcessResponse error is not catchable with .on('error')",
+      "url": "https://github.com/knex/knex/issues/6032",
+      "labels": [
+        "NG_bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "Knex version: 3.1.0"
+      },
+      "armedSymbols": [
+        "postProcessResponse",
+        "stream",
+        "process",
+        "process.on"
+      ],
+      "workaround": null,
+      "body": "# Environment\r\n\r\nKnex version: 3.1.0\r\nDatabase + version: Microsoft SQL Server 2019 + tedious 18.1.0\r\nOS: Linux Mint 21\r\n\r\n[@smorey2](https://github.com/smorey2)\r\n\r\n# Bug\r\n\r\n## Actual behaviour and the expected one\r\n\r\nWhen using `.stream()` query and postProcessResponse, that throws an error, then it is impossible to catch the error with `.on('error'`. The expected behaviour is that `.on('error'` should also catch an error that happened in `postProcessResponse`. \r\n\r\n## Minimal code to cause the issue. \r\n\r\nSpecific data is not needed. \r\n\r\n```javascript\r\n\r\nconst DATABASE = ''; // Name of the database\r\nconst USERNAME = ''; // Username\r\nconst PASSWORD = ''; // Password\r\nconst HOST = ''; // Hostname\r\n\r\nfunction main() {\r\n    const knex = require('knex')({\r\n        client: 'mssql',\r\n        connection: {\r\n            database: DATABASE,\r\n            user: USERNAME,\r\n            password: PASSWORD,\r\n            server: HOST,\r\n        },\r\n        // A showcase what happens if postProcessResponse is a sync function which throws\r\n        postProcessResponse: (result, queryContext) => {\r\n            throw new Error('This is a test error');\r\n        }\r\n    });\r\n    // Query does not matter sin"
+    },
+    {
+      "n": 6,
+      "id": "scikit-learn/scikit-learn#30310",
+      "package": "scikit-learn@1.5.2",
+      "title": "Error with set_output(transform='pandas') in ColumnTransformer when using OneHotEncoder with sparse output in intermediate steps",
+      "url": "https://github.com/scikit-learn/scikit-learn/issues/30310",
+      "labels": [
+        "Bug",
+        "Enhancement"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "sklearn: 1.5.2"
+      },
+      "armedSymbols": [
+        "ColumnTransformer",
+        "OneHotEncoder"
+      ],
+      "workaround": null,
+      "body": "### Describe the bug\r\n\r\n**Explanation**\r\n\r\nUsing the ColumnTransformer with set_output(transform='pandas') raises an error when there is a sparse intermediate output, even if the final output is dense. The error suggests setting sparse_output=False in OneHotEncoder, even though the intermediate sparse output should not impact the final dense output after transformations like TruncatedSVD.\r\n\r\n\r\nThe transformer raises this error even though the final output is dense due to the use of TruncatedSVD, which converts the intermediate sparse output to a dense matrix. The requirement to specify sparse_output=False for OneHotEncoder should not be enforced here, as the final output does not contain sparse data.\r\n\r\n**Suggested Fix**\r\n\r\nThis check should be modified to allow cases where the final output is dense, regardless of intermediate sparse representations.\r\n\r\n\r\n\r\n\r\n### Steps/Code to Reproduce\r\n\r\n```python\r\nfrom sklearn.pipeline import make_pipeline\r\nfrom sklearn.preprocessing import OneHotEncoder, MinMaxScaler\r\nfrom sklearn.decomposition import TruncatedSVD\r\nfrom sklearn.compose import ColumnTransformer\r\nfrom sklearn.datasets import load_diabetes\r\nimport pandas as pd\r\n\r\nds = load_diabete"
+    },
+    {
+      "n": 7,
+      "id": "plotly/plotly.py#4825",
+      "package": "plotly@5.24.1",
+      "title": "`choropleth_map` missing the `locationmode` parameter in its signature",
+      "url": "https://github.com/plotly/plotly.py/issues/4825",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "I'm using plotly v5.24.1"
+      },
+      "armedSymbols": [
+        "choropleth_map",
+        "locationmode",
+        "locations"
+      ],
+      "workaround": null,
+      "body": "The docstring of `choropleth_map` states that `locations` are to be \"interpreted according to `locationmode`\" (as with other mapping functions), but this parameter seems to be missing from the signature of this function.\n\nI'm using plotly v5.24.1\n\n\n```python\nimport plotly.express as px\n\npx.choropleth_map?\n\n\nSignature:\npx.choropleth_map(\n    data_frame=None,\n    geojson=None,\n    featureidkey=None,\n    locations=None,\n    color=None,\n    hover_name=None,\n    hover_data=None,\n    custom_data=None,\n    animation_frame=None,\n    animation_group=None,\n    category_orders=None,\n    labels=None,\n    color_discrete_sequence=None,\n    color_discrete_map=None,\n    color_continuous_scale=None,\n    range_color=None,\n    color_continuous_midpoint=None,\n    opacity=None,\n    zoom=8,\n    center=None,\n    map_style=None,\n    title=None,\n    template=None,\n    width=None,\n    height=None,\n) -> plotly.graph_objs._figure.Figure\nDocstring:\n    In a choropleth map, each row of `data_frame` is represented by a\n    colored region on the map.\n    \nParameters\n----------\ndata_frame: DataFrame or array-like or dict\n    This argument needs to be passed for column names (and not keyword\n    names) to be used. "
+    },
+    {
+      "n": 8,
+      "id": "pytorch/pytorch#132029",
+      "package": "torch@2.5.0",
+      "title": "torch.QUInt4x2Storage: RuntimeError cuda_dispatch_ptr INTERNAL ASSERT FAILED on torch 2.5.0.dev20240708+cu121",
+      "url": "https://github.com/pytorch/pytorch/issues/132029",
+      "labels": [
+        "oncall: quantization"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "title",
+        "kind": "adjacent",
+        "quote": "torch.QUInt4x2Storage: RuntimeError cuda_dispatch_ptr INTERNAL ASSERT FAILED on torch 2.5.0.dev20240708+cu121"
+      },
+      "armedSymbols": [
+        "cuda_dispatch_ptr",
+        "dev20240708",
+        "QUInt4x2Storage",
+        "RuntimeError"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\n\nI met an error `RuntimeError cuda_dispatch_ptr INTERNAL ASSERT FAILED at \"../aten/src/ATen/native/DispatchStub.cpp\":137, please report a bug to PyTorch. DispatchStub: missing CUDA kernel` when running the following code.\r\n\r\nCode:\r\n```python\r\nimport torch\r\ndef quantize(tensor, scale, zero_point):\r\n    return torch.quantize_per_tensor(tensor, scale, zero_point, torch.quint4x2)\r\ntensor = torch.tensor([[[[-0.1, -0.2], [-0.3, -0.4]], [[-0.5, -0.6], [-0.7, -0.8]]], [[[0.1, 0.2], [0.3, 0.4]], [[0.5, 0.6], [0.7, 0.8]]]]).cuda()\r\ntensor = tensor.float()  # Convert to float tensor\r\nscale = 0.5  # Define the scale\r\nzero_point = 0  # Define the zero point\r\nquantized_tensor = quantize(tensor, scale, zero_point)\r\nprint(quantized_tensor)\r\n```\r\n\r\nLog:\r\n```python\r\nIn [6]: import torch\r\n   ...: def quantize(tensor, scale, zero_point):\r\n   ...:     return torch.quantize_per_tensor(tensor, scale, zero_point, torch.quint4x2)\r\n   ...: tensor = torch.tensor([[[[-0.1, -0.2], [-0.3, -0.4]], [[-0.5, -0.6], [-0.7, -0.8]]], [[[0.1, 0.2], [0.3, 0.4]], [[0.5, 0.6], [0.7, 0.8]]]]).cuda()\r\n   ...: tensor = tensor.float()  # Convert to float tensor\r\n   ...: scale = 0.5  # Define the scale\r"
+    },
+    {
+      "n": 9,
+      "id": "redis/redis-py#3454",
+      "package": "redis@5.2.0",
+      "title": "socket_timeout parameter on async connections actually apply to multiple socket read operations",
+      "url": "https://github.com/redis/redis-py/issues/3454",
+      "labels": [],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "I'm having the same issue with `redis@5.2.0`, macos, python:3.10:",
+        "by": "dadwin"
+      },
+      "armedSymbols": [
+        "socket_timeout",
+        "_parser",
+        "_parser.read_response",
+        "_stream"
+      ],
+      "workaround": null,
+      "body": "\r\n**Version**: 4.6.0\r\n\r\n**Platform**: What platform / version? Python 3.12 on Red Hat Enterprise Linux Server release 7.9 (Maipo)\r\n\r\n**Description**:\r\nWe recently started using the asyncio version of the and noticed we were getting redis timeout errors (`redis.exceptions.TimeoutError: Timeout reading from xx.xx.xx.xx:30433`) a lot more frequently. The actual time it took redis to respond with data hadn't actualy changed,  but some of the requests would just timeout. I was able to narrow the error down to the following:\r\n\r\nIn the sync version of the code, redis uses the low-level OS socket timeout (driven by the `socket_timeout` parameter), which controls the timeout for every read operation from the socket. For large responses, since the data is read in chunks, the timeout only applies to each individual read operation.\r\n\r\nIn the async version of the code, redis explicitly sets a timeout using `asyncio.timeout`, but wraps it around multiple socket read operations. So, for large responses, even if each individual chunk read operation is done quickly, the total time can exceeds the timeout. To make matters worse, we yield control back to the event loop in between each chunk read, so "
+    },
+    {
+      "n": 10,
+      "id": "scikit-learn/scikit-learn#30332",
+      "package": "scikit-learn@1.5.2",
+      "title": "NuSVC argument `class_weight` is not used",
+      "url": "https://github.com/scikit-learn/scikit-learn/issues/30332",
+      "labels": [
+        "Bug",
+        "Needs Investigation"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "sklearn: 1.5.2"
+      },
+      "armedSymbols": [
+        "class_weight",
+        "dual_coef_",
+        "NuSVC",
+        "NuSVM"
+      ],
+      "workaround": null,
+      "body": "### Describe the bug\r\n\r\nLike `SVC`, the class `NuSVC` takes argument `class_weight`. However, it looks like this argument is not used. After a quick look at the libsvm C code within sklearn as well as [libsvm's original documentation](https://www.csie.ntu.edu.tw/~cjlin/libsvm/), this seems to be expected: \"`wi` set the parameter C of class i to weight*C, for C-SVC\". I suggest that this argument should be removed from `NuSVC`'s constructor and from the documentation.\r\n\r\n### Steps/Code to Reproduce\r\n\r\n```python\r\nfrom sklearn.svm import SVC, NuSVC\r\n\r\nX = [[1., 2, 3], [0, 5, 2]]\r\ny = [-1, 1]\r\n\r\nNuSVC(verbose=True).fit(X, y).dual_coef_\r\n\r\noptimization finished, #iter = 0\r\nC = 2.587063\r\nobj = 1.293532, rho = 0.000000\r\nnSV = 2, nBSV = 0\r\nTotal nSV = 2\r\nOut: [LibSVM]array([[-1.29353162,  1.29353162]])\r\n\r\nSVC(C=2.587063, verbose=True).fit(X, y).dual_coef_\r\n\r\noptimization finished, #iter = 1\r\nobj = -1.293532, rho = 0.000000\r\nnSV = 2, nBSV = 0\r\nTotal nSV = 2\r\nOut: [LibSVM]array([[-1.29353162,  1.29353162]])\r\n\r\nNuSVC(class_weight={-1:1.5, 1:.2}, verbose=True).fit(X, y).dual_coef_\r\n\r\noptimization finished, #iter = 0\r\nC = 2.587063\r\nobj = 1.293532, rho = 0.000000\r\nnSV = 2, nBSV = 0\r\nTotal nSV = 2"
+    },
+    {
+      "n": 11,
+      "id": "pytorch/pytorch#132041",
+      "package": "torch@2.5.0",
+      "title": "`torch.nn.functional.max_unpool2d`'s behavior is different on cpu and gpu on torch 2.5.0.dev20240708+cu121",
+      "url": "https://github.com/pytorch/pytorch/issues/132041",
+      "labels": [
+        "module: cuda",
+        "triaged",
+        "module: python frontend"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "title",
+        "kind": "adjacent",
+        "quote": "`torch.nn.functional.max_unpool2d`'s behavior is different on cpu and gpu on torch 2.5.0.dev20240708+cu121"
+      },
+      "armedSymbols": [
+        "dev20240708",
+        "functional",
+        "functional.max_unpool2d",
+        "max_unpool2d"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\n\n`torch.nn.functional.max_unpool2d`'s behavior is different on cpu and gpu.\r\n\r\non cpu:\r\n```python\r\nimport torch\r\n# Use the torch.nn.functional.max_unpool2d function\r\ninput_tensor = torch.tensor([[[[-0.2, -0.3], [-0.4, -0.5]]]])\r\nindices = torch.tensor([[[[1, 0], [1, 0]]]])\r\nresult = torch.nn.functional.max_unpool2d(input_tensor, indices, kernel_size=(2, 2))\r\nprint(result)\r\n# tensor([[[[-0.5000, -0.4000,  0.0000,  0.0000],\r\n#           [ 0.0000,  0.0000,  0.0000,  0.0000],\r\n#           [ 0.0000,  0.0000,  0.0000,  0.0000],\r\n#           [ 0.0000,  0.0000,  0.0000,  0.0000]]]])\r\n```\r\n\r\non gpu:\r\n```python\r\nimport torch\r\n# Use the torch.nn.functional.max_unpool2d function\r\ninput_tensor = torch.tensor([[[[-0.2, -0.3], [-0.4, -0.5]]]]).cuda()\r\nindices = torch.tensor([[[[1, 0], [1, 0]]]]).cuda()\r\nresult = torch.nn.functional.max_unpool2d(input_tensor, indices, kernel_size=(2, 2))\r\nprint(result)\r\n# tensor([[[[-0.3000, -0.2000,  0.0000,  0.0000],\r\n#           [ 0.0000,  0.0000,  0.0000,  0.0000],\r\n#           [ 0.0000,  0.0000,  0.0000,  0.0000],\r\n#           [ 0.0000,  0.0000,  0.0000,  0.0000]]]], device='cuda:0')\r\n```\r\n\r\n`result` on cpu and gpu are not equal.\n\n### "
+    },
+    {
+      "n": 12,
+      "id": "mwaskom/seaborn#3875",
+      "package": "seaborn@0.13.2",
+      "title": "Conflict between norm and log_scale in 2d histplot",
+      "url": "https://github.com/mwaskom/seaborn/issues/3875",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "Using Seaborn 0.13.2, I am trying to create a seaborn 2d histplot with a log colorscale as well as a log scale on the y axis:"
+      },
+      "armedSymbols": [
+        "histplot",
+        "log_scale"
+      ],
+      "workaround": null,
+      "body": "Using Seaborn 0.13.2, I am trying to create a seaborn 2d histplot with a log colorscale as well as a log scale on the y axis:\n\n```\nimport seaborn as sns\nimport numpy as np\nimport matplotlib.pyplot as plt\nfrom matplotlib.colors import LogNorm\n\nmean = [0, 10]\ncov = [[1, 0], [0, 50]] \nx, y = np.random.multivariate_normal(mean, cov, 5000).T\n\nfig, ax = plt.subplots(figsize=(8, 7))\n\nsns.histplot(\n    x=x, \n    y=y, \n    log_scale = (False, True),\n    norm=LogNorm(),\n    ax=ax\n)\n```\n\nHowever, this results in the error:\n\n```\nValueError: Passing a Normalize instance simultaneously with vmin/vmax is not supported.  Please pass vmin/vmax directly to the norm when creating it.\n```"
+    },
+    {
+      "n": 13,
+      "id": "mwaskom/seaborn#3973",
+      "package": "seaborn@0.13.2",
+      "title": "lmplot with refline produces unexpected markers on both ends of the lines",
+      "url": "https://github.com/mwaskom/seaborn/issues/3973",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "The following simple example which calls `lmplot` and then calls `FacetGrid.refline` produces some unexpected gray markers on both ends of the lines plotted by "
+      },
+      "armedSymbols": [
+        "lmplot",
+        "refline",
+        "FacetGrid",
+        "FacetGrid.refline"
+      ],
+      "workaround": null,
+      "body": "The following simple example which calls `lmplot` and then calls `FacetGrid.refline` produces some unexpected gray markers on both ends of the lines plotted by `refline`. This behavior seems specific to `lmplot` since those markers are not present when I use it with other plot types. This is on version 0.13.2\n```\nimport seaborn as sns\nimport pandas as pd\nimport matplotlib.pyplot as plt\n\ndf = pd.DataFrame({\"x\": [1.0, 2.0, 3.0], \"y\": [0.0, 1.0, 2.0]})\ng = sns.lmplot(df, x=\"x\", y=\"y\")\ng.refline(x=0, y=0)\nplt.show()\n```\n<img width=\"493\" height=\"479\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/527f7aa0-54d4-4452-aa5b-924989d7ac3a\" />"
+    },
+    {
+      "n": 14,
+      "id": "scipy/scipy#21134",
+      "package": "scipy@1.14.1",
+      "title": "MAINT: spatial.distance: consistent handling of non-0/1 input for Boolean metrics",
+      "url": "https://github.com/scipy/scipy/issues/21134",
+      "labels": [
+        "scipy.spatial",
+        "maintenance"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "The following table summarizes the treatment of non-0/1 numeric inputs by the Boolean metrics as of SciPy 1.14.1. The columns \"Python\" and \"C++\" indicates the *"
+      },
+      "armedSymbols": [
+        "distance",
+        "spatial",
+        "spatial.distance",
+        "crisp"
+      ],
+      "workaround": null,
+      "body": "### Is your feature request related to a problem? Please describe.\r\n\r\nThe Boolean metrics in `spatial.distance` are documented to take Boolean vectors as input, but they also accept non-0/1 numeric vectors, and possibly non-numeric vectors. The behavior is not always as simple as converting the input to `bool` — some of the metrics support [fuzzy logic](https://en.m.wikipedia.org/wiki/Fuzzy_logic) (using the [product t-norm](https://en.m.wikipedia.org/wiki/T-norm)), as pointed out by [this comment](https://github.com/scipy/scipy/issues/17703#issuecomment-1503607530) as well as some of the test cases. However, such support is not documented and not consistent across metrics.\r\n\r\n### Describe the solution you'd like.\r\n\r\nIt would be helpful to document fuzzy Boolean handling properly to help those looking for this feature as well as those not expecting this feature. In addition, it would be helpful for handle non-0/1 input consistently to ensure predictable behavior.\r\n\r\nTo handle non-0/1 input consistently, I propose to add an optional argument `fuzzy` to all Boolean metrics. Its value can be one of:\r\n\r\n- `'crisp'`: convert non-zero value (including `nan`) to 1 and compute the metric o"
+    },
+    {
+      "n": 15,
+      "id": "python-pillow/Pillow#7935",
+      "package": "pillow@11.0.0",
+      "title": "Memory of copied PIL Images is not released",
+      "url": "https://github.com/python-pillow/Pillow/issues/7935",
+      "labels": [
+        "Memory",
+        "PNG"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "I tested with Python 3.11 and Python 3.12 on Ubuntu 20.04 (WSL) and Pillow 11.0.0 from pypi (same behavior when I compile the lib myself).",
+        "by": "TTMaDe"
+      },
+      "armedSymbols": [
+        "containers",
+        "containers.pop",
+        "image",
+        "image.close"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "Yay295",
+        "excerpt": "It looks like it caches 0 blocks by default though.\n\nhttps://github.com/python-pillow/Pillow/blob/aeeb596c98fe4c9cd79cc1408eb7a3353c43eef1/src/libImaging/Storage.c#L260-L271\n\nAnd you can set the number of blocks to cache with the `PILLOW_BLOCKS_MAX` environment variable.\n\nhttps://github.com/python-pillow/Pillow/blob/aeeb596c98fe4c9cd79cc1408eb7a3353c43eef1/src/PIL/Image.py#L3624-L3656\n\nThere's a docs page for this actually: https://pillow.readthedocs.io/en/stable/reference/block_allocator.html"
+      },
+      "body": "### What did you do?\r\n\r\nOur application works with PIL images and holds a list of containers. Every container has a copy of the last image to track manipulations of the image data. When we delete the containers, the memory reserved by the PIL images is not released. Even closing the image manually via `image.close()` in the container's desctructor and calling the garbage collector does not release the memory.\r\n\r\nIf I replace the PIL image with a Python list (line: 55) the memory gets freed when a container is popped from the list.\r\n\r\n\r\n```python\r\nimport gc\r\nimport os\r\nimport sys\r\nimport time\r\n\r\nimport PIL.Image\r\nimport psutil\r\n\r\nFILE = './test_image.png'\r\n\r\n\r\ndef LogMemory():\r\n    pid = os.getpid()\r\n    rss = 0\r\n    for mmap in psutil.Process(pid).memory_maps():\r\n        # All memory that this process holds in RAM. RSS = USS + Shared.\r\n        rss += mmap.rss\r\n    print(f'RSS: {rss}')\r\n\r\n\r\nclass Container:\r\n\r\n    def __init__(self):\r\n        self.value = None\r\n\r\n    def __del__(self):\r\n        if isinstance(self.value, PIL.Image.Image):\r\n            LogMemory()\r\n            self.value.close()\r\n            self.value = None\r\n            gc.collect()\r\n            print('closed image "
+    },
+    {
+      "n": 16,
+      "id": "jestjs/jest#11868",
+      "package": "jest@29.7.0",
+      "title": "[Bug]: HTML Coverage does not understand template strings",
+      "url": "https://github.com/jestjs/jest/issues/11868",
+      "labels": [
+        "Needs Triage",
+        "Bug Report"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "still a issue with jest 29.7.0.",
+        "by": "hasezoey"
+      },
+      "armedSymbols": [
+        "coverage",
+        "internal"
+      ],
+      "workaround": null,
+      "body": "### Version\n\n27.1.1\n\n### Steps to reproduce\n\n1. clone https://github.com/hasezoey/jest-template-string-repro\r\n2. cd into the repository\r\n3. run `yarn install`\r\n4. run `yarn run test`\r\n5. open `coverage/lcov-report/some_source.js.html` in a browser (in my case it was firefox)\n\n### Expected behavior\n\nTo handle and show Template strings properly\n\n### Actual behavior\n\nTemplate Strings are not recognized and syntax highlighting can go haywire (see complex repository / original problem repository)\n\n### Additional context\n\nThe original Project where i noticed this problem, is `https://github.com/typegoose/typegoose/`, in particular it is the `errors.ts` file\r\n\r\nSteps for this complex repository:\r\n1. clone the mentioned repository\r\n2. cd into the repository\r\n3. run `yarn install`\r\n4. run `yarn run test:coverage`\r\n5. open `coverage/lcov-report/src/internal/errors.ts.html` in a browser (in my case firefox)\r\n6. look at the syntax highlighting going haywire (and also showing wrong values on the wrong lines?)\n\n### Environment\n\n```shell\n$ yarn envinfo --preset jest \r\nyarn run v1.22.11\r\n$ /home/hasezoey/Downloads/jest-test/node_modules/.bin/envinfo --preset jest\r\n\r\n  System:\r\n    OS: Linux 5.14 M"
+    },
+    {
+      "n": 17,
+      "id": "mwaskom/seaborn#3892",
+      "package": "seaborn@0.13.2",
+      "title": "seaborn@0.13.1: 3 tests fail with NumPy 2.3.1",
+      "url": "https://github.com/mwaskom/seaborn/issues/3892",
+      "labels": [],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "plain",
+        "quote": "Those are from the current development branch. The reporter talks about 0.13.1. But this is still an issue in the most recent release 0.13.2 from January 2024 (",
+        "by": "bnavigator"
+      },
+      "armedSymbols": [
+        "NumPy"
+      ],
+      "workaround": null,
+      "body": "Hi,\n\nWhile refreshing NumPy stack on Guix (1.26.4 -> 2.3.1) I've noticed `seaborn` started failing on two tests:\n\n```\n=========================== short test summary info ============================\nFAILED tests/_core/test_plot.py::TestLabelVisibility::test_1d_column_wrapped - KeyError: 'labelleft'\nFAILED tests/_core/test_plot.py::TestLabelVisibility::test_1d_row_wrapped - KeyError: 'labelleft'\nFAILED tests/test_distributions.py::TestKDEPlotBivariate::test_weights - AttributeError: module 'numpy' has no attribute 'VisibleDeprecationWarning'\n= 3 failed, 2354 passed, 17 skipped, 6 xfailed, 224 warnings in 63.06s (0:01:03) =\n```\nInputs:\nPython 3.11.11\n- python-flit-core@3.12.0\n- python-pytest@8.4.1\n- python-pytest-xdist@3.8.0\n- python-matplotlib@3.10.8\n- python-numpy@2.3.1\n- python-pandas@2.3.3\n- python-scipy@1.16.3\n- python-statsmodels@0.14.4\n\n\n[4n2spb06gzczlypy5xk1rmkqwv2980-python-seaborn-0.13.2.drv.gz](https://github.com/user-attachments/files/24154419/4n2spb06gzczlypy5xk1rmkqwv2980-python-seaborn-0.13.2.drv.gz)"
+    },
+    {
+      "n": 18,
+      "id": "evanw/esbuild#3934",
+      "package": "esbuild@0.24.0",
+      "title": "Could not resolve file without extension from node_modules when using ts and tsx loader for js files",
+      "url": "https://github.com/evanw/esbuild/issues/3934",
+      "labels": [],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "range",
+        "quote": "\"esbuild\": \"^0.24.0\""
+      },
+      "armedSymbols": [
+        "node_modules",
+        "stable"
+      ],
+      "workaround": null,
+      "body": "I have a very specific problem regarding ts and tsx loader and imports from node_modules that do not have extension specified.\r\nSteps or files to reproduce:\r\n\r\npackage.json:\r\n```\r\n{\r\n  \"name\": \"esbuild-test\",\r\n  \"main\": \"app.js\",\r\n  \"scripts\": {\r\n    \"build\": \"node build.mjs\"\r\n  },\r\n  \"devDependencies\": {\r\n    \"esbuild\": \"^0.24.0\"\r\n  },\r\n  \"dependencies\": {\r\n    \"core-js\": \"^3.38.1\",\r\n    \"regenerator-runtime\": \"^0.14.1\"\r\n  }\r\n}\r\n```\r\n\r\napp.jsx:\r\n```\r\nimport 'core-js/stable'\r\n//import 'regenerator-runtime/runtime'\r\n\r\nconsole.log('Hello world!');\r\n```\r\n\r\nbuild.mjs:\r\n```\r\nimport esbuild from 'esbuild'\r\n\r\nawait esbuild.build({\r\n    entryPoints: ['app.jsx'],\r\n    outfile: 'output.js',\r\n    bundle: true,\r\n    loader: {\r\n        '.jsx': 'tsx',\r\n        '.js': 'ts',\r\n    },\r\n})\r\n```\r\n\r\nWhen I run `node build.mjs` I get this error: `Could not resolve \"core-js/stable\"`.\r\nSeems like a problem with resolving file `index.js` in `core-js/stable` folder. If I specify this file directly it works, but then it fails to resolve other imports form this file.\r\n \r\nLikewise, if I import a file from `node_modules` without extension - in my case it was `import 'regenerator-runtime/runtime'` - the build fa"
+    },
+    {
+      "n": 19,
+      "id": "plotly/plotly.py#4801",
+      "package": "plotly@5.24.1",
+      "title": "Hover data not showing correctly for px.scatter inside go.FigureWidget",
+      "url": "https://github.com/plotly/plotly.py/issues/4801",
+      "labels": [
+        "bug",
+        "P3"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "plotly: 5.24.1"
+      },
+      "armedSymbols": [
+        "FigureWidget",
+        "go.FigureWidget",
+        "px.scatter",
+        "scatter"
+      ],
+      "workaround": null,
+      "body": "### Environment requirements\r\nPython 3.11 on Linux, in Jupyter Notebook inside VSCode.\r\n\r\nExtensions:\r\nms-toolsai.jupyter  v2024.1.1\r\n\r\nPackages:\r\nplotly: 5.24.1\r\nipywidgets: 8.1.5\r\njupyterlab 3.6.8\r\n\r\n### Issue description\r\nHello, I'm having this issue where the hover data doesn't seem to show correctly, but it instead shows \"%{customdata[0}\" on the hover box.\r\n\r\nfig_scatter = go.FigureWidget(px.scatter(df, \r\n                       x='some_column1', y='some_column2', \r\n                       title=f'Scatterplot', \r\n                       hover_data=['column_in_df']\r\n                     ))\r\n                     \r\nIf I have the px.scatter plotted using a go.Figure directly it works but with go.FigureWidget it doesn't.\r\n\r\nx and y columns show on the hover data, while this extra column_in_df doesn't even though it's also part of the df.\r\n\r\nLet me know if any additional information is needed. Any help is appreciated, thank you!\r\n\r\n![image](https://github.com/user-attachments/assets/0eb6b979-8286-4f89-aa62-8859784f4562)\r\n"
+    },
+    {
+      "n": 20,
+      "id": "pytorch/pytorch#152028",
+      "package": "torch@2.5.0",
+      "title": "[CUDA] MultiheadAttention with masks and dropout produces NaNs",
+      "url": "https://github.com/pytorch/pytorch/issues/152028",
+      "labels": [
+        "module: cuda",
+        "triaged",
+        "module: correctness (silent)",
+        "module: sdpa"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "torch==2.5.0"
+      },
+      "armedSymbols": [
+        "MultiheadAttention",
+        "NaNs"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "kimmeoungjun",
+        "excerpt": "Hi. I reproduced this on CUDA/A100 with PyTorch 2.8.0+cu128.\n\nThe issue is in the `nn.MultiheadAttention(..., need_weights=True)` path. When a bool `attn_mask` fully masks out a query row, that row’s attention scores become all `-inf`; the current regular softmax then produces NaNs. The `need_weights=False` path goes through SDPA and already handles fully masked rows with safe-softmax semantics, returning zeros instead.\n\nI have a fix ready that updates the `need_weights=True` path to use `torch."
+      },
+      "body": "### 🐛 Describe the bug\n\nI found the MHA exception error with the following triggering condition:\n\n1. attn_mask=None, need_weights=False, OK\n2. attn_mask=tensor[bool], need_weights=True, OK\n3. attn_mask=tensor[bool], need_weights=False, find NaNs\n\n```python\n\nself.read_from_pixel = CrossAttention(\n    self.embed_dim, self.num_heads, add_pe_to_qkv=this_cfg.read_from_pixel.add_pe_to_qkv\n)\n\n# bs*C*H*W -> bs*(H*W)*C\npixel_flat = pixel.flatten(2, 3).transpose(1, 2).contiguous()\n\n# masked cross attention\nx, q_weights = self.read_from_pixel(\n    x, pixel_flat, query_pe, pixel_pe, attn_mask=attn_mask, need_weights=need_weights\n)\n```\n```python\n\nclass CrossAttention(nn.Module):\n    def __init__(\n            self, dim: int, nhead: int, dropout: float = 0.0, batch_first: bool = True,\n            add_pe_to_qkv: List[bool] = [True, True, False], residual: bool = True, norm: bool = True\n    ):\n        super().__init__()\n        self.cross_attn = nn.MultiheadAttention(dim, nhead, dropout=dropout, batch_first=batch_first)\n        if norm:\n            self.norm = nn.LayerNorm(dim)\n        else:\n            self.norm = nn.Identity()\n        self.dropout = nn.Dropout(dropout)\n        self.add_pe_to_qkv"
+    },
+    {
+      "n": 21,
+      "id": "pytorch/pytorch#135011",
+      "package": "torch@2.5.0",
+      "title": "dynamo (re)compilation issues: shape (1,1), nn.Parameter, mark_dynamic",
+      "url": "https://github.com/pytorch/pytorch/issues/135011",
+      "labels": [
+        "good first issue",
+        "triaged",
+        "oncall: pt2",
+        "module: dynamo",
+        "recompilations"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "PyTorch version: 2.5.0.dev20240902+cu118"
+      },
+      "armedSymbols": [
+        "_dynamo",
+        "_dynamo.mark_dynamic",
+        "mark_dynamic",
+        "nn.Parameter"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "shekhovt",
+        "excerpt": "My use case for parameters is applying some trainable quantization block on them, which I am compiling. A workaround is to cast Parameter as Tensor with `x.view(x.shape)` first and set dynamic size on it. Shapes of the kind (64,256,1,1) appear in 1x1 convolutions.\n\nI guess the guard on the size '- 2 <= L['x'].size()[0]' could actually mean '2 <= L['x'].size()[0]', which corresponds to considering size 1 as a special cases enabling optimizing out address calculations. However, if the user request"
+      },
+      "body": "### 🐛 Describe the bug\r\n\r\nThere are following issues:\r\n\r\n1. passing `Parameter` as argument instead of `Tensor` causes recompilation\r\n2. setting `torch._dynamo.mark_dynamic` on `Parameter` has no effect\r\n3. passing tensor of size `(1,1)` causes recompilation with a strange guard failure `- 2 <= L['x'].size()[0]`\r\n4. using `torch._dynamo.mark_dynamic(x, 0, min=0)` causes error `not simple sympy type <class 'NoneType'>`\r\n5. using `torch._dynamo.mark_dynamic(x, 0, min=0, max=65536)` causes error `CONSTRAINTS_VIOLATED`\r\n\r\nI've checked on 2.4.0 and on nightly\r\n\r\n```python\r\nimport torch\r\nimport torch.nn as nn\r\nfrom torch import Tensor\r\n\r\nimport logging\r\ntorch._logging.set_logs(recompiles=True, recompiles_verbose = True)\r\n\r\n\r\ndef f(x):\r\n    return x.sin() + 1.0\r\n\r\n# def g(x):\r\n#     return x**2\r\n\r\ncompile_args = dict(fullgraph=True, dynamic = True, backend = \"inductor\", options={'force_same_precision':True, 'disable_cpp_codegen':False, 'trace.graph_diagram':True, \"triton.cudagraphs\": False})\r\n\r\n@torch.compile(**compile_args)\r\ndef foo(x):\r\n    y = f(x)\r\n    # z = g(y)\r\n    return y\r\n\r\nshapes = [(2,2), (3,3), (1,1)]\r\n\r\nfor P in [False, True]:\r\n    for k, shape in enumerate(shapes):\r\n      "
+    },
+    {
+      "n": 22,
+      "id": "pytorch/pytorch#133795",
+      "package": "torch@2.5.0",
+      "title": "RuntimeError: createStatus == pytorch_qnnp_status_success INTERNAL ASSERT FAILED at \"../aten/src/ATen/native/quantized/cpu/BinaryOps.cpp\":204, please report a bug to PyTorch. failed to create QNNPACK Add operator",
+      "url": "https://github.com/pytorch/pytorch/issues/133795",
+      "labels": [
+        "oncall: jit",
+        "oncall: quantization"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "PyTorch version: 2.5.0.dev20240815+cu121"
+      },
+      "armedSymbols": [
+        "BinaryOps",
+        "BinaryOps.cpp",
+        "createStatus",
+        "jit.trace"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\n\n INTERNAL ASSERT Error would be raised when using `quantized tensor` (empty data) and `torch.jit.trace`. The code is as follows:\r\n\r\n```python\r\nimport torch\r\nimport os\r\nimport ctypes\r\n\r\n# Initialize the environment\r\ndef setup_nnapi():\r\n    torch.backends.quantized.engine = 'qnnpack'\r\n    libneuralnetworks_path = os.environ.get('LIBNEURALNETWORKS_PATH')\r\n    if libneuralnetworks_path:\r\n      ctypes.cdll.LoadLibrary(libneuralnetworks_path)\r\n\r\n# The check function\r\ndef check(module, arg_or_args, trace_args=None):\r\n    with torch.no_grad():\r\n        if isinstance(arg_or_args, torch.Tensor):\r\n          args = [arg_or_args]\r\n        else:\r\n          args = arg_or_args\r\n        module.eval()\r\n        traced = torch.jit.trace(module, trace_args or args)\r\n\r\n# Test function\r\ndef test_qadd():\r\n    setup_nnapi()\r\n\r\n    func = torch.ao.nn.quantized.QFunctional()\r\n    func.scale = 0.5\r\n    func.zero_point = 120\r\n\r\n    class AddMod(torch.nn.Module):\r\n        def forward(self, lhs, rhs):\r\n            return func.add(lhs, rhs)\r\n\r\n    for (name, mod) in [('add', AddMod), ]:\r\n        # check(mod(), [qpt([[1.,2.]], 0.25, 128), qpt([[1.,2.]], 0.25, 128)]) # works well\r\n        c"
+    },
+    {
+      "n": 23,
+      "id": "yaml/pyyaml#845",
+      "package": "pyyaml@6.0.2",
+      "title": "Update setup.py for Pyyaml v6.0.2",
+      "url": "https://github.com/yaml/pyyaml/issues/845",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "In version 6.0.2, the 'run' function for class 'test' in the setup.py file contains the line `sys.path.insert(0, 'tests/lib')` which fails when running the `pyt"
+      },
+      "armedSymbols": [
+        "legacy_tests",
+        "sys.path"
+      ],
+      "workaround": null,
+      "body": "In version 6.0.2, the 'run' function for class 'test' in the setup.py file contains the line `sys.path.insert(0, 'tests/lib')` which fails when running the `python setup.py test` command as this path no longer exists in 6.0.2.\nAs a fix that line would need to be updated to `sys.path.insert(0, 'tests/legacy_tests')` to conform with the file structure in 6.0.2."
+    },
+    {
+      "n": 24,
+      "id": "pytorch/pytorch#131312",
+      "package": "torch@2.5.0",
+      "title": "Pytorch Error: ImportError: /home/dp/anaconda3/envs/ComfyUI/lib/python3.11/site-packages/torch/lib/../../nvidia/cusparse/lib/libcusparse.so.12: undefined symbol: __nvJitLinkComplete_12_4, version libnvJitLink.so.12",
+      "url": "https://github.com/pytorch/pytorch/issues/131312",
+      "labels": [
+        "module: binaries",
+        "module: cuda",
+        "triaged"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "torch 2.5.0.dev20240720+cu124"
+      },
+      "armedSymbols": [
+        "__nvJitLinkComplete_12_4",
+        "ComfyUI",
+        "ImportError",
+        "libcusparse"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\n\n\r\nAnd, when I run the python3 -c \"import torch;\", I got this error:\r\n```\r\nTraceback (most recent call last):\r\n  File \"<string>\", line 1, in <module>\r\n  File \"/home/dp/anaconda3/envs/ComfyUI/lib/python3.11/site-packages/torch/__init__.py\", line 364, in <module>\r\n    from torch._C import *  # noqa: F403\r\n    ^^^^^^^^^^^^^^^^^^^^^^\r\nImportError: /home/dp/anaconda3/envs/ComfyUI/lib/python3.11/site-packages/torch/lib/../../nvidia/cusparse/lib/libcusparse.so.12: undefined symbol: __nvJitLinkComplete_12_4, version libnvJitLink.so.12\r\n```\r\n\n\n### Versions\n\n\r\n```\r\n(ComfyUI) dp@dp-7920:/hw_data/ws/ComfyUI$ pip list |grep torch\r\npytorch-triton           3.0.0+dedb7bdf33\r\ntorch                    2.5.0.dev20240720+cu124\r\ntorchaudio               2.4.0.dev20240721+cu124\r\ntorchvision              0.20.0.dev20240721+cu124\r\n(ComfyUI) dp@dp-7920:/hw_data/ws/ComfyUI$ cat /proc/driver/nvidia/version\r\nNVRM version: NVIDIA UNIX x86_64 Kernel Module  550.90.07  Fri May 31 09:35:42 UTC 2024\r\nGCC version:  gcc version 12.3.0 (Ubuntu 12.3.0-1ubuntu1~22.04) \r\n```\n\ncc @seemethere @malfet @osalpekar @atalman @ptrblck @msaroufim"
+    },
+    {
+      "n": 25,
+      "id": "pytorch/pytorch#140909",
+      "package": "torch@2.5.0",
+      "title": "[2.5.0+] Running a compiled model under FlopCounterMode regresses its performance",
+      "url": "https://github.com/pytorch/pytorch/issues/140909",
+      "labels": [
+        "triaged",
+        "module: __torch_dispatch__",
+        "oncall: pt2",
+        "module: dynamo"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "I noticed this problem when I upgraded from torch 2.4.x to 2.5.0."
+      },
+      "armedSymbols": [
+        "FlopCounterMode",
+        "ms_per_iter"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\n\nInvoking a compiled model under FlopCounterMode context results in a slower compiled model.\r\n\r\nIf we run our benchmark _before_ the model is instrumented with FlopCounterMode, then `ms_per_iter` records a decent latency, benefitting from compilation.\r\n\r\nIf we run our benchmark _after_ the model is instrumented with FlopCounterMode, then `ms_per_iter` records a slower time, equal to a non-compiled model.\r\n\r\nHere's a pseudocode illustration of what I mean:\r\n\r\n```diff\r\n  from typing import Callable\r\n  from torch.utils.flop_counter import FlopCounterMode\r\n  from triton.testing import do_bench\r\n  \r\n  def get_flops(f: Callable[[], None]) -> None:\r\n+     ms_per_iter: float = do_bench(f)\r\n      flop_counter = FlopCounterMode(display=True)\r\n      with flop_counter:\r\n          f()\r\n-     ms_per_iter: float = do_bench(f)     \r\n      flop_count: int = flop_counter.get_total_flops()\r\n      iters_per_second = 1e3/ms_per_iter\r\n      flops: float = iters_per_second * flop_count\r\n      print(f\"{flops / 1e12} TF/s\")\r\n  \r\n  model: Callable[[LongTensor, FloatTensor]\r\n  model_c = torch.compile(model)\r\n  input_ids = torch.ones(8, 512, dtype=torch.long, device='cuda')\r\n  get_flop"
+    },
+    {
+      "n": 26,
+      "id": "pytorch/pytorch#190626",
+      "package": "torch@2.5.0",
+      "title": "[FSDP2] MixedPrecisionPolicy reduce_dtype is not applied to the TP-mesh Partial -> Replicate gradient all-reduce",
+      "url": "https://github.com/pytorch/pytorch/issues/190626",
+      "labels": [
+        "oncall: distributed",
+        "bot-triaged"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- torch v2.5.0 (`_composable/fsdp/_fsdp_param.py:674-682`) carries the same unguarded `Partial -> Replicate` redistribute as current main, so the mechanism span"
+      },
+      "armedSymbols": [
+        "bfloat16",
+        "distributed",
+        "float32",
+        "fsdp"
+      ],
+      "workaround": null,
+      "body": "## Bug description\n\nUnder FSDP2 + tensor parallelism (2D `dp x tp` mesh), `MixedPrecisionPolicy(param_dtype=torch.bfloat16, reduce_dtype=torch.float32)` applies `reduce_dtype` only to FSDP's own reduce-scatter. The `Partial() -> Replicate()` all-reduce over the TP mesh, which FSDP itself issues during post-backward for every TP-replicated parameter (e.g. norm weights under sequence parallelism, replicated biases, MoE router weights), runs in the gradient's own dtype, i.e. `param_dtype` bf16. The user asks for an fp32 reduction, FSDP accepts the policy silently, and half of the 2D reduction still happens in bf16.\n\n**Impact: every torchtitan run with `tensor_parallel_degree > 1` on shipped defaults hits this, including the published Llama 3.1 70B and 405B demonstration configs (both tp=8): their norm-weight gradients are TP-reduced in bf16 while the config promises, and only permits, fp32.**\n\nThe `MixedPrecisionPolicy` docstring says `reduce_dtype` \"specifies the dtype for gradient reduction (i.e. reduce-scatter or all-reduce)\" (`torch/distributed/fsdp/_fully_shard/_fsdp_api.py`). The TP all-reduce is an all-reduce that FSDP issues, and it is not covered.\n\n## Minimal repro (4 GPUs, d"
+    },
+    {
+      "n": 27,
+      "id": "pytorch/pytorch#130359",
+      "package": "torch@2.5.0",
+      "title": "FP8 Rowwise Scaling does not work on L4 GPU",
+      "url": "https://github.com/pytorch/pytorch/issues/130359",
+      "labels": [
+        "triaged",
+        "module: floatx (formerly float8)"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "PyTorch version: 2.5.0.dev20240709+cu121"
+      },
+      "armedSymbols": [
+        "_scaled_mm"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\n\nWhen running the latest version of Pytorch (3689471), rowwise scaling factors for the `_scaled_mm` function do not work on L4 GPUs (but they work fine on the H100). The bug can be reproduced with this code:\r\n```python\r\nimport torch\r\n\r\na_data = torch.ones(32, 128, device=\"cuda\").to(torch.float8_e4m3fn).contiguous()\r\nb_data = torch.ones(64, 128, device=\"cuda\").to(torch.float8_e4m3fn).t()\r\na_scale = torch.ones(a_data.shape[0], 1, device=\"cuda\", dtype=torch.float32)\r\nb_scale = torch.ones(1, b_data.shape[1], device=\"cuda\", dtype=torch.float32)\r\n\r\ntorch._scaled_mm(\r\n            a_data,\r\n            b_data,\r\n            scale_a=a_scale,\r\n            scale_b=b_scale,\r\n            out_dtype=torch.bfloat16,\r\n        )\r\n```\r\n\r\nRunning on an H100 GPU gives the expected:\r\n```python\r\ntensor([[128., 128., 128.,  ..., 128., 128., 128.],\r\n        [128., 128., 128.,  ..., 128., 128., 128.],\r\n        [128., 128., 128.,  ..., 128., 128., 128.],\r\n        ...,\r\n        [128., 128., 128.,  ..., 128., 128., 128.],\r\n        [128., 128., 128.,  ..., 128., 128., 128.],\r\n        [128., 128., 128.,  ..., 128., 128., 128.]], device='cuda:0',\r\n       dtype=torch.bfloat16)\r\n```\r\n\r\nBut run"
+    },
+    {
+      "n": 28,
+      "id": "knex/knex#6161",
+      "package": "knex@3.1.0",
+      "title": "better-sqlite doesn't handle array value in an object",
+      "url": "https://github.com/knex/knex/issues/6161",
+      "labels": [
+        "NG_bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "Knex version: 3.1.0"
+      },
+      "armedSymbols": [
+        "sqlite3",
+        "whereIn"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "mercmobily",
+        "excerpt": "Thank you for reporting this issue. You've uncovered an important inconsistency in how different SQLite drivers handle array values in `.where()` clauses.\n\nWhen you write `.where({ 'id': [5, 6] })`, Knex generates `where id = ?` with a binding of `[[5, 6]]` - it treats the entire array as a single value rather than converting it to a `whereIn` clause. The behaviour you're seeing differs between drivers because they handle this invalid binding differently:\n\n```javascript\n// With sqlite3 - silentl"
+      },
+      "body": "# Environment\r\n\r\nKnex version: 3.1.0\r\nDatabase + version: sqlite3 using `better-sqlite3` as client\r\nOS: linux\r\n\r\n# Bug\r\n\r\n1. Explain what kind of behaviour you are getting and how you think it should do\r\n\r\nWhen passing to `.where()` an object where some key's value is an array the query throws an exception.\r\ni.e.:\r\n\r\n```js\r\n.where({ 'id': [5, 6] })\r\n```\r\n```\r\nTypeError: select * from `table` where `id` = '5', '6' - SQLite3 can only bind numbers, strings, bigints, buffers, and null\r\n```\r\n\r\nRelevant debug info:\r\n```\r\nbindings: [ [ '5', '6' ] ],\r\nsql: 'select * from `table` where `id` = ?'\r\n```\r\n\r\nI expected it should convert to `whereIn`.\r\nIt worked fine with `sqlite3`...\r\n\r\n"
+    },
+    {
+      "n": 29,
+      "id": "plotly/plotly.py#2395",
+      "package": "plotly@5.24.1",
+      "title": "tickvals and ticktext don't work with subcategory axes",
+      "url": "https://github.com/plotly/plotly.py/issues/2395",
+      "labels": [
+        "bug",
+        "P3"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "I have been struggling with the same issue while plotting grouped bar chart over longer horizon. I am using plotly version 5.24.1.",
+        "by": "Joeljoy-65"
+      },
+      "armedSymbols": [
+        "ticktext",
+        "tickvals"
+      ],
+      "workaround": null,
+      "body": "If a plot has multi-category axes there is no way to hide a subcategory labels only and the plot doesn't render at all if `tickvals` and `ticktext` are used.\r\n\r\nLook at the code without multi-categories:\r\n```\r\nx_names = ['very.long.name.1', 'very.long.name.2', 'very.long.name.3']\r\nfig = go.Figure(go.Bar(\r\n    x=x_names,\r\n    y=[10, 20, 30]))\r\nfig.update_layout(\r\n    xaxis=dict(\r\n        tickvals=x_names,\r\n        ticktext=['', '', ''],\r\n    ))\r\n```\r\nThis works fine and all x-axes labels are hidden. I could achieve the same thing with this:\r\n```fig.update_layout(xaxis=dict(showticklabels=False))```\r\n\r\nHowever, if this is a multi-category plot it doesn't work at all:\r\n\r\n```\r\nx_names = [['A', 'A', 'B'], ['very.long.name.1', 'very.long.name.2', 'very.long.name.3']]\r\nfig = go.Figure(go.Bar(\r\n    x=x_names,\r\n    y=[10, 20, 30]))\r\nfig.update_layout(\r\n    xaxis=dict(\r\n        tickvals=x_names,\r\n        ticktext=[['A', 'A', 'B'], ['', '', '']],\r\n    ))\r\n```\r\nSetting `showticklabels=False` hides everything and I didn't find a way to hide just a single category labels.\r\n\r\nWhat is really surprising this doesn't work either even if this doesn't change anything:\r\n\r\n```\r\nx_names = [['A', 'A', 'B'"
+    },
+    {
+      "n": 30,
+      "id": "mwaskom/seaborn#3891",
+      "package": "seaborn@0.13.2",
+      "title": "FutureWarning from `observed` parameter of pandas' `groupby` used in relplot",
+      "url": "https://github.com/mwaskom/seaborn/issues/3891",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- seaborn: 0.13.2"
+      },
+      "armedSymbols": [
+        "FutureWarning",
+        "groupby",
+        "observed",
+        "relplot"
+      ],
+      "workaround": null,
+      "body": "## Description\nSince pandas 2.2.0, using `relplot` with `units` parameter on categorical data produces a FutureWarning:\n\n```\nFutureWarning: The default of observed=False is deprecated and will be changed to True in a future version of pandas. Pass observed=False to retain current behavior or observed=True to adopt the future default and silence this warning.\n```\n\n## Reproducer\n```\nimport seaborn as sns\nimport pandas as pd\nimport numpy as np\n\n# Create data with categorical units\ndf = pd.DataFrame({\n    'x': np.random.randn(100),\n    'y': np.random.randn(100),\n    'hue': ['A', 'B'] * 50,\n    'units': pd.Categorical(['split1', 'split2'] * 50)\n})\n\n# This triggers the warning\nsns.relplot(data=df, x='x', y='y', hue='hue', units='units', kind='line')\n```\n## Expected Behavior\nNo warning should be produced.\n\n## Suggested Fix\nIn seaborn's relational.py, explicitly set `observed=False` in the groupby operation:\nInstead of: `sub_data.groupby(\"units\")`\nUse: `sub_data.groupby(\"units\", observed=False)`\n\n## Environment\n- seaborn: 0.13.2\n- pandas: 2.2.0+\n- matplotlib: 3.10.7"
+    },
+    {
+      "n": 31,
+      "id": "pytorch/pytorch#141836",
+      "package": "torch@2.5.0",
+      "title": "StrideAPI caused regression in channels-last logic",
+      "url": "https://github.com/pytorch/pytorch/issues/141836",
+      "labels": [
+        "triaged",
+        "module: regression",
+        "module: mps"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "Versions 2.5.0, 2.5.1, nightly"
+      },
+      "armedSymbols": [
+        "StrideAPI"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\r\n\r\nhttps://github.com/pytorch/pytorch/pull/128393 caused numerous performance/correctness regressions for the ops that had a special codepath for channels last, see \r\n- https://github.com/pytorch/pytorch/issues/141471\r\n- https://github.com/pytorch/pytorch/issues/140902\r\n- https://github.com/pytorch/pytorch/issues/137800\r\n- https://github.com/pytorch/pytorch/issues/142344\r\nWould be nice to have a better testing for those cases\r\n\r\n### Versions\r\n\r\n2.5.0, 2.5.1, nightly\r\n\r\ncc @ezyang @gchanan @zou3519 @kadeng @msaroufim @kulinseth @albanD @DenisVieriu97 @jhavukainen"
+    },
+    {
+      "n": 32,
+      "id": "plotly/plotly.py#4846",
+      "package": "plotly@5.24.1",
+      "title": "`plotly.express.imshow` blurry when exported to pdf",
+      "url": "https://github.com/plotly/plotly.py/issues/4846",
+      "labels": [
+        "bug",
+        "P2"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "I am using `plotly` version `5.24.1` and `kaleido` version `0.2.1`."
+      },
+      "armedSymbols": [
+        "express",
+        "express.imshow",
+        "imshow",
+        "plotly.express"
+      ],
+      "workaround": null,
+      "body": "When writing `plotly.express.imshow` figure to pdf using `write_image`, the contents are rendered extremely blurry while axes and legends are rendered just fine: [test.pdf](https://github.com/user-attachments/files/17607411/test.pdf)\n\nCode to produce figure:\n\n    import numpy as np\n    import plotly.express as px\n\n    np.random.seed(0)\n    data = np.random.randint(low=0, high=2, size=(10, 10))\n\n    fig = px.imshow(data)\n    fig.write_image('test.pdf', format='pdf')\n\n\nI am using `plotly` version `5.24.1` and `kaleido` version `0.2.1`.\n\n"
+    },
+    {
+      "n": 33,
+      "id": "mwaskom/seaborn#4014",
+      "package": "seaborn@0.13.2",
+      "title": "so.Stack move distorts bar heights and causes the first bar to disappear when baseline is non-zero`",
+      "url": "https://github.com/mwaskom/seaborn/issues/4014",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- **Seaborn Version:** `0.13.2` / `0.14.0.dev0` (current `main` commit `c1cb287`)"
+      },
+      "armedSymbols": [
+        "_stack",
+        "baseline",
+        "so.Bar",
+        "so.Stack"
+      ],
+      "workaround": null,
+      "body": "### Environment\n- **OS:** Windows / Linux / macOS\n- **Python Version:** 3.10+\n- **Seaborn Version:** `0.13.2` / `0.14.0.dev0` (current `main` commit `c1cb287`)\n- **Matplotlib Version:** 3.9+ / 3.10+ / 3.11+\n- **Pandas Version:** 2.0+ / 3.0+\n\n### Description\nIn the `seaborn.objects` interface, `so.Stack` is designed to eliminate overlap between marks having a baseline (e.g., `so.Bar`, `so.Area`) by cumulatively stacking heights along the value axis.\n\nHowever, when a non-zero `baseline` is specified (e.g., `so.Bar(baseline=10)` or any custom baseline), `so.Stack` computes incorrect coordinates. Specifically:\n1. The first bar at each position is assigned a height of `0` (or negative), causing `BarBase._make_patches` to completely discard it (`if not np.nan_to_num(row[val_dim]): continue`). The first bar becomes completely invisible.\n2. All subsequent bars in the stack are shifted by incorrect relative lengths, distorting the entire cumulative distribution.\n\n### Minimal Reproducible Example (MRE)\n```python\nimport matplotlib.pyplot as plt\nimport pandas as pd\nimport seaborn.objects as so\n\n# Two bars with heights 5 and 15 starting from baseline 10:\n# Bar 1: value = 15 (height = 15 - 10 = "
+    },
+    {
+      "n": 34,
+      "id": "pytorch/pytorch#140687",
+      "package": "torch@2.5.0",
+      "title": "“Can't swap an already initialized allocator” when calling torch.cuda.memory.change_current_allocator",
+      "url": "https://github.com/pytorch/pytorch/issues/140687",
+      "labels": [
+        "module: cuda",
+        "triaged",
+        "module: CUDACachingAllocator"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "PyTorch version: 2.5.0+cu121"
+      },
+      "armedSymbols": [
+        "change_current_allocator",
+        "cuda",
+        "cuda.memory",
+        "memory"
+      ],
+      "workaround": null,
+      "body": "### 🐛 Describe the bug\r\n\r\nI write an example based on the one from doc: https://pytorch.org/docs/stable/notes/cuda.html#cuda-memory-management\r\n\r\nThe reason I found out is when lazy init is already done, for example \"torch.cuda.get_device_capability()\", change_current_allocator will raise such error.\r\n\r\n```\r\nimport torch\r\nfrom torch.utils.cpp_extension import load_inline\r\n\r\ndummy_allocator_source = \"\"\"\r\n#include <sys/types.h>\r\n#include <cuda.h>\r\n#include <cuda_runtime_api.h>\r\n#include <stdio.h>\r\n#include <iostream>\r\n\r\nextern \"C\" {\r\nvoid* my_malloc(ssize_t size, int device, cudaStream_t stream) {\r\n   void *ptr;\r\n   cudaMalloc(&ptr, size);\r\n   std::cout<<\"alloc \"<<ptr<<size<<std::endl;\r\n   return ptr;\r\n}\r\n\r\nvoid my_free(void* ptr, ssize_t size, int device, cudaStream_t stream) {\r\n   std::cout<<\"free \"<<ptr<< \" \"<<stream<<std::endl;\r\n   cudaFree(ptr);\r\n}\r\n}\r\n\"\"\"\r\n\r\n# Add with_cuda=True to explicitly enable CUDA support\r\ndummy_allocator = load_inline(\r\n    name=\"dummy_allocator\",\r\n    cpp_sources=[dummy_allocator_source],\r\n    extra_ldflags=[\"-lcudart\"],  # Link with the CUDA runtime library\r\n    extra_cflags=['-O3'],\r\n    is_python_module=False,\r\n    keep_intermediates=False,\r\n    ve"
+    },
+    {
+      "n": 35,
+      "id": "yaml/pyyaml#601",
+      "package": "pyyaml@6.0.2",
+      "title": "\"AttributeError: cython_sources\" with Cython 3.0.0a10",
+      "url": "https://github.com/yaml/pyyaml/issues/601",
+      "labels": [
+        "task:bug",
+        "-★★★-"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "plain",
+        "quote": "Query: is this issue now moot with 6.0.2? The 6.0.2 release notes say:",
+        "by": "mathomp4"
+      },
+      "armedSymbols": [
+        "AttributeError",
+        "cython_sources"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "pinghedm",
+        "excerpt": "Our workaround for the time being is, in our build process, to install a compatible cython first and then use --no-build-isolation.  Eg\n```\npip install \"Cython<3.0\" pyyaml --no-build-isolation # new line\npip install -r requirements.txt # original build step, which has pyyaml in it\n```\n\nif that helps anyone"
+      },
+      "body": "When attempting to install PyYAML from sources with [Cython 3.0.0a10](https://cython.readthedocs.io/en/latest/src/changes.html#alpha-10-2022-01-06), e.g. like so:\r\n\r\n`pip install --pre -v git+https://github.com/yaml/pyyaml.git`\r\n\r\nthe install fails with:\r\n\r\n```\r\nUsing pip 21.3.1 from /home/florian/tmp/toxtest/.venv/lib/python3.10/site-packages/pip (python 3.10)\r\nCollecting git+https://github.com/yaml/pyyaml.git\r\n  Cloning https://github.com/yaml/pyyaml.git to /tmp/pip-req-build-rdv2sw86\r\n  Running command git version\r\n  git version 2.34.1\r\n  Running command git clone --filter=blob:none -q https://github.com/yaml/pyyaml.git /tmp/pip-req-build-rdv2sw86\r\n  Running command git rev-parse HEAD\r\n  8cdff2c80573b8be8e8ad28929264a913a63aa33\r\n  Resolved https://github.com/yaml/pyyaml.git to commit 8cdff2c80573b8be8e8ad28929264a913a63aa33\r\n  Running command /home/florian/tmp/toxtest/.venv/bin/python3 /tmp/pip-standalone-pip-7sp3xayz/__env_pip__.zip/pip install --ignore-installed --no-user --prefix /tmp/pip-build-env-az2k859x/overlay --no-warn-script-location --no-binary :none: --only-binary :none: -i https://pypi.org/simple --pre -- setuptools wheel Cython\r\n  Collecting setuptools\r\n    Using c"
+    },
+    {
+      "n": 36,
+      "id": "knex/knex#6282",
+      "package": "knex@3.1.0",
+      "title": "Regression in 3.1.0: isConnectionError does not treat NJS-500 / NJS-521 as connection errors (npm published from older commit)",
+      "url": "https://github.com/knex/knex/issues/6282",
+      "labels": [
+        "NG_bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "1. `npm view knex@3.1.0 gitHead` — shows `4ca3dd5b...` (the published gitHead)"
+      },
+      "armedSymbols": [
+        "isConnectionError",
+        "dialects",
+        "gitHead",
+        "master"
+      ],
+      "workaround": null,
+      "body": "### Background\nThe `knex` package published to npm as **v3.1.0** was built from commit\n`4ca3dd5bc28e0665c5bed55026fac2ec45489d81`. That commit's\n`lib/dialects/oracle/utils.js` does **not** include handling for `NJS-500`\n(and `NJS-521`) in `isConnectionError(error)`. The `master` branch's\n`lib/dialects/oracle/utils.js` however *does* contain logic for  `NJS-500`\ncode (so the repository shows different contents than the npm tarball) but does not handle `NJS-521`.\n\nThis causes `knex` to **not** evict broken Oracle connections when the\ndriver returns new NJS error codes (for example `NJS-500`), leaving the\npool filled with dead connections after a brief outage.\n\nBecause `NJS-521` is an EOF/communication-channel error from the\n`node-oracledb` driver (e.g. \"received end-of-file on communication\nchannel\"), it should be treated as a connection-level error so the pool\nwill evict that connection.\n\n### Reproduction / verification steps\n1. `npm view knex@3.1.0 gitHead` — shows `4ca3dd5b...` (the published gitHead)\n2. `npm pack knex@3.1.0 && tar -xzf knex-3.1.0.tgz` — inspect\n   `package/lib/dialects/oracle/utils.js` and see that `NJS-500`/`NJS-521`\n   handling is missing from `isConnectionErro"
+    },
+    {
+      "n": 37,
+      "id": "pytorch/pytorch#141822",
+      "package": "torch@2.5.0",
+      "title": "F.cross_entropy unexpectedly slower than F.log_softmax + torch.gather",
+      "url": "https://github.com/pytorch/pytorch/issues/141822",
+      "labels": [
+        "module: performance",
+        "module: nn",
+        "triaged"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "I thought it might be due to the `reduction='none'`, but commenting it out doesn’t lead to any noticeable speedup. I'm on version 2.5.0."
+      },
+      "armedSymbols": [
+        "cross_entropy",
+        "F.cross_entropy",
+        "F.log_softmax",
+        "gather"
+      ],
+      "workaround": null,
+      "body": "I’m working on some training code that computes the total log probabilities of prediction sequences (i.e. outputs from a language model).\r\n\r\nI had previously implemented this using `F.log_softmax` followed by `torch.gather`, but realized this can also be done with `F.cross_entropy` with `reduction='none'` followed by a sum operation over the last dimension. I rewrote my code using `F.cross_entropy` thinking it would speed up my code since it’s a single builtin function instead of two but to my surprise, training is now significantly slower.\r\n\r\nHere’s a hacky microbenchmark script capturing what I’m talking about:\r\n\r\n```\r\nimport torch\r\nimport torch.nn.functional as F\r\nimport time\r\n\r\ntorch.manual_seed(42)\r\n\r\nbatch_size, seq_len, vocab_size = 2, 512, 50257\r\nlogits = torch.randn(batch_size, seq_len, vocab_size)\r\nlabels = torch.randint(0, vocab_size, (batch_size, seq_len))\r\nlabels[labels % 3 == 0] = -100\r\n\r\nlabels_safe = labels.detach()\r\nlabels_safe[labels_safe == -100] = 0\r\n\r\nlogits = logits.to(\"cuda\")\r\nlabels = labels.to(\"cuda\")\r\nlabels_safe = labels_safe.to(\"cuda\")\r\n\r\n\r\ndef benchmark(func, num_iters=20):\r\n    torch.cuda.synchronize()\r\n    start = time.perf_counter()\r\n    for _ in ran"
+    },
+    {
+      "n": 38,
+      "id": "scikit-learn/scikit-learn#30935",
+      "package": "scikit-learn@1.5.2",
+      "title": "The default token pattern in CountVectorizer breaks Indic sentences into non-sensical tokens",
+      "url": "https://github.com/scikit-learn/scikit-learn/issues/30935",
+      "labels": [
+        "Bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "sklearn: 1.5.2"
+      },
+      "armedSymbols": [
+        "CountVectorizer",
+        "token_pattern"
+      ],
+      "workaround": null,
+      "body": "### Describe the bug\n\nThe default `token_pattern` in `CountVectorizer` is `r\"(?u)\\b\\w\\w+\\b\"` which tokenizes Indic texts in a wrong way - breaks whitespace tokenized words into multiple chunks and even omits several valid characters. The resulting vocabulary doesn't make any sense !\n\nIs this the expected behaviour?\n\nSample code is pasted in the sections below\n\n### Steps/Code to Reproduce\n\n```\nimport sklearn\nfrom sklearn.feature_extraction.text import CountVectorizer\n\ntel = [\"ప్రధానమంత్రిని కలుసుకున్నారు\"]\nhin = [\"आधुनिक मानक हिन्दी\"]\neng = [\"They met the Prime Minister\"]\n\ncvect = CountVectorizer(\n    ngram_range=(1, 1),\n    max_features=None,\n    min_df=1,\n    strip_accents=None,\n)\ncvect.fit(tel + hin + eng)\nprint(cvect.vocabulary_)\n```\n\n### Expected Results\n\n```\n{'ప్రధానమంత్రిని': 9, 'కలుసుకున్నారు': 8, 'आधुनिक': 5, 'मानक': 6, 'हिन्दी': 7, 'they': 4, 'met': 0, 'the': 3, 'prime': 2, 'minister': 1}\n```\n\n### Actual Results\n\n```\n{'రధ': 9, 'నమ': 8, 'కల': 7, 'आध': 5, 'नक': 6, 'they': 4, 'met': 0, 'the': 3, 'prime': 2, 'minister': 1}\n```\n\n\n### Versions\n\n```\nSystem:\n    python: 3.11.10 (main, Oct  3 2024, 07:29:13) [GCC 11.2.0]\nexecutable: miniconda3/envs/lolm/bin/python\n   machine: Linux"
+    },
+    {
+      "n": 39,
+      "id": "scikit-learn/scikit-learn#32614",
+      "package": "scikit-learn@1.5.2",
+      "title": "StackingRegressor is incompatible with TimeSeriesSplit as cv parameter, raising \"ValueError: cross_val_predict only works for partitions\"",
+      "url": "https://github.com/scikit-learn/scikit-learn/issues/32614",
+      "labels": [
+        "Needs Info"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "scikit-learn version: 1.5.2 (also affects 1.4.x)"
+      },
+      "armedSymbols": [
+        "cross_val_predict",
+        "StackingRegressor",
+        "TimeSeriesSplit",
+        "ValueError"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "nothing-ends-adrian",
+        "excerpt": "This bug makes it impossible to use `StackingRegressor` for time-series forecasting without resorting to a leaky workaround like `KFold(shuffle=False)`.\n\n### Steps/Code to Reproduce\n\nHere is a minimal reproducible example:\n\n```python\nimport numpy as np\nimport sklearn\nfrom sklearn.model_selection import TimeSeriesSplit, KFold\nfrom sklearn.ensemble import StackingRegressor\nfrom sklearn.linear_model import LinearRegression\n\nprint(f\"scikit-learn version: {sklearn.__version__}\")\n\n# 1. Create dummy ti"
+      },
+      "body": "https://github.com/scikit-learn/scikit-learn/blob/0f9b6a6c0bbbcbbb7f509016fa1006facfe1ba8d/sklearn/model_selection/_validation.py#L1185\n\n### `scikit-learn` version and operating system\n\nscikit-learn version: 1.5.2 (also affects 1.4.x)\nOperating System: (e.g., macOS, Windows, Linux)\nPython version: (e.g., 3.10)\n\n### The bug\n\nWhen using `StackingRegressor` (or `StackingClassifier`), passing a `TimeSeriesSplit` object to the `cv` parameter fails, raising a `ValueError: cross_val_predict only works for partitions`.\n\nThis check is fundamentally incompatible with `TimeSeriesSplit`, which correctly reserves the initial chunk of data for training and never uses it as a test set.\n\nThis bug makes it impossible to use `StackingRegressor` for time-series forecasting without resorting to a leaky workaround like `KFold(shuffle=False)`.\n\n### Steps/Code to Reproduce\n\nHere is a minimal reproducible example:\n\n```python\nimport numpy as np\nimport sklearn\nfrom sklearn.model_selection import TimeSeriesSplit, KFold\nfrom sklearn.ensemble import StackingRegressor\nfrom sklearn.linear_model import LinearRegression\n\nprint(f\"scikit-learn version: {sklearn.__version__}\")\n\n# 1. Create dummy time-series data\nX = "
+    },
+    {
+      "n": 40,
+      "id": "mwaskom/seaborn#3922",
+      "package": "seaborn@0.13.2",
+      "title": "Violinplot shows groups swapped contrary to boxplot",
+      "url": "https://github.com/mwaskom/seaborn/issues/3922",
+      "labels": [
+        "bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "I am using pandas 3.0.0 and seaborn 0.13.2."
+      },
+      "armedSymbols": [
+        "boxplot"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "bidyut18",
+        "excerpt": "Hello Everyone, I have initiated a pull request with a fix which ensures the integrity of the the `hue_order` in case of `pd.Categorical`.\n### Solution\nMy solution is to manually add a check to ensure that  the hue column’s category order is aligned with the mapping’s levels thus  fixing the bug."
+      },
+      "body": "Hello,\n\nI am seeing different behavior in seaborn.violinplot compared with seaborn.boxplot when using the same dataframe.\n\n<img width=\"608\" height=\"280\" alt=\"Image\" src=\"https://github.com/user-attachments/assets/a4d425c2-eef1-4757-b402-52ccc988e972\" />\n\nIn my case, boxplot looks correct, but violinplot lookes swapped. I found a workaround, but I do not understand the underlying issue: the violin plot only matches the data after I explicitly change the column's type I use for groupping to _str_ instead of the original type which was _category_. I included an example below.\n\nI am using pandas 3.0.0 and seaborn 0.13.2.\n\nI also saw issue #3893, which seems possibly related.\n\nThank you in advance,\nRita\n\n```python\n\nimport matplotlib.pyplot as plt\nimport seaborn as sns\nimport pandas as pd\n\ndata_pat = df_long[df_long[\"Pattern\"] == 'MD']\ndata_pat = data_pat[data_pat[\"ROI\"].isin([\"Isocortex\", \"Cerebellum\"])]\ndata_pat = (\n    data_pat\n    .groupby([\"Subject\", \"ROI\", \"Group\", \"Pattern\"], as_index=False)\n    .agg({\"Value\": \"mean\"})\n)\n\n# ----------  !! Violinplot looks wrong unless group is cast to str !! ----------\n# data_pat[\"Group\"] = data_pat[\"Group\"].astype(str)\n\nhue_order = ['WT', 'HTZ']\n"
+    }
+  ]
+}
