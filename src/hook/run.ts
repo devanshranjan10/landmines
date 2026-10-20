@@ -1,6 +1,6 @@
 import { appendFileSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { type Hit, matchTouches } from '../match.js';
+import { type Hit, fileContext, matchTouches } from '../match.js';
 import { MAX_HITS, modelMessage } from '../message.js';
 import { langForPath } from '../source/lang.js';
 import { touches } from '../source/touches.js';
@@ -72,7 +72,8 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
       if (!indexes.has(root)) indexes.set(root, readIndex(root));
       const index = indexes.get(root);
       if (!index) continue;
-      for (const h of matchTouches(touches({ fileText: edit.fileText, changedText: edit.changedText, lang }), index, lang)) {
+      const found = touches({ fileText: edit.fileText, changedText: edit.changedText, lang });
+      for (const h of matchTouches(found, index, lang, fileContext(edit.fileText, lang))) {
         if (!hits.some((x) => x.landmine.id === h.landmine.id)) hits.push({ ...h, file: edit.path, root });
       }
     }

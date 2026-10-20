@@ -131,3 +131,20 @@ describe('cli check / list', () => {
     });
   });
 });
+
+describe('database dialect context', () => {
+  it('a MySQL-specific issue does not fire in a Postgres file, but does in a MySQL one', async () => {
+    const { issueDialects, fileDialects } = await import('../src/analyze/dialect.js');
+    expect(issueDialects('[BUG]: Getting started with MariaDB: serial auto_increment', ['bug', 'db/mysql', 'db/mariadb'])).toEqual(['mysql']);
+    expect(issueDialects('findOne with relations does two queries.', ['driver: mysql', 'driver: postgres'])).toEqual(['mysql', 'postgres']);
+    expect([...fileDialects(['drizzle-orm/pg-core', 'drizzle-orm/node-postgres'], '')]).toEqual(['postgres']);
+    expect([...fileDialects([], "create_engine('postgresql+psycopg://u@h/db')")]).toEqual(['postgres']);
+
+    const base = index.landmines.find((l) => l.id === 'drizzle-team/drizzle-orm#3333') as Landmine;
+    expect(base.dialects).toEqual(['mysql']);
+    const pgFile = "import { pgTable, serial } from 'drizzle-orm/pg-core';\nexport const t = pgTable('t', { id: serial('id') });\n";
+    const myFile = "import { mysqlTable, serial } from 'drizzle-orm/mysql-core';\nexport const t = mysqlTable('t', { id: serial('id') });\n";
+    expect(checkFile(join(root, 'pg.ts'), index, pgFile).map((h) => h.landmine.id)).not.toContain('drizzle-team/drizzle-orm#3333');
+    expect(checkFile(join(root, 'my.ts'), index, myFile).map((h) => h.landmine.id)).toContain('drizzle-team/drizzle-orm#3333');
+  });
+});

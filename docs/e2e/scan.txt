@@ -1,0 +1,17 @@
+
+landmine scanned 7 direct dependencies from package-lock.json, requirements.txt
+
+  date-fns@3.6.0      22 open issues · 15 tied to symbols · 4 workarounds
+  drizzle-orm@0.36.0  13 open issues · 9 tied to symbols · 6 workarounds
+  pg@8.13.1           1 open issue · 0 tied to symbols · 0 workarounds
+  typescript@5.6.3    21 open issues · 17 tied to symbols · 5 workarounds
+  pydantic@2.9.2      21 open issues · 21 tied to symbols · 12 workarounds
+  requests@2.32.3     6 open issues · 5 tied to symbols · 3 workarounds
+
+  No open issues name the exact version: zod@3.23.8
+  Search hits dropped: 2 that only name it as working, fixed or upgraded-from; 15 that only mention it in links or hidden comments.
+  9 weaker mentions (version only in an unconfirmed comment) kept in the index but never trigger the hook.
+
+Found 84 open issues filed against your exact versions in 6 of 7 packages.
+67 point at specific symbols the hook will watch. 30 have a workaround in the comments.
+Index: .landmine/index.json

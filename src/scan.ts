@@ -1,3 +1,5 @@
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
 import { buildLandmines } from './analyze/landmine.js';
 import { strengthRank } from './analyze/version.js';
 import { type GitHubClient, GitHubError } from './github/client.js';
@@ -6,7 +8,7 @@ import type { Http } from './http.js';
 import { readDependencies } from './lockfiles/index.js';
 import { importNamesFor } from './pypiNames.js';
 import { resolveRepo } from './registry/resolve.js';
-import { readIndex, writeIndex } from './store.js';
+import { INDEX_DIR, writeIndex } from './store.js';
 import type { Dependency, LandmineIndex, Landmine, PackageRecord, SkippedDependency } from './types.js';
 import { VERSION } from './version.js';
 
@@ -60,32 +62,74 @@ function emptyRecord(dep: Dependency, now: Date): PackageRecord {
   };
 }
 
+/** What scan learned from the network about one package version. Cached raw so re-analysis is free. */
+interface Fetched {
+  fetchedAt: string;
+  maxIssues: number;
+  status: PackageRecord['status'];
+  detail?: string;
+  repo?: string;
+  repoDirectory?: string;
+  searchHits: number;
+  issues: RawIssue[];
+}
+
+export function cacheFile(root: string, dep: Pick<Dependency, 'ecosystem' | 'name' | 'version'>): string {
+  return join(root, INDEX_DIR, 'cache', dep.ecosystem, `${encodeURIComponent(dep.name)}@${encodeURIComponent(dep.version)}.json`);
+}
+
+function readCache(file: string, now: Date, maxIssues: number): Fetched | undefined {
+  try {
+    const f = JSON.parse(readFileSync(file, 'utf8')) as Fetched;
+    const fresh = now.getTime() - Date.parse(f.fetchedAt) < CACHE_TTL_MS;
+    const enough = f.maxIssues >= maxIssues || f.issues.length < f.maxIssues;
+    return fresh && enough && Array.isArray(f.issues) ? f : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+function writeCache(root: string, file: string, f: Fetched): void {
+  mkdirSync(dirname(file), { recursive: true });
+  const ignore = join(root, INDEX_DIR, '.gitignore');
+  if (!existsSync(ignore)) writeFileSync(ignore, '# raw GitHub/registry responses; index.json can be committed\ncache/\n');
+  writeFileSync(file, JSON.stringify(f));
+}
+
 /** Build `.landmine/index.json`: lockfiles → registry → GitHub → verified landmines. */
 export async function scan(opts: ScanOptions): Promise<ScanResult> {
   const now = opts.now ?? (() => new Date());
   const log = opts.log ?? (() => {});
   const maxIssues = opts.maxIssues ?? 100;
   const { deps, skipped, lockfiles, notes } = readDependencies(opts.root, { prod: opts.prod ?? false });
-  const previous = opts.refresh ? undefined : readIndex(opts.root);
   const searches = new Map<string, Promise<{ searchHits: number; issues: RawIssue[] }>>();
   const records: PackageRecord[] = [];
   const landmines: Landmine[] = [];
   let reused = 0;
   let fatal: GitHubError | undefined;
 
+  const fetchDep = async (dep: Dependency, started: Date): Promise<Fetched> => {
+    const base = { fetchedAt: started.toISOString(), maxIssues, searchHits: 0, issues: [] as RawIssue[] };
+    const res = await resolveRepo(opts.http, dep);
+    if (res.status === 'error') throw new Error(res.detail ?? 'registry error');
+    if (res.status !== 'ok' || !res.repo) return { ...base, status: res.status, ...(res.detail ? { detail: res.detail } : {}) };
+    const canon = await canonicalRepo(opts.github, res.repo.owner, res.repo.name);
+    if (!canon) return { ...base, status: 'no-repo', detail: `${res.repo.owner}/${res.repo.name} not found on GitHub` };
+    const repoInfo = { repo: canon.fullName, ...(res.directory ? { repoDirectory: res.directory } : {}) };
+    if (!canon.hasIssues) return { ...base, ...repoInfo, status: 'no-repo', detail: 'issues are disabled on the repository' };
+    const key = `${canon.fullName}@${dep.version}`;
+    let search = searches.get(key);
+    if (!search) {
+      search = searchVersionIssues(opts.github, canon.fullName, dep.version, maxIssues);
+      searches.set(key, search);
+    }
+    const { searchHits, issues } = await search;
+    return { ...base, ...repoInfo, status: 'ok', searchHits, issues, ...(canon.archived ? { detail: 'repository is archived' } : {}) };
+  };
+
   await pool(deps, opts.concurrency ?? 4, async (dep) => {
     if (fatal) return;
     const started = now();
-    const cached = previous?.packages.find(
-      (p) => p.ecosystem === dep.ecosystem && p.name === dep.name && p.version === dep.version && p.status !== 'error',
-    );
-    if (cached?.fetchedAt && started.getTime() - Date.parse(cached.fetchedAt) < CACHE_TTL_MS) {
-      records.push({ ...cached, dev: dep.dev });
-      landmines.push(...(previous?.landmines ?? []).filter((l) => l.ecosystem === dep.ecosystem && l.package === dep.name && l.version === dep.version));
-      reused++;
-      return;
-    }
-
     const rec = emptyRecord(dep, started);
     records.push(rec);
     if (dep.ecosystem === 'npm' && dep.name.startsWith('@types/')) {
@@ -95,46 +139,33 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
       return;
     }
     try {
-      const res = await resolveRepo(opts.http, dep);
-      if (res.status !== 'ok' || !res.repo) {
-        rec.status = res.status === 'error' ? 'error' : res.status;
-        if (res.detail) rec.detail = res.detail;
-        log(`  ${dep.name}@${dep.version}: ${res.status === 'not-github' ? 'not on GitHub' : 'no GitHub repo found'}`);
-        return;
+      const file = cacheFile(opts.root, dep);
+      let fetched = opts.refresh ? undefined : readCache(file, started, maxIssues);
+      if (fetched) reused++;
+      else {
+        fetched = await fetchDep(dep, started);
+        if (opts.write !== false) writeCache(opts.root, file, fetched);
       }
-      const canon = await canonicalRepo(opts.github, res.repo.owner, res.repo.name);
-      if (!canon) {
-        rec.status = 'no-repo';
-        rec.detail = `${res.repo.owner}/${res.repo.name} not found on GitHub`;
-        return;
-      }
-      rec.repo = canon.fullName;
-      if (res.directory) rec.repoDirectory = res.directory;
-      if (canon.archived) rec.detail = 'repository is archived';
-      if (!canon.hasIssues) {
-        rec.status = 'no-repo';
-        rec.detail = 'issues are disabled on the repository';
+      rec.status = fetched.status;
+      rec.fetchedAt = fetched.fetchedAt;
+      if (fetched.detail) rec.detail = fetched.detail;
+      if (fetched.repo) rec.repo = fetched.repo;
+      if (fetched.repoDirectory) rec.repoDirectory = fetched.repoDirectory;
+      if (fetched.status !== 'ok' || !fetched.repo) {
+        log(`  ${dep.name}@${dep.version}: ${fetched.status === 'not-github' ? 'not on GitHub' : 'no GitHub repo found'}`);
         return;
       }
       if (dep.ecosystem === 'pypi') rec.importNames = importNamesFor(dep.name, opts.root);
-
-      const key = `${canon.fullName}@${dep.version}`;
-      let search = searches.get(key);
-      if (!search) {
-        search = searchVersionIssues(opts.github, canon.fullName, dep.version, maxIssues);
-        searches.set(key, search);
-      }
-      const { searchHits, issues } = await search;
-      const built = buildLandmines(issues, {
+      const built = buildLandmines(fetched.issues, {
         ecosystem: dep.ecosystem,
         name: dep.name,
         version: dep.version,
-        repo: canon.fullName,
+        repo: fetched.repo,
         ...(rec.repoDirectory ? { repoDirectory: rec.repoDirectory } : {}),
         ...(rec.importNames ? { importNames: rec.importNames } : {}),
       });
-      rec.searchHits = searchHits;
-      rec.verified = issues.length - built.dropped.unverified;
+      rec.searchHits = fetched.searchHits;
+      rec.verified = fetched.issues.length - built.dropped.unverified;
       rec.landmines = built.landmines.length;
       rec.dropped = built.dropped;
       landmines.push(...built.landmines);

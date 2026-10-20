@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { fileDialects } from './analyze/dialect.js';
+import { bindings } from './source/bindings.js';
 import { langForPath } from './source/lang.js';
 import type { Lang } from './source/lex.js';
 import { type Touch, touches } from './source/touches.js';
@@ -25,8 +27,19 @@ function packagesFor(touch: Touch, lang: Lang, index: LandmineIndex): Set<string
   return keys;
 }
 
+export interface MatchContext {
+  /** Databases the edited file uses (imports, connection URLs); see analyze/dialect.ts. */
+  dialects?: Set<string>;
+}
+
+/** What the whole edited file tells us beyond the touched symbols. */
+export function fileContext(fileText: string, lang: Lang): MatchContext {
+  const specs = bindings(fileText, lang).map((b) => b.specifier);
+  return { dialects: fileDialects(specs, fileText) };
+}
+
 /** Landmines whose strong symbols the edit touches, best first, one hit per issue. */
-export function matchTouches(found: Touch[], index: LandmineIndex, lang: Lang): Hit[] {
+export function matchTouches(found: Touch[], index: LandmineIndex, lang: Lang, ctx: MatchContext = {}): Hit[] {
   const best = new Map<string, Hit>();
   for (const touch of found) {
     const keys = packagesFor(touch, lang, index);
@@ -34,6 +47,8 @@ export function matchTouches(found: Touch[], index: LandmineIndex, lang: Lang): 
     const names = [...touch.specifiers, ...touch.pairs, ...touch.symbols];
     for (const l of index.landmines) {
       if (!keys.has(`${l.ecosystem}:${l.package}@${l.version}`) || l.evidence.strength === 'weak') continue;
+      // A MySQL-only bug is not a landmine in a file that talks to Postgres.
+      if (l.dialects?.length && ctx.dialects?.size && !l.dialects.some((d) => ctx.dialects?.has(d))) continue;
       let hit: { symbol: string; score: number } | undefined;
       for (const name of names) {
         const s = l.symbols.find((x) => x.name === name);
@@ -52,5 +67,5 @@ export function matchTouches(found: Touch[], index: LandmineIndex, lang: Lang): 
 export function checkFile(path: string, index: LandmineIndex, text: string = readFileSync(path, 'utf8')): Hit[] {
   const lang = langForPath(path);
   if (!lang) return [];
-  return matchTouches(touches({ fileText: text, changedText: text, lang }), index, lang);
+  return matchTouches(touches({ fileText: text, changedText: text, lang }), index, lang, fileContext(text, lang));
 }

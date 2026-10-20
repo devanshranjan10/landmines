@@ -138,3 +138,16 @@ Python…). Without this, "macOS 14.2.1" would count as evidence for next@14.2.1
 upstream package, so searching for "20.11.0" finds Node.js runtime issues, not
 type-definition bugs. These packages are recorded as `skipped`.
 
+**D-25 — Database dialect context.** The first real `check` on the demo found a false
+positive. `serial` in a file importing `drizzle-orm/pg-core` matched #3333, a
+MariaDB-only bug: same symbol name, different database.
+- Landmines now record the dialects named in their title and labels (`db/mysql`,
+  `driver: postgres`).
+- The edited file's dialects come from its imports and connection URLs.
+- A dialect-specific issue only fires when the two overlap.
+
+**D-26 — Cache raw network data, not analysis.** Caching analysed landmines meant
+analysis fixes stayed invisible for 24 h. Scan now caches raw registry and GitHub
+responses per package version in `.landmine/cache/`, git-ignored via
+`.landmine/.gitignore`, and always re-analyses. The index stays small enough to commit.
+

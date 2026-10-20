@@ -89,6 +89,8 @@ export interface Landmine {
   };
   evidence: VersionEvidence;
   symbols: IssueSymbol[];
+  /** Databases the issue is specific to (from title and labels), e.g. ["mysql"]. */
+  dialects?: string[];
   workaround?: Workaround;
   fixHint?: FixHint;
 }

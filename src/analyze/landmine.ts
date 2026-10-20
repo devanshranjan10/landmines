@@ -1,6 +1,7 @@
 import type { RawIssue } from '../github/issues.js';
 import type { Lang } from '../source/lex.js';
 import type { Ecosystem, Landmine } from '../types.js';
+import { issueDialects } from './dialect.js';
 import { issueSymbols } from './issueSymbols.js';
 import { type DropReason, type PackageContext, packageAliases, strengthRank, versionEvidence } from './version.js';
 import { boilerplateBodies, fixHint, pickWorkaround } from './workaround.js';
@@ -33,6 +34,7 @@ export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult 
     }
     const workaround = pickWorkaround(issue, ctx.name, boilerplate);
     const fix = fixHint(issue);
+    const dialects = issueDialects(issue.title, issue.labels);
     landmines.push({
       id: `${issue.repo}#${issue.number}`,
       ecosystem: ctx.ecosystem,
@@ -51,6 +53,7 @@ export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult 
       },
       evidence: ev.evidence,
       symbols: issueSymbols(issue, { packageName: ctx.name, packageAliases: aliases, importNames, lang }),
+      ...(dialects.length ? { dialects } : {}),
       ...(workaround ? { workaround } : {}),
       ...(fix ? { fixHint: fix } : {}),
     });
