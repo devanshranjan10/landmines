@@ -1,10 +1,14 @@
-import { existsSync } from 'node:fs';
+import { existsSync, realpathSync } from 'node:fs';
 import { dirname, relative, resolve } from 'node:path';
 import { Command, InvalidArgumentError } from 'commander';
 import { GitHubClient } from './github/client.js';
 import { findToken } from './github/token.js';
 import { type Http, liveHttp, recordingHttp, replayHttp } from './http.js';
 import { findProjectRoot } from './lockfiles/index.js';
+import { HARNESSES, type Harness } from './hook/payload.js';
+import type { HookMode } from './hook/respond.js';
+import { runHook } from './hook/run.js';
+import { hookCommand, install, uninstall } from './install.js';
 import { checkFile } from './match.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
@@ -120,6 +124,62 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     });
 
   program
+    .command('hook')
+    .description('Hook entry point: reads the harness payload on stdin, blocks an edit once per known bug (always exits 0)')
+    .option('--mode <mode>', 'block (deny once, then allow the retry) or warn (add context, never block)', modeArg, 'block')
+    .option('--harness <name>', `force the payload format (${HARNESSES.join(', ')}); default: detect`, harnessArg)
+    .action(async (opts: { mode: HookMode; harness?: Harness | 'all' }) => {
+      if (process.stdin.isTTY) {
+        process.stderr.write('landmine hook reads a hook payload on stdin; it is meant to be run by Claude Code, Codex, Cursor or Gemini CLI. See `landmine install`.\n');
+        return;
+      }
+      try {
+        const input = await readStdin();
+        const harness = opts.harness === 'all' ? undefined : opts.harness;
+        const result = runHook(input, { mode: opts.mode, env, ...(harness ? { harness } : {}) });
+        if (result.stdout) process.stdout.write(`${result.stdout}\n`);
+        if (env.LANDMINE_DEBUG === '1') process.stderr.write(`landmine: ${result.decision}${result.reason ? ` (${result.reason})` : ''}\n`);
+      } catch {
+        // Never get in the agent's way.
+      }
+    });
+
+  program
+    .command('install')
+    .description('Wire the hook into this project (default: Claude Code, which Cursor also reads)')
+    .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
+    .option('--harness <name>', `${HARNESSES.join(', ')} or all`, harnessArg, 'claude')
+    .option('--mode <mode>', 'block or warn', modeArg, 'block')
+    .option('--command <cmd>', 'exact command the harness should run (default: this landmine install)')
+    .action((opts: { root?: string; harness: Harness | 'all'; mode: HookMode; command?: string }) => {
+      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const script = process.argv[1] ? realpathSync(process.argv[1]) : '';
+      const command = opts.command ?? hookCommand({ execPath: process.execPath, script, version: VERSION, mode: opts.mode, ...(env.PATH ? { pathEnv: env.PATH } : {}) });
+      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : [opts.harness];
+      for (const h of targets) {
+        const r = install(root, h, command);
+        process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: ${h} hook in ${relative(process.cwd(), r.file) || r.file}\n`);
+        for (const n of r.notes) process.stdout.write(`  ${n}\n`);
+      }
+      process.stdout.write(`  Command: ${command}\n`);
+      if (!readIndex(root)) process.stdout.write('  No index yet. Run `landmine scan` so the hook has something to match.\n');
+    });
+
+  program
+    .command('uninstall')
+    .description("Remove landmine's hook entries (other hooks are left alone)")
+    .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
+    .option('--harness <name>', `${HARNESSES.join(', ')} or all`, harnessArg, 'all')
+    .action((opts: { root?: string; harness: Harness | 'all' }) => {
+      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : [opts.harness];
+      for (const h of targets) {
+        const r = uninstall(root, h);
+        if (r.changed) process.stdout.write(`Removed: ${h} hook from ${relative(process.cwd(), r.file) || r.file}\n`);
+      }
+    });
+
+  program
     .command('list')
     .description('Show indexed landmines (default: the ones the hook can fire on)')
     .argument('[package]', 'only this package')
@@ -144,6 +204,22 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     });
 
   return program;
+}
+
+function harnessArg(value: string): Harness | 'all' {
+  if (value === 'all' || (HARNESSES as readonly string[]).includes(value)) return value as Harness | 'all';
+  throw new InvalidArgumentError(`expected one of ${HARNESSES.join(', ')}, all`);
+}
+
+function modeArg(value: string): HookMode {
+  if (value === 'block' || value === 'warn') return value;
+  throw new InvalidArgumentError('expected block or warn');
+}
+
+async function readStdin(): Promise<string> {
+  const chunks: Buffer[] = [];
+  for await (const chunk of process.stdin) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : (chunk as Buffer));
+  return Buffer.concat(chunks).toString('utf8');
 }
 
 function loadIndex(start: string): LandmineIndex {

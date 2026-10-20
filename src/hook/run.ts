@@ -1,0 +1,103 @@
+import { appendFileSync } from 'node:fs';
+import { dirname } from 'node:path';
+import { type Hit, matchTouches } from '../match.js';
+import { MAX_HITS, modelMessage } from '../message.js';
+import { langForPath } from '../source/lang.js';
+import { touches } from '../source/touches.js';
+import { findIndexRoot, readIndex } from '../store.js';
+import type { LandmineIndex } from '../types.js';
+import { type Harness, type ReadFile, detectHarness, extractEdits, isPreToolEvent, readFileOrUndefined, sessionKey, workDir } from './payload.js';
+import { type HookMode, respond } from './respond.js';
+import { ShownState } from './state.js';
+
+export interface HookOptions {
+  mode?: HookMode;
+  harness?: Harness;
+  env?: NodeJS.ProcessEnv;
+  now?: () => Date;
+  stateDir?: string;
+  read?: ReadFile;
+}
+
+export interface HookResult {
+  stdout: string;
+  harness?: Harness;
+  decision: 'none' | 'deny' | 'context';
+  hits: Array<{ id: string; symbol: string; file: string }>;
+  reason?: string;
+}
+
+/** Evaluate one hook invocation. Never throws: any problem means "print nothing". */
+export function runHook(stdin: string, opts: HookOptions = {}): HookResult {
+  const env = opts.env ?? process.env;
+  const result = evaluate(stdin, opts, env);
+  const log = env.LANDMINE_DEBUG_LOG;
+  if (log) {
+    try {
+      appendFileSync(log, `${JSON.stringify({ time: new Date().toISOString(), ...result, payload: safeParse(stdin) })}\n`);
+    } catch {
+      // logging is best effort
+    }
+  }
+  return result;
+}
+
+function safeParse(text: string): unknown {
+  try {
+    return JSON.parse(text) as unknown;
+  } catch {
+    return text.slice(0, 2000);
+  }
+}
+
+function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): HookResult {
+  const none = (reason: string, harness?: Harness): HookResult => ({ stdout: '', decision: 'none', hits: [], reason, ...(harness ? { harness } : {}) });
+  try {
+    const parsed: unknown = JSON.parse(stdin);
+    if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) return none('payload is not a JSON object');
+    const payload = parsed as Record<string, unknown>;
+    const harness = opts.harness ?? detectHarness(payload);
+    if (!isPreToolEvent(payload)) return none('not a pre-tool event', harness);
+    const cwd = workDir(payload, env);
+    const edits = extractEdits(payload, harness, cwd, opts.read ?? readFileOrUndefined);
+    if (edits.length === 0) return none('no file edit in payload', harness);
+
+    const indexes = new Map<string, LandmineIndex | undefined>();
+    const hits: Array<Hit & { file: string; root: string }> = [];
+    for (const edit of edits) {
+      const lang = langForPath(edit.path);
+      if (!lang) continue;
+      const root = findIndexRoot(dirname(edit.path)) ?? findIndexRoot(cwd);
+      if (!root) continue;
+      if (!indexes.has(root)) indexes.set(root, readIndex(root));
+      const index = indexes.get(root);
+      if (!index) continue;
+      for (const h of matchTouches(touches({ fileText: edit.fileText, changedText: edit.changedText, lang }), index, lang)) {
+        if (!hits.some((x) => x.landmine.id === h.landmine.id)) hits.push({ ...h, file: edit.path, root });
+      }
+    }
+    if (hits.length === 0) return none('no landmine touched', harness);
+    hits.sort((a, b) => b.rank - a.rank);
+
+    const mode = opts.mode ?? 'block';
+    const session = sessionKey(payload, (opts.now ?? (() => new Date()))());
+    const fresh: typeof hits = [];
+    for (const h of hits) {
+      if (fresh.length >= MAX_HITS) break;
+      const state = new ShownState(h.root, session, opts.stateDir ?? env.LANDMINE_STATE_DIR);
+      if (!state.has(h.landmine.id) && state.claim(h.landmine.id)) fresh.push(h);
+    }
+    const summary = hits.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file }));
+    if (fresh.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };
+
+    const stdout = respond(harness, mode, modelMessage(fresh, mode)) ?? '';
+    return {
+      stdout,
+      harness,
+      decision: stdout ? (mode === 'block' ? 'deny' : 'context') : 'none',
+      hits: fresh.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file })),
+    };
+  } catch (err) {
+    return none(`internal error: ${(err as Error).message}`);
+  }
+}
