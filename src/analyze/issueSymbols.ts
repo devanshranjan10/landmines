@@ -4,7 +4,7 @@ import { langForFence } from '../source/lang.js';
 import type { Lang } from '../source/lex.js';
 import { touches } from '../source/touches.js';
 import type { IssueSymbol, SymbolSource } from '../types.js';
-import { codeSpans, dropQuotes, dropTaskLists, splitFences, stripNoise } from './markdown.js';
+import { codeSpans, codeSpansInContext, dropQuotes, dropTaskLists, splitFences, stripNoise } from './markdown.js';
 
 export const WEIGHT: Record<SymbolSource, number> = { title: 1.0, span: 0.7, code: 0.5, import: 0.2 };
 
@@ -86,11 +86,16 @@ export interface SymbolContext {
   lang: Lang;
 }
 
+/** "you can still use `np.ma.ptp`", "`foo` works fine": the span names the alternative, not the bug. */
+const ALTERNATIVE = /\b(still use|can use|could use|instead|alternative|work[- ]?around|works(?: fine| as expected| correctly)?|is fine|no problem)\b/i;
+const BUG_WORDS = /\b(fail\w*|error\w*|wrong|broken|bug|incorrect\w*|crash\w*|nan|unexpected\w*|doesn'?t|does not|not work\w*|cannot|can'?t|throws?|raises?)\b/i;
+export const ALTERNATIVE_WEIGHT = 0.3;
+
 class Scores {
   private readonly bySymbol = new Map<string, Map<SymbolSource, number>>();
-  add(name: string, source: SymbolSource): void {
+  add(name: string, source: SymbolSource, weight: number = WEIGHT[source]): void {
     const m = this.bySymbol.get(name) ?? new Map<SymbolSource, number>();
-    m.set(source, WEIGHT[source]);
+    m.set(source, Math.max(m.get(source) ?? 0, weight));
     this.bySymbol.set(name, m);
   }
   has(name: string): boolean {
@@ -139,14 +144,14 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
   const body = dropQuotes(dropTaskLists(stripNoise(issue.body)));
   const { prose, fences } = splitFences(body);
 
-  const addChains = (chains: string[][], source: SymbolSource): void => {
+  const addChains = (chains: string[][], source: SymbolSource, weight?: number): void => {
     for (const chain of chains) {
       if (isFileName(chain)) continue;
-      for (const seg of chain) if (isCandidate(seg, ctx)) scores.add(seg, source);
+      for (const seg of chain) if (isCandidate(seg, ctx)) scores.add(seg, source, weight);
       for (let k = 1; k < chain.length; k++) {
         const a = chain[k - 1];
         const b = chain[k];
-        if (a && b && isCandidate(b, ctx)) scores.add(`${a}.${b}`, source);
+        if (a && b && isCandidate(b, ctx)) scores.add(`${a}.${b}`, source, weight);
       }
     }
   };
@@ -162,9 +167,14 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
   const titleCodeish = titleWords.filter((w) => /\(\)|[\w$]\.[\w$]/.test(w) || CODEISH.test(w.replace(/\(\)$/, '')));
   addChains(titleCodeish.flatMap(chainsIn), 'title');
 
-  // Body inline code. Multi-word spans (error messages) only contribute code-looking tokens.
-  const spans = codeSpans(prose).filter(looksLikeCode);
-  addChains(spans.flatMap(spanChains), 'span');
+  // Body inline code. Multi-word spans (error messages) only contribute code-looking tokens; spans
+  // named as the alternative that works count for little.
+  const inContext = codeSpansInContext(prose).filter((c) => looksLikeCode(c.span));
+  const spans = inContext.map((c) => c.span);
+  for (const c of inContext) {
+    const alternative = ALTERNATIVE.test(c.sentence) && !BUG_WORDS.test(c.sentence);
+    addChains(spanChains(c.span), 'span', alternative ? ALTERNATIVE_WEIGHT : undefined);
+  }
 
   // Fenced code: bindings imported from this package, and the members used on them.
   for (const fence of fences) {

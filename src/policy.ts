@@ -10,5 +10,5 @@ export function armedSymbols(l: Landmine): string[] {
 
 /** Can the hook ever fire on this landmine? Needs non-weak version evidence and at least one strong symbol. */
 export function isArmed(l: Landmine): boolean {
-  return l.evidence.strength !== 'weak' && armedSymbols(l).length > 0;
+  return l.evidence.strength !== 'weak' && !l.nonBug && armedSymbols(l).length > 0;
 }

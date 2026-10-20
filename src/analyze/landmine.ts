@@ -17,6 +17,16 @@ export interface BuildResult {
   dropped: Record<DropReason, number>;
 }
 
+const BUG_LABEL = /\bbug\b|regression|crash|defect|incorrect|broken/i;
+const NON_BUG_LABEL = /enhancement|feature|proposal|\bidea\b|question|documentation|\bdocs?\b|installation|\bbuild\b|discussion|support request/i;
+const NON_BUG_TITLE = /^\s*(?:\[?(?:feat(?:ure)?|enhancement|proposal|rfc|question|docs?|discussion)\b[\]:]?|ENH\b|DOC\b|BLD\b|BUILD\b|QST\b|feature request)/i;
+
+/** Feature requests, questions, docs and install problems are not landmines for code edits. */
+export function isNonBug(title: string, labels: string[]): boolean {
+  if (labels.some((l) => BUG_LABEL.test(l))) return false;
+  return labels.some((l) => NON_BUG_LABEL.test(l)) || NON_BUG_TITLE.test(title);
+}
+
 /** Turn raw search hits into verified, scored landmines for one package version. */
 export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult {
   const dropped: Record<DropReason, number> = { unverified: 0, unaffected: 0, incidental: 0 };
@@ -54,6 +64,7 @@ export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult 
       evidence: ev.evidence,
       symbols: issueSymbols(issue, { packageName: ctx.name, packageAliases: aliases, importNames, lang }),
       ...(dialects.length ? { dialects } : {}),
+      ...(isNonBug(issue.title, issue.labels) ? { nonBug: true as const } : {}),
       ...(workaround ? { workaround } : {}),
       ...(fix ? { fixHint: fix } : {}),
     });
@@ -67,14 +78,18 @@ export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult 
   return { landmines, dropped };
 }
 
-/** A symbol in more than half of a package's landmines (its main entry point) identifies none of them. */
+/**
+ * A symbol in many of a package's landmines (its main entry point: `drizzle`, `DataFrame`) identifies none
+ * of them: more than half of 4+, or more than a quarter of 8+.
+ */
 export function applyUbiquityPenalty(landmines: Landmine[]): void {
   if (landmines.length < 4) return;
+  const limit = landmines.length >= 8 ? 0.25 : 0.5;
   const df = new Map<string, number>();
   for (const l of landmines) for (const s of l.symbols) df.set(s.name, (df.get(s.name) ?? 0) + 1);
   for (const l of landmines) {
     for (const s of l.symbols) {
-      if ((df.get(s.name) ?? 0) / landmines.length > 0.5) s.score = Math.round(s.score * 50) / 100;
+      if ((df.get(s.name) ?? 0) / landmines.length > limit) s.score = Math.round(s.score * 50) / 100;
     }
   }
 }

@@ -36,7 +36,7 @@ export function packageAliases(ctx: Pick<PackageContext, 'name' | 'repo'>): stri
 const NEGATION = /\b(not|never|no longer|stopped|cannot)\b|n't\b/i;
 const WORKAROUND_CONTEXT = /work[- ]?around|fix|patch|solution|suggest|hack/i;
 const WORKS_CUE =
-  /\b(works?|worked|working)\b(?:\s+(?:fine|correctly|well|ok|okay|as expected|perfectly|again|for me))?\s+(?:in|on|with|at|using|under|for)\s+(?:\S+\s+)?(?:version\s*|v\s*)?$/i;
+  /\b(works?|worked|working|pass(?:es|ed|ing)?)\b(?:\s+(?:fine|correctly|well|ok|okay|as expected|perfectly|again|for me))?\s+(?:in|on|with|at|using|under|for)\s+(?:\S+\s+)?(?:version\s*|v\s*)?$/i;
 const GOOD_CUE = /\b(fine|ok|okay|good|correct(?:ly)?|as expected|no issues?|no problems?)\s+(?:in|on|with|at|using|under)\s+(?:\S+\s+)?(?:version\s*|v\s*)?$/i;
 const ROLLBACK_CUE =
   /\b(downgrad\w*|revert\w*|roll(?:ed|ing)?\s*back|go(?:ing)?\s+back|went\s+back|pin(?:ned|ning)?)\b(?:\s+\S+){0,2}?\s+(?:to|at)\s+(?:\S+\s+)?(?:version\s*|v\s*)?$/i;
@@ -46,6 +46,9 @@ const FROM_CUE = /\bfrom\s+(?:\S+\s+)?(?:version\s*|v\s*)?\(?$/i;
 const MIGRATION = /\b(upgrad|updat|migrat|bump|mov(?:ed|ing)|switch)\w*/i;
 const POST_UNAFFECTED =
   /^[\s`'"*)\]]*[,;:]?\s*(?:and\s+|which\s+|that\s+|it\s+|where\s+it\s+)?(?:does(?:n't| not)\s+(?:have|experience|reproduce|show|exhibit|suffer|happen|occur)|(?:is|was)\s+(?:fine|ok|okay|unaffected|not affected|working fine)|works\s+(?:fine|correctly|well|as expected|ok)|is(?:n't| not) affected|has no (?:such )?(?:issue|problem|bug))/i;
+/** Later in the same sentence: "Using 2.2.3, the snippet works just fine", "On 2.2.3 I can't reproduce". */
+const SENTENCE_UNAFFECTED =
+  /\b(works?\s+(?:just\s+)?(?:fine|correctly|as expected|well|perfectly)|(?:seems|appears)\s+(?:to\s+(?:be|have\s+been)\s+)?(?:fixed|resolved)|(?:is|was|has been)\s+(?:already\s+)?(?:fixed|resolved)|fixed already|(?:can'?t|cannot|could\s*n[o']t|unable to|failed to)\s+reproduce|no longer\s+(?:happens|occurs|reproduces|an issue|a problem)|not reproducible)\b/i;
 const CONFIRM = /\b(still|same|also|as well|too|facing|face|experienc\w*|encounter\w*|reproduc\w*|repro|confirm\w*|happen\w*|broken|break\w*|issue|bug|error|problem|fail\w*|crash\w*|occur\w*|present|persist\w*|affect\w*|seeing|getting)\b/i;
 const TEMPLATE_WORD = /\bversions?\b/i;
 const OTHER_PRODUCT = /\b(os|macos|mac ?os x?|windows|win|ubuntu|debian|linux|ios|ipados|android|node(?:\.?js)?|python|npm|pnpm|yarn|bun|deno|chrome|chromium|firefox|safari|edge|browser|typescript|tsc|kernel|xcode|java|jdk|golang|rustc|docker|postgres(?:ql)?|mysql|sqlite|redis|electron|expo|react native)\b/i;
@@ -61,6 +64,34 @@ function namesOtherProduct(label: string, aliases: string[]): boolean {
   if (/(?<![\w@])(?:@[\w.-]+\/)?[a-z][\w.]*-[\w.-]+/i.test(label)) return true;
   return OTHER_PRODUCT.test(label);
 }
+
+/** Words that commonly sit right before a version and are not product names. */
+const NOT_A_NAME = new Set(
+  `on in with at to from for of by is was are be been and or but as using use used uses run running ran version versions release released tag tagged
+  latest current currently now still also both since until before after upgraded upgrading upgrade updated updating update tested test testing installed
+  install pinned pin bumped bump downgraded downgrade see saw get got getting have has had my our the a an this that its it i we you they when where
+  which what v ver vs versus than like even only just exactly here there then not no yes ok works worked working fails failed failing broken happens
+  happening occurs issue bug error problem same environment env between through into via per against within without is version: release: tested:`
+    .split(/\s+/)
+    .filter(Boolean),
+);
+
+/**
+ * The name written right before the version, when there is one: `"@types/jsonwebtoken": "^9.0.2"`, `amqp==5.4.0`,
+ * `matplotlib: 2.2.3`, `Compiling rayon v1.11.0`. Undefined when the text before is prose.
+ */
+export function nameBefore(before: string): string | undefined {
+  const tail = before.slice(-60);
+  const json = /["']([@\w./-]+)["']\s*:\s*["']?\s*[\^~>=<]*\s*$/.exec(tail);
+  if (json?.[1]) return json[1];
+  const pin = /([A-Za-z][\w.-]*(?:\[[^\]]*\])?)\s*(?:===?|>=|<=|~=|@)\s*$/.exec(tail);
+  if (pin?.[1]) return pin[1].replace(/\[.*$/, '');
+  const spaced = /(?:^|[\s(|,;])([@A-Za-z][\w.@/-]*)\s*(?::\s*|\s+)$/.exec(tail);
+  if (spaced?.[1]) return spaced[1];
+  return undefined;
+}
+
+const VERSION_TOKEN = /(?<![\w.])v?\d+\.\d+(?:\.\d+)?(?:[-.+][\w.]+)?(?![\w])/g;
 
 /** Every mention of `version` (or `v<version>`) in `text`, classified. */
 export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'version' | 'repo'>): Mention[] {
@@ -100,10 +131,19 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
     }
     if (affected && FROM_CUE.test(pre) && MIGRATION.test(line)) affected = false;
     if (affected && POST_UNAFFECTED.test(post)) affected = false;
+    const sentenceEnd = text.slice(end).search(/[.!?](?:\s|$)|\n\s*\n/);
+    const rest = text.slice(end, sentenceEnd < 0 ? Math.min(text.length, end + 160) : end + sentenceEnd);
+    if (affected && SENTENCE_UNAFFECTED.test(rest.slice(0, 160)) && !NEGATION.test(rest.slice(0, rest.search(SENTENCE_UNAFFECTED)))) affected = false;
 
     const window = text.slice(Math.max(0, index - 120), Math.min(text.length, end + 120));
     let quote = line.trim();
     let other = false;
+    // A different package's version that happens to be the same string.
+    const named = nameBefore(before)?.toLowerCase();
+    if (named && !NOT_A_NAME.has(named) && !aliases.some((a) => named === a || named === `${a}.js` || named === `${a}js`)) other = true;
+    // One entry in a list of many versions ("from versions: 1.22.0, 1.22.1, …").
+    const around = text.slice(Math.max(0, index - 80), Math.min(text.length, end + 80));
+    if ([...around.matchAll(VERSION_TOKEN)].length >= 5 && /,/.test(around)) other = true;
     if (kind === 'template') {
       const sameLine = before.slice(-40);
       const prevLabel = text.slice(Math.max(0, lineStart - 400), lineStart).split('\n').filter((l) => l.trim()).at(-1);

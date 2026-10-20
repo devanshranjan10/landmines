@@ -23,6 +23,22 @@ export function splitFences(md: string): { prose: string; fences: Fence[] } {
   return { prose, fences };
 }
 
+/** Inline code spans with the sentence each one sits in. */
+export function codeSpansInContext(prose: string): Array<{ span: string; sentence: string }> {
+  const out: Array<{ span: string; sentence: string }> = [];
+  for (const m of prose.matchAll(/(`{1,2})([^`\n]+?)\1(?!`)/g)) {
+    const v = m[2]?.trim();
+    if (!v) continue;
+    const i = m.index ?? 0;
+    const start = Math.max(prose.lastIndexOf('. ', i), prose.lastIndexOf('\n', i)) + 1;
+    const endDot = prose.indexOf('. ', i + m[0].length);
+    const endNl = prose.indexOf('\n', i + m[0].length);
+    const end = Math.min(endDot < 0 ? prose.length : endDot, endNl < 0 ? prose.length : endNl);
+    out.push({ span: v, sentence: prose.slice(start, end) });
+  }
+  return out;
+}
+
 /** Inline code spans (single or double backticks). */
 export function codeSpans(prose: string): string[] {
   const out: string[] = [];

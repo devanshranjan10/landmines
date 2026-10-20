@@ -313,3 +313,46 @@ describe('backticked versions in a label are not other products', () => {
     expect(r).toMatchObject({ evidence: { where: 'comment' } });
   });
 });
+
+describe('held-out sample A failure patterns (docs/ACCURACY.md)', () => {
+  const v = (text: string, name: string, version: string) => findMentions(text, { name, version, repo: `o/${name}` })[0];
+
+  it('a different package named right before the version is not evidence', () => {
+    expect(v('"@types/jsonwebtoken": "^9.0.2",', 'jsonwebtoken', '9.0.2')?.other).toBe(true);
+    expect(v('amqp==5.4.0', 'celery', '5.4.0')?.other).toBe(true);
+    expect(v('matplotlib: 2.2.3', 'pandas', '2.2.3')?.other).toBe(true);
+    expect(v('Compiling rayon v1.11.0', 'polars', '1.11.0')?.other).toBe(true);
+    expect(v('celery==5.4.0', 'celery', '5.4.0')?.other).toBe(false);
+    expect(v('- Day.js Version: 1.11.13', 'dayjs', '1.11.13')?.other).toBe(false);
+    expect(v('Experiencing the same issue in python 3.12.8 and celery 5.4.0', 'celery', '5.4.0')?.other).toBe(false);
+    expect(v('I am on 2.2.3', 'pandas', '2.2.3')?.other).toBe(false);
+  });
+
+  it('"passes on X", "X ... works just fine", "can\'t reproduce on X" mean X is not affected', () => {
+    expect(v('passes on 8.3.3, failing on 8.3.4 and main', 'pytest', '8.3.3')?.affected).toBe(false);
+    expect(v('Using Pandas 2.2.3, the snippet provided works just fine. This issue seems to be fixed already.', 'pandas', '2.2.3')?.affected).toBe(false);
+    expect(v("On 2.2.3 I can't reproduce this", 'pandas', '2.2.3')?.affected).toBe(false);
+    expect(v('On 2.2.3 it is still not fixed', 'pandas', '2.2.3')?.affected).toBe(true);
+  });
+
+  it('a version inside a long list of versions is incidental', () => {
+    expect(v('(from versions: 1.22.0, 1.22.1, 1.22.2, 2.1.1, 2.1.2, 2.1.3, 2.2.0)', 'numpy', '2.1.2')?.other).toBe(true);
+  });
+
+  it('feature requests, docs and install issues are not bugs', async () => {
+    const { isNonBug } = await import('../src/analyze/landmine.js');
+    expect(isNonBug('ENH: Add Float128 support for groupby.', ['Enhancement', 'Groupby'])).toBe(true);
+    expect(isNonBug('BLD: Error installing Numpy', ['32 - Installation'])).toBe(true);
+    expect(isNonBug('Enhancement: more complete magicksave support', ['enhancement'])).toBe(true);
+    expect(isNonBug('BUG: Boolean Column Indexing Issue', ['Bug', 'Indexing', 'Needs Discussion'])).toBe(false);
+    expect(isNonBug('findOne returns null', [])).toBe(false);
+  });
+
+  it('a span named as the working alternative barely counts', () => {
+    const s = issueSymbols(
+      { title: 'numpy 2 ptp returns nan when applied to masked arrays', body: 'The issue is not a problem b/c one can still use `np.ma.ptp`.' },
+      { packageName: 'numpy', packageAliases: ['numpy', 'np'], importNames: ['numpy'], lang: 'py' },
+    );
+    expect(s.find((x) => x.name === 'ma.ptp')?.score).toBeLessThan(0.6);
+  });
+});

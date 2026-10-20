@@ -91,6 +91,8 @@ export interface Landmine {
   symbols: IssueSymbol[];
   /** Databases the issue is specific to (from title and labels), e.g. ["mysql"]. */
   dialects?: string[];
+  /** A feature request, question, docs or install issue rather than a bug report. Never arms the hook. */
+  nonBug?: true;
   workaround?: Workaround;
   fixHint?: FixHint;
 }

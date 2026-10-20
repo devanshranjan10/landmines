@@ -1,0 +1,635 @@
+{
+  "sample": "eval/heldout seed 20261021 n=40",
+  "code": "commit 02236b5 (before held-out fixes)",
+  "criteria": "see docs/ACCURACY.md",
+  "items": [
+    {
+      "n": 1,
+      "id": "pandas-dev/pandas#61294",
+      "package": "pandas@2.2.3",
+      "title": "BUG: join unexpectedly created extra column start with \"key_\"",
+      "armedSymbols": [
+        "join",
+        "key_"
+      ],
+      "evidence": "pandas : 2.2.3",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 2,
+      "id": "celery/celery#8952",
+      "package": "celery@5.4.0",
+      "title": "WorkerLostError   billiard.pool in mark_as_worker_lost SIGNAL 11",
+      "armedSymbols": [
+        "billiard",
+        "billiard.pool",
+        "mark_as_worker_lost",
+        "pool"
+      ],
+      "evidence": "Experiencing the same issue in python 3.12.8 and celery 5.4.0",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are billiard (another library) frames; inert"
+    },
+    {
+      "n": 3,
+      "id": "pandas-dev/pandas#60073",
+      "package": "pandas@2.2.3",
+      "title": "BUG: ArrowDtype Series: Broadcasting Error with Single-Value Arrays in Arithmetic Operations",
+      "armedSymbols": [
+        "ArrowDtype",
+        "Series",
+        "_evaluate_op_method",
+        "ArrowExtensionArray"
+      ],
+      "evidence": "Pandas v2.2.3:",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 4,
+      "id": "pytest-dev/pytest#13257",
+      "package": "pytest@8.3.3",
+      "title": "pytest 8.3.4 --import-mode importlib regression",
+      "armedSymbols": [
+        "mypkg"
+      ],
+      "evidence": "Verified against your `reproduce.zip`: passes on 8.3.3, failing on 8.3.4 and main, passing with the change.",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "comment says it PASSES on 8.3.3; title is about 8.3.4"
+    },
+    {
+      "n": 5,
+      "id": "pandas-dev/pandas#60068",
+      "package": "pandas@2.2.3",
+      "title": "BUG: Failures with ArrowDtype(pa.string_view())",
+      "armedSymbols": [
+        "ArrowDtype",
+        "pa.string_view",
+        "pd.ArrowDtype",
+        "string_view"
+      ],
+      "evidence": "import pandas as pd # pandas 2.2.3 => latest",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 6,
+      "id": "prisma/orm#24932",
+      "package": "prisma@5.21.1",
+      "title": "Race conditions in MongoDB updates",
+      "armedSymbols": [
+        "MongoDB"
+      ],
+      "evidence": "Get this in 5.21.1 as well, any workaround for this?",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "no",
+      "note": "MongoDB is not an API symbol; quoted top reply is a complaint"
+    },
+    {
+      "n": 7,
+      "id": "auth0/node-jsonwebtoken#927",
+      "package": "jsonwebtoken@9.0.2",
+      "title": "TypeError: validator.isValid is not a function",
+      "armedSymbols": [
+        "isValid",
+        "TypeError",
+        "validator",
+        "validator.isValid"
+      ],
+      "evidence": "\"@types/jsonwebtoken\": \"^9.0.2\",",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "version belongs to @types/jsonwebtoken in a package.json"
+    },
+    {
+      "n": 8,
+      "id": "iamkun/dayjs#1219",
+      "package": "dayjs@1.11.13",
+      "title": "Issue with converting to Europe/London timezone",
+      "armedSymbols": [
+        "Europe",
+        "London",
+        "Athens",
+        "Paris"
+      ],
+      "evidence": "Fun fact is that I pointed to the previous version of the code, because the utc library changes since git tag 1.11.13+ a",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "yes",
+      "note": "comment does not confirm the bug on 1.11.13; symbols are timezone names"
+    },
+    {
+      "n": 9,
+      "id": "pandas-dev/pandas#61177",
+      "package": "pandas@2.2.3",
+      "title": "BUG: Inconsistency when converting week PeriodIndex into DatetimeIndex with astype(\"datetime64[ns]\")",
+      "armedSymbols": [
+        "datetime64",
+        "DatetimeIndex",
+        "PeriodIndex",
+        "Period"
+      ],
+      "evidence": "pandas : 2.2.3",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "no",
+      "note": ""
+    },
+    {
+      "n": 10,
+      "id": "numpy/numpy#27674",
+      "package": "numpy@2.1.2",
+      "title": "BUG:  numpy 2 ptp returns nan when applied to masked arrays",
+      "armedSymbols": [
+        "ma.ptp"
+      ],
+      "evidence": "numpy 2.1.2",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "armed symbol ma.ptp is the working alternative named in the body"
+    },
+    {
+      "n": 11,
+      "id": "celery/celery#9390",
+      "package": "celery@5.4.0",
+      "title": "celery multi start not working in a Docker container",
+      "armedSymbols": [
+        "C_FAKEFORK",
+        "celery.exceptions",
+        "celery.exceptions.TimeoutError",
+        "exceptions"
+      ],
+      "evidence": "celery==5.4.0",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are an env var and exceptions; bug is in the celery multi CLI"
+    },
+    {
+      "n": 12,
+      "id": "vuejs/core#12286",
+      "package": "vue@3.5.12",
+      "title": "sfc without typescript is failing type check",
+      "armedSymbols": [
+        "markRaw",
+        "script",
+        "toRaw"
+      ],
+      "evidence": "Vue version 3.5.12",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "yes",
+      "note": ""
+    },
+    {
+      "n": 13,
+      "id": "iamkun/dayjs#2818",
+      "package": "dayjs@1.11.13",
+      "title": "Parse error with DD.MMM.YY format",
+      "armedSymbols": [
+        "DD.MMM",
+        "MMM.YY"
+      ],
+      "evidence": "- Day.js Version 1.11.13",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are format-string tokens"
+    },
+    {
+      "n": 14,
+      "id": "numpy/numpy#27577",
+      "package": "numpy@2.1.2",
+      "title": "BUG: In SWIG tests, several OverflowErrors arise from testMaxWrongDim",
+      "armedSymbols": [
+        "OverflowErrors",
+        "testMaxWrongDim",
+        "__main__",
+        "__main__.ucharTestCase"
+      ],
+      "evidence": "2.1.2",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are numpy test names"
+    },
+    {
+      "n": 15,
+      "id": "prisma/orm#25468",
+      "package": "prisma@5.21.1",
+      "title": "The table `(not available)` does not exist in the current database",
+      "armedSymbols": [
+        "accountId",
+        "Setting"
+      ],
+      "evidence": "@prisma/client : 5.21.1",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbols are user schema names"
+    },
+    {
+      "n": 16,
+      "id": "pandas-dev/pandas#61291",
+      "package": "pandas@2.2.3",
+      "title": "BUG: reindex (and atleast several other methods) do not respect fill_value=None",
+      "armedSymbols": [
+        "fill_value",
+        "reindex",
+        "take",
+        "_make_na_array"
+      ],
+      "evidence": "pandas : 2.2.3",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 17,
+      "id": "auth0/node-jsonwebtoken#1000",
+      "package": "jsonwebtoken@9.0.2",
+      "title": "`jwt.sign()` callback is executed twice for \"The payload already has an \"...\" property\" errors",
+      "armedSymbols": [
+        "jwt.sign",
+        "sign",
+        "failure",
+        "issuer"
+      ],
+      "evidence": "jsonwebtoken 9.0.2 on Darwin 24.6.0 arm64 arm",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 18,
+      "id": "pytest-dev/pytest#12876",
+      "package": "pytest@8.3.3",
+      "title": "\"The handle is invalid\" error when trying to use a std stream saved before teh call to `pytest.main`",
+      "armedSymbols": [
+        "pytest.main",
+        "stdout",
+        "sys.stdout"
+      ],
+      "evidence": "pytest 8.3.3",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 19,
+      "id": "numpy/numpy#27580",
+      "package": "numpy@2.1.2",
+      "title": "BUG: numpy.ma.min fails for uint dtypes",
+      "armedSymbols": [
+        "numpy.ma",
+        "numpy.ma.min",
+        "numpy.ma.max"
+      ],
+      "evidence": "Python and NumPy Versions: 2.1.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 20,
+      "id": "numpy/numpy#27540",
+      "package": "numpy@2.1.2",
+      "title": "BUG: IntEnum behaves differently in bitwise_or from numpy 1.26 to numpy 2+",
+      "armedSymbols": [
+        "bitwise_or",
+        "IntEnum",
+        "np.bitwise_or",
+        "np.uint32"
+      ],
+      "evidence": "2.1.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 21,
+      "id": "pola-rs/polars#25231",
+      "package": "polars@1.11.0",
+      "title": "Compilation Error: `undeclared type DataType` in `polars-expr` when using `pyo3-polars` with `dtype-full` feature",
+      "armedSymbols": [
+        "DataType",
+        "pyo3"
+      ],
+      "evidence": "Compiling rayon v1.11.0",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "yes",
+      "note": "version is the rayon crate (Compiling rayon v1.11.0)"
+    },
+    {
+      "n": 22,
+      "id": "pandas-dev/pandas#31805",
+      "package": "pandas@2.2.3",
+      "title": "df.loc[0] = row, datatype changes",
+      "armedSymbols": [
+        "df.loc",
+        "pd.show_versions",
+        "show_versions"
+      ],
+      "evidence": "matplotlib: 2.2.3",
+      "version": "no",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": "version is matplotlib in show_versions output"
+    },
+    {
+      "n": 23,
+      "id": "lovell/sharp#4260",
+      "package": "sharp@0.33.5",
+      "title": "Enhancement: more complete magicksave support",
+      "armedSymbols": [
+        "cache",
+        "EBUSY",
+        "EPERM",
+        "keepExif"
+      ],
+      "evidence": "sharp: ^0.33.5 => 0.33.5",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "enhancement, not a bug"
+    },
+    {
+      "n": 24,
+      "id": "matplotlib/matplotlib#28769",
+      "package": "matplotlib@3.9.2",
+      "title": "[Bug]: Gouraud shading for `plt.tripcolor` is slightly off",
+      "armedSymbols": [
+        "plt.tripcolor",
+        "tripcolor"
+      ],
+      "evidence": "Matplotlib Version 3.9.2",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 25,
+      "id": "pandas-dev/pandas#59483",
+      "package": "pandas@2.2.3",
+      "title": "ENH: Add Float128 support for groupby.",
+      "armedSymbols": [
+        "groupby",
+        "mean",
+        "float128",
+        "np.float128"
+      ],
+      "evidence": "Using Pandas 2.2.3, the snippet provided works just fine. This issue seems to be fixed already.",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "comment says it works fine on 2.2.3; enhancement"
+    },
+    {
+      "n": 26,
+      "id": "prisma/orm#25562",
+      "package": "prisma@5.21.1",
+      "title": "A constraint violation error is thrown as `PrismaClientUnknownError` instead of a known error with code P2004",
+      "armedSymbols": [
+        "PrismaClientUnknownError",
+        "cause"
+      ],
+      "evidence": "@prisma/client : 5.21.1",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 27,
+      "id": "iamkun/dayjs#2760",
+      "package": "dayjs@1.11.13",
+      "title": "DevHelper plugin panics while initializing in the browser",
+      "armedSymbols": [
+        "DevHelper"
+      ],
+      "evidence": "- Day.js Version 1.11.13",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 28,
+      "id": "iamkun/dayjs#3013",
+      "package": "dayjs@1.11.13",
+      "title": "Passing array value to format param to dayjs.utc() silently disables utc mode",
+      "armedSymbols": [
+        "dayjs.utc",
+        "customParseFormat"
+      ],
+      "evidence": "- Day.js Version 1.11.13",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 29,
+      "id": "iamkun/dayjs#2798",
+      "package": "dayjs@1.11.13",
+      "title": "`z` timezone formatting option doesn't formatting as expected",
+      "armedSymbols": [
+        "advancedFormat"
+      ],
+      "evidence": "- Day.js Version [1.11.13]",
+      "version": "yes",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 30,
+      "id": "numpy/numpy#28704",
+      "package": "numpy@2.1.2",
+      "title": "BLD: Error installing Numpy 2.2.2 / 2.2.4 (2.2.x) on Raspberry Pi with Python3.13",
+      "armedSymbols": [
+        "Python3"
+      ],
+      "evidence": "ERROR: Could not find a version that satisfies the requirement numpy==2.2.5 (from versions: 1.22.0, 1.22.1, 1.22.2, 1.22",
+      "version": "no",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "version appears in pip from-versions list"
+    },
+    {
+      "n": 31,
+      "id": "pandas-dev/pandas#60108",
+      "package": "pandas@2.2.3",
+      "title": "BUG: many dataframe operations broken when a column contains numpy structured array",
+      "armedSymbols": [
+        "df.loc",
+        "get_indexer",
+        "hashes",
+        "index.get_indexer"
+      ],
+      "evidence": "pandas : 2.2.3",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "no",
+      "note": "quoted comment says the earlier workaround stopped working"
+    },
+    {
+      "n": 32,
+      "id": "socketio/socket.io#5325",
+      "package": "socket.io@4.8.1",
+      "title": "TRANSPORT_HANDSHAKE_ERROR",
+      "armedSymbols": [
+        "TRANSPORT_HANDSHAKE_ERROR"
+      ],
+      "evidence": "Socket.IO server version: 4.8.1",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "error code constant"
+    },
+    {
+      "n": 33,
+      "id": "pola-rs/polars#19457",
+      "package": "polars@1.11.0",
+      "title": "Error Result When Adding Two Columns with map_elements and with_column and Using pysam",
+      "armedSymbols": [
+        "map_elements",
+        "with_column"
+      ],
+      "evidence": "Polars: 1.11.0",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 34,
+      "id": "celery/celery#10724",
+      "package": "celery@5.4.0",
+      "title": "A task whose SUCCESS is stored still fires its error callback: a pool child lost after the store, or a raising on_success",
+      "armedSymbols": [
+        "on_success",
+        "_exit",
+        "after_return",
+        "announce"
+      ],
+      "evidence": "amqp==5.4.0",
+      "version": "no",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": "version is amqp==5.4.0"
+    },
+    {
+      "n": 35,
+      "id": "iamkun/dayjs#2741",
+      "package": "dayjs@1.11.13",
+      "title": "CustomParseFormat does not parse UTC offset in strict mode",
+      "armedSymbols": [
+        "CustomParseFormat"
+      ],
+      "evidence": "- Day.js Version: 1.11.13",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 36,
+      "id": "iamkun/dayjs#2881",
+      "package": "dayjs@1.11.13",
+      "title": "Incorrect week() for UTC time zone",
+      "armedSymbols": [
+        "week"
+      ],
+      "evidence": "- Day.js Version: 1.11.13",
+      "version": "yes",
+      "symbol": "yes",
+      "workaround": "none",
+      "note": ""
+    },
+    {
+      "n": 37,
+      "id": "react/react#35762",
+      "package": "react@18.3.1",
+      "title": "[Compiler Bug]: Closure dependency cache keys eagerly evaluate property accesses, causing TypeError on nullable objects",
+      "armedSymbols": [
+        "TypeError",
+        "company",
+        "company.id",
+        "user.company"
+      ],
+      "evidence": "What version of React are you using? 18.3.1",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "yes",
+      "note": "user variable names"
+    },
+    {
+      "n": 38,
+      "id": "pandas-dev/pandas#22807",
+      "package": "pandas@2.2.3",
+      "title": "When exported to CSV file, category data should be considered non numeric",
+      "armedSymbols": [
+        "csv.QUOTE_NONNUMERIC",
+        "pd.show_versions",
+        "QUOTE_NONNUMERIC",
+        "quoting"
+      ],
+      "evidence": "matplotlib: 2.2.3",
+      "version": "no",
+      "symbol": "partial",
+      "workaround": "none",
+      "note": "version is matplotlib; enhancement"
+    },
+    {
+      "n": 39,
+      "id": "pytest-dev/pytest#13614",
+      "package": "pytest@8.3.3",
+      "title": "All tests are run when only last failed tests are requested",
+      "armedSymbols": [
+        "tests"
+      ],
+      "evidence": "Facing quite a similar issue in a `pytest v8.3.3` environment. Not sure what OP meant by deleting but it also happens wh",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "symbol is the tests directory"
+    },
+    {
+      "n": 40,
+      "id": "pandas-dev/pandas#61980",
+      "package": "pandas@2.2.3",
+      "title": "BUG: Boolean Column Indexing Issue in Pandas",
+      "armedSymbols": [
+        "DataFrame",
+        "pandas.DataFrame"
+      ],
+      "evidence": "pandas : 2.2.3",
+      "version": "yes",
+      "symbol": "no",
+      "workaround": "none",
+      "note": "DataFrame would fire on nearly every pandas edit"
+    }
+  ]
+}

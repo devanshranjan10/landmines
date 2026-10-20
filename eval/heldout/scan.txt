@@ -1,0 +1,32 @@
+
+landmine scanned 31 direct dependencies from package-lock.json, requirements.txt
+
+  axios@1.7.7         5 open issues · 4 tied to symbols · 1 workaround
+  dayjs@1.11.13       67 open issues · 42 tied to symbols · 7 workarounds
+  hono@4.6.8          1 open issue · 1 tied to symbols · 1 workaround
+  jsonwebtoken@9.0.2  16 open issues · 10 tied to symbols · 5 workarounds
+  prisma@5.21.1       19 open issues · 12 tied to symbols · 3 workarounds
+  react@18.3.1        21 open issues · 14 tied to symbols · 5 workarounds
+  react-dom@18.3.1    18 open issues · 12 tied to symbols · 4 workarounds
+  sharp@0.33.5        3 open issues · 2 tied to symbols · 0 workarounds
+  socket.io@4.8.1     8 open issues · 7 tied to symbols · 2 workarounds
+  svelte@5.1.3        6 open issues · 3 tied to symbols · 2 workarounds
+  vitest@2.1.4        1 open issue · 1 tied to symbols · 1 workaround
+  vue@3.5.12          16 open issues · 11 tied to symbols · 7 workarounds
+  celery@5.4.0        31 open issues · 19 tied to symbols · 8 workarounds
+  httpx@0.27.2        1 open issue · 1 tied to symbols · 1 workaround
+  langchain@0.3.4     7 open issues · 7 tied to symbols · 4 workarounds
+  matplotlib@3.9.2    11 open issues · 11 tied to symbols · 2 workarounds
+  numpy@2.1.2         11 open issues · 10 tied to symbols · 1 workaround
+  pandas@2.2.3        57 open issues · 52 tied to symbols · 17 workarounds
+  polars@1.11.0       9 open issues · 9 tied to symbols · 1 workaround
+  pytest@8.3.3        10 open issues · 9 tied to symbols · 3 workarounds
+
+  No open issues name the exact version: @supabase/supabase-js@2.45.6, @tanstack/react-query@5.59.16, eslint@9.13.0, express@4.21.1, mongoose@8.7.3, openai@4.68.4, react-hook-form@7.53.1, tailwindcss@3.4.14, fastapi@0.115.4, flask@3.0.3
+  Not searched: django (issues disabled)
+  Search hits dropped: 19 that never mention the version; 10 that only mention it in links or hidden comments.
+  29 weaker mentions (version only in an unconfirmed comment) kept in the index but never trigger the hook.
+
+Found 318 open issues filed against your exact versions in 20 of 31 packages.
+237 point at specific symbols the hook will watch. 75 have a workaround in the comments.
+Index: .landmine/index.json

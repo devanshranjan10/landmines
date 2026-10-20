@@ -1,0 +1,979 @@
+{
+  "root": "eval/heldout",
+  "armedTotal": 225,
+  "sampled": 40,
+  "seed": 20261021,
+  "items": [
+    {
+      "n": 1,
+      "id": "pandas-dev/pandas#61294",
+      "package": "pandas@2.2.3",
+      "title": "BUG: join unexpectedly created extra column start with \"key_\"",
+      "url": "https://github.com/pandas-dev/pandas/issues/61294",
+      "labels": [
+        "Bug",
+        "Reshaping",
+        "Deprecate"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "pandas : 2.2.3"
+      },
+      "armedSymbols": [
+        "join",
+        "key_"
+      ],
+      "workaround": null,
+      "body": "### Pandas version checks\n\n- [x] I have checked that this issue has not already been reported.\n\n- [x] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\n\n- [x] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\n\n\n### Reproducible Example\n\n```python\nimport pandas as pd\n\na = pd.DataFrame({0:[1,2,3]})\nb = pd.DataFrame(index=[1,2,3],data={0:[4,5,6]})\na.join(b, on=0, rsuffix='_test')\n```\n\n### Issue Description\n\nWhen dataframe a and b have the same column name, a key_ column is created unexpectedly after the join operation.\n\n   **key_0**  0  0_test\n0      1  1       4\n1      2  2       5\n2      3  3       6\n\n\n\n### Expected Behavior\n\nExpecting result without the key_0 column.\n\n### Installed Versions\n\n<details>\n\npandas                : 2.2.3\nnumpy                 : 1.26.4\n\n</details>\n"
+    },
+    {
+      "n": 2,
+      "id": "celery/celery#8952",
+      "package": "celery@5.4.0",
+      "title": "WorkerLostError   billiard.pool in mark_as_worker_lost SIGNAL 11",
+      "url": "https://github.com/celery/celery/issues/8952",
+      "labels": [
+        "Issue Type: Bug Report",
+        "Component: Billiard"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "Experiencing the same issue in python 3.12.8 and celery 5.4.0",
+        "by": "jtandavala"
+      },
+      "armedSymbols": [
+        "billiard",
+        "billiard.pool",
+        "mark_as_worker_lost",
+        "pool"
+      ],
+      "workaround": null,
+      "body": "From time to time Sentry reports the exception below. I'm not sure how to replicate it and which one could be the issue.\r\nThere are some mentions that the issue could be related to `psycopg2` and `psycopg-binary2` but I do not have `psycopg2-binary` as part of the libraries installed on the server.\r\n\r\n```\r\nWorkerLostError\r\n\r\n\"\"\"\r\nTraceback (most recent call last):\r\n  File \"/home/user-service/.cache/pypoetry/virtualenvs/morta-9TtSrW0h-py3.11/lib/python3.11/site-packages/billiard/pool.py\", line 1264, in mark_as_worker_lost\r\n    raise WorkerLostError(\r\nbilliard.exceptions.WorkerLostError: Worker exited prematurely: signal 11 (SIGSEGV) Job: 2434.\r\n\"\"\"\r\n```\r\n\r\n```\r\nProcess \"ForkPoolWorker-11\" pid:33013 exited with \"signal 11 (SIGSEGV)\"\r\n```\r\n\r\n\r\n## Environment & Settings\r\n\r\n**Celery version**:\r\n\r\n<details>\r\n<summary><b><code>celery report</code> Output:</b></summary>\r\n<p>\r\n\r\n```\r\nsoftware -> celery:5.3.6 (emerald-rush) kombu:5.3.5 py:3.11.2\r\n            billiard:4.2.0 py-amqp:5.2.0\r\nplatform -> system:Linux arch:64bit\r\n            kernel version:6.4.16-linuxkit imp:CPython\r\nloader   -> celery.loaders.default.Loader\r\nsettings -> transport:amqp results:disabled\r\n```\r\n\r\n</p>\r\n</details>\r\n\r"
+    },
+    {
+      "n": 3,
+      "id": "pandas-dev/pandas#60073",
+      "package": "pandas@2.2.3",
+      "title": "BUG: ArrowDtype Series: Broadcasting Error with Single-Value Arrays in Arithmetic Operations",
+      "url": "https://github.com/pandas-dev/pandas/issues/60073",
+      "labels": [
+        "Bug",
+        "Arrow"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "Pandas v2.2.3:"
+      },
+      "armedSymbols": [
+        "ArrowDtype",
+        "Series",
+        "_evaluate_op_method",
+        "ArrowExtensionArray"
+      ],
+      "workaround": null,
+      "body": "### Pandas version checks\r\n\r\n- [X] I have checked that this issue has not already been reported.\r\n\r\n- [X] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\r\n\r\n- [X] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\r\n\r\n\r\n### Reproducible Example\r\n\r\n```python\r\nimport numpy as np\r\nimport pandas as pd\r\nimport pyarrow as pa\r\n\r\nseries = pd.Series([1.0, 2.0, 3.0], dtype=pd.ArrowDtype(pa.float64()))\r\nseries / np.array([2.0])\r\n# ArrowInvalid: Array arguments must all be the same length\r\n```\r\n\r\n\r\n### Issue Description\r\n\r\nWhen performing arithmetic operations between a `Series` of `ArrowDtype` and a single-value array, the array is not broadcasted to match the series shape. Instead, it raises an `ArrowInvalid error`. This behavior is inconsistent, as the same operation works correctly with both default and numpy-nullable dtypes.\r\n\r\nA solution could be casting a single-element array to a `pa.Scalar` in `ArrowExtensionArray._evaluate_op_method`:\r\nhttps://github.com/pandas-dev/pandas/blob/2a10e04a099d5f1"
+    },
+    {
+      "n": 4,
+      "id": "pytest-dev/pytest#13257",
+      "package": "pytest@8.3.3",
+      "title": "pytest 8.3.4 --import-mode importlib regression",
+      "url": "https://github.com/pytest-dev/pytest/issues/13257",
+      "labels": [
+        "topic: collection",
+        "type: regression"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "plain",
+        "quote": "Verified against your `reproduce.zip`: passes on 8.3.3, failing on 8.3.4 and main, passing with the change.",
+        "by": "vismaytiwari"
+      },
+      "armedSymbols": [
+        "mypkg"
+      ],
+      "workaround": null,
+      "body": "Starting in 8.3.4, running `pytest` using `--import-mode importlib` with the following directory structure no longer works.\n\n```\n<root>\n    + mypkg\n        - pyproject.toml\n        + mypkg\n            - __init__.py\n        + tests\n            - test_version.py\n```\n\n`test_version.py` attempts to import from `mypkg` and fails:\n\n```\nmypkg/tests/version_test.py:1: in <module>\n    from mypkg import version\nE   ImportError: cannot import name 'version' from 'mypkg' (unknown location)\n```\n\n`pytest.ini` contains:\n```\n[pytest]\naddopts = --import-mode importlib\ntestpaths =\n    mypkg/tests\n```\n\n`git bisect` says:\n\n```\n± git bisect bad\n3d3ec5724c6f76bc07d0631ec8061f26f9ecac4c is the first bad commit\ncommit 3d3ec5724c6f76bc07d0631ec8061f26f9ecac4c\nAuthor: patchback[bot] <45432694+patchback[bot]@users.noreply.github.com>\nDate:   Thu Sep 26 01:26:01 2024 +0000\n\n    Fix KeyError with importlib mode (directories with same name) (#12752) (#12843)\n\n    Directories inside a namespace package with the same name as the namespace package would cause a `KeyError` with `--import-mode=importlib`.\n\n    Fixes #12592\n\n    Co-authored-by: Bruno Oliveira <bruno@pytest.org>\n    (cherry picked from commit 6486c3f3"
+    },
+    {
+      "n": 5,
+      "id": "pandas-dev/pandas#60068",
+      "package": "pandas@2.2.3",
+      "title": "BUG: Failures with ArrowDtype(pa.string_view())",
+      "url": "https://github.com/pandas-dev/pandas/issues/60068",
+      "labels": [
+        "Bug",
+        "Needs Discussion",
+        "Arrow"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "import pandas as pd # pandas 2.2.3 => latest"
+      },
+      "armedSymbols": [
+        "ArrowDtype",
+        "pa.string_view",
+        "pd.ArrowDtype",
+        "string_view"
+      ],
+      "workaround": null,
+      "body": "### Pandas version checks\r\n\r\n- [X] I have checked that this issue has not already been reported.\r\n\r\n- [X] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\r\n\r\n- [ ] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\r\n\r\n\r\n### Reproducible Example\r\n\r\n```python\r\nimport pandas as pd # pandas 2.2.3 => latest\r\nimport pyarrow as pa # pyarrow 17.0.0 => latest\r\n\r\ntab = pa.table({\"names\": pa.array([\"a\", \"b\", \"c\"], type=pa.string_view())})\r\n\r\n# this succeeds\r\ntab.to_pandas()\r\n\r\n# this throws an exception\r\ntab.to_pandas(types_mapper=pd.ArrowDtype)\r\n```\r\n\r\n\r\n### Issue Description\r\n\r\nOur library is producing Arrow binary view arrays (strings and binary) and we want to allow users to convert into Pandas DataFrame.\r\n\r\nWe are using the `pd.ArrowDtype` constructor to allow creating Pandas arrays that are backed with Arrow storage. The example I've attached fails also when you change `\"c\"` to `None` (i.e. problem hits for both nullable and non-nullable types).\r\n\r\nFull repro with error message:\r\n\r\n```\r\n>>> impo"
+    },
+    {
+      "n": 6,
+      "id": "prisma/orm#24932",
+      "package": "prisma@5.21.1",
+      "title": "Race conditions in MongoDB updates",
+      "url": "https://github.com/prisma/orm/issues/24932",
+      "labels": [
+        "bug/1-unconfirmed",
+        "kind/bug",
+        "topic: mongodb"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "plain",
+        "quote": "Get this in 5.21.1 as well, any workaround for this?",
+        "by": "opti21"
+      },
+      "armedSymbols": [
+        "MongoDB"
+      ],
+      "workaround": {
+        "kind": "top-reply",
+        "author": "winkcor",
+        "excerpt": "Any update here?\n\n## Can you fix this faster? Prisma is totally useless when it can't handle concurrent operations.\n\nThe `$transaction` method has this problem too:\n\n```ts\nconst promises = [];\nfor (let i = 0; i  {\n      const product = await tx.product.findUnique({\n        where: { id: \"MjNgwCO1Q0Q1lbv5FNTI\" },\n        select: { like: true }\n      });\n  \n      return tx.product.update({\n        where: { id: \"MjNgwCO1Q0Q1lbv5FNTI\" },\n        data: { like: product.like + 1 }\n      });\n    })\n  );\n"
+      },
+      "body": "### Bug description\r\n\r\nWhen multiple queries run at the same time, prisma couldn't handle them.\r\nprisma handle few of concurrent operations I think it's using retries that mention in [issues/12814](https://github.com/prisma/prisma/issues/12814) it's handle about 100 concurrent operations on my system but can't handle all of them.\r\nin this code I try to simulate multiple users action:\r\n```ts\r\nconst promises = [];\r\nfor (let i = 0; i < 300/*you might need to increase this number to get this error*/; i++) {\r\n  promises.push(prisma.product.update({\r\n      where: {\r\n        id: \"MjNgwCO1Q0Q1lbv5FNTI\"\r\n      },\r\n      data: {\r\n        like: {\r\n          increment: 1\r\n        }\r\n      }\r\n    }));\r\n}\r\nawait Promise.all(promises);\r\n```\r\nabove code return this:\r\n ```ts\r\n  55 //  Query: db.products.aggregate([ { $match: { $expr: { $and: [ { $and: [ { $eq: [ \"$_id\", { $literal: \"MjNgwCO1Q0Q1lbv5FNTI\", }, ], }, { $ne: [ \"$_id\", \"$$REMOVE\", ], }, ], }, ], }, }, }, ...\r\n  56 // Duration: 0ms\r\n  57\r\n→ 58 return prisma.product.update(\r\nTransaction failed due to a write conflict or a deadlock. Please retry your transaction\r\n```\r\nIf multiple users, for example, 300 people(**in your system might need b"
+    },
+    {
+      "n": 7,
+      "id": "auth0/node-jsonwebtoken#927",
+      "package": "jsonwebtoken@9.0.2",
+      "title": "TypeError: validator.isValid is not a function",
+      "url": "https://github.com/auth0/node-jsonwebtoken/issues/927",
+      "labels": [],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "range",
+        "quote": "\"@types/jsonwebtoken\": \"^9.0.2\","
+      },
+      "armedSymbols": [
+        "isValid",
+        "TypeError",
+        "validator",
+        "validator.isValid"
+      ],
+      "workaround": null,
+      "body": "ISSUE WAS FOUND AND FIXED - LOOK HERE https://github.com/auth0/node-jsonwebtoken/issues/927#issuecomment-1694701319\r\n\r\n### Description\r\n\r\nBasically whenever I try to run `jsonwebtoken.sign()` in typescript it gives me an error. Running the code in a simple javascript code runner works perfectly fine.\r\n\r\nI have been trying to debug this for a couple of days now, can't seem to figure it out.\r\n\r\n### Reproduction\r\n\r\nLink to code I am working with: https://github.com/tonykaram1993/typescript-express-starter/blob/e6975e805f7f5b332e389d723d63a5641959ce15/src/services/authentication.services.ts#L64\r\n\r\nThe error log and a couple of log messages above it so you are able to see what is passed:\r\n```\r\n[watch] \r\n[watch] \r\n[watch] 2:42:24 PM - Found 0 errors. Watching for file changes.\r\n[server] info: Server is running at https://localhost:5000\r\n[server] info: Connected to MongoDB! [mongodb://localhost:27017/typescript]\r\n[server] TKCL - JWT_TOKEN_SECRET: secretsecretsecretsecretsecretsecretsecret\r\n[server] TKCL - data: {\r\n[server]   email: 'john@thedoes.com',\r\n[server]   passwordHash: '$2b$10$E.w9gKA4KsZU1LdN0KN99eCvAyteG/.xboV.ppGoh3gmiVWsJPyIi',\r\n[server]   salt: '$2b$10$E.w9gKA4KsZU1LdN0KN99e'"
+    },
+    {
+      "n": 8,
+      "id": "iamkun/dayjs#1219",
+      "package": "dayjs@1.11.13",
+      "title": "Issue with converting to Europe/London timezone",
+      "url": "https://github.com/iamkun/dayjs/issues/1219",
+      "labels": [],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "plain",
+        "quote": "Fun fact is that I pointed to the previous version of the code, because the utc library changes since git tag 1.11.13+ are not really present in the npm package",
+        "by": "krzysztof-grzybek"
+      },
+      "armedSymbols": [
+        "Europe",
+        "London",
+        "Athens",
+        "Paris"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "anzap",
+        "excerpt": "@AlexGrafe it is already reopened. \nI also got a workaround to work in my case, and even though it is very ugly and most probably non-performant, it can help as a temporary solution till this is fixed. Solution is to first convert to appropriate timezone and then to string. Then parse the string and print out with appropriate locale. See last example in this link https://runkit.com/embed/izgfo00kpis9"
+      },
+      "body": "**Describe the bug**\r\nI have dates formatted in ISO-8601 format and use dayjs to convert them to different timezones. Conversion works file for all cases except for \"Europe/London\". It seems the issue might apply to all timezones that match UTC one.\r\n\r\nWhat i do is i use dayjs in an angular app where i have a custom pipe doing the following in the function:\r\n```\r\ndayjs.extend(utc);\r\ndayjs.extend(timezone);\r\nreturn dayjs(value).tz(tz).locale(locale).format(pattern);\r\n```\r\n\r\nwhere value is `2020-11-06T19:27:08Z` and tz `Europe/London` and pattern `DD MMM, HH:mm a`\r\n\r\nIn this case i would expect `06 Nov, 19:27 pm` but i get `06 Nov, 17:27 pm`.\r\nIf i change timezone to something that does not match UTC like `Europe/Athens` or `Europe/Paris` the conversion works fine.\r\n\r\n**Information**\r\n - Day.js Version 1.9.6\r\n - OS: [e.g. iOS]\r\n - Browser Chrome/Firefox\r\n \r\n"
+    },
+    {
+      "n": 9,
+      "id": "pandas-dev/pandas#61177",
+      "package": "pandas@2.2.3",
+      "title": "BUG: Inconsistency when converting week PeriodIndex into DatetimeIndex with astype(\"datetime64[ns]\")",
+      "url": "https://github.com/pandas-dev/pandas/issues/61177",
+      "labels": [
+        "Bug",
+        "Datetime",
+        "Dtype Conversions",
+        "Period",
+        "Needs Discussion"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "pandas : 2.2.3"
+      },
+      "armedSymbols": [
+        "datetime64",
+        "DatetimeIndex",
+        "PeriodIndex",
+        "Period"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "dbalabka",
+        "excerpt": "@omaraymanatia , I would like to clarify where the confusion appears. Usually, Pandas uses right border value (Sundays) as a label for a week periods when we working with bins.\n\nAs @BahramF73 mentioned, converting the period into a single date using `asfreq()` and `astype()` is different. However, my intuition is that they should be the same, taking into account Pandas' documented behaviour in all function that works with periods. Here is an example of `resample()` function documentation:\n\nI ful"
+      },
+      "body": "### Pandas version checks\n\n- [x] I have checked that this issue has not already been reported.\n\n- [x] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\n\n- [x] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\n\n\n### Reproducible Example\n\n```python\nimport pandas as pd\n\ndates = pd.date_range(start=pd.to_datetime(\"2018-01-01\"), end=pd.to_datetime(\"2018-01-31\"))\nperiod_index = dates.to_period(freq=\"W\")\n\n# 2018-01-01\nperiod_label_1 = period_index.astype(\"datetime64[ns]\")[0]\n\n# 2018-01-07\nperiod_label_2 = period_index.asfreq('D').astype(\"datetime64[ns]\")[0]\n\n# I'm expecting that these values should be the same. However, it is not.\nassert period_label_1 == period_label_2\n```\n\n### Issue Description\n\nLet's imagine you have a column with dates:\n```python\ndates = pd.date_range(start=pd.to_datetime(\"2018-01-01\"), end=pd.to_datetime(\"2018-01-31\"))\n```\n```\nDatetimeIndex(['2018-01-01', '2018-01-02', '2018-01-03', '2018-01-04',\n                ....               \n               '2018-01-29', '2018-01-30', '"
+    },
+    {
+      "n": 10,
+      "id": "numpy/numpy#27674",
+      "package": "numpy@2.1.2",
+      "title": "BUG:  numpy 2 ptp returns nan when applied to masked arrays",
+      "url": "https://github.com/numpy/numpy/issues/27674",
+      "labels": [
+        "00 - Bug",
+        "component: numpy.ma"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "numpy 2.1.2"
+      },
+      "armedSymbols": [
+        "ma.ptp"
+      ],
+      "workaround": null,
+      "body": "### Describe the issue:\n\nBefore numpy 2 np.ptp(masked_array) worked as expected and where the masked values are ignored. Starting from numpy 2 the ptp function now returns nan instead.\n\n### Reproduce the code example:\n\n```python\nimport numpy as np\r\narr = np.ma.masked_invalid([np.nan, 5, 10, 5, 10])\r\nnp.ptp(arr)\r\nmasked_array(data=nan,\r\n             mask=False,\r\n       fill_value=1e+20)\r\n# expected the same as\r\narr.ptp()\r\nnp.float64(5.0)\n```\n\n\n### Error message:\n\n_No response_\n\n### Python and NumPy Versions:\n\nnumpy 2.1.2\r\nPython 3.13.0\n\n### Runtime Environment:\n\n_No response_\n\n### Context for the issue:\n\nThe issue is not a problem b/c one can still use `np.ma.ptp`. However, it seems inconsistent with all other functions that when applied to a masked array, will ignore masked values."
+    },
+    {
+      "n": 11,
+      "id": "celery/celery#9390",
+      "package": "celery@5.4.0",
+      "title": "celery multi start not working in a Docker container",
+      "url": "https://github.com/celery/celery/issues/9390",
+      "labels": [
+        "Issue Type: Bug Report",
+        "Status: Needs Verification ✘",
+        "Component: Docker Image",
+        "multi"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "celery==5.4.0"
+      },
+      "armedSymbols": [
+        "C_FAKEFORK",
+        "celery.exceptions",
+        "celery.exceptions.TimeoutError",
+        "exceptions"
+      ],
+      "workaround": null,
+      "body": "# Checklist\r\n- [ ] I have verified that the issue exists against the `main` branch of Celery.\r\n- [ ] This has already been asked to the [discussions forum](https://github.com/celery/celery/discussions) first.\r\n- [x] I have read the relevant section in the\r\n  [contribution guide](https://docs.celeryq.dev/en/main/contributing.html#other-bugs)\r\n  on reporting bugs.\r\n- [x] I have checked the [issues list](https://github.com/celery/celery/issues?q=is%3Aissue+label%3A%22Issue+Type%3A+Bug+Report%22+-label%3A%22Category%3A+Documentation%22)\r\n  for similar or identical bug reports.\r\n- [x] I have checked the [pull requests list](https://github.com/celery/celery/pulls?q=is%3Apr+label%3A%22PR+Type%3A+Bugfix%22+-label%3A%22Category%3A+Documentation%22)\r\n  for existing proposed fixes.\r\n- [x] I have checked the [commit log](https://github.com/celery/celery/commits/main)\r\n  to find out if the bug was already fixed in the main branch.\r\n- [x] I have included all related issues and possible duplicate issues\r\n  in this issue (If there are none, check this box anyway).\r\n- [ ] I have tried to reproduce the issue with [pytest-celery](https://docs.celeryq.dev/projects/pytest-celery/en/latest/userguide/cel"
+    },
+    {
+      "n": 12,
+      "id": "vuejs/core#12286",
+      "package": "vue@3.5.12",
+      "title": "sfc without typescript is failing type check",
+      "url": "https://github.com/vuejs/core/issues/12286",
+      "labels": [
+        "scope: types",
+        "upstream: typescript"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "Vue version 3.5.12"
+      },
+      "armedSymbols": [
+        "markRaw",
+        "script",
+        "toRaw"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "edison1105",
+        "excerpt": "a workaround\n\n```ts\n// util.ts\nimport { markRaw as _markRaw } from 'vue'\nexport const markRaw = (obj: any) => _markRaw(obj)\n\n// comp.vue\nimport { markRaw } from './utils'\nimport { toRaw } from 'vue';\nexport default {\n  data() {\n    return {\n      value1: markRaw({}),\n      value2: toRaw({}),\n    }\n  },\n}\n```"
+      },
+      "body": "### Vue version\r\n\r\n3.5.12\r\n\r\n### Link to minimal reproduction\r\n\r\nhttps://github.com/jacobg/vue-project-ts\r\n\r\n### Steps to reproduce\r\n\r\nSince updating Vue 3.4 to 3.5, I'm seeing build errors like this:\r\n```\r\nsrc/components/MyComponent.vue:1:1 - error TS9006: Declaration emit for this file requires using private name 'RawSymbol' from module '\"/Users/j/repositories/f/console/node_modules/@vue/reactivity/dist/reactivity\"'. An explicit type annotation may unblock declaration emit.\r\n\r\n<template>\r\n```\r\n\r\nThat particular component uses `markRaw` and `toRaw`.\r\n\r\nBut the vue sfc file only uses `<script>` and not `<script lang=\"ts\">`, so such an error is not expected.\r\n\r\nIn the `tsconfig.app.json` file if:\r\n```\r\n \"include\": [\"env.d.ts\", \"src/**/*\", \"src/**/*.vue\"],\r\n```\r\nis changed to:\r\n```\r\n\"include\": [\"env.d.ts\", \"src/**/*.ts\"],\r\n```\r\nthen the errors goes away. \r\n\r\n\r\n### What is expected?\r\n\r\nNo build error\r\n\r\n### What is actually happening?\r\n\r\nError TS9006\r\n\r\n### System Info\r\n\r\n_No response_\r\n\r\n### Any additional comments?\r\n\r\n_No response_"
+    },
+    {
+      "n": 13,
+      "id": "iamkun/dayjs#2818",
+      "package": "dayjs@1.11.13",
+      "title": "Parse error with DD.MMM.YY format",
+      "url": "https://github.com/iamkun/dayjs/issues/2818",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- Day.js Version 1.11.13"
+      },
+      "armedSymbols": [
+        "DD.MMM",
+        "MMM.YY"
+      ],
+      "workaround": null,
+      "body": "Parse error with date format DD.MMM.YY, dayjs('29.Jul.21', 'DD.MMM.YY') returns Invalid Date.\nIntresting that I tried old version like 1.8.16 and it works fine, but last 1.11.13 returns Invalid Date.\n\ndayjs.extend(customParseFormat); is used of course.\n\n - Day.js Version 1.11.13\n - OS: Windows\n - Browser Edge\n"
+    },
+    {
+      "n": 14,
+      "id": "numpy/numpy#27577",
+      "package": "numpy@2.1.2",
+      "title": "BUG: In SWIG tests, several OverflowErrors arise from testMaxWrongDim",
+      "url": "https://github.com/numpy/numpy/issues/27577",
+      "labels": [
+        "00 - Bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "2.1.2"
+      },
+      "armedSymbols": [
+        "OverflowErrors",
+        "testMaxWrongDim",
+        "__main__",
+        "__main__.ucharTestCase"
+      ],
+      "workaround": null,
+      "body": "### Describe the issue:\r\n\r\nWorking on Fedora 40, with swig 4.2.1, several errors of the form `ERROR: testMaxWrongDim (__main__.ucharTestCase.testMaxWrongDim)` occur when attempting to run the SWIG tests.\r\n\r\n### Reproduce the code example:\r\n\r\n```python\r\n$ gh repo clone numpy/numpy\r\n$ cd numpy\r\n$ cd tools/swig\r\n$ python3.12 -m venv _e\r\n$ . _e/bin/activate\r\n(_e) $ pip install setuptools numpy\r\n(_e) $ make test\r\n```\r\n\r\n\r\n### Error message:\r\n\r\n```shell\r\n======================================================================\r\nERROR: testMaxWrongDim (__main__.ucharTestCase.testMaxWrongDim)\r\nTest max function with wrong dimensions\r\n----------------------------------------------------------------------\r\nTraceback (most recent call last):\r\n  File \"/home/ben/src/forks/numpy/tools/swig/test/testTensor.py\", line 103, in testMaxWrongDim\r\n    self.assertRaises(TypeError, max, [0, -1, 2, -3])\r\n  File \"/usr/lib64/python3.12/unittest/case.py\", line 778, in assertRaises\r\n    return context.handle('assertRaises', args, kwargs)\r\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\r\n  File \"/usr/lib64/python3.12/unittest/case.py\", line 238, in handle\r\n    callable_obj(*args, **kwargs)\r\n  File \"/home/b"
+    },
+    {
+      "n": 15,
+      "id": "prisma/orm#25468",
+      "package": "prisma@5.21.1",
+      "title": "The table `(not available)` does not exist in the current database",
+      "url": "https://github.com/prisma/orm/issues/25468",
+      "labels": [
+        "bug/1-unconfirmed",
+        "kind/bug",
+        "topic: postgresql"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "@prisma/client : 5.21.1"
+      },
+      "armedSymbols": [
+        "accountId",
+        "Setting"
+      ],
+      "workaround": null,
+      "body": "### Bug description\r\n\r\nWhen I try to update the `User` table and the `Setting` table has a row with `accountId` `NULL` I encounter the following error: `The table (not available) does not exist in the current database`:\r\n\r\n```ts\r\n// this codes lead to \"The table (not available) does not exist in the current database\" error\r\nawait prisma.user.update({\r\n    where: { id: 1 },\r\n    data: {\r\n        userSetting: {\r\n            upsert: {\r\n                where: { accountId: 1 },\r\n                create: {},\r\n                update: {}\r\n            }\r\n        }\r\n    }\r\n});\r\n```\r\n\r\nThe error:\r\n```\r\nprisma:query BEGIN\r\nprisma:query SELECT \"public\".\"User\".\"id\", \"public\".\"User\".\"userSettingId\" FROM \"public\".\"User\" WHERE (\"public\".\"User\".\"id\" = $1 AND 1=1) LIMIT $2 OFFSET $3\r\nprisma:query SELECT \"public\".\"Setting\".\"id\" FROM \"public\".\"Setting\" WHERE (\"public\".\"Setting\".\"accountId\" = $1 AND \"public\".\"Setting\".\"id\" IN ($2)) OFFSET $3\r\nprisma:query INSERT INTO \"public\".\"Setting\" DEFAULT VALUES RETURNING \"public\".\"Setting\".\"id\"\r\nprisma:query UPDATE \"public\".\"User\" SET \"userSettingId\" = $1 WHERE (\"public\".\"User\".\"id\" IN ($2) AND \"public\".\"Setting\".\"accountId\" = $3)\r\nprisma:query ROLLBACK\r\n\r\nPrismaCl"
+    },
+    {
+      "n": 16,
+      "id": "pandas-dev/pandas#61291",
+      "package": "pandas@2.2.3",
+      "title": "BUG: reindex (and atleast several other methods) do not respect fill_value=None",
+      "url": "https://github.com/pandas-dev/pandas/issues/61291",
+      "labels": [
+        "Missing-data",
+        "API Design",
+        "Needs Discussion",
+        "PDEP missing values"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "pandas : 2.2.3"
+      },
+      "armedSymbols": [
+        "fill_value",
+        "reindex",
+        "take",
+        "_make_na_array"
+      ],
+      "workaround": null,
+      "body": "### Pandas version checks\n\n- [x] I have checked that this issue has not already been reported.\n\n- [x] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\n\n- [x] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\n\n\n### Reproducible Example\n\n```python\nimport pandas as pd\n\n\ndf = pd.DataFrame({'1'})\nnew_df = df.reindex(range(2), fill_value=None)\nprint(new_df,'\\n')\n\ndata = [None, complex(1)]\narr2 = pd.core.construction.array(data)\nindexer = [0, -1]\nnew_arr = arr2.take(indexer, allow_fill=True, fill_value=None)\nprint(arr2)\nprint(new_arr)\n```\n\n### Issue Description\n\nUser-facing bug placing `NaN` into df instead of `None` and the underlying `ExtensionArray.take` method (with a more contrived example to ensure the types are valid) which is a significant cause of the behaviour.\n \nThis is less of a bug and more a discussion on default behaviour in pandas. It is impossible to \"fill\" a value of `None` in an already existing dataframe/array as far as I can see in pandas, although `None` is often the default"
+    },
+    {
+      "n": 17,
+      "id": "auth0/node-jsonwebtoken#1000",
+      "package": "jsonwebtoken@9.0.2",
+      "title": "`jwt.sign()` callback is executed twice for \"The payload already has an \"...\" property\" errors",
+      "url": "https://github.com/auth0/node-jsonwebtoken/issues/1000",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "jsonwebtoken 9.0.2 on Darwin 24.6.0 arm64 arm"
+      },
+      "armedSymbols": [
+        "jwt.sign",
+        "sign",
+        "failure",
+        "issuer"
+      ],
+      "workaround": null,
+      "body": "### Description\n\nThe callback to `jwt.sign()` is executed twice when there is an error `Bad \"options.issuer\" option. The payload already has an \"iss\" property`. I would expect the callback to only be executed once.\n\n### Reproduction\n\n```js\n// a.mjs\nimport jwt from \"jsonwebtoken\";\njwt.sign(\n  {\n    iss: \"bar\",\n    iat: 1757476476,\n  },\n  \"secret\",\n  {\n    algorithm: \"HS256\",\n    issuer: \"foo\",\n  },\n  (err, asyncSigned) => {\n    console.log(\"callback called:\", asyncSigned ?? err?.message);\n  },\n);\n```\n\n```\n$> npm init -y && npm add jsonwebtoken\n$> node a.mjs\ncallback called: Bad \"options.issuer\" option. The payload already has an \"iss\" property.\ncallback called: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYXIiLCJpYXQiOjE3NTc0NzY0NzZ9.TkSecbZDocHnjwnuDhQRXNvRkxsERNGBkRc6P0wHlNY\n```\n\nNotice that \"callback called\" is printed twice, while I would expect it to be printed only once.\n\n### Environment\n\njsonwebtoken 9.0.2 on Darwin 24.6.0 arm64 arm\n\n### Other information\n\nIt looks like the error is here:\n\nhttps://github.com/auth0/node-jsonwebtoken/blob/bc28861f1fa981ed9c009e29c044a19760a0b128/sign.js#L217-L225\n\nTypically, `return failure()` throws which exits the forEach and the function"
+    },
+    {
+      "n": 18,
+      "id": "pytest-dev/pytest#12876",
+      "package": "pytest@8.3.3",
+      "title": "\"The handle is invalid\" error when trying to use a std stream saved before teh call to `pytest.main`",
+      "url": "https://github.com/pytest-dev/pytest/issues/12876",
+      "labels": [
+        "type: docs",
+        "plugin: capture"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "pytest 8.3.3"
+      },
+      "armedSymbols": [
+        "pytest.main",
+        "stdout",
+        "sys.stdout"
+      ],
+      "workaround": null,
+      "body": "\r\nHi, \r\n\r\nit seems there's an issue when trying to use a standard system output stream that was saved before calling pytest.main on  MS-Windows\r\n```\r\nE   OSError: [WinError 6] The handle is invalid\r\n```\r\n\r\nTo reproduce on MS-Windows 11:\r\n1.Create a script that calls `pytest.main` but saves `sys.stdout` in another module before doing so. A test file will then attempt to write to this saved `stdout` stream\r\n\r\n**save.py**\r\n```python\r\nSTDOUT = None\r\n```\r\n\r\n**issue_test.py**\r\n```python\r\nimport save\r\nimport sys\r\n\r\nsave.STDOUT.write(\":save.STDOUT\\n\")\r\n\r\ndef test_addition():\r\n    assert 1 + 1 == 2\r\n```\r\n\r\n**ptissue.py**\r\n```python\r\nimport pytest\r\nimport save\r\nimport sys\r\n\r\nif __name__ == \"__main__\":\r\n    save.STDOUT = sys.stdout\r\n    pytest.main(sys.argv[1:])\r\n```\r\n3. Run the script, you will encounter the error\r\n```powershell\r\n>  python .\\ptissue.py\r\n=============================================================================================================== test session starts ================================================================================================================\r\nplatform win32 -- Python 3.11.4, pytest-8.3.3, pluggy-1.5.0\r\ncollected 0 items / 1 error\r\n\r\n======"
+    },
+    {
+      "n": 19,
+      "id": "numpy/numpy#27580",
+      "package": "numpy@2.1.2",
+      "title": "BUG: numpy.ma.min fails for uint dtypes",
+      "url": "https://github.com/numpy/numpy/issues/27580",
+      "labels": [
+        "00 - Bug",
+        "component: numpy.ma"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "Python and NumPy Versions: 2.1.2"
+      },
+      "armedSymbols": [
+        "numpy.ma",
+        "numpy.ma.min",
+        "numpy.ma.max"
+      ],
+      "workaround": null,
+      "body": "### Describe the issue:\r\n\r\nThe `numpy.ma.min` operation fails for cases where the input array has a `dtype = uint` and the resultant array and mask has `ndim > 0`. There could be other operations where this same case fails, e.g., `numpy.ma.max`.\r\n\r\n### Reproduce the code example:\r\n\r\n```python\r\nimport numpy as np\r\nimport numpy.ma as ma\r\n\r\n_dtype = np.uint8\r\nfill_value = _dtype( 0 )\r\na = np.array( [ [ 1, 127, 2 ],\r\n                [ 2, 127, 1 ] ], dtype = _dtype )\r\na = ma.masked_array( a, a == 127 )\r\na.fill_value = fill_value\r\namin = a.min( axis = 0 )\r\n```\r\n\r\n\r\n### Error message:\r\n\r\n```shell\r\n╭───────────────────────── Traceback (most recent call last) ──────────────────────────╮\r\n│ test.py:10 in <module>                                                               │\r\n│                                                                                      │\r\n│    7 │   │   │   │   [ 2, 127, 1 ] ], dtype = _dtype )                               │\r\n│    8 a = ma.masked_array( a, a == 127 )                                              │\r\n│    9 a.fill_value = fill_value                                                       │\r\n│ ❱ 10 amin = a.min( axis = 0 )                               "
+    },
+    {
+      "n": 20,
+      "id": "numpy/numpy#27540",
+      "package": "numpy@2.1.2",
+      "title": "BUG: IntEnum behaves differently in bitwise_or from numpy 1.26 to numpy 2+",
+      "url": "https://github.com/numpy/numpy/issues/27540",
+      "labels": [
+        "00 - Bug"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "2.1.2"
+      },
+      "armedSymbols": [
+        "bitwise_or",
+        "IntEnum",
+        "np.bitwise_or",
+        "np.uint32"
+      ],
+      "workaround": null,
+      "body": "### Describe the issue:\n\nWhile updating some code to be numpy 2 compatible I have run into some strange behavior that I cannot explain. In numpy 1.26 (on python 3.12), when I apply the `np.bitwise_or` inplace between a `np.uint32` array and an element of an `IntEnum` the computation succeeds, but when running the same code in numpy 2.12 the code fails with an error.\r\n\r\nNote that if one directly casts an `IntEnum` member to an integer before passing it to `np.bitwise_or` then the code succeeds when running in numpy 2.12.\n\n### Reproduce the code example:\n\n```python\nfrom enum import IntEnum\r\n\r\nimport numpy as np\r\n\r\nclass DqEnum(IntEnum):\r\n    \"\"\"\r\n    Example IntEnum for testing purposes\r\n    \"\"\"\r\n    GOOD = 0\r\n    BADA = 1\r\n    BADB = 2\r\n    BADC = 3\r\n\r\n\r\n# create demo data\r\ncurrent_flags = np.array([0], dtype=np.uint32)\r\n\r\n# Update flags\r\ncurrent_flags |= DqEnum.BADA\r\n# Succeeds in numpy 1.26 but fails in numpy 2 with\r\n# UFuncTypeError: Cannot cast ufunc 'bitwise_or' output from dtype('int64') to dtype('uint32') with casting rule 'same_kind'\r\n\r\n# From the docs I believe this is the same as calling\r\nnp.bitwise_or(current_flags, DqEnum.BADA, out=current_flags)\r\n# The has same behavior"
+    },
+    {
+      "n": 21,
+      "id": "pola-rs/polars#25231",
+      "package": "polars@1.11.0",
+      "title": "Compilation Error: `undeclared type DataType` in `polars-expr` when using `pyo3-polars` with `dtype-full` feature",
+      "url": "https://github.com/pola-rs/polars/issues/25231",
+      "labels": [
+        "bug",
+        "rust",
+        "needs triage"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "plain",
+        "quote": "Compiling rayon v1.11.0"
+      },
+      "armedSymbols": [
+        "DataType",
+        "pyo3"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "Seldom-SE",
+        "excerpt": "I ran into this with `polars = { version = \"0.52.0\", features = [\"lazy\"] }`, but worked around it with `polars = { version = \"0.52.0\", features = [\"lazy\", \"timezones\"] }`. Should work as long as the `timezones` feature is enabled on `polars-expr`. You can do this by adding that crate to your `Cargo.toml` with the feature enabled."
+      },
+      "body": "### Checks\n\n- [x] I have checked that this issue has not already been reported.\n- [x] I have confirmed this bug exists on the [latest version](https://crates.io/crates/polars) of Polars.\n\n### Reproducible example\n\n#### **Steps to Reproduce**\n\n1. Create a new Rust library project:\n\n   ```sh\n   cargo new --lib my_polars_project\n   cd my_polars_project\n   ```\n2. Modify `Cargo.toml` to set up the Python extension and add the dependencies:\n\n   ```toml\n   [package]\n   name = \"my_polars_project\"\n   version = \"0.1.0\"\n   edition = \"2021\"\n\n   [lib]\n   name = \"my_polars_project\"\n   crate-type = [\"cdylib\"]\n\n   [dependencies]\n   pyo3 = { version = \"0.26.0\", features = [\"extension-module\"] }\n   pyo3-polars = { version = \"0.25.0\", features = [\"lazy\", \"dtype-full\"] }\n   ```\n3. Create a minimal `src/lib.rs` file. The content of the file does not matter, as the error is at compile-time.\n\n   ```rust\n   use pyo3::prelude::*;\n\n   #[pyfunction]\n   fn do_nothing() {\n       // The error occurs even with an empty function,\n       // as it's a dependency compilation issue.\n   }\n\n   #[pymodule]\n   fn my_polars_project(_py: Python, m: &Bound<PyModule>) -> PyResult<()> {\n       m.add_function(wrap_pyfunction!("
+    },
+    {
+      "n": 22,
+      "id": "pandas-dev/pandas#31805",
+      "package": "pandas@2.2.3",
+      "title": "df.loc[0] = row, datatype changes",
+      "url": "https://github.com/pandas-dev/pandas/issues/31805",
+      "labels": [
+        "Bug",
+        "Indexing",
+        "Dtype Conversions",
+        "setitem-with-expansion",
+        "Void Dtype"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "plain",
+        "quote": "matplotlib: 2.2.3"
+      },
+      "armedSymbols": [
+        "df.loc",
+        "pd.show_versions",
+        "show_versions"
+      ],
+      "workaround": null,
+      "body": "#### Code Sample, a copy-pastable example if possible\r\n\r\n```python\r\nfrom numpy import NaN\r\nrow = [2015, 1, 7.0, NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, 0.4, NaN, NaN, NaN]\r\nprint([type(i) for i in row])\r\ncolumns = ['year', 'month', 'day', '平均風速', '最大風速', '最大風向', '最大風速時間', '最大瞬間風速',\r\n            '最大瞬間風向','最大瞬間時間', '最多風向', '日照時間', '降雪', '最深積雪値', '最深積雪時間']\r\n# Sorry some of the columns are in Japanese, but I believe it doesn't matter.\r\nrow_df = pd.DataFrame(columns=columns)\r\nrow_df.loc[0] = row\r\nprint(row_df.dtypes)\r\n\r\n```\r\nMy problem is, after running \r\n```python\r\nrow_df.loc[0] = row\r\n```\r\n,the datatypes change\r\n#### Output of ``pd.show_versions()``\r\n\r\n<details>\r\n\r\nINSTALLED VERSIONS\r\n------------------\r\ncommit: None\r\npython: 3.7.3.final.0\r\npython-bits: 64\r\nOS: Windows\r\nOS-release: 10\r\nmachine: AMD64\r\nprocessor: Intel64 Family 6 Model 142 Stepping 9, GenuineIntel\r\nbyteorder: little\r\nLC_ALL: None\r\nLANG: None\r\nLOCALE: None.None\r\n\r\npandas: 0.23.4\r\npytest: 3.8.0\r\npip: 19.1.1\r\nsetuptools: 41.0.1\r\nCython: 0.28.5\r\nnumpy: 1.15.4\r\nscipy: 1.1.0\r\npyarrow: None\r\nxarray: None\r\nIPython: 6.5.0\r\nsphinx: 1.7.9\r\npatsy: 0.5.0\r\ndateutil: 2.7.3\r\npytz: 2018.5\r\nblosc: None\r\nbottleneck: 1.2.1\r\ntables: 3.4.4\r"
+    },
+    {
+      "n": 23,
+      "id": "lovell/sharp#4260",
+      "package": "sharp@0.33.5",
+      "title": "Enhancement: more complete magicksave support",
+      "url": "https://github.com/lovell/sharp/issues/4260",
+      "labels": [
+        "enhancement"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "range",
+        "quote": "sharp: ^0.33.5 => 0.33.5"
+      },
+      "armedSymbols": [
+        "cache",
+        "EBUSY",
+        "EPERM",
+        "keepExif"
+      ],
+      "workaround": null,
+      "body": "\r\n\r\n## Possible bug\r\n\r\n### Is this a possible bug in a feature of sharp, unrelated to installation?\r\n\r\n\r\n\r\n- [x] Running `npm install sharp` completes without error.\r\n- [x] Running `node -e \"require('sharp')\"` completes without error.\r\n\r\n\r\n### Are you using the latest version of sharp?\r\n\r\n\r\n\r\n- [x] I am using the latest version of `sharp` as reported by `npm view sharp dist-tags.latest`.\r\n\r\n\r\n### What is the output of running `npx envinfo --binaries --system --npmPackages=sharp --npmGlobalPackages=sharp`?\r\n\r\n\r\n\r\n```\r\n  System:\r\n    OS: Linux 6.1 Debian GNU/Linux trixie/sid\r\n    CPU: (8) x64 Intel(R) Core(TM) Ultra 9 185H\r\n    Memory: 6.67 GB / 7.72 GB\r\n    Container: Yes\r\n    Shell: 5.2.15 - /bin/bash\r\n  Binaries:\r\n    Node: 20.18.0 - /usr/local/bin/node\r\n    Yarn: 1.22.22 - /usr/local/bin/yarn\r\n    npm: 10.8.2 - /usr/local/bin/npm\r\n  npmPackages:\r\n    sharp: ^0.33.5 => 0.33.5 \r\n```\r\n\r\n### Does this problem relate to file caching?\r\n\r\nThe default behaviour of libvips is to cache input files, which can lead to `EBUSY` or `EPERM` errors on Windows.\r\nUse [`sharp.cache(false)`](https://sharp.pixelplumbing.com/api-utility#cache) to switch this feature off.\r\n\r\n- [ ] Adding `sharp.cache(fa"
+    },
+    {
+      "n": 24,
+      "id": "matplotlib/matplotlib#28769",
+      "package": "matplotlib@3.9.2",
+      "title": "[Bug]: Gouraud shading for `plt.tripcolor` is slightly off",
+      "url": "https://github.com/matplotlib/matplotlib/issues/28769",
+      "labels": [
+        "status: confirmed bug",
+        "Difficulty: Hard",
+        "topic: tri"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "Matplotlib Version 3.9.2"
+      },
+      "armedSymbols": [
+        "plt.tripcolor",
+        "tripcolor"
+      ],
+      "workaround": null,
+      "body": "### Bug summary\n\nWhen `plt.tripcolor(... shading='gouraud')` is used, triangles are not interpolated exactly as they should, there is a small but visible difference at times.\r\nA simple way to see it is to draw a rectangle with high aspect ratio, where each end has a different color (same in both vertices of each end).\n\n### Code for reproduction\n\n```Python\nfrom matplotlib import pyplot as plt\r\n# Make a figure with a gouraud shaded band\r\nfig = plt.figure(figsize=[6.4, 4.8], dpi=100) # increase dpi for detail\r\nz = .05 # half width. try also: .02, .01\r\nplt.tripcolor([-1,-1,+1,+1], [-z,+z,-z,+z],  [0,0,1,1], \r\n              shading='gouraud', cmap='gray');\r\nplt.xlim((-1,+1)); plt.ylim((-1,+1)); \r\nplt.axis('off'); fig.patch.set_facecolor('k')\r\n\r\n# Create a bytes buffer to save the plot\r\nimport io, numpy as np; from PIL import Image\r\nbuf = io.BytesIO()\r\nplt.savefig(buf, format='png') # format doesn't affect the result\r\nbuf.seek(0)\r\n# Open the PNG image from the buffer and convert it to a NumPy array\r\nimage = np.array(Image.open(buf),dtype='float32')\r\n# Close the buffer\r\nbuf.close()\r\n\r\nplt.show() # after saving\r\n\r\n# Inspect the RGB array\r\nimg = image[...,1]/255; h,w = img.shape\r\nplt.figure"
+    },
+    {
+      "n": 25,
+      "id": "pandas-dev/pandas#59483",
+      "package": "pandas@2.2.3",
+      "title": "ENH: Add Float128 support for groupby.",
+      "url": "https://github.com/pandas-dev/pandas/issues/59483",
+      "labels": [
+        "Enhancement",
+        "Groupby"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "Using Pandas 2.2.3, the snippet provided works just fine. This issue seems to be fixed already.",
+        "by": "RafaelGreg18"
+      },
+      "armedSymbols": [
+        "groupby",
+        "mean",
+        "float128",
+        "np.float128"
+      ],
+      "workaround": null,
+      "body": "### Feature Type\n\n- [X] Adding new functionality to pandas\n\n- [ ] Changing existing functionality in pandas\n\n- [ ] Removing existing functionality in pandas\n\n\n### Problem Description\n\nI wish to use `groupby()[].mean()` on a column with `np.float128`. However, that is not supported.\n\n### Feature Description\n\n```python\r\nimport numpy as np\r\nimport pandas as pd\r\n\r\n# Set the random seed for reproducibility\r\nnp.random.seed(42)\r\n\r\n# Generate binary data for columns A and B\r\ndata_A = np.random.randint(0, 2, size=1000)\r\ndata_B = np.random.randint(0, 2, size=1000)\r\n\r\n# Generate lognormal random values for column C with np.float128 precision\r\ndata_C = np.random.lognormal(mean=0, sigma=1, size=1000).astype(np.float128)\r\n\r\n# Create the DataFrame\r\ndf = pd.DataFrame({\r\n    \"A\": data_A,\r\n    \"B\": data_B,\r\n    \"C\": data_C\r\n})\r\n\r\n# Group by columns A and B and get the mean of column C\r\ngrouped_means = df.groupby([\"A\", \"B\"])[\"C\"].mean()\r\n\r\ngrouped_means\r\n```\r\n\r\nresults in this error message:\r\n\r\n```python\r\n  File \"/homes/cornelius/numpy128.py\", line 22, in <module>\r\n    grouped_means = df.groupby([\"A\", \"B\"])[\"C\"].mean()\r\n  File \"/homes/cornelius/anaconda3/envs/general/lib/python3.10/site-packages/pand"
+    },
+    {
+      "n": 26,
+      "id": "prisma/orm#25562",
+      "package": "prisma@5.21.1",
+      "title": "A constraint violation error is thrown as `PrismaClientUnknownError` instead of a known error with code P2004",
+      "url": "https://github.com/prisma/orm/issues/25562",
+      "labels": [
+        "bug/1-unconfirmed",
+        "kind/bug",
+        "topic: error",
+        "topic: postgresql",
+        "topic: constraint"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "@prisma/client : 5.21.1"
+      },
+      "armedSymbols": [
+        "PrismaClientUnknownError",
+        "cause"
+      ],
+      "workaround": null,
+      "body": "### Bug description\n\nWhen a PrismaClientUnknownRequestError is thrown in a postgres database, the `cause` property has an undefined value. It should include the underlying PostgresError object to allow error handling logic to inspect details.\n\n### How to reproduce\n\nCreate a table with a row-level postgres constraint. Then try to insert a row that violates the constraint.\n\n### Expected behavior\n\nThere are a few issues:\r\n* PrismaClientUnknownError is thrown and cause is missing. We would like to access PostgresError object to inspect the code property and other details.\r\n* Prisma should actually throw a PrismaClientKnownError with error code P2004 (and still include the cause)\n\n### Prisma information\n\nN/A\n\n### Environment & setup\n\n- OS: macOS\r\n- Database: PostgreSQL\r\n- Node.js version: 18.19.1\r\n\n\n### Prisma Version\n\n```\r\nprisma                  : 5.21.1\r\n@prisma/client          : 5.21.1\r\nComputed binaryTarget   : darwin-arm64\r\nOperating System        : darwin\r\nArchitecture            : arm64\r\nNode.js                 : v18.19.1\r\nQuery Engine (Node-API) : libquery-engine bf0e5e8a04cada8225617067eaa03d041e2bba36 (at ../node_modules/@prisma/engines/libquery_engine-darwin-arm64.dylib.node"
+    },
+    {
+      "n": 27,
+      "id": "iamkun/dayjs#2760",
+      "package": "dayjs@1.11.13",
+      "title": "DevHelper plugin panics while initializing in the browser",
+      "url": "https://github.com/iamkun/dayjs/issues/2760",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- Day.js Version 1.11.13"
+      },
+      "armedSymbols": [
+        "DevHelper"
+      ],
+      "workaround": null,
+      "body": "**Describe the bug**\r\nExtending dayjs with devhelper in the browser errors with \"ReferenceError: process is not defined\"\r\nThe error occurs in the following line: https://github.com/iamkun/dayjs/blob/1f67767944c3ac7384c3128ddd805611e9ce8f57/src/plugin/devHelper/index.js#L4C1-L4C59\r\n\r\n**Expected behavior**\r\ndevhelper properly detects that process doesn't exists and initializaes in the browser\r\n\r\n**Information**\r\n - Day.js Version 1.11.13\r\n - OS: Ubuntu 24.10\r\n - Browser Firefox 131 and Chrome 125.0.6422.60\r\n"
+    },
+    {
+      "n": 28,
+      "id": "iamkun/dayjs#3013",
+      "package": "dayjs@1.11.13",
+      "title": "Passing array value to format param to dayjs.utc() silently disables utc mode",
+      "url": "https://github.com/iamkun/dayjs/issues/3013",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- Day.js Version 1.11.13"
+      },
+      "armedSymbols": [
+        "dayjs.utc",
+        "customParseFormat"
+      ],
+      "workaround": null,
+      "body": "**Describe the bug**\nWhen an array is passed as the format argument to dayjs.utc(), UTC mode is not used: the date is parsed in the local timezone.\ndayjs() accepts an array for the format parameter (with the customParseFormat plugin), so it’s easy to assume dayjs.utc() does too. With an array, dayjs.utc() does not throw; it silently parses in local time, which can cause subtle bugs (e.g. tests passing only when TZ=UTC).\n\nTo reproduce\n```\nconst dayjs = require('dayjs');\nconst utc = require('dayjs/plugin/utc');\nconst customParseFormat = require('dayjs/plugin/customParseFormat');\n\ndayjs.extend(utc);\ndayjs.extend(customParseFormat);\n\n// With a single format, result is UTC midnight (correct)\nconst single = dayjs.utc('1995-05-01', 'YYYY-MM-DD');\nconsole.log(single.toISOString()); // '1995-05-01T00:00:00.000Z'\n\n// With a format array, result is local midnight (incorrect)\nconst withArray = dayjs.utc('1995-05-01', ['YYYY-MM-DD', 'YYYY-M-D']);\nconsole.log(withArray.toISOString()); // e.g. '1995-05-01T23:00:00.000Z' in UTC+1\n```\nStackblitz link https://stackblitz.com/edit/dayjs-playground-8cua8kja?file=index.js\n\n**Expected behavior**\nEither:\n- Support format arrays and parse in UTC (same sema"
+    },
+    {
+      "n": 29,
+      "id": "iamkun/dayjs#2798",
+      "package": "dayjs@1.11.13",
+      "title": "`z` timezone formatting option doesn't formatting as expected",
+      "url": "https://github.com/iamkun/dayjs/issues/2798",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- Day.js Version [1.11.13]"
+      },
+      "armedSymbols": [
+        "advancedFormat"
+      ],
+      "workaround": null,
+      "body": "**Describe the bug**\r\nwhile trying to format a value using `z` it returns zone offset instead of abbreviated offset\r\n\r\n```\r\nconst date = dayjs.tz('2024-12-22T16:21:11+05:30', 'Asia/Kolkata');\r\nconsole.log(date.format('z')); // Expected: IST\r\nconsole.log(date.format('Z')); // Expected: +05:30\r\n```\r\n\r\ninstead of the above expected OP for `z` formatting it returns `GMT:+5:30`\r\n\r\nI have tried using `advancedFormat` plugin too still im facing the issue\r\n\r\n**Expected behavior**\r\n\r\n`z` will be transformed abbreviated offset name correctly according to [(https://day.js.org/docs/en/plugin/advanced-format)]\r\n\r\n**Information**\r\n - Day.js Version [1.11.13]\r\n - OS: [Ubuntu 24.04.1 LTS]\r\n - Browser [all browser]\r\n - Time zone: [ GMT+05:30 IST (Indian Standard Time)]\r\n"
+    },
+    {
+      "n": 30,
+      "id": "numpy/numpy#28704",
+      "package": "numpy@2.1.2",
+      "title": "BLD: Error installing Numpy 2.2.2 / 2.2.4 (2.2.x) on Raspberry Pi with Python3.13",
+      "url": "https://github.com/numpy/numpy/issues/28704",
+      "labels": [
+        "32 - Installation"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "plain",
+        "quote": "ERROR: Could not find a version that satisfies the requirement numpy==2.2.5 (from versions: 1.22.0, 1.22.1, 1.22.2, 1.22.3, 1.22.4, 1.23.0, 1.23.1, 1.23.2, 1.23",
+        "by": "bauergeorg"
+      },
+      "armedSymbols": [
+        "Python3"
+      ],
+      "workaround": null,
+      "body": "I receive the following error when numpy is install on a raspberry pi:\n\nERROR: Can not run test applications in this cross environment.\n\nMore below:\n\n```\n      Build type: native build                                                                                                                                                            11:01:20 [367/465]\n      Project name: NumPy                                                                                                                                                                                   \n      Project version: 2.2.2                                                                                                                                                                                \n      C compiler for the host machine: cc (gcc 12.2.0 \"cc (Raspbian 12.2.0-14+rpi1) 12.2.0\")                                                                                                                \n      C linker for the host machine: cc ld.bfd 2.40                                                                                                                                                         \n      C++ compiler fo"
+    },
+    {
+      "n": 31,
+      "id": "pandas-dev/pandas#60108",
+      "package": "pandas@2.2.3",
+      "title": "BUG: many dataframe operations broken when a column contains numpy structured array",
+      "url": "https://github.com/pandas-dev/pandas/issues/60108",
+      "labels": [
+        "Bug",
+        "Error Reporting",
+        "Constructors"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "pandas : 2.2.3"
+      },
+      "armedSymbols": [
+        "df.loc",
+        "get_indexer",
+        "hashes",
+        "index.get_indexer"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "digitalsignalperson",
+        "excerpt": "Some changes I noticed in pandas 2.3.1 / numpy 2.3.2 (was previously on pandas 2.2.3 / numpy 2.3.0)\n\nI was building a tool making use of the `np.dtype(f'S{element width')` workaround above, but currently this no longer works for some dataframe operations.\n\n```python\ndf = pd.DataFrame({'x':np.arange(10), 'y' : np.array(['12345678'] * 10, dtype='S8')})\n\ndf['y'].dtype\n# dtype('O')\n# Curious why it coerced to object type\n\ndf.groupby('x').first()\n# But this currently works\n             y\nx           "
+      },
+      "body": "### Pandas version checks\r\n\r\n- [X] I have checked that this issue has not already been reported.\r\n\r\n- [X] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\r\n\r\n- [ ] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\r\n\r\n\r\n### Reproducible Example\r\n\r\n```python\r\nimport numpy as np\r\nimport pandas as pd\r\n\r\nN = 10\r\nhash_dtype = np.dtype([(f'h{i}', np.uint64) for i in range(4)])\r\nhashes = np.zeros(N, dtype=hash_dtype)\r\n\r\ndf = pd.DataFrame(data={'hashes':hashes, 'other_stuff':np.zeros(N)})\r\nidx = [0, 1]\r\n\r\n## This fails\r\ndf.loc[idx, 'hashes'] = np.ones(len(idx), dtype=hash_dtype)\r\n# LossySetitemError: \r\n# During handling of the above exception, another exception occurred:\r\n# AssertionError\r\n# AssertionError: Something has gone wrong, please report a bug at https://github.com/pandas-dev/pandas/issues\r\n\r\n## This also files\r\nprint(df)\r\n# TypeError: ufunc 'isnan' not supported for the input types, and the inputs could not be safely coerced to any supported types according to the casting rule ''safe''\r\n\r"
+    },
+    {
+      "n": 32,
+      "id": "socketio/socket.io#5325",
+      "package": "socket.io@4.8.1",
+      "title": "TRANSPORT_HANDSHAKE_ERROR",
+      "url": "https://github.com/socketio/socket.io/issues/5325",
+      "labels": [
+        "needs author input"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "Socket.IO server version: 4.8.1"
+      },
+      "armedSymbols": [
+        "TRANSPORT_HANDSHAKE_ERROR"
+      ],
+      "workaround": null,
+      "body": "**Describe the bug**\nI am using socketio with eiows and fastify\nWe are running socketio on AWS EC2 instance behing loadbalancer.\nFew of the users(Approx 1%) are not able to connect to socketio server and getting TRANSPORT_HANDSHAKE_ERROR.\n\nI have printed the logs like below:\n```\n    fastify.io.engine.on(\"connection_error\", (err) => {\n      console.error(\"Socket connection error: code: \" + err.code); // the error code, for example 1\n      console.error(\"Socket connection error: message: \" + err.message); // the error message, for example \"Session ID unknown\"\n      console.error(\"Socket connection error: context: \" + JSON.stringify(err.context)); // some additional error context\n    });\n```\n\nBelow are the logs:\n```\nSocket connection error: code: 3\nSocket connection error: message: Bad request\nSocket connection error: context: {\"name\":\"TRANSPORT_HANDSHAKE_ERROR\"}\n```\n\n**To Reproduce**\nI am not sure about the reproduction condition. It is happening for few users and we dont have the user details to connect to them,\n\nSocket.IO server version: 4.8.1\n\n**Expected behavior**\nSocket connection should be success\n"
+    },
+    {
+      "n": 33,
+      "id": "pola-rs/polars#19457",
+      "package": "polars@1.11.0",
+      "title": "Error Result When Adding Two Columns with map_elements and with_column and Using pysam",
+      "url": "https://github.com/pola-rs/polars/issues/19457",
+      "labels": [
+        "bug",
+        "python",
+        "needs triage"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "Polars: 1.11.0"
+      },
+      "armedSymbols": [
+        "map_elements",
+        "with_column"
+      ],
+      "workaround": null,
+      "body": "### Checks\r\n\r\n- [X] I have checked that this issue has not already been reported.\r\n- [X] I have confirmed this bug exists on the [latest version](https://pypi.org/project/polars/) of Polars.\r\n\r\n### Reproducible example\r\n\r\n```python\r\nfrom functools import partial\r\nimport polars as pl\r\n\r\ndf = pl.DataFrame(\r\n    {\r\n        'a': [1, 2, 3],\r\n        'b': [4, 5, 6],\r\n        'c': [7, 8, 9],\r\n    }\r\n).lazy()\r\n\r\ndef f(row,c):\r\n    return row['a']+row['b']+c\r\nf1 = partial(f,c=1)\r\n\r\nf2 = partial(f,c=0)\r\n\r\nresult1 = (df.with_columns([\r\n    pl.struct([pl.col('a'), pl.col('b')]).map_elements(f1, return_dtype=pl.Int64).alias('add'),])\r\n    .collect()\r\n    .with_columns([\r\n    pl.struct([pl.col('a'), pl.col('b')]).map_elements(f2, return_dtype=pl.Int64).alias('add2')\r\n])\r\n)\r\n\r\nresult2 = (df.with_columns([\r\n    pl.struct([pl.col('a'), pl.col('b')]).map_elements(f1, return_dtype=pl.Int64).alias('add'),])\r\n    .with_columns([\r\n    pl.struct([pl.col('a'), pl.col('b')]).map_elements(f2, return_dtype=pl.Int64).alias('add2')\r\n]).collect()\r\n)\r\n```\r\n\r\nDetails1\r\n\r\n<details>\r\n\r\n```\r\n\r\nFAKE_GENOME = {\r\n    \"chr1\": (\r\n        \"ATGCGTACGTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTAGCTA\"\r\n        \"GCTAGCTA"
+    },
+    {
+      "n": 34,
+      "id": "celery/celery#10724",
+      "package": "celery@5.4.0",
+      "title": "A task whose SUCCESS is stored still fires its error callback: a pool child lost after the store, or a raising on_success",
+      "url": "https://github.com/celery/celery/issues/10724",
+      "labels": [
+        "Issue Type: Bug Report"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "plain",
+        "quote": "amqp==5.4.0"
+      },
+      "armedSymbols": [
+        "on_success",
+        "_exit",
+        "after_return",
+        "announce"
+      ],
+      "workaround": null,
+      "body": "> I'm Claude Opus 5.5, AI can make mistakes. Succeeded, and sorry about that.\n\n# Checklist\n\n- [x] I have verified that the issue exists against the `main` branch of Celery.\n- [ ] This has already been asked to the [discussions forum](https://github.com/celery/celery/discussions) first.\n- [x] I have read the relevant section in the\n  [contribution guide](https://docs.celeryq.dev/en/main/contributing.html#other-bugs)\n  on reporting bugs.\n- [x] I have checked the [issues list](https://github.com/celery/celery/issues?q=is%3Aissue+label%3A%22Issue+Type%3A+Bug+Report%22+-label%3A%22Category%3A+Documentation%22)\n  for similar or identical bug reports.\n- [x] I have checked the [pull requests list](https://github.com/celery/celery/pulls?q=is%3Apr+label%3A%22PR+Type%3A+Bugfix%22+-label%3A%22Category%3A+Documentation%22)\n  for existing proposed fixes.\n- [x] I have checked the [commit log](https://github.com/celery/celery/commits/main)\n  to find out if the bug was already fixed in the main branch.\n- [x] I have included all related issues and possible duplicate issues\n  in this issue (If there are none, check this box anyway).\n- [ ] I have tried to reproduce the issue with [pytest-celery](https"
+    },
+    {
+      "n": 35,
+      "id": "iamkun/dayjs#2741",
+      "package": "dayjs@1.11.13",
+      "title": "CustomParseFormat does not parse UTC offset in strict mode",
+      "url": "https://github.com/iamkun/dayjs/issues/2741",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- Day.js Version: 1.11.13"
+      },
+      "armedSymbols": [
+        "CustomParseFormat"
+      ],
+      "workaround": null,
+      "body": "**Describe the bug**\r\n```\r\n// From CustomParseFormat documentation, assertion passes:\r\nassert(dayjs(\"05/02/69 1:02:03 PM -05:00\", \"MM/DD/YY H:mm:ss A Z\").isValid())\r\n\r\n// Same example but with strict=true, assertion fails:\r\nassert(dayjs(\"05/02/69 1:02:03 PM -05:00\", \"MM/DD/YY H:mm:ss A Z\", true).isValid())\r\n```\r\n\r\n**Expected behavior**\r\nBoth should pass\r\n\r\n**Information**\r\n - Day.js Version: 1.11.13\r\n - OS: Windows 10\r\n - Browser: NodeJs v20.17.0\r\n - Time zone: Europe/Warsaw UTC+2\r\n"
+    },
+    {
+      "n": 36,
+      "id": "iamkun/dayjs#2881",
+      "package": "dayjs@1.11.13",
+      "title": "Incorrect week() for UTC time zone",
+      "url": "https://github.com/iamkun/dayjs/issues/2881",
+      "labels": [],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "- Day.js Version: 1.11.13"
+      },
+      "armedSymbols": [
+        "week"
+      ],
+      "workaround": null,
+      "body": "**Describe the bug**\nWeeks for UTC time zone (+0) seem to be off.\nMay 22nd is Thursday, 21st ISO week.\n```\nconsole.log(dayjs.tz.guess()) // Europe/Amsterdam\nconsole.log(dayjs('2025-05-22T12:00:00Z').tz('America/New_York').week()) // 21\nconsole.log(dayjs('2025-05-22T12:00:00Z').tz('UTC').week()) // 25\nconsole.log(dayjs('2025-05-22T12:00:00Z').tz('Portugal').week()) // 25\nconsole.log(dayjs('2025-05-22T12:00:00Z').tz('Europe/Riga').week()) // 21\n```\n\n\n**Expected behavior**\nRegardless of the time zone, week number should be 21 in this case and certainly not 4 weeks off.\n\n\n**Information**\n - Day.js Version: 1.11.13\n - OS: Debian 12 x86_64\n - Browser Brave 1.78.102 Chromium: 136.0.7103.113 (also tested in node v22.15.0 and on Firefox)\n - Time zone: Europe/Amsterdam\n\nP.S. Thanks for your kind work."
+    },
+    {
+      "n": 37,
+      "id": "react/react#35762",
+      "package": "react@18.3.1",
+      "title": "[Compiler Bug]: Closure dependency cache keys eagerly evaluate property accesses, causing TypeError on nullable objects",
+      "url": "https://github.com/react/react/issues/35762",
+      "labels": [
+        "Type: Bug",
+        "Status: Unconfirmed"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "template",
+        "quote": "What version of React are you using? 18.3.1"
+      },
+      "armedSymbols": [
+        "TypeError",
+        "company",
+        "company.id",
+        "user.company"
+      ],
+      "workaround": {
+        "kind": "workaround",
+        "author": "MatiasCiccone",
+        "excerpt": "## Workarounds\n\n### 1. Extract to variables\n\nExtract property accesses into variables before using them in closures. The compiler then caches on the primitive values:\n\n```jsx\nconst companyId = user?.company?.id;\nconst email = user?.email;\n\nconst handleClick = async () => {\n  console.log(companyId);\n  console.log(email);\n};\n```\n…"
+      },
+      "body": "### What kind of issue is this?\n\n- [x] React Compiler core (the JS output is incorrect, or your app works incorrectly after optimization)\n- [ ] babel-plugin-react-compiler (build issue installing or using the Babel plugin)\n- [ ] eslint-plugin-react-hooks (build issue installing or using the eslint plugin)\n- [ ] react-compiler-healthcheck (build issue installing or using the healthcheck script)\n\n### Link to repro\n\nhttps://playground.react.dev/#N4Igzg9grgTgxgUxALhHCA7MAXABAWQE8BhCAWwAdMEM8BeXACmFyjARlwF8BKXOgHy5gAHQy5c6LHgAWAQwwATADYJiygJZwA1vyZ9BwsRIlTIqgHTKIAc0ZsOFjHLIIeAbmPdPGLxoBmTACEDjB8MAjYsOIYUMrKPl4RUTDiADwARlDY2Ji4mOpa2nTA8kqqhTpcApXaaQD0WTmYAj5c7iAANGiY-ho2KCAalBAweNiEFAjCuAAKylA2GhgA8hTYGphg3Lj+MOS4AOQZchkIygC0FAtLGBcRcnDYF+iUGqow9YoaOIeJGMwvPV6q8KO85BtMPgIIoEMhcCIQHJ4oixFxcGAIT8+ghtvNFss1pCsB4uuAZBAAO4ASVoHGcyjAKH8yPYXCAA\n\n### Repro steps\n\n1. Create a component that receives a nullable prop\n2. Access that prop's properties inside a closure (event handler)\n3. Add an early return guard: if (!prop) return null\n4. Pass null/undefined as the prop\n5. Component throws TypeError during render\n\n------------------------\n\n# React Compiler hoists closure property accesses into cache "
+    },
+    {
+      "n": 38,
+      "id": "pandas-dev/pandas#22807",
+      "package": "pandas@2.2.3",
+      "title": "When exported to CSV file, category data should be considered non numeric",
+      "url": "https://github.com/pandas-dev/pandas/issues/22807",
+      "labels": [
+        "Enhancement",
+        "IO CSV"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "body",
+        "kind": "plain",
+        "quote": "matplotlib: 2.2.3"
+      },
+      "armedSymbols": [
+        "csv.QUOTE_NONNUMERIC",
+        "pd.show_versions",
+        "QUOTE_NONNUMERIC",
+        "quoting"
+      ],
+      "workaround": null,
+      "body": "#### Code Sample, a copy-pastable example if possible\r\n\r\n```python\r\nIn [32]: df = pd.DataFrame({'a': list('abc'), 'b': range(3), 'c': range(3)})\r\nIn [33]: df['c'] = df['c'].astype('category')\r\nIn [34]: df.dtypes\r\nOut[34]: \r\na      object\r\nb       int64\r\nc    category\r\ndtype: object\r\n\r\nIn [35]: import csv\r\nIn [36]: df.to_csv(\"test.csv\", quoting=csv.QUOTE_NONNUMERIC)\r\nIn [39]: !head test.csv\r\n\"\",\"a\",\"b\",\"c\"\r\n0,\"a\",0,0\r\n1,\"b\",1,1\r\n2,\"c\",2,2\r\n```\r\n#### Problem description\r\n\r\nAlthough the 'c' column data are made just of numeric values, it is categorical data. These kind of data shouldn't be considered numeric, so it must be quoted when I generate the csv file with the option: `quoting=csv.QUOTE_NONNUMERIC`\r\n\r\nCSV isn't a very sophisticate format to export data, but the ability to already say that some data isn't numeric, would make it richer. It would make it easy to share data, and spare my users to uncorrectly identify a field as a numeric value.\r\n\r\n#### Expected Output\r\n```\r\nIn [39]: !head test.csv\r\n\"\",\"a\",\"b\",\"c\"\r\n0,\"a\",0,\"0\"\r\n1,\"b\",1,\"1\"\r\n2,\"c\",2,\"2\"\r\n```\r\n\r\n#### Output of ``pd.show_versions()``\r\n\r\n<details>\r\n\r\n[paste the output of ``pd.show_versions()`` here below this line]\r\n\r\np"
+    },
+    {
+      "n": 39,
+      "id": "pytest-dev/pytest#13614",
+      "package": "pytest@8.3.3",
+      "title": "All tests are run when only last failed tests are requested",
+      "url": "https://github.com/pytest-dev/pytest/issues/13614",
+      "labels": [
+        "topic: collection"
+      ],
+      "evidence": {
+        "strength": "medium",
+        "where": "comment",
+        "kind": "adjacent",
+        "quote": "Facing quite a similar issue in a `pytest v8.3.3` environment. Not sure what OP meant by deleting but it also happens when you combine the last failed command l",
+        "by": "cswrd"
+      },
+      "armedSymbols": [
+        "tests"
+      ],
+      "workaround": null,
+      "body": "**Observed behavior:**\n\nWhen I run `pytest -s --lf --lfnf=none tests` and all the tests that failed during the previous run of the test suite where removed, all the tests are run.\n\n**Expected behavior:**\n\nI would expect that no tests are run at all in the above-mentioned situation, because the user explicitly requested to only run the tests that failed previously. Given that there are none, no tests should run.\n\n**Minimal reproduction:**\n\nStep 1: Run `pytest tests` with the following `tests/test_test.py` file:\n\n``` \ndef test_test1():\n    raise Exception()\n \ndef test_test2():\n    return\n```\n\nThis produces the following output:\n\n```\nTest session starts (platform: linux, Python 3.12.11, pytest 8.4.1, pytest-sugar 1.0.0)\nUsing --randomly-seed=533107519\nrootdir: /tmp/test\nconfigfile: pyproject.toml\nplugins: time-machine-2.16.0, env-1.1.5, cov-6.2.1, instafail-0.5.0, sugar-1.0.0, timeout-2.4.0, randomly-3.16.0, postgresql-7.0.2, asyncio-1.1.0, logfire-4.0.0\nasyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function\ncollected 2 items                                                                                                              "
+    },
+    {
+      "n": 40,
+      "id": "pandas-dev/pandas#61980",
+      "package": "pandas@2.2.3",
+      "title": "BUG: Boolean Column Indexing Issue in Pandas",
+      "url": "https://github.com/pandas-dev/pandas/issues/61980",
+      "labels": [
+        "Bug",
+        "Indexing",
+        "Needs Discussion"
+      ],
+      "evidence": {
+        "strength": "strong",
+        "where": "body",
+        "kind": "adjacent",
+        "quote": "pandas : 2.2.3"
+      },
+      "armedSymbols": [
+        "DataFrame",
+        "pandas.DataFrame"
+      ],
+      "workaround": null,
+      "body": "### Pandas version checks\n\n- [x] I have checked that this issue has not already been reported.\n\n- [x] I have confirmed this bug exists on the [latest version](https://pandas.pydata.org/docs/whatsnew/index.html) of pandas.\n\n- [x] I have confirmed this bug exists on the [main branch](https://pandas.pydata.org/docs/dev/getting_started/install.html#installing-the-development-version-of-pandas) of pandas.\n\n\n### Reproducible Example\n\n```python\nimport pandas as pd\n\ndata = {\"A\": [1, 2, 3], \"B\": [4, 5, 6], True: [7, 8, 9]}\n\ndf = pd.DataFrame(data)\n\ncols = [\"A\"]\ndf[cols]\n#    A\n# 0  1\n# 1  2\n# 2  3\n\ncols = [True]\ndf[cols]  # ValueError: Item wrong length 1 instead of 3.\n```\n\n### Issue Description\n\nThe issue arises when attempting to access a `pandas.DataFrame` using a list of boolean values as column names.\n\n### Expected Behavior\n\n```py\n   A\n0  7\n1  8\n2  9\n```\n\n### Installed Versions\n\n<details>\n\nINSTALLED VERSIONS\n------------------\ncommit                : 0691c5cf90477d3503834d983f69350f250a6ff7\npython                : 3.12.4\npython-bits           : 64\nOS                    : Darwin\nOS-release            : 24.5.0\nVersion               : Darwin Kernel Version 24.5.0: Tue Apr 22 19:54:49 PDT "
+    }
+  ]
+}

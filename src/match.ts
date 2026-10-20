@@ -45,14 +45,19 @@ export function matchTouches(found: Touch[], index: LandmineIndex, lang: Lang, c
     const keys = packagesFor(touch, lang, index);
     if (keys.size === 0) continue;
     const names = [...touch.specifiers, ...touch.pairs, ...touch.symbols];
+    // `dayjs/plugin/customParseFormat` is what issues call `CustomParseFormat`.
+    const segments = new Set(touch.specifiers.map((s) => (s.split('/').at(-1) ?? '').toLowerCase()).filter((s) => s.length >= 6));
     for (const l of index.landmines) {
-      if (!keys.has(`${l.ecosystem}:${l.package}@${l.version}`) || l.evidence.strength === 'weak') continue;
+      if (!keys.has(`${l.ecosystem}:${l.package}@${l.version}`) || l.evidence.strength === 'weak' || l.nonBug) continue;
       // A MySQL-only bug is not a landmine in a file that talks to Postgres.
       if (l.dialects?.length && ctx.dialects?.size && !l.dialects.some((d) => ctx.dialects?.has(d))) continue;
       let hit: { symbol: string; score: number } | undefined;
       for (const name of names) {
         const s = l.symbols.find((x) => x.name === name);
         if (s && s.score >= SYMBOL_THRESHOLD && (!hit || s.score > hit.score)) hit = { symbol: name, score: s.score };
+      }
+      for (const s of l.symbols) {
+        if (s.score >= SYMBOL_THRESHOLD && segments.has(s.name.toLowerCase()) && (!hit || s.score > hit.score)) hit = { symbol: s.name, score: s.score };
       }
       if (!hit) continue;
       const rank = hit.score * STRENGTH_WEIGHT[l.evidence.strength] * (1 + Math.log10(1 + l.issue.reactions));

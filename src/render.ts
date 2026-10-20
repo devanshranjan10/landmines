@@ -22,9 +22,9 @@ function plural(n: number, word: string, pluralWord = `${word}s`): string {
   return `${n} ${n === 1 ? word : pluralWord}`;
 }
 
-/** Landmines worth counting as "filed against your exact version": strong or medium evidence. */
+/** Landmines worth counting as "bugs filed against your exact version": strong or medium evidence, bug reports only. */
 export function reportable(l: Landmine): boolean {
-  return l.evidence.strength !== 'weak';
+  return l.evidence.strength !== 'weak' && !l.nonBug;
 }
 
 export interface Totals {
@@ -36,15 +36,17 @@ export interface Totals {
   workarounds: number;
 }
 
+/** Headline numbers. Issues are counted once even when two packages share a repo (react, react-dom). */
 export function totals(index: LandmineIndex): Totals {
   const real = index.landmines.filter(reportable);
+  const unique = (ls: Landmine[]): number => new Set(ls.map((l) => l.id)).size;
   return {
     packages: index.packages.length,
     packagesWithHits: new Set(real.map((l) => `${l.ecosystem}:${l.package}@${l.version}`)).size,
-    issues: real.length,
-    weak: index.landmines.length - real.length,
-    armed: real.filter(isArmed).length,
-    workarounds: real.filter((l) => l.workaround?.kind === 'workaround').length,
+    issues: unique(real),
+    weak: unique(index.landmines.filter((l) => !reportable(l) && !real.some((r) => r.id === l.id))),
+    armed: unique(real.filter(isArmed)),
+    workarounds: unique(real.filter((l) => l.workaround?.kind === 'workaround')),
   };
 }
 
