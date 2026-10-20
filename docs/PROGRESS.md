@@ -9,9 +9,9 @@ Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/s
 - [x] Research (`docs/RESEARCH.md`)
 - [x] Design spec (self-approved, D-19)
 - [x] Implementation plan
-- [ ] M0 Scaffold
-- [ ] M1 Lockfiles
-- [ ] M2 Source analysis
+- [x] M0 Scaffold
+- [x] M1 Lockfiles
+- [x] M2 Source analysis
 - [ ] M3 HTTP / GitHub / registries
 - [ ] M4 Issue analysis
 - [ ] M5 Scan + index
@@ -23,7 +23,7 @@ Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/s
 
 ## Next
 
-M0 scaffold.
+M3: HTTP layer with record/replay, GitHub client (token, backoff), npm/PyPI repo resolution.
 
 ## Blocked
 
