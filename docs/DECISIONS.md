@@ -128,3 +128,13 @@ never as "workaround".
 - `unaffected`: the version is only named as working, fixed, or upgraded-from.
 - `incidental`: the version appears only in URLs or hidden comments.
 
+**D-23 — Version answers for another product don't count.** drizzle's template asks
+for both the drizzle-orm and the drizzle-kit version, and #3547 answers 0.36.0 under
+drizzle-kit. A mention is attributed elsewhere when its label names a different
+package (a backticked or kebab-case name) or an OS/runtime (macOS, Node.js,
+Python…). Without this, "macOS 14.2.1" would count as evidence for next@14.2.1.
+
+**D-24 — `@types/*` packages are not searched.** DefinitelyTyped versions mirror the
+upstream package, so searching for "20.11.0" finds Node.js runtime issues, not
+type-definition bugs. These packages are recorded as `skipped`.
+

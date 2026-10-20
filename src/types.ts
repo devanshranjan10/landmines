@@ -102,7 +102,7 @@ export interface PackageRecord {
   repoDirectory?: string;
   /** PyPI only: top-level import names (bs4 for beautifulsoup4). */
   importNames?: string[];
-  status: 'ok' | 'no-repo' | 'not-github' | 'archived' | 'error';
+  status: 'ok' | 'no-repo' | 'not-github' | 'skipped' | 'error';
   detail?: string;
   searchHits: number;
   verified: number;

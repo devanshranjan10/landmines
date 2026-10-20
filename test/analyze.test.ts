@@ -263,7 +263,7 @@ describe('real corpus (recorded GitHub data)', () => {
   it('drizzle-orm 0.36.0: #3402 points at $client, quotes the @ts-expect-error workaround, notes cant-reproduce', async () => {
     const { issues } = await searchVersionIssues(gh, 'drizzle-team/drizzle-orm', '0.36.0', 50);
     const r = buildLandmines(issues, { ecosystem: 'npm', name: 'drizzle-orm', version: '0.36.0', repo: 'drizzle-team/drizzle-orm' });
-    expect(r.landmines).toHaveLength(16);
+    expect(r.landmines).toHaveLength(15); // #3547 answers the drizzle-kit version field, not drizzle-orm
     const l = r.landmines.find((x) => x.issue.number === 3402);
     expect(l?.evidence).toMatchObject({ strength: 'medium', kind: 'template', notes: ['labelled bug/cant-reproduce'] });
     expect(l?.symbols.find((s) => s.name === '$client')?.score).toBeGreaterThanOrEqual(0.6);
@@ -290,5 +290,26 @@ describe('real corpus (recorded GitHub data)', () => {
     const r = buildLandmines(issues, { ecosystem: 'npm', name: 'next', version: '14.2.3', repo: 'vercel/next.js', repoDirectory: 'packages/next' });
     expect(r.dropped.unverified).toBe(1);
     expect(r.landmines.find((x) => x.issue.number === 25456)?.symbols.map((s) => s.name)).toContain('next/dynamic');
+  });
+});
+
+describe('mentions attributed to another product', () => {
+  it('template fields for other packages, OSes and runtimes are not evidence', () => {
+    const drizzle = { name: 'drizzle-orm', version: '0.36.0', repo: 'drizzle-team/drizzle-orm' };
+    expect(versionEvidence(issue({ body: '### What version of `drizzle-kit` are you using?\n\n0.36.0' }), drizzle)).toEqual({ dropped: 'incidental' });
+    expect(versionEvidence(issue({ body: '### What version of `drizzle-orm` are you using?\n\n0.36.0' }), drizzle)).toMatchObject({ evidence: { strength: 'strong' } });
+    const next = { name: 'next', version: '14.2.1', repo: 'vercel/next.js' };
+    expect(versionEvidence(issue({ body: 'OS version: 14.2.1' }), next)).toEqual({ dropped: 'incidental' });
+    expect(versionEvidence(issue({ body: 'Running on macOS 14.2.1' }), next)).toEqual({ dropped: 'incidental' });
+  });
+});
+
+describe('backticked versions in a label are not other products', () => {
+  it('upgrading from `2.x` to the latest version `3.6.0` is about 3.6.0', () => {
+    const r = versionEvidence(
+      issue({ comments: [comment('I see this after upgrading `date-fns` from version `2.x` to the latest version `3.6.0`. Did some investigation')] }),
+      { name: 'date-fns', version: '3.6.0', repo: 'date-fns/date-fns' },
+    );
+    expect(r).toMatchObject({ evidence: { where: 'comment' } });
   });
 });

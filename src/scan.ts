@@ -88,6 +88,12 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
 
     const rec = emptyRecord(dep, started);
     records.push(rec);
+    if (dep.ecosystem === 'npm' && dep.name.startsWith('@types/')) {
+      // DefinitelyTyped versions mirror the upstream package's, so a version search finds the runtime's issues.
+      rec.status = 'skipped';
+      rec.detail = 'type definitions (DefinitelyTyped)';
+      return;
+    }
     try {
       const res = await resolveRepo(opts.http, dep);
       if (res.status !== 'ok' || !res.repo) {

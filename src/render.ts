@@ -54,6 +54,8 @@ function skipLabel(p: PackageRecord): string {
       return p.detail?.includes('disabled') ? 'issues disabled' : 'no GitHub repo';
     case 'not-github':
       return 'not on GitHub';
+    case 'skipped':
+      return p.detail ?? 'skipped';
     case 'error':
       return `error: ${p.detail ?? 'unknown'}`;
     default:

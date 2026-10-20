@@ -6,6 +6,8 @@ export interface Mention {
   index: number;
   length: number;
   kind: MentionKind;
+  /** The text attributes this version to a different product (`drizzle-kit`, `macOS`, `Node.js`). */
+  other: boolean;
   affected: boolean;
   /** For comments: does the surrounding text say the problem happens? */
   confirmed: boolean;
@@ -46,6 +48,19 @@ const POST_UNAFFECTED =
   /^[\s`'"*)\]]*[,;:]?\s*(?:and\s+|which\s+|that\s+|it\s+|where\s+it\s+)?(?:does(?:n't| not)\s+(?:have|experience|reproduce|show|exhibit|suffer|happen|occur)|(?:is|was)\s+(?:fine|ok|okay|unaffected|not affected|working fine)|works\s+(?:fine|correctly|well|as expected|ok)|is(?:n't| not) affected|has no (?:such )?(?:issue|problem|bug))/i;
 const CONFIRM = /\b(still|same|also|as well|too|facing|face|experienc\w*|encounter\w*|reproduc\w*|repro|confirm\w*|happen\w*|broken|break\w*|issue|bug|error|problem|fail\w*|crash\w*|occur\w*|present|persist\w*|affect\w*|seeing|getting)\b/i;
 const TEMPLATE_WORD = /\bversions?\b/i;
+const OTHER_PRODUCT = /\b(os|macos|mac ?os x?|windows|win|ubuntu|debian|linux|ios|ipados|android|node(?:\.?js)?|python|npm|pnpm|yarn|bun|deno|chrome|chromium|firefox|safari|edge|browser|typescript|tsc|kernel|xcode|java|jdk|golang|rustc|docker|postgres(?:ql)?|mysql|sqlite|redis|electron|expo|react native)\b/i;
+
+/** Does this label (template question, `X version:` prefix) name some other product rather than ours? */
+function namesOtherProduct(label: string, aliases: string[]): boolean {
+  const lower = label.toLowerCase();
+  if (aliases.some((a) => new RegExp(`(?<![\\w@/-])${escapeRe(a)}(?![\\w-])`).test(lower))) return false;
+  const named = [...label.matchAll(/`([^`]+)`/g)]
+    .map((m) => (m[1] ?? '').toLowerCase())
+    .filter((n) => /^@?[a-z][\w.@/-]*$/.test(n) && !/^v?\d/.test(n));
+  if (named.some((n) => !aliases.includes(n))) return true;
+  if (/(?<![\w@])(?:@[\w.-]+\/)?[a-z][\w.]*-[\w.-]+/i.test(label)) return true;
+  return OTHER_PRODUCT.test(label);
+}
 
 /** Every mention of `version` (or `v<version>`) in `text`, classified. */
 export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'version' | 'repo'>): Mention[] {
@@ -88,14 +103,21 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
 
     const window = text.slice(Math.max(0, index - 120), Math.min(text.length, end + 120));
     let quote = line.trim();
-    if (kind === 'template' && quote.length <= 40) {
-      const label = text.slice(Math.max(0, lineStart - 400), lineStart).split('\n').filter((l) => l.trim()).at(-1);
-      if (label && TEMPLATE_WORD.test(label)) quote = `${label.replace(/^[#\s*|-]+|[\s*|]+$/g, '')} ${quote}`;
+    let other = false;
+    if (kind === 'template') {
+      const sameLine = before.slice(-40);
+      const prevLabel = text.slice(Math.max(0, lineStart - 400), lineStart).split('\n').filter((l) => l.trim()).at(-1);
+      const label = TEMPLATE_WORD.test(sameLine) ? sameLine : prevLabel && TEMPLATE_WORD.test(prevLabel) ? prevLabel : '';
+      if (label && namesOtherProduct(label, aliases)) other = true;
+      if (label === prevLabel && quote.length <= 40) quote = `${label.replace(/^[#\s*|-]+|[\s*|]+$/g, '')} ${quote}`;
+    } else if (kind === 'plain' && namesOtherProduct(before.slice(-25), aliases) && OTHER_PRODUCT.test(before.slice(-25))) {
+      other = true;
     }
     mentions.push({
       index,
       length: m[0].length,
       kind,
+      other,
       affected,
       confirmed: CONFIRM.test(window),
       quote: quote.replace(/\s+/g, ' ').slice(0, 160),
@@ -148,7 +170,7 @@ export function versionEvidence(issue: RawIssue, ctx: PackageContext): EvidenceR
   const notes: string[] = [];
 
   let evidence: VersionEvidence | undefined;
-  const authorAffected = author.filter((a) => a.m.affected && a.m.kind !== 'url');
+  const authorAffected = author.filter((a) => a.m.affected && a.m.kind !== 'url' && !a.m.other);
   if (authorAffected.length > 0) {
     const order: MentionKind[] = ['template', 'adjacent', 'range', 'plain'];
     authorAffected.sort((a, b) => order.indexOf(a.m.kind) - order.indexOf(b.m.kind));
@@ -172,7 +194,7 @@ export function versionEvidence(issue: RawIssue, ctx: PackageContext): EvidenceR
   if (!evidence) {
     for (const c of issue.comments) {
       if (c.minimized) continue;
-      const cm = findMentions(stripNoise(c.body), ctx).filter((m) => m.affected && m.kind !== 'url');
+      const cm = findMentions(stripNoise(c.body), ctx).filter((m) => m.affected && m.kind !== 'url' && !m.other);
       const best = cm.find((m) => m.confirmed && m.kind !== 'range') ?? cm.find((m) => m.confirmed) ?? cm[0];
       if (!best) continue;
       const strength: Strength = best.confirmed ? (best.kind === 'range' ? 'weak' : 'medium') : 'weak';
@@ -185,7 +207,7 @@ export function versionEvidence(issue: RawIssue, ctx: PackageContext): EvidenceR
 
   if (!evidence) {
     const visible = [...author.map((a) => a.m), ...issue.comments.filter((c) => !c.minimized).flatMap((c) => findMentions(stripNoise(c.body), ctx))];
-    if (visible.some((m) => !m.affected && m.kind !== 'url')) return { dropped: 'unaffected' };
+    if (visible.some((m) => !m.affected && m.kind !== 'url' && !m.other)) return { dropped: 'unaffected' };
     const anyMention = visible.length > 0 || issue.comments.some((c) => findMentions(c.body, ctx).length > 0);
     return { dropped: anyMention ? 'incidental' : 'unverified' };
   }

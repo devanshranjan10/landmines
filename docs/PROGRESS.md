@@ -15,7 +15,7 @@ Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/s
 - [x] M3 HTTP / GitHub / registries
 - [x] M4 Issue analysis
 - [x] M5 Scan + index
-- [ ] M6 Match, check, list
+- [x] M6 Match, check, list
 - [ ] M7 Hook + install
 - [ ] M8 Real e2e + accuracy
 - [ ] M9 MCP (stretch)
@@ -23,7 +23,7 @@ Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/s
 
 ## Next
 
-M6: match touched symbols to landmines; `check` and `list` commands; model-facing hit message.
+M7: `landmine hook` (harness detection, edit extraction incl. Codex patches and Cursor full-file writes, block-once state, per-harness responses) and `install`/`uninstall`.
 
 ## Blocked
 

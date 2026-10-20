@@ -33,7 +33,7 @@ describe('scan (recorded GitHub, npm and PyPI responses)', () => {
     const result = await scan({ root, ...clients(replayHttp(HTTP_DIR)), maxIssues: 30, now: () => NOW });
     const byName = Object.fromEntries(result.index.packages.map((p) => [p.name, p]));
     expect(Object.keys(byName).sort()).toEqual(['beautifulsoup4', 'drizzle-orm', 'left-pad', 'requests', 'vite', 'zod']);
-    expect(byName['drizzle-orm']).toMatchObject({ status: 'ok', repo: 'drizzle-team/drizzle-orm', searchHits: 16, landmines: 16 });
+    expect(byName['drizzle-orm']).toMatchObject({ status: 'ok', repo: 'drizzle-team/drizzle-orm', searchHits: 16, landmines: 15, verified: 16 });
     expect(byName.vite).toMatchObject({ dev: true, repo: 'vitejs/vite' });
     expect(byName.requests).toMatchObject({ ecosystem: 'pypi', repo: 'psf/requests', importNames: ['requests'] });
     expect(byName.beautifulsoup4?.status).toBe('no-repo');
@@ -57,7 +57,7 @@ describe('scan (recorded GitHub, npm and PyPI responses)', () => {
     const flaky: Http = { fetch: (url, init) => (url.includes('left-pad') ? Promise.resolve(new Response('down', { status: 503 })) : replay.fetch(url, init)) };
     const result = await scan({ root: project(), ...clients(flaky), maxIssues: 30, now: () => NOW, write: false });
     expect(result.index.packages.find((p) => p.name === 'left-pad')?.status).toBe('error');
-    expect(result.index.packages.find((p) => p.name === 'drizzle-orm')?.landmines).toBe(16);
+    expect(result.index.packages.find((p) => p.name === 'drizzle-orm')?.landmines).toBe(15);
   });
 
   it('aborts on a rejected token', async () => {
@@ -70,10 +70,11 @@ describe('scan (recorded GitHub, npm and PyPI responses)', () => {
     const result = await scan({ root: project(), ...clients(replayHttp(HTTP_DIR)), maxIssues: 30, now: () => NOW, write: false });
     const text = renderScanSummary(result.index, { skipped: result.skipped, notes: result.notes }, { color: false });
     expect(text).toMatch(/^landmine scanned 6 direct dependencies from package-lock\.json, requirements\.txt/);
-    expect(text).toMatch(/drizzle-orm@0\.36\.0 +14 open issues · \d+ tied to symbols · \d+ workarounds/);
+    expect(text).toMatch(/drizzle-orm@0\.36\.0 +13 open issues · \d+ tied to symbols · \d+ workarounds/);
     expect(text).toContain('No open issues name the exact version: left-pad@1.3.0, zod@3.23.8');
     expect(text).toContain('Not searched: beautifulsoup4 (no GitHub repo)');
-    expect(text).toMatch(/Found 24 open issues filed against your exact versions in 3 of 6 packages\./);
+    expect(text).toMatch(/Found 23 open issues filed against your exact versions in 3 of 6 packages\./);
+    expect(text).toContain('Search hits dropped: 1 that only mention it in links or hidden comments.');
   });
 });
 
@@ -97,7 +98,7 @@ describe('cli scan (built binary, replayed HTTP)', () => {
     const { stdout } = await run(process.execPath, [new URL('../dist/cli.js', import.meta.url).pathname, 'scan', '--root', root, '--max-issues', '30', '--quiet'], {
       env: { ...process.env, LANDMINE_HTTP_REPLAY: HTTP_DIR, NO_COLOR: '1' },
     });
-    expect(stdout).toContain('Found 24 open issues filed against your exact versions in 3 of 6 packages.');
+    expect(stdout).toContain('Found 23 open issues filed against your exact versions in 3 of 6 packages.');
   });
 
   it('fails clearly without a lockfile', async () => {

@@ -1,11 +1,17 @@
-import { relative } from 'node:path';
+import { existsSync } from 'node:fs';
+import { dirname, relative, resolve } from 'node:path';
 import { Command, InvalidArgumentError } from 'commander';
 import { GitHubClient } from './github/client.js';
 import { findToken } from './github/token.js';
 import { type Http, liveHttp, recordingHttp, replayHttp } from './http.js';
 import { findProjectRoot } from './lockfiles/index.js';
+import { checkFile } from './match.js';
+import { humanLandmine } from './message.js';
+import { isArmed } from './policy.js';
 import { renderScanSummary, wantsColor } from './render.js';
 import { scan } from './scan.js';
+import { findIndexRoot, readIndex } from './store.js';
+import type { LandmineIndex } from './types.js';
 import { VERSION } from './version.js';
 
 /**
@@ -73,19 +79,84 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         process.stdout.write(`${JSON.stringify(result.index, null, 2)}\n`);
         return;
       }
-      const indexFile = result.indexFile ? relative(process.cwd(), result.indexFile) || result.indexFile : undefined;
+      const rel = result.indexFile ? relative(process.cwd(), result.indexFile) : undefined;
+      const indexFile = rel && !rel.startsWith('..') ? rel : result.indexFile;
       process.stdout.write(
         `\n${renderScanSummary(result.index, { skipped: result.skipped, notes: result.notes, reused: result.reused, ...(indexFile ? { indexFile } : {}) }, { color: wantsColor(process.stdout, env) })}`,
       );
     });
 
+  program
+    .command('check')
+    .description('Report landmines that whole files touch (as if every line were being edited)')
+    .argument('<files...>', 'JS/TS or Python files')
+    .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest one above each file)')
+    .option('--json', 'machine-readable output')
+    .option('--exit-code', 'exit with status 1 when anything matches (for CI)')
+    .action((files: string[], opts: { root?: string; json?: boolean; exitCode?: boolean }) => {
+      const color = { color: wantsColor(process.stdout, env) };
+      const results: Array<{ file: string; hits: ReturnType<typeof checkFile> }> = [];
+      for (const file of files) {
+        const abs = resolve(file);
+        if (!existsSync(abs)) throw new CliError(`No such file: ${file}`);
+        const index = loadIndex(opts.root ?? dirname(abs));
+        results.push({ file, hits: checkFile(abs, index) });
+      }
+      if (opts.json) {
+        process.stdout.write(
+          `${JSON.stringify(results.map((r) => ({ file: r.file, hits: r.hits.map((h) => ({ symbol: h.symbol, score: h.score, id: h.landmine.id, landmine: h.landmine })) })), null, 2)}\n`,
+        );
+      } else {
+        for (const r of results) {
+          if (r.hits.length === 0) {
+            process.stdout.write(`${r.file}: no known open bugs touched\n`);
+            continue;
+          }
+          process.stdout.write(`${r.file}\n`);
+          for (const h of r.hits) process.stdout.write(`  ${humanLandmine(h.landmine, color, h.symbol).replace(/\n/g, '\n  ')}\n`);
+        }
+      }
+      if (opts.exitCode && results.some((r) => r.hits.length > 0)) process.exitCode = 1;
+    });
+
+  program
+    .command('list')
+    .description('Show indexed landmines (default: the ones the hook can fire on)')
+    .argument('[package]', 'only this package')
+    .option('-r, --root <dir>', 'project with .landmine/index.json')
+    .option('-a, --all', 'include issues with no strong symbol or with weak version evidence')
+    .option('--json', 'machine-readable output')
+    .action((pkg: string | undefined, opts: { root?: string; all?: boolean; json?: boolean }) => {
+      const index = loadIndex(opts.root ?? process.cwd());
+      const chosen = index.landmines.filter((l) => (!pkg || l.package === pkg) && (opts.all || isArmed(l)));
+      if (opts.json) {
+        process.stdout.write(`${JSON.stringify(chosen, null, 2)}\n`);
+        return;
+      }
+      const color = { color: wantsColor(process.stdout, env) };
+      if (chosen.length === 0) {
+        process.stdout.write(`No ${opts.all ? '' : 'armed '}landmines${pkg ? ` for ${pkg}` : ''} in the index.${opts.all ? '' : ' Try --all.'}\n`);
+        return;
+      }
+      for (const l of chosen) process.stdout.write(`${humanLandmine(l, color)}\n`);
+      const hidden = index.landmines.filter((l) => (!pkg || l.package === pkg) && !isArmed(l)).length;
+      if (!opts.all && hidden) process.stdout.write(`\n${hidden} more without a strong symbol or with weak evidence: landmine list --all\n`);
+    });
+
   return program;
+}
+
+function loadIndex(start: string): LandmineIndex {
+  const root = findIndexRoot(start);
+  const index = root ? readIndex(root) : undefined;
+  if (!index) throw new CliError('No .landmine/index.json found. Run `landmine scan` in your project first.');
+  return index;
 }
 
 export async function main(argv: string[], env: NodeJS.ProcessEnv = process.env): Promise<number> {
   try {
     await buildProgram(env).parseAsync(argv);
-    return 0;
+    return typeof process.exitCode === 'number' ? process.exitCode : 0;
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     process.stderr.write(`landmine: ${message}\n`);
