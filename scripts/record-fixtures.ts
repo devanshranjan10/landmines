@@ -9,7 +9,21 @@ import { GitHubClient } from '../src/github/client.js';
 import { canonicalRepo, searchVersionIssues } from '../src/github/issues.js';
 import { findToken } from '../src/github/token.js';
 import { recordingHttp } from '../src/http.js';
-import { resolveNpmRepo, resolvePypiRepo } from '../src/registry/resolve.js';
+import { resolveNpmRepo, resolvePypiRepo, resolveRepo } from '../src/registry/resolve.js';
+import type { Dependency } from '../src/types.js';
+
+/** Real projects' pins used to calibrate and test issue analysis. */
+export const CORPUS: Array<[Dependency['ecosystem'], string, string]> = [
+  ['npm', 'drizzle-orm', '0.36.0'],
+  ['npm', 'next', '14.2.3'],
+  ['npm', 'vite', '5.4.10'],
+  ['npm', '@tanstack/react-query', '5.59.0'],
+  ['npm', 'date-fns', '3.6.0'],
+  ['npm', 'typeorm', '0.3.20'],
+  ['pypi', 'pydantic', '2.9.2'],
+  ['pypi', 'requests', '2.32.3'],
+  ['pypi', 'sqlalchemy', '2.0.36'],
+];
 
 const set = process.argv[2] ?? 'clients';
 const dir = new URL(`../test/fixtures/http/${set}/`, import.meta.url).pathname;
@@ -48,4 +62,18 @@ if (set === 'clients') {
   }
   const s = await searchVersionIssues(gh, 'drizzle-team/drizzle-orm', '0.36.0', 30);
   console.log('search drizzle-orm 0.36.0', s.searchHits, s.issues.length);
+}
+
+if (set === 'corpus') {
+  for (const [ecosystem, name, version] of CORPUS) {
+    const res = await resolveRepo(http, { ecosystem, name, version, dev: false, source: 'corpus' });
+    if (!res.repo) {
+      console.log(name, res.status);
+      continue;
+    }
+    const canon = await canonicalRepo(gh, res.repo.owner, res.repo.name);
+    if (!canon) continue;
+    const s = await searchVersionIssues(gh, canon.fullName, version, 50);
+    console.log(`${name}@${version} ${canon.fullName} hits=${s.searchHits} fetched=${s.issues.length}`);
+  }
 }

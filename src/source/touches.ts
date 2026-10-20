@@ -12,6 +12,10 @@ export interface Touch {
   package: string;
   /** Exported/member names the changed text uses, in first-seen order. */
   symbols: string[];
+  /** Adjacent chain members as `a.b` (`z.string().email()` → `z.string`, `string.email`). */
+  pairs: string[];
+  /** Deep import specifiers whose bindings are used (`next/dynamic`). */
+  specifiers: string[];
 }
 
 const MAX_CHAIN = 6;
@@ -105,11 +109,17 @@ export function touches({ fileText, changedText, lang }: TouchInput): Touch[] {
   if (binds.length === 0) return [];
   const roots = rootsFor(binds, derivedAliases(fileLex.code, binds, lang));
   const code = lex(changedText, lang).code;
-  const byPackage = new Map<string, string[]>();
-  const add = (pkg: string, sym: string): void => {
-    const list = byPackage.get(pkg) ?? [];
-    if (!list.includes(sym)) list.push(sym);
-    byPackage.set(pkg, list);
+  const byPackage = new Map<string, Touch>();
+  const entry = (pkg: string): Touch => {
+    let t = byPackage.get(pkg);
+    if (!t) {
+      t = { package: pkg, symbols: [], pairs: [], specifiers: [] };
+      byPackage.set(pkg, t);
+    }
+    return t;
+  };
+  const push = (list: string[], v: string): void => {
+    if (!list.includes(v)) list.push(v);
   };
   const idRe = lang === 'py' ? /(?<![\w.])[A-Za-z_]\w*/g : /(?<![\w$.])[A-Za-z_$][\w$]*/g;
   for (const m of code.matchAll(idRe)) {
@@ -118,8 +128,14 @@ export function touches({ fileText, changedText, lang }: TouchInput): Touch[] {
     // Skip object keys (`{ drizzle: x }`) and declarations of the same name.
     const after = code.slice((m.index ?? 0) + m[0].length, (m.index ?? 0) + m[0].length + 3);
     if (/^\s*:(?!:)/.test(after) && lang === 'js' && /[{,]\s*$/.test(code.slice(Math.max(0, (m.index ?? 0) - 20), m.index))) continue;
-    if (root.symbol) add(root.binding.package, root.symbol);
-    for (const member of walkChain(code, (m.index ?? 0) + m[0].length, lang)) add(root.binding.package, member);
+    const t = entry(root.binding.package);
+    const chain = [...(root.symbol ? [root.symbol] : []), ...walkChain(code, (m.index ?? 0) + m[0].length, lang)];
+    for (const sym of chain) push(t.symbols, sym);
+    for (let k = 1; k < chain.length; k++) push(t.pairs, `${chain[k - 1]}.${chain[k]}`);
+    const spec = root.binding.specifier;
+    if (spec !== root.binding.package && (spec.startsWith(`${root.binding.package}/`) || spec.startsWith(`${root.binding.package}.`))) {
+      push(t.specifiers, spec);
+    }
   }
-  return [...byPackage].map(([pkg, symbols]) => ({ package: pkg, symbols }));
+  return [...byPackage.values()];
 }

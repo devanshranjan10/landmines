@@ -105,3 +105,26 @@ environment: both `writing-plans` and `anthropic-skills:writing-plans` returned
 "Unknown skill". The plan at `docs/superpowers/plans/2026-10-21-landmine.md` follows
 that skill's usual shape (milestones, files, tests, verification, commit). It runs
 inline in this session, one commit per milestone.
+
+**D-20 — Code fences can support a symbol but never trigger the hook alone.** In
+drizzle-orm 0.36.0, most repros call the `drizzle()` factory. If a fence counted as
+much as prose, every edit that creates a db would fire. Weights:
+- issue title: 1.0
+- inline code span in the body: 0.7
+- member used in a fence: 0.5
+- entry point imported or called in a fence: 0.2
+
+The hook threshold is 0.6, so the issue author has to name the symbol in prose.
+Measured on the recorded corpus.
+
+**D-21 — Workaround picks need a claim, or are labelled `top-reply`.** On the corpus,
+code plus upvotes often meant a diagnosis ("the issue lies in this line"), not a fix.
+A pick needs a fix-claiming phrase. "Any workaround?" is a question and doesn't count.
+A reply with code and at least 3 reactions but no claim is shown as "top reply",
+never as "workaround".
+
+**D-22 — Three drop reasons, all reported.**
+- `unverified`: the version isn't in the fetched text.
+- `unaffected`: the version is only named as working, fixed, or upgraded-from.
+- `incidental`: the version appears only in URLs or hidden comments.
+

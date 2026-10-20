@@ -3,7 +3,10 @@ import { bindings } from '../src/source/bindings.js';
 import { langForFence, langForPath } from '../src/source/lang.js';
 import { lex } from '../src/source/lex.js';
 import { packageFromSpecifier } from '../src/source/specifier.js';
-import { touches, walkChain } from '../src/source/touches.js';
+import { type TouchInput, touches as touchesFull, walkChain } from '../src/source/touches.js';
+
+const touches = (input: TouchInput): Array<{ package: string; symbols: string[] }> =>
+  touchesFull(input).map((t) => ({ package: t.package, symbols: t.symbols }));
 
 const b = (text: string, lang: 'js' | 'py' = 'js'): string[] =>
   bindings(text, lang).map((x) => `${x.local}=${x.package}:${x.imported}`);
@@ -254,6 +257,17 @@ describe('touches', () => {
     expect(touches({ fileText: file, changedText: 'class Tags(RootModel[list[str]]):', lang: 'py' })).toEqual([
       { package: 'pydantic', symbols: ['RootModel'] },
     ]);
+  });
+});
+
+describe('touches: pairs and deep specifiers', () => {
+  it('records adjacent chain pairs and subpath imports', () => {
+    const file = "import dynamic from 'next/dynamic';\nconst C = dynamic(() => import('./c'));";
+    expect(touchesFull({ fileText: file, changedText: "dynamic(() => import('./c'))", lang: 'js' })).toEqual([
+      { package: 'next', symbols: ['dynamic'], pairs: [], specifiers: ['next/dynamic'] },
+    ]);
+    const z = "import { z } from 'zod';\nz.string().email();";
+    expect(touchesFull({ fileText: z, changedText: 'z.string().email();', lang: 'js' })[0]?.pairs).toEqual(['z.string', 'string.email']);
   });
 });
 

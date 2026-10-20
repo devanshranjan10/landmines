@@ -27,3 +27,95 @@ export interface LockfileResult {
   deps: Dependency[];
   skipped: SkippedDependency[];
 }
+
+export type Strength = 'strong' | 'medium' | 'weak';
+export type MentionKind = 'template' | 'adjacent' | 'plain' | 'range' | 'url';
+export type SymbolSource = 'title' | 'span' | 'code' | 'import';
+
+export interface VersionEvidence {
+  strength: Strength;
+  where: 'title' | 'body' | 'comment';
+  kind: MentionKind;
+  /** Short excerpt around the version mention. */
+  quote: string;
+  /** Comment author when the evidence is a comment. */
+  by?: string;
+  /** Why the strength was lowered, if it was. */
+  notes?: string[];
+}
+
+export interface IssueSymbol {
+  /** Identifier, `a.b` pair, or deep import path (`next/dynamic`). */
+  name: string;
+  score: number;
+  sources: SymbolSource[];
+}
+
+export interface Workaround {
+  /** `workaround`: the text says it works around the bug. `top-reply`: highest-signal reply with code, no explicit claim. */
+  kind: 'workaround' | 'top-reply';
+  author: string;
+  association: string;
+  url: string;
+  createdAt: string;
+  reactions: number;
+  excerpt: string;
+  signals: string[];
+  caution?: string;
+}
+
+export interface FixHint {
+  text: string;
+  url: string;
+  author: string;
+}
+
+export interface Landmine {
+  /** `owner/repo#123` */
+  id: string;
+  ecosystem: Ecosystem;
+  package: string;
+  version: string;
+  issue: {
+    number: number;
+    title: string;
+    url: string;
+    createdAt: string;
+    updatedAt: string;
+    author: string;
+    labels: string[];
+    reactions: number;
+    comments: number;
+  };
+  evidence: VersionEvidence;
+  symbols: IssueSymbol[];
+  workaround?: Workaround;
+  fixHint?: FixHint;
+}
+
+export interface PackageRecord {
+  ecosystem: Ecosystem;
+  name: string;
+  version: string;
+  dev: boolean;
+  repo?: string;
+  repoDirectory?: string;
+  /** PyPI only: top-level import names (bs4 for beautifulsoup4). */
+  importNames?: string[];
+  status: 'ok' | 'no-repo' | 'not-github' | 'archived' | 'error';
+  detail?: string;
+  searchHits: number;
+  verified: number;
+  landmines: number;
+  dropped: { unverified: number; unaffected: number; incidental: number };
+  fetchedAt?: string;
+}
+
+export interface LandmineIndex {
+  schema: 1;
+  generator: string;
+  generatedAt: string;
+  lockfiles: string[];
+  packages: PackageRecord[];
+  landmines: Landmine[];
+}

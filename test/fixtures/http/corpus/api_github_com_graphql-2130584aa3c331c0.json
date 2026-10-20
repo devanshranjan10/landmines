@@ -1,0 +1,18 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://api.github.com/graphql",
+    "body": "{\"query\":\"query($q: String!, $first: Int!, $after: String) {\\n  search(type: ISSUE, query: $q, first: $first, after: $after) {\\n    issueCount\\n    pageInfo { hasNextPage endCursor }\\n    nodes {\\n      ... on Issue {\\n        number title url body createdAt updatedAt\\n        author { login } authorAssociation\\n        labels(first: 10) { nodes { name } }\\n        reactionGroups { content reactors { totalCount } }\\n        comments { totalCount }\\n        firstComments: comments(first: 30) { nodes { id url body createdAt author { login } authorAssociation isMinimized reactionGroups { content reactors { totalCount } } } }\\n        lastComments: comments(last: 15) { nodes { id url body createdAt author { login } authorAssociation isMinimized reactionGroups { content reactors { totalCount } } } }\\n      }\\n    }\\n  }\\n}\",\"variables\":{\"q\":\"repo:TanStack/query is:issue is:open (\\\"5.59.0\\\" OR \\\"v5.59.0\\\") sort:reactions-desc\",\"first\":25,\"after\":null}}"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "x-ratelimit-remaining": "4985",
+      "x-ratelimit-reset": "1792534596",
+      "x-ratelimit-resource": "graphql",
+      "x-ratelimit-limit": "5000"
+    },
+    "body": "{\"data\":{\"search\":{\"issueCount\":0,\"pageInfo\":{\"hasNextPage\":false,\"endCursor\":null},\"nodes\":[]}}}"
+  }
+}

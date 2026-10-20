@@ -90,6 +90,24 @@ likeliest fast follower.
   | sqlalchemy 2.0.36 | 11 |
   | axios 1.7.2, prisma 5.22.0, react-hook-form 7.53.0, fastapi 0.115.0, mongoose 8.8.0 | 0 |
 
+  **Correction (later the same night).** That first probe was inflated by the
+  non-lexical results described above. Re-running the queries gave stable counts
+  that matched between REST and GraphQL:
+
+  | Package and version | Open issues (re-run) |
+  |---|---|
+  | pydantic 2.9.2 | 24 |
+  | next 14.2.3 | 36 |
+  | typeorm 0.3.20 | 36 |
+  | date-fns 3.6.0 | 28 |
+  | drizzle-orm 0.36.0 | 16 |
+  | requests 2.32.3 | 6 |
+  | vite 5.4.10 | 4 |
+  | sqlalchemy 2.0.36 | 2 |
+  | @tanstack/react-query 5.59.0 | 0 |
+
+  These are recorded in `test/fixtures/http/corpus`.
+
   Issue templates such as drizzle's `### What version of drizzle-orm are you using?`
   put the version on its own line. That is strong evidence the issue was filed
   against that version.
