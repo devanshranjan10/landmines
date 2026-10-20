@@ -14,7 +14,7 @@ Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/s
 - [x] M2 Source analysis
 - [x] M3 HTTP / GitHub / registries
 - [x] M4 Issue analysis
-- [ ] M5 Scan + index
+- [x] M5 Scan + index
 - [ ] M6 Match, check, list
 - [ ] M7 Hook + install
 - [ ] M8 Real e2e + accuracy
@@ -23,7 +23,7 @@ Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/s
 
 ## Next
 
-M5: scan pipeline + index store + summary rendering; PyPI import-name mapping.
+M6: match touched symbols to landmines; `check` and `list` commands; model-facing hit message.
 
 ## Blocked
 
