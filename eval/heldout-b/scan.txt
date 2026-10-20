@@ -1,0 +1,33 @@
+
+landmine scanned 44 direct dependencies from package-lock.json, requirements.txt (44 from cache)
+
+  @mui/material@6.1.5       1 open issue · 1 tied to symbols · 1 workaround
+  chart.js@4.4.5            2 open issues · 1 tied to symbols · 0 workarounds
+  cheerio@1.0.0             3 open issues · 0 tied to symbols · 1 workaround
+  esbuild@0.24.0            5 open issues · 2 tied to symbols · 1 workaround
+  jest@29.7.0               11 open issues · 7 tied to symbols · 6 workarounds
+  knex@3.1.0                24 open issues · 18 tied to symbols · 9 workarounds
+  rollup@4.24.0             1 open issue · 1 tied to symbols · 0 workarounds
+  sequelize@6.37.5          6 open issues · 4 tied to symbols · 1 workaround
+  styled-components@6.1.13  2 open issues · 1 tied to symbols · 0 workarounds
+  winston@3.15.0            1 open issue · 1 tied to symbols · 0 workarounds
+  aiohttp@3.10.10           2 open issues · 1 tied to symbols · 1 workaround
+  alembic@1.13.3            1 open issue · 0 tied to symbols · 0 workarounds
+  click@8.1.7               4 open issues · 4 tied to symbols · 2 workarounds
+  networkx@3.4.2            1 open issue · 1 tied to symbols · 1 workaround
+  pillow@11.0.0             1 open issue · 1 tied to symbols · 1 workaround
+  plotly@5.24.1             21 open issues · 14 tied to symbols · 5 workarounds
+  pyyaml@6.0.2              8 open issues · 7 tied to symbols · 1 workaround
+  redis@5.2.0               1 open issue · 1 tied to symbols · 0 workarounds
+  scikit-learn@1.5.2        5 open issues · 5 tied to symbols · 1 workaround
+  scipy@1.14.1              10 open issues · 9 tied to symbols · 5 workarounds
+  seaborn@0.13.2            32 open issues · 29 tied to symbols · 6 workarounds
+  torch@2.5.0               57 open issues · 50 tied to symbols · 7 workarounds
+
+  No open issues name the exact version: @angular/core@18.2.9, @nestjs/core@10.4.6, @reduxjs/toolkit@2.3.0, fastify@5.0.0, graphql@16.9.0, mobx@6.13.5, moment@2.30.1, nodemailer@6.9.15, pino@9.5.0, puppeteer@23.6.0, react-router-dom@6.27.0, three@0.169.0, uuid@10.0.0, webpack@5.95.0, ws@8.18.0, zustand@5.0.0, rich@13.9.3, sqlmodel@0.0.22, starlette@0.41.2, transformers@4.46.0, typer@0.12.5, uvicorn@0.32.0
+  Search hits dropped: 10 that never mention the version; 6 that only name it as working, fixed or upgraded-from; 50 that only mention it in links or hidden comments.
+  65 weaker mentions (version only in an unconfirmed comment) kept in the index but never trigger the hook.
+
+Found 199 open issues filed against your exact versions in 22 of 44 packages.
+158 point at specific symbols the hook will watch. 49 have a workaround in the comments.
+Index: .landmine/index.json

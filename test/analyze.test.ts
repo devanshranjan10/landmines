@@ -356,3 +356,27 @@ describe('held-out sample A failure patterns (docs/ACCURACY.md)', () => {
     expect(s.find((x) => x.name === 'ma.ptp')?.score).toBeLessThan(0.6);
   });
 });
+
+describe('environment dumps are evidence, version lists are not', () => {
+  it('collect_env style blocks keep the mention', () => {
+    const env = 'PyTorch version: 2.5.0\nIs debug build: False\nCUDA used to build PyTorch: 12.4\nROCM used to build PyTorch: N/A\nOS: Ubuntu 22.04.4 LTS\nGCC version: 11.4.0\nPython version: 3.11.9\n[pip3] numpy==1.26.4\n[pip3] torch==2.5.0\n[pip3] triton==3.1.0';
+    const ms = findMentions(env, { name: 'torch', version: '2.5.0', repo: 'pytorch/pytorch' });
+    expect(ms.filter((m) => !m.other).length).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('import names and local versions', () => {
+  it('sklearn: 1.5.2 in show_versions output is evidence for scikit-learn', () => {
+    const r = versionEvidence(issue({ body: 'Python dependencies:\n      sklearn: 1.5.2\n          pip: 24.0' }), {
+      name: 'scikit-learn',
+      version: '1.5.2',
+      repo: 'scikit-learn/scikit-learn',
+      importNames: ['sklearn'],
+    });
+    expect(r).toMatchObject({ evidence: { strength: 'strong' } });
+  });
+
+  it('2.5.0+cu124 is the 2.5.0 release', () => {
+    expect(findMentions('PyTorch version: 2.5.0+cu124', { name: 'torch', version: '2.5.0', repo: 'pytorch/pytorch' })).toHaveLength(1);
+  });
+});

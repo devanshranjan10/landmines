@@ -19,6 +19,8 @@ export interface PackageContext {
   version: string;
   repo: string;
   repoDirectory?: string;
+  /** PyPI import names (`sklearn` for scikit-learn): what show_versions-style dumps call the package. */
+  importNames?: string[];
 }
 
 function escapeRe(s: string): string {
@@ -26,10 +28,10 @@ function escapeRe(s: string): string {
 }
 
 /** Names people use for the package in prose: `@tanstack/react-query`, `react-query`, `query`. */
-export function packageAliases(ctx: Pick<PackageContext, 'name' | 'repo'>): string[] {
+export function packageAliases(ctx: Pick<PackageContext, 'name' | 'repo' | 'importNames'>): string[] {
   const tail = ctx.name.includes('/') ? (ctx.name.split('/')[1] ?? ctx.name) : ctx.name;
   const repoName = ctx.repo.split('/')[1] ?? '';
-  const names = new Set([ctx.name, tail, repoName, repoName.replace(/\.js$/i, ''), repoName.replace(/[-_.]?js$/i, '')]);
+  const names = new Set([ctx.name, tail, repoName, repoName.replace(/\.js$/i, ''), repoName.replace(/[-_.]?js$/i, ''), ...(ctx.importNames ?? [])]);
   return [...names].filter((n) => n.length >= 2);
 }
 
@@ -91,11 +93,10 @@ export function nameBefore(before: string): string | undefined {
   return undefined;
 }
 
-const VERSION_TOKEN = /(?<![\w.])v?\d+\.\d+(?:\.\d+)?(?:[-.+][\w.]+)?(?![\w])/g;
-
 /** Every mention of `version` (or `v<version>`) in `text`, classified. */
-export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'version' | 'repo'>): Mention[] {
-  const re = new RegExp(`(?<![\\w.+\\-])v?${escapeRe(ctx.version)}(?![\\w]|\\.\\d|-\\w|\\+\\w)`, 'gi');
+export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'version' | 'repo' | 'importNames'>): Mention[] {
+  // `2.5.0+cu124` (PEP 440 local version) and `1.0.0+build.5` (semver build metadata) are the same release.
+  const re = new RegExp(`(?<![\\w.+\\-])v?${escapeRe(ctx.version)}(?![\\w]|\\.\\d|-\\w)`, 'gi');
   const aliases = packageAliases(ctx).map((a) => a.toLowerCase());
   const mentions: Mention[] = [];
   for (const m of text.matchAll(re)) {
@@ -141,9 +142,11 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
     // A different package's version that happens to be the same string.
     const named = nameBefore(before)?.toLowerCase();
     if (named && !NOT_A_NAME.has(named) && !aliases.some((a) => named === a || named === `${a}.js` || named === `${a}js`)) other = true;
-    // One entry in a list of many versions ("from versions: 1.22.0, 1.22.1, …").
-    const around = text.slice(Math.max(0, index - 80), Math.min(text.length, end + 80));
-    if ([...around.matchAll(VERSION_TOKEN)].length >= 5 && /,/.test(around)) other = true;
+    // One entry in a comma-separated run of versions ("from versions: 1.22.0, 1.22.1, …"). Environment
+    // dumps (`PyTorch version: 2.5.0`, `numpy 1.26.4` lines) are dense with versions too, but are not lists.
+    const listBefore = /(?:v?\d+(?:\.\d+)+[\w.+-]*\s*,\s*){2,}$/.test(before.slice(-80));
+    const listAfter = /^(?:\s*,\s*v?\d+(?:\.\d+)+[\w.+-]*){2,}/.test(text.slice(end, end + 80));
+    if (listBefore || listAfter) other = true;
     if (kind === 'template') {
       const sameLine = before.slice(-40);
       const prevLabel = text.slice(Math.max(0, lineStart - 400), lineStart).split('\n').filter((l) => l.trim()).at(-1);

@@ -33,7 +33,7 @@ export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult 
   const boilerplate = boilerplateBodies(raw);
   const lang: Lang = ctx.ecosystem === 'pypi' ? 'py' : 'js';
   const importNames = ctx.importNames?.length ? ctx.importNames : [ctx.name];
-  const aliases = packageAliases(ctx);
+  const aliases = packageAliases({ ...ctx, importNames });
   const landmines: Landmine[] = [];
 
   for (const issue of raw) {
