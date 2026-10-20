@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://registry.npmjs.org/does-not-exist-landmine-test/1.0.0"
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "content-type": "application/json"
+    },
+    "body": "\"Not Found\""
+  }
+}

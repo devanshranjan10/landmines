@@ -1,0 +1,17 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.github.com/repos/landmine-nonexistent-owner/nope"
+  },
+  "response": {
+    "status": 404,
+    "headers": {
+      "content-type": "application/json; charset=utf-8",
+      "x-ratelimit-remaining": "4897",
+      "x-ratelimit-reset": "1792532889",
+      "x-ratelimit-resource": "core",
+      "x-ratelimit-limit": "5000"
+    },
+    "body": "{\"message\":\"Not Found\",\"documentation_url\":\"https://docs.github.com/rest/repos/repos#get-a-repository\",\"status\":\"404\"}"
+  }
+}
