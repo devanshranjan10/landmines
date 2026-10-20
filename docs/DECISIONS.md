@@ -98,3 +98,10 @@ last 20, because GraphQL can't order by reactions. Repos are canonicalized via R
 RECORD/top_level.txt when a venv is present. Otherwise an embedded copy of the
 pipreqs mapping (Apache-2.0, attributed in `THIRD_PARTY_NOTICES.md`). Otherwise the
 normalized name.
+
+**D-19 — The spec was self-approved, and the plan was written by hand.** The owner
+pre-approved every gate. The `writing-plans` skill is not installed in this
+environment: both `writing-plans` and `anthropic-skills:writing-plans` returned
+"Unknown skill". The plan at `docs/superpowers/plans/2026-10-21-landmine.md` follows
+that skill's usual shape (milestones, files, tests, verification, commit). It runs
+inline in this session, one commit per milestone.

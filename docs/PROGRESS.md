@@ -1,18 +1,29 @@
 # Progress
 
-Resume point for any session. Update after every milestone.
+This is the resume point for any session. Update it after every milestone.
+
+Plan: `docs/superpowers/plans/2026-10-21-landmine.md`. Spec: `docs/superpowers/specs/2026-10-21-landmine-design.md`.
 
 ## Status
 
-- [x] Repo created (`/Users/ranjansrivastav/Downloads/sideproj/landmine`, local git only)
-- [ ] Research (collision sweep, GitHub/registry APIs, hook formats, lockfiles)
-- [ ] Design spec
-- [ ] Implementation plan
-- [ ] Milestones (see plan)
+- [x] Research (`docs/RESEARCH.md`)
+- [x] Design spec (self-approved, D-19)
+- [x] Implementation plan
+- [ ] M0 Scaffold
+- [ ] M1 Lockfiles
+- [ ] M2 Source analysis
+- [ ] M3 HTTP / GitHub / registries
+- [ ] M4 Issue analysis
+- [ ] M5 Scan + index
+- [ ] M6 Match, check, list
+- [ ] M7 Hook + install
+- [ ] M8 Real e2e + accuracy
+- [ ] M9 MCP (stretch)
+- [ ] M10 README + morning summary
 
 ## Next
 
-Finish research, write `docs/RESEARCH.md`, then the spec.
+M0 scaffold.
 
 ## Blocked
 
