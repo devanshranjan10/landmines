@@ -1,0 +1,1 @@
+{"name":"@me/foo","version":"0.1.0","dependencies":{"semver":"^7.6.0","debug":"^2.6.9","lodash":"github:lodash/lodash#4.17.21"}}

@@ -1,0 +1,4 @@
+packages:
+  - "packages/*"
+configDependencies:
+  "@pnpm/plugin-better-defaults": "0.2.1"

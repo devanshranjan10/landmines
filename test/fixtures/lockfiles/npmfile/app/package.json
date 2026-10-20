@@ -1,0 +1,1 @@
+{"name":"app","version":"1.0.0","dependencies":{"local-thing":"file:../local","is-odd":"github:i-voted-for-trump/is-odd#3.0.1"}}
