@@ -1,0 +1,14 @@
+{
+  "session_id": "01a15b54-e368-7e71-a92b-283a9c5ceead",
+  "turn_id": "01a15b54-e434-7ef3-80aa-d9efd0fc3571",
+  "transcript_path": "${HOME}/.codex/sessions/2026/10/21/rollout-2026-10-21T03-30-52-01a15b54-e368-7e71-a92b-283a9c5ceead.jsonl",
+  "cwd": "${ROOT}",
+  "hook_event_name": "PreToolUse",
+  "model": "gpt-5.6-terra",
+  "permission_mode": "bypassPermissions",
+  "tool_name": "apply_patch",
+  "tool_input": {
+    "command": "*** Begin Patch\n*** Update File: ${ROOT}/src/db.ts\n@@\n export const db = drizzle({ connection: process.env.DATABASE_URL ?? 'postgres://localhost/demo' });\n+\n+export async function closeDb() {\n+  await db.$client.end();\n+}\n \n export async function findUser(id: number) {\n*** End Patch"
+  },
+  "tool_use_id": "exec-68a649dc-0b7b-4946-9534-0d2b7a5e27ae"
+}

@@ -1,0 +1,19 @@
+{
+  "session_id": "3a1a9581-4060-45f9-8bb3-6b57a14a1ac8",
+  "transcript_path": "${HOME}/.claude/projects/-Users-me-Downloads-sideproj-landmine-examples-demo/3a1a9581-4060-45f9-8bb3-6b57a14a1ac8.jsonl",
+  "cwd": "${ROOT}",
+  "prompt_id": "c5d97666-dfdd-4188-ac0a-a9d397fb17e1",
+  "permission_mode": "acceptEdits",
+  "effort": {
+    "level": "medium"
+  },
+  "hook_event_name": "PreToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "${ROOT}/src/db.ts",
+    "old_string": "import { pgTable, serial, text } from 'drizzle-orm/pg-core';\n\nexport const users = pgTable('users', {\n  id: serial('id').primaryKey(),\n  email: text('email').notNull(),\n});\n\nexport const db = drizzle({ connection: process.env.DATABASE_URL ?? 'postgres://localhost/demo' });\n\nexport async function findUser(id: number) {\n  return db.query.users.findFirst({ where: (u, { eq }) => eq(u.id, id) });\n}\n",
+    "new_string": "import { pgTable, serial, text } from 'drizzle-orm/pg-core';\nimport pg from 'pg';\n\nexport const users = pgTable('users', {\n  id: serial('id').primaryKey(),\n  email: text('email').notNull(),\n});\n\nconst pool = new pg.Pool({ connectionString: process.env.DATABASE_URL ?? 'postgres://localhost/demo' });\n\nexport const db = drizzle(pool);\n\nexport async function findUser(id: number) {\n  return db.query.users.findFirst({ where: (u, { eq }) => eq(u.id, id) });\n}\n\nexport async function closeDb() {\n  await pool.end();\n}\n",
+    "replace_all": false
+  },
+  "tool_use_id": "toolu_012EajADZvUDe4WvbDb97n38"
+}

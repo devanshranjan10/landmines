@@ -1,0 +1,20 @@
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { pgTable, serial, text } from 'drizzle-orm/pg-core';
+import pg from 'pg';
+
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull(),
+});
+
+const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL ?? 'postgres://localhost/demo' });
+
+export const db = drizzle(pool);
+
+export async function findUser(id: number) {
+  return db.query.users.findFirst({ where: (u, { eq }) => eq(u.id, id) });
+}
+
+export async function closeDb() {
+  await pool.end();
+}

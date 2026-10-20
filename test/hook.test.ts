@@ -245,3 +245,33 @@ describe('install / uninstall', () => {
     expect(stdout).toContain('No index yet');
   });
 });
+
+describe('captured Claude Code payloads (live session in examples/demo, docs/e2e)', () => {
+  const load = (name: string, projectRoot: string): string =>
+    readFileSync(new URL(`./fixtures/payloads/${name}`, import.meta.url), 'utf8').split('${ROOT}').join(projectRoot).split('${HOME}').join(tmpdir());
+
+  it('denies the real first edit (db.$client.end) and stays silent on the real retry', () => {
+    mkdirSync(join(root, 'src'), { recursive: true });
+    cpSync(new URL('../examples/demo/src/db.ts', import.meta.url), join(root, 'src', 'db.ts'));
+    const dir = state();
+    const denied = runHook(load('claude-edit-denied.json', root), { stateDir: dir });
+    expect(denied).toMatchObject({ decision: 'deny', harness: 'claude', hits: [{ id: 'drizzle-team/drizzle-orm#3402', symbol: '$client.end' }] });
+    const retry = runHook(load('claude-edit-allowed.json', root), { stateDir: dir });
+    expect(retry).toMatchObject({ decision: 'none', reason: 'no landmine touched', stdout: '' });
+  });
+});
+
+describe('captured Codex CLI payloads (live codex exec session, docs/e2e)', () => {
+  const load = (name: string, projectRoot: string): string =>
+    readFileSync(new URL(`./fixtures/payloads/${name}`, import.meta.url), 'utf8').split('${ROOT}').join(projectRoot).split('${HOME}').join(tmpdir());
+
+  it('denies the real apply_patch that adds db.$client.end() and allows the owned-pool retry', () => {
+    mkdirSync(join(root, 'src'), { recursive: true });
+    cpSync(new URL('../examples/demo/src/db.ts', import.meta.url), join(root, 'src', 'db.ts'));
+    const dir = state();
+    const denied = runHook(load('codex-apply-patch-denied.json', root), { stateDir: dir });
+    expect(denied).toMatchObject({ decision: 'deny', harness: 'codex', hits: [{ id: 'drizzle-team/drizzle-orm#3402' }] });
+    expect(JSON.parse(denied.stdout)).toMatchObject({ hookSpecificOutput: { hookEventName: 'PreToolUse', permissionDecision: 'deny' } });
+    expect(runHook(load('codex-apply-patch-allowed.json', root), { stateDir: dir })).toMatchObject({ decision: 'none', stdout: '' });
+  });
+});
