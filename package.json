@@ -1,0 +1,51 @@
+{
+  "name": "landmines",
+  "version": "0.1.0",
+  "description": "Warns your coding agent before it edits code that touches a known open bug in your exact pinned dependency versions, and quotes the workaround from the issue thread.",
+  "type": "module",
+  "license": "MIT",
+  "bin": {
+    "landmine": "dist/cli.js",
+    "landmines": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY_NOTICES.md"
+  ],
+  "engines": {
+    "node": ">=22.12"
+  },
+  "keywords": [
+    "claude-code",
+    "codex",
+    "cursor",
+    "hooks",
+    "github-issues",
+    "dependencies",
+    "lockfile",
+    "agent"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "check": "npm run typecheck && npm run lint && npm run test"
+  },
+  "dependencies": {
+    "commander": "^15.0.0",
+    "js-yaml": "^5.5.0",
+    "smol-toml": "^1.9.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.20.5",
+    "eslint": "^10.13.0",
+    "tsup": "^9.0.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.72.0",
+    "vitest": "^5.0.5"
+  }
+}
