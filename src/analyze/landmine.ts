@@ -18,12 +18,13 @@ export interface BuildResult {
 }
 
 const BUG_LABEL = /\bbug\b|regression|crash|defect|incorrect|broken/i;
-const NON_BUG_LABEL = /enhancement|feature|proposal|\bidea\b|question|documentation|\bdocs?\b|installation|\bbuild\b|discussion|support request/i;
+const BUG_TITLE = /^\s*(?:\[?bug\b[\]:]?|BUG\b|\(🐞\)|🐛)/i;
+const NON_BUG_LABEL = /enhancement|feature|proposal|\bidea\b|question|documentation|\bdocs?\b|installation|\bbuild\b|^discussion$|support request/i;
 const NON_BUG_TITLE = /^\s*(?:\[?(?:feat(?:ure)?|enhancement|proposal|rfc|question|docs?|discussion)\b[\]:]?|ENH\b|DOC\b|BLD\b|BUILD\b|QST\b|feature request)/i;
 
 /** Feature requests, questions, docs and install problems are not landmines for code edits. */
 export function isNonBug(title: string, labels: string[]): boolean {
-  if (labels.some((l) => BUG_LABEL.test(l))) return false;
+  if (labels.some((l) => BUG_LABEL.test(l)) || BUG_TITLE.test(title)) return false;
   return labels.some((l) => NON_BUG_LABEL.test(l)) || NON_BUG_TITLE.test(title);
 }
 

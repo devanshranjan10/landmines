@@ -4,7 +4,11 @@ import { langForFence } from '../source/lang.js';
 import type { Lang } from '../source/lex.js';
 import { touches } from '../source/touches.js';
 import type { IssueSymbol, SymbolSource } from '../types.js';
+import { isDialectWord } from './dialect.js';
 import { codeSpans, codeSpansInContext, dropQuotes, dropTaskLists, splitFences, stripNoise } from './markdown.js';
+
+/** Conventional import aliases: a chain rooted here is rooted at the package. */
+const CONVENTIONAL_ALIASES = new Set(['np', 'pd', 'plt', 'sns', 'px', 'go', 'tf', 'nn', 'F', 'th', 'sp', 'nx', 'mpl', 'pl', 'xr', 'dd', 'sk', 'jnp']);
 
 export const WEIGHT: Record<SymbolSource, number> = { title: 1.0, span: 0.7, code: 0.5, import: 0.2 };
 
@@ -18,7 +22,9 @@ export const GENERIC = new Set(
   instance client db app router server model schema table column field fields record row rows index object string number boolean
   array date time event events node nodes element component page view main utils helpers lib src dist build module exports require
   import export return async await promise resolve reject string int float bool dict tuple str none true false null undefined
-  min max sum avg is has on off emit with as to of in out api http https www com org github issue issues bug fix version`
+  min max sum avg is has on off emit with as to of in out api http https www com org github issue issues bug fix version
+  float16 float32 float64 bfloat16 int8 int16 int32 int64 uint8 uint16 uint32 uint64 complex64 complex128 bool_ object_ dtype dtypes
+  cuda cpu gpu mps device tensor tensors edges edge graph`
     .split(/\s+/)
     .filter(Boolean),
 );
@@ -106,8 +112,15 @@ class Scores {
   }
 }
 
+/** Builtin error and warning classes say what failed, not which API. Package-specific ones (PrismaClientKnownRequestError) stay. */
+const BUILTIN_ERROR =
+  /^(?:(?:Type|Value|Range|Reference|Syntax|Runtime|Import|ModuleNotFound|Attribute|Key|Index|OS|IO|Assertion|NotImplemented|Overflow|ZeroDivision|Recursion|Memory|Lookup|Name|Unicode\w*|Timeout|Connection\w*|Permission|FileNotFound|Eval|URI|Aggregate|Internal)(?:Error|Exception)|(?:Future|Deprecation|User|Runtime|Pending\w*|Syntax|Resource|Import|Unicode)Warning|Error|Exception|Warning)$/;
+/** Release tags (`dev20240708`, `rc1`) that leak out of version strings. */
+const RELEASE_TAG = /^(?:dev|rc|post|alpha|beta|pre|canary|nightly)\d+$/i;
+
 function isCandidate(name: string, ctx: SymbolContext): boolean {
-  if (name.length < 2 || /^\d/.test(name) || KEYWORDS.has(name)) return false;
+  if (name.length < 2 || /^\d/.test(name) || KEYWORDS.has(name) || BUILTIN_ERROR.test(name) || RELEASE_TAG.test(name)) return false;
+  if (isDialectWord(name)) return false;
   const lower = name.toLowerCase();
   if (ctx.packageAliases.some((a) => a.toLowerCase() === lower)) return false;
   if (ctx.importNames.some((a) => a.toLowerCase() === lower)) return false;
@@ -132,6 +145,8 @@ function deepImports(text: string, ctx: SymbolContext): string[] {
     for (const m of text.matchAll(re)) {
       const segs = m[0].split(/[/.]/).slice(1);
       if (segs.some((s) => NOT_IMPORT_SEGMENT.test(s)) || FILE_EXT.test(segs.at(-1) ?? '')) continue;
+      // Python modules are lowercase; `pandas.DataFrame` is a class, not a deep import.
+      if (ctx.lang === 'py' && !segs.every((s) => /^[a-z_][a-z0-9_]*$/.test(s))) continue;
       out.push(m[0]);
     }
   }
@@ -144,14 +159,23 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
   const body = dropQuotes(dropTaskLists(stripNoise(issue.body)));
   const { prose, fences } = splitFences(body);
 
+  const roots = new Set([...ctx.importNames, ...ctx.packageAliases].map((r) => r.toLowerCase()));
+  const namespaces = new Set<string>();
   const addChains = (chains: string[][], source: SymbolSource, weight?: number): void => {
     for (const chain of chains) {
       if (isFileName(chain)) continue;
+      // In `torch.cuda.memory.change_current_allocator`, `cuda` and `memory` are namespaces of the package:
+      // touching them says nothing about which API is buggy.
+      const head = chain[0] ?? '';
+      if (chain.length > 2 && (roots.has(head.toLowerCase()) || CONVENTIONAL_ALIASES.has(head))) {
+        for (const seg of chain.slice(1, -1)) if (/^_?[a-z][a-z0-9_]*$/.test(seg)) namespaces.add(seg);
+      }
       for (const seg of chain) if (isCandidate(seg, ctx)) scores.add(seg, source, weight);
       for (let k = 1; k < chain.length; k++) {
         const a = chain[k - 1];
         const b = chain[k];
-        if (a && b && isCandidate(b, ctx)) scores.add(`${a}.${b}`, source, weight);
+        // `pandas.DataFrame` is just `DataFrame`: a pair headed by the package adds nothing and would dodge its penalties.
+        if (a && b && isCandidate(b, ctx) && !roots.has(a.toLowerCase()) && !CONVENTIONAL_ALIASES.has(a)) scores.add(`${a}.${b}`, source, weight);
       }
     }
   };
@@ -217,7 +241,8 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
   const out: IssueSymbol[] = [];
   for (const [name, sources] of scores.entries()) {
     const raw = Math.min(1, [...sources.values()].reduce((a, b) => a + b, 0));
-    const score = Math.round(raw * specificity(name) * 100) / 100;
+    const isNamespace = namespaces.has(name) || name.split('.').every((p) => namespaces.has(p) || roots.has(p.toLowerCase()) || CONVENTIONAL_ALIASES.has(p));
+    const score = Math.round(raw * (isNamespace ? 0.35 : specificity(name)) * 100) / 100;
     out.push({ name, score, sources: [...sources.keys()] });
   }
   return out.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));

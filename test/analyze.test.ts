@@ -380,3 +380,53 @@ describe('import names and local versions', () => {
     expect(findMentions('PyTorch version: 2.5.0+cu124', { name: 'torch', version: '2.5.0', repo: 'pytorch/pytorch' })).toHaveLength(1);
   });
 });
+
+describe('post-evaluation fixes (held-out sample B)', () => {
+  const ctxNp = { packageName: 'torch', packageAliases: ['torch', 'pytorch'], importNames: ['torch'], lang: 'py' as const };
+  it('pre-release and nightly versions are not the release', () => {
+    expect(findMentions('on torch 2.5.0.dev20240708+cu121', { name: 'torch', version: '2.5.0', repo: 'pytorch/pytorch' })).toEqual([]);
+    expect(findMentions('2.5.0rc1', { name: 'torch', version: '2.5.0', repo: 'pytorch/pytorch' })).toEqual([]);
+    expect(findMentions('PyTorch version: 2.5.0+cu121', { name: 'torch', version: '2.5.0', repo: 'pytorch/pytorch' })).toHaveLength(1);
+  });
+
+  it('a question about a version is not a confirmation', () => {
+    const r = versionEvidence(issue({ comments: [comment('Query: is this issue now moot with 6.0.2? The release notes say Cython 3 support.')] }), {
+      name: 'pyyaml',
+      version: '6.0.2',
+      repo: 'yaml/pyyaml',
+    });
+    expect(r).toMatchObject({ evidence: { strength: 'weak' } });
+  });
+
+  it('namespaces under the package, dtypes, builtin errors, release tags and dialect words are not trigger symbols', () => {
+    const s = Object.fromEntries(
+      issueSymbols(
+        { title: '`torch.cuda.memory.change_current_allocator` fails on 2.5.0.dev20240708 with RuntimeError', body: 'Using `torch.bfloat16` and `sqlite3`' },
+        ctxNp,
+      ).map((x) => [x.name, x.score]),
+    );
+    expect(s.change_current_allocator).toBe(1);
+    expect(s.cuda).toBeLessThan(0.6);
+    expect(s.memory).toBeLessThan(0.6);
+    expect(s.bfloat16).toBeLessThan(0.6);
+    expect(s.RuntimeError).toBeUndefined();
+    expect(s.dev20240708).toBeUndefined();
+    expect(s.sqlite3).toBeUndefined();
+  });
+
+  it('a chain rooted at a user variable is not a namespace (db.$client.end)', () => {
+    const s = issueSymbols({ title: 'client has no end', body: 'calling `db.$client.end()` fails' }, { packageName: 'drizzle-orm', packageAliases: ['drizzle-orm'], importNames: ['drizzle-orm'], lang: 'js' });
+    expect(s.find((x) => x.name === '$client')?.score).toBe(0.7);
+  });
+});
+
+describe('status questions vs confirmations ending in "?"', () => {
+  it('"still facing this issue in 0.36.0 ?" confirms', () => {
+    const r = versionEvidence(issue({ comments: [comment('still facing this issue in 0.36.0 ? any workarounds except for joining them manually ?')] }), {
+      name: 'drizzle-orm',
+      version: '0.36.0',
+      repo: 'drizzle-team/drizzle-orm',
+    });
+    expect(r).toMatchObject({ evidence: { strength: 'medium' } });
+  });
+});

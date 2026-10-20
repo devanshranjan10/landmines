@@ -51,6 +51,8 @@ const POST_UNAFFECTED =
 /** Later in the same sentence: "Using 2.2.3, the snippet works just fine", "On 2.2.3 I can't reproduce". */
 const SENTENCE_UNAFFECTED =
   /\b(works?\s+(?:just\s+)?(?:fine|correctly|as expected|well|perfectly)|(?:seems|appears)\s+(?:to\s+(?:be|have\s+been)\s+)?(?:fixed|resolved)|(?:is|was|has been)\s+(?:already\s+)?(?:fixed|resolved)|fixed already|(?:can'?t|cannot|could\s*n[o']t|unable to|failed to)\s+reproduce|no longer\s+(?:happens|occurs|reproduces|an issue|a problem)|not reproducible)\b/i;
+const STATUS_QUESTION =
+  /\b(moot|(?:is|was|has)\s+(?:this|it)\s+(?:been\s+)?(?:still|now|already|fixed|resolved|addressed)|(?:fixed|resolved|addressed)\s+(?:in|by|with)|does\s+(?:this|it)\s+still)\b/i;
 const CONFIRM = /\b(still|same|also|as well|too|facing|face|experienc\w*|encounter\w*|reproduc\w*|repro|confirm\w*|happen\w*|broken|break\w*|issue|bug|error|problem|fail\w*|crash\w*|occur\w*|present|persist\w*|affect\w*|seeing|getting)\b/i;
 const TEMPLATE_WORD = /\bversions?\b/i;
 const OTHER_PRODUCT = /\b(os|macos|mac ?os x?|windows|win|ubuntu|debian|linux|ios|ipados|android|node(?:\.?js)?|python|npm|pnpm|yarn|bun|deno|chrome|chromium|firefox|safari|edge|browser|typescript|tsc|kernel|xcode|java|jdk|golang|rustc|docker|postgres(?:ql)?|mysql|sqlite|redis|electron|expo|react native)\b/i;
@@ -95,8 +97,12 @@ export function nameBefore(before: string): string | undefined {
 
 /** Every mention of `version` (or `v<version>`) in `text`, classified. */
 export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'version' | 'repo' | 'importNames'>): Mention[] {
-  // `2.5.0+cu124` (PEP 440 local version) and `1.0.0+build.5` (semver build metadata) are the same release.
-  const re = new RegExp(`(?<![\\w.+\\-])v?${escapeRe(ctx.version)}(?![\\w]|\\.\\d|-\\w)`, 'gi');
+  // `2.5.0+cu124` (PEP 440 local version) and `1.0.0+build.5` (semver build metadata) are the same release;
+  // `2.5.0.dev20240708`, `2.5.0rc1`, `2.5.0-beta.1` are not.
+  const re = new RegExp(
+    `(?<![\\w.+\\-])v?${escapeRe(ctx.version)}(?![\\w]|\\.\\d|-\\w|\\.(?:dev|post|a|b|rc|alpha|beta|pre|next|canary)\\w*)`,
+    'gi',
+  );
   const aliases = packageAliases(ctx).map((a) => a.toLowerCase());
   const mentions: Mention[] = [];
   for (const m of text.matchAll(re)) {
@@ -137,6 +143,9 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
     if (affected && SENTENCE_UNAFFECTED.test(rest.slice(0, 160)) && !NEGATION.test(rest.slice(0, rest.search(SENTENCE_UNAFFECTED)))) affected = false;
 
     const window = text.slice(Math.max(0, index - 120), Math.min(text.length, end + 120));
+    // "Is this issue now moot with 6.0.2?" asks about status; "still facing this in 0.36.0?" still confirms.
+    const sentence = `${pre}${text.slice(index, end)}${text.slice(end, end + 200).split(/[.!\n]/)[0] ?? ''}`;
+    const question = /\?/.test(sentence) && STATUS_QUESTION.test(sentence);
     let quote = line.trim();
     let other = false;
     // A different package's version that happens to be the same string.
@@ -162,7 +171,7 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
       kind,
       other,
       affected,
-      confirmed: CONFIRM.test(window),
+      confirmed: CONFIRM.test(window) && !question,
       quote: quote.replace(/\s+/g, ' ').slice(0, 160),
     });
   }

@@ -14,6 +14,11 @@ const DIALECT_WORDS: Record<string, string[]> = {
 const WORD_TO_DIALECT = new Map<string, string>();
 for (const [dialect, words] of Object.entries(DIALECT_WORDS)) for (const w of words) WORD_TO_DIALECT.set(w, dialect);
 
+/** Database/driver names are context, not APIs. */
+export function isDialectWord(word: string): boolean {
+  return WORD_TO_DIALECT.has(word.toLowerCase());
+}
+
 function dialectsInTokens(tokens: Iterable<string>): Set<string> {
   const out = new Set<string>();
   for (const t of tokens) {
