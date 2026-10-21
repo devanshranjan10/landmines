@@ -55,28 +55,36 @@ function workaroundSection(l: Landmine, budget: number): string[] {
 function hitSection(h: Hit, budget: number): string[] {
   const l = h.landmine;
   const lines = [`${l.id} · ${l.issue.title}`, l.issue.url, evidenceLine(l)];
+  if (h.corroboratedBy) lines.push(`Why it applies here: this file also uses \`${h.corroboratedBy}\`, which the issue names.`);
   if (l.issue.labels.length) lines.push(`Labels: ${l.issue.labels.join(', ')}`);
   lines.push('', ...workaroundSection(l, budget));
   if (l.fixHint) lines.push('', `Maintainer note (@${l.fixHint.author}): ${l.fixHint.text} ${l.fixHint.url === l.issue.url ? '' : l.fixHint.url}`.trimEnd());
   return lines;
 }
 
-/** Text the coding agent sees when the hook pauses an edit (plain text, ≤ 4,000 chars). */
-export function modelMessage(hits: Hit[], mode: 'block' | 'warn' = 'block'): string {
+/**
+ * Text the coding agent sees (plain text, ≤ 4,000 chars).
+ * `block`: corroborated hits, edit paused once. `warn`: --mode warn. `heads-up`: block mode, but nothing in the
+ * file beyond the symbol itself matches the issue, so it is passed on without stopping the edit.
+ */
+export function modelMessage(hits: Hit[], mode: 'block' | 'warn' | 'heads-up' = 'block'): string {
   const shown = hits.slice(0, MAX_HITS);
   const first = shown[0];
   if (!first) return '';
   const l0 = first.landmine;
+  const prefix = mode === 'heads-up' ? 'landmine (heads-up, not blocking)' : 'landmine';
   const header =
     shown.length === 1
-      ? `landmine: this edit uses \`${first.symbol}\` from ${l0.package}@${l0.version}, and an open GitHub issue filed against exactly that version describes a bug there.`
-      : `landmine: this edit uses symbols with open GitHub issues filed against the exact versions this project pins (${shown
+      ? `${prefix}: this edit uses \`${first.symbol}\` from ${l0.package}@${l0.version}, and an open GitHub issue filed against exactly that version describes a bug there.`
+      : `${prefix}: this edit uses symbols with open GitHub issues filed against the exact versions this project pins (${shown
           .map((h) => `\`${h.symbol}\` from ${h.landmine.package}@${h.landmine.version}`)
           .join(', ')}).`;
   const footer =
     mode === 'block'
       ? 'landmine paused this edit once so you can account for the bug. If the code already handles it or the bug does not apply, re-apply the same edit and it will go through. If the bug changes your approach, tell the user which issue you are working around.'
-      : 'This is a heads-up, not a block. If the bug changes your approach, tell the user which issue you are working around.';
+      : mode === 'heads-up'
+        ? 'Nothing else in this file matches the specifics of the issue, so it may well not apply; there is no need to change course unless your code hits the conditions it describes.'
+        : 'This is a heads-up, not a block. If the bug changes your approach, tell the user which issue you are working around.';
   const perHit = Math.floor((MAX_MESSAGE - header.length - footer.length - 200) / shown.length) - 400;
   const sections = shown.map((h, i) => {
     const [title = '', ...rest] = hitSection(h, perHit);
@@ -88,9 +96,10 @@ export function modelMessage(hits: Hit[], mode: 'block' | 'warn' = 'block'): str
 }
 
 /** Compact terminal rendering for `check` and `list`. */
-export function humanLandmine(l: Landmine, opts: RenderOptions, symbol?: string): string {
+export function humanLandmine(l: Landmine, opts: RenderOptions, symbol?: string, hit?: Pick<Hit, 'corroboratedBy'>): string {
   const sym = symbol ?? armedSymbols(l)[0];
-  const head = `${paint(opts, 'yellow', '▲')} ${paint(opts, 'bold', `${l.package}@${l.version}`)}${sym ? ` · \`${sym}\`` : ''} · ${l.id} ${l.issue.title}`;
+  const tier = hit === undefined ? '' : hit.corroboratedBy ? ` ${paint(opts, 'red', `[blocks: also uses \`${hit.corroboratedBy}\`]`)}` : ` ${paint(opts, 'dim', '[heads-up only]')}`;
+  const head = `${paint(opts, 'yellow', '▲')} ${paint(opts, 'bold', `${l.package}@${l.version}`)}${sym ? ` · \`${sym}\`` : ''}${tier} · ${l.id} ${l.issue.title}`;
   const lines = [head, `    ${paint(opts, 'cyan', l.issue.url)}`, `    ${paint(opts, 'dim', `${l.evidence.strength} evidence — ${evidenceLine(l).replace(/^Evidence: /, '')}`)}`];
   if (l.workaround) {
     const w = l.workaround;

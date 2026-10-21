@@ -1,0 +1,422 @@
+[
+  {
+    "pkg": "pandas",
+    "repo": "ziyangwang007/UNet-Seg",
+    "path": "1.py",
+    "sha": "65f23af746b112a0f9fddf431a35f6f06fc5100c",
+    "url": "https://github.com/ziyangwang007/UNet-Seg/blob/23171ffc8086d85ec03ac7ee6afb1f338db5b1a4/1.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "binzhouchn/capsule-pytorch",
+    "path": "m.py",
+    "sha": "ce4da5002508f0f1c38748c63837f9b1513c6f67",
+    "url": "https://github.com/binzhouchn/capsule-pytorch/blob/741bdbb979cd962160c096afe9b84e8e15d11951/m.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "treangenlab/emu",
+    "path": "emu",
+    "sha": "57c616a2f5661af7bcffd1f9ed3b6af6a4ff5ae2",
+    "url": "https://github.com/treangenlab/emu/blob/3a1a1118783995090f164351c5dc8c3fac7efe3a/emu"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "samyachour/EKG_Analysis",
+    "path": "R.py",
+    "sha": "a3eb3a37f4392ba5d550f54129c71776519f906a",
+    "url": "https://github.com/samyachour/EKG_Analysis/blob/42a763064d0eacf682f120738ce51cf535f8a612/R.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "tkphd/KKS-binary-solidification",
+    "path": "c.py",
+    "sha": "fd233b3da612d4a9800efcfd387b1f89ca5b4765",
+    "url": "https://github.com/tkphd/KKS-binary-solidification/blob/09100cc0bcf93494ce8241f98cb65226c3b03f38/c.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "daleroberts/bv",
+    "path": "bv",
+    "sha": "fa62181705dccb32b5da143b8a3ff2edd7805631",
+    "url": "https://github.com/daleroberts/bv/blob/479241ef5cc984c55b742a4d1fd219dc1baba10a/bv"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "oreillymedia/ipython-kernel",
+    "path": "t.py",
+    "sha": "e08fdda1a94f2cdd34706175d16244f4598e2233",
+    "url": "https://github.com/oreillymedia/ipython-kernel/blob/6b6c9ec9c8563098c852c1403103b4235a9ce413/t.py"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "jweyn/MOS-X",
+    "path": "run",
+    "sha": "be38726baf06cbc3f46c15ab708d44916c387d77",
+    "url": "https://github.com/jweyn/MOS-X/blob/83b3dd5ac2e610b6a2934408d07f573789a3f233/run"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "drdrang/simple-plotting",
+    "path": "plot",
+    "sha": "77f74a7e6b4ea2244e6be6130717321cac9fa6a0",
+    "url": "https://github.com/drdrang/simple-plotting/blob/792c0fb3f522201f113363c6b8958f55c8db33b7/plot"
+  },
+  {
+    "pkg": "polars",
+    "repo": "MarcoGorelli/polars-plugins-tutorial",
+    "path": "run.py",
+    "sha": "23168a2590aa2423545e8d20c712c120cdb81a26",
+    "url": "https://github.com/MarcoGorelli/polars-plugins-tutorial/blob/f5a5257116b47566229f64188784eff5fe59d110/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "Zaczero/CBBI",
+    "path": "utils.py",
+    "sha": "1ef6c345ec41d0561334dc3ac2d62eb78063611a",
+    "url": "https://github.com/Zaczero/CBBI/blob/31e4b869d1ecd425040885b820cb75e39a879299/utils.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "DerwenAI/strwythura",
+    "path": "app.py",
+    "sha": "7e76df8830bd3df2e98d7eb28842d7190a95f25b",
+    "url": "https://github.com/DerwenAI/strwythura/blob/690bbabecc14038b6618ff35230bf32e1559d225/app.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "miguelgrinberg/flask-celery-example",
+    "path": "app.py",
+    "sha": "085aa4186a33a3f9d6e8a1c6141846ec4da0bd3a",
+    "url": "https://github.com/miguelgrinberg/flask-celery-example/blob/76f785ebe6a049e873a8c28b4f25686b64c4fa55/app.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "gorse-io/gitrec",
+    "path": "jobs.py",
+    "sha": "a0b86ac5f84c50bacce3be75028ea1c2a0627ed2",
+    "url": "https://github.com/gorse-io/gitrec/blob/968cd935aea0e901345c5ba91f97f954f65b43f1/jobs.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "stleon/vk_friends",
+    "path": "call.py",
+    "sha": "d51cf17b77f6224e947dab14b3b97cf0d969ccda",
+    "url": "https://github.com/stleon/vk_friends/blob/d6403010cd2787e009dd6f5805c79bc6da48c02e/call.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "datalib/libextract",
+    "path": "setup.py",
+    "sha": "a5898442fb3bc10cd6f488a5a8999cdbe45a0951",
+    "url": "https://github.com/datalib/libextract/blob/9cf9d55c7f8cd622eab0a50f009385f0a39b1200/setup.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "jeff1evesque/machine-learning",
+    "path": "app.py",
+    "sha": "a26a96e90342965e3a0843283964ed103f0fffd3",
+    "url": "https://github.com/jeff1evesque/machine-learning/blob/4c54e36f8ebf6a0b481c8aca71a6b3b4010dd4ff/app.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "coveragepy/coveragepy",
+    "path": "igor.py",
+    "sha": "df20a27f6c763164a6c8ba3b0a31c08db3b14aa2",
+    "url": "https://github.com/coveragepy/coveragepy/blob/934f5b87067e188a7a7cdf23739d874be2b181a8/igor.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "hwchase17/notion-qa",
+    "path": "qa.py",
+    "sha": "c82fe02e4ee809387d27fdffc4b093ecaca62929",
+    "url": "https://github.com/hwchase17/notion-qa/blob/71610847545c97041b93ecb3b19d9746623ce80f/qa.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "SaiAkhil066/CORTEX-AI-SUPER-RAG",
+    "path": "app.py",
+    "sha": "1a99c21e3da2f8882193d53a4dddad18a86753c5",
+    "url": "https://github.com/SaiAkhil066/CORTEX-AI-SUPER-RAG/blob/91dc9c31e064e1e71c23324c61eff53aa8a1369d/app.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "Olney1/ChatGPT-OpenAI-Smart-Speaker",
+    "path": "pi.py",
+    "sha": "3a247f62cf5c184517a7837709702cf6ab75b0ae",
+    "url": "https://github.com/Olney1/ChatGPT-OpenAI-Smart-Speaker/blob/c00deccbefd51c0b237751d803fe11f764bdf57f/pi.py"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "HuolalaTech/page-spy-web",
+    "path": "src/init.ts",
+    "sha": "7786fa6f7bb1d3eb0a22f6770172d720bcc2d193",
+    "url": "https://github.com/HuolalaTech/page-spy-web/blob/8b7ab96fa5b1f5ec60cf1d6579a7d0eeed21f44c/src/init.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "ineo6/hosts",
+    "path": "src/hosts.ts",
+    "sha": "ddbcb518b0ac96af23cd62e200d20234628037fa",
+    "url": "https://github.com/ineo6/hosts/blob/df7760e7d9a595ebdbb4501d105aac7dcccb1cc1/src/hosts.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "Mayandev/notion-avatar",
+    "path": "src/utils.ts",
+    "sha": "288178326e875b95ca4d5712dd2830f2955c564a",
+    "url": "https://github.com/Mayandev/notion-avatar/blob/d59791d24db741e307d8c91ac9f38f92e033ad46/src/utils.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "zwave-js/zwave-js-ui",
+    "path": "api/app.ts",
+    "sha": "c7b7b907e12033aeaa21991fd2f07b943ec74581",
+    "url": "https://github.com/zwave-js/zwave-js-ui/blob/27ba3c730cbe9c0cbbce8e15a6084ae9c942a79c/api/app.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "gitranks/gitranks-ui",
+    "path": "codegen.ts",
+    "sha": "636ffc8271a040e64b75fc159d12129e10539dac",
+    "url": "https://github.com/gitranks/gitranks-ui/blob/df4a3bebcd6a1f436c797f014ac42c35a47e31e2/codegen.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "neo9/n9-node-micro",
+    "path": "src/jwt.ts",
+    "sha": "8a06b8c53073e5e431212130aff63e7facba4b1e",
+    "url": "https://github.com/neo9/n9-node-micro/blob/1688a7a11a6ba153a2cf2f0e60bebbd2722b22c7/src/jwt.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "billchurch/webssh2",
+    "path": "app/io.ts",
+    "sha": "e30450c91ccf28741486ffb745913251931f6751",
+    "url": "https://github.com/billchurch/webssh2/blob/00f942be076978c26ebb17edce67c74ebbe381e1/app/io.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "Vladinho10/node-server-template",
+    "path": "index.ts",
+    "sha": "d274573c0f064c4bed0934ac7c50cb3604eff6f2",
+    "url": "https://github.com/Vladinho10/node-server-template/blob/d4271af05e35e09c66df5af6174cf0cae04e0c88/index.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "webkom/vote",
+    "path": "server.ts",
+    "sha": "7d0cc179f4b2c5672ce5b70862f20ebf352947d9",
+    "url": "https://github.com/webkom/vote/blob/736ecc402b019211dc58e4c4a820c7d24a571ec5/server.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "rcbyr/keen-slider",
+    "path": "src/vue.ts",
+    "sha": "022802048077b29bda794dd1e7f74357eed25b61",
+    "url": "https://github.com/rcbyr/keen-slider/blob/520c757a80aa10ff224e9c89b0917edfa811adcf/src/vue.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "mirari/v-viewer",
+    "path": "src/api.ts",
+    "sha": "460c63f6449d29dbe36e17eb95d96b090857c1a8",
+    "url": "https://github.com/mirari/v-viewer/blob/9d51fe98f9d2b5d7c836a637cbb3b11d20bf4899/src/api.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "streamlabs/desktop",
+    "path": "app/app.ts",
+    "sha": "30e5d4b160cfe41ebbcfb83c9cf9d6aee2729fa8",
+    "url": "https://github.com/streamlabs/desktop/blob/8fc20738b123c0a3ba793ebcd9b203a67343fa35/app/app.ts"
+  },
+  {
+    "pkg": "torch",
+    "repo": "meta-pytorch/gpt-fast",
+    "path": "tp.py",
+    "sha": "a151a87571d9c6a6914e4eb4fdb65f229d55c3d7",
+    "url": "https://github.com/meta-pytorch/gpt-fast/blob/6ecad9b5b6b987d17ac4303965545873d0192086/tp.py"
+  },
+  {
+    "pkg": "torch",
+    "repo": "aitorzip/PyTorch-CycleGAN",
+    "path": "train",
+    "sha": "95160b51b62059d79894e6dc1f6554cde3f72d0a",
+    "url": "https://github.com/aitorzip/PyTorch-CycleGAN/blob/67da8f9e2b69bd68763451803c7700aaccc92f18/train"
+  },
+  {
+    "pkg": "torch",
+    "repo": "FourthBrain/FastAPI-for-Machine-Learning-Live-Demo",
+    "path": "ml.py",
+    "sha": "9ada79d753850b65b70c9da6a647c412f39dc980",
+    "url": "https://github.com/FourthBrain/FastAPI-for-Machine-Learning-Live-Demo/blob/d75552a9c7e6ca0d75a54c7a596109167dd48354/ml.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "akash13singh/lstm_anomaly_thesis",
+    "path": "NN.py",
+    "sha": "9b107236891b9649f4a6708a913fbc25df5c4ff0",
+    "url": "https://github.com/akash13singh/lstm_anomaly_thesis/blob/c9c1aae3545e0412a042f5838e81622c82e8668a/NN.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "APPIAN-PET/APPIAN",
+    "path": "QC.py",
+    "sha": "2b35b2d3068c5919a2b9b1a32fab3486dd8400da",
+    "url": "https://github.com/APPIAN-PET/APPIAN/blob/c70a42aea397f1efa1734fa466601df388ddfa7f/QC.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "tesla-is/NLP",
+    "path": "st.py",
+    "sha": "71695ee37fc47889f20fd8b8213bca7389ea1b72",
+    "url": "https://github.com/tesla-is/NLP/blob/6117ea88ea33a10ec8ea6677ae427a15d1ea9541/st.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "amrrs/real-time-live-streamlit-dashboard-python",
+    "path": "app.py",
+    "sha": "ac2c4fbc88dd909c10b15938d1091b8b904be397",
+    "url": "https://github.com/amrrs/real-time-live-streamlit-dashboard-python/blob/72347d9de864218944aa3d7ad93a10133defc49b/app.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "juandspy/adp-payslips-reader",
+    "path": "ui.py",
+    "sha": "e77630f1bb541312f13e224391cb05ec4d8a0878",
+    "url": "https://github.com/juandspy/adp-payslips-reader/blob/f55b2bad7d283c8b1b5315b883593151adf821bc/ui.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "RoboticsData/score_lerobot_episodes",
+    "path": "ui.py",
+    "sha": "7cac25fc107dbe536f4604e547e09d15941c5c67",
+    "url": "https://github.com/RoboticsData/score_lerobot_episodes/blob/0d388396e041db40eb0144a8aad0140666190072/ui.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "google-deepmind/alphageometry",
+    "path": "ar.py",
+    "sha": "01dd8cc749219affe3ba1c50c075145814f3042d",
+    "url": "https://github.com/google-deepmind/alphageometry/blob/6777cb586cbb46beed28db12dc72c69770b68337/ar.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "MrChrisJohnson/implicit-mf",
+    "path": "mf.py",
+    "sha": "ba42c92bfc97d3a3d574d1296ef09885b4bb2e10",
+    "url": "https://github.com/MrChrisJohnson/implicit-mf/blob/1ae21c1f08d3da87610c4821bd63618527171983/mf.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "jilljenn/ktm",
+    "path": "lr.py",
+    "sha": "69fde0a249d30f69cd367dd54e6fe045fce49e39",
+    "url": "https://github.com/jilljenn/ktm/blob/12084d691173147477fb9d373801a67efe55eb4b/lr.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "ahmedbesbes/Neural-Network-from-scratch",
+    "path": "nn.py",
+    "sha": "d23fb7dca25ed171033abbb73c80c4a2180d049c",
+    "url": "https://github.com/ahmedbesbes/Neural-Network-from-scratch/blob/493be2f4015d345fc68d3addd518c2b127e8c648/nn.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "r9y9/nlp100",
+    "path": "78.py",
+    "sha": "f0a480572cd8e68bd0a249a7ae630974de464fcc",
+    "url": "https://github.com/r9y9/nlp100/blob/391ca6c4fb8afc074ed825404d4ad4efc4467f05/78.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "Okes2024/Air-Quality-Index-Prediction-Using-ML-and-IoT-Sensor-Data",
+    "path": "file",
+    "sha": "62afe5c805efc142a283bed3654d341160e7e135",
+    "url": "https://github.com/Okes2024/Air-Quality-Index-Prediction-Using-ML-and-IoT-Sensor-Data/blob/558d31eab5e9629d302d8c81316659feac259ecf/file"
+  },
+  {
+    "pkg": "click",
+    "repo": "GNOME/meld",
+    "path": "maint",
+    "sha": "48c30241a69e36d8732c3ccf24cd0daa4338fb26",
+    "url": "https://github.com/GNOME/meld/blob/718216742e7fa26bfce162610a0e4006202ab304/maint"
+  },
+  {
+    "pkg": "click",
+    "repo": "saltshaker-plus/saltshaker_api",
+    "path": "app.py",
+    "sha": "b8462e3e9ca1343ba109fd6ff9b81c01baebeda7",
+    "url": "https://github.com/saltshaker-plus/saltshaker_api/blob/829ebd3af3c21ed5728c4184716857aa2a7cf300/app.py"
+  },
+  {
+    "pkg": "click",
+    "repo": "isaac-sim/IsaacAutomator",
+    "path": "ssh",
+    "sha": "45942ce76134760e37e1a7004f64f31f10053e33",
+    "url": "https://github.com/isaac-sim/IsaacAutomator/blob/e5cea36553de241321b54819b48a4c85eeafcd0c/ssh"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "goodfeli/adversarial",
+    "path": "ll.py",
+    "sha": "a74ca2077b8d69ba34a0f2c61426067c2be17e09",
+    "url": "https://github.com/goodfeli/adversarial/blob/1720041f51efcb92df61d1638f1a74aea2ae74c2/ll.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "PrAYtele/Stable-Texturify",
+    "path": "dp.py",
+    "sha": "e596a9f66be456cd0dfef7511dfd6673b811c8ab",
+    "url": "https://github.com/PrAYtele/Stable-Texturify/blob/072139df32ddcdc40f7396201c4dd61026f9a65e/dp.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "aws/aws-ops-wheel",
+    "path": "run",
+    "sha": "42417da4ee0d8ef6c301c4a2ab0152233285251d",
+    "url": "https://github.com/aws/aws-ops-wheel/blob/505da04c6d0ed8052c11aefbce138d6135387c66/run"
+  },
+  {
+    "pkg": "knex",
+    "repo": "balena-os/balena-supervisor",
+    "path": "src/db.ts",
+    "sha": "4b01584fd75d751e1aae035bd486f450e5788a69",
+    "url": "https://github.com/balena-os/balena-supervisor/blob/f0062cc72fda576d335ff9265255c10d93cb7da7/src/db.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "knex/knex-schema-inspector",
+    "path": "lib/index.ts",
+    "sha": "53de8fd187e7230d882205754263ed231f4fb42b",
+    "url": "https://github.com/knex/knex-schema-inspector/blob/ab277052f03b0e6730a9f7c23de0a1b8d3c8fe58/lib/index.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "rmp135/sql-ts",
+    "path": "src/Typings.ts",
+    "sha": "0a9e0027b892c5b4ebd50cbf3405027150b4188e",
+    "url": "https://github.com/rmp135/sql-ts/blob/3eb70b5477125414f817b492e0dc9b1624841082/src/Typings.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "Prince-Mendiratta/BotsApp",
+    "path": "config.ts",
+    "sha": "ca08333a5756403292f30d5f5724c315e6171dc1",
+    "url": "https://github.com/Prince-Mendiratta/BotsApp/blob/219a6ed4e59c9bcf2adf35282e9f4cf45574f38a/config.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "streetmix/streetmix",
+    "path": "app/db/db.ts",
+    "sha": "1ae303e3d7926f775fe6365bd013292ae6277701",
+    "url": "https://github.com/streetmix/streetmix/blob/f940b80c46a1c8820471032c900f6cf22a8053ce/app/db/db.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "intri-in/manage-my-damn-life-nextjs",
+    "path": "models/users.ts",
+    "sha": "abaab5fc79812e2ac4fac8f818d05a2e42668909",
+    "url": "https://github.com/intri-in/manage-my-damn-life-nextjs/blob/49dd7d5718552fb5a1659cc90ea66ff7962ce981/models/users.ts"
+  }
+]

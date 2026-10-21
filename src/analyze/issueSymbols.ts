@@ -2,6 +2,7 @@ import type { RawIssue } from '../github/issues.js';
 import { bindings } from '../source/bindings.js';
 import { langForFence } from '../source/lang.js';
 import type { Lang } from '../source/lex.js';
+import { lex } from '../source/lex.js';
 import { touches } from '../source/touches.js';
 import type { IssueSymbol, SymbolSource } from '../types.js';
 import { isDialectWord } from './dialect.js';
@@ -210,6 +211,14 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
       if (sym && isCandidate(sym, ctx)) scores.add(sym, 'import');
     }
     if (ours.length === 0) continue;
+    // Namespaces from the repro's own chains (`torch.distributed.x`, `np.ma.y`), with namespace aliases as roots.
+    const fenceRoots = new Set([...roots, ...ours.filter((b) => b.kind !== 'named').map((b) => b.local.toLowerCase())]);
+    for (const chain of chainsIn(lex(fence.code, lang).code)) {
+      const head = chain[0] ?? '';
+      if (chain.length > 2 && (fenceRoots.has(head.toLowerCase()) || CONVENTIONAL_ALIASES.has(head))) {
+        for (const seg of chain.slice(1, -1)) if (/^_?[a-z][a-z0-9_]*$/.test(seg)) namespaces.add(seg);
+      }
+    }
     for (const t of touches({ fileText: fence.code, changedText: fence.code, lang })) {
       if (!ctx.importNames.includes(t.package)) continue;
       for (const sym of t.symbols) {
@@ -222,7 +231,7 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
       }
       for (const p of t.pairs) {
         const [a, b] = p.split('.');
-        if (a && b && isCandidate(b, ctx)) scores.add(p, 'code');
+        if (a && b && isCandidate(b, ctx) && !fenceRoots.has(a.toLowerCase()) && !CONVENTIONAL_ALIASES.has(a)) scores.add(p, 'code');
       }
       for (const spec of t.specifiers) scores.add(spec, 'import');
     }
@@ -238,10 +247,14 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
     if (isCandidate(word, ctx) && scores.has(word)) scores.add(word, 'title');
   }
 
+  const pyModules = new Set([...`${issue.title}\n${issue.body}`.matchAll(/\b(?:from|import)\s+([A-Za-z_][\w]*(?:\.[A-Za-z_]\w*)+)/g)].map((m) => m[1] ?? ''));
   const out: IssueSymbol[] = [];
   for (const [name, sources] of scores.entries()) {
     const raw = Math.min(1, [...sources.values()].reduce((a, b) => a + b, 0));
-    const isNamespace = namespaces.has(name) || name.split('.').every((p) => namespaces.has(p) || roots.has(p.toLowerCase()) || CONVENTIONAL_ALIASES.has(p));
+    // Python modules the issue imports (`from sklearn.model_selection import …`) are namespaces, not APIs.
+    const pyModulePath = ctx.lang === 'py' && pyModules.has(name);
+    const isNamespace =
+      pyModulePath || namespaces.has(name) || name.split('.').every((p) => namespaces.has(p) || roots.has(p.toLowerCase()) || CONVENTIONAL_ALIASES.has(p));
     const score = Math.round(raw * (isNamespace ? 0.35 : specificity(name)) * 100) / 100;
     out.push({ name, score, sources: [...sources.keys()] });
   }

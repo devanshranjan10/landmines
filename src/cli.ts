@@ -108,7 +108,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       }
       if (opts.json) {
         process.stdout.write(
-          `${JSON.stringify(results.map((r) => ({ file: r.file, hits: r.hits.map((h) => ({ symbol: h.symbol, score: h.score, id: h.landmine.id, landmine: h.landmine })) })), null, 2)}\n`,
+          `${JSON.stringify(results.map((r) => ({ file: r.file, hits: r.hits.map((h) => ({ symbol: h.symbol, score: h.score, id: h.landmine.id, blocks: Boolean(h.corroboratedBy), corroboratedBy: h.corroboratedBy ?? null, landmine: h.landmine })) })), null, 2)}\n`,
         );
       } else {
         for (const r of results) {
@@ -117,7 +117,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
             continue;
           }
           process.stdout.write(`${r.file}\n`);
-          for (const h of r.hits) process.stdout.write(`  ${humanLandmine(h.landmine, color, h.symbol).replace(/\n/g, '\n  ')}\n`);
+          for (const h of r.hits) process.stdout.write(`  ${humanLandmine(h.landmine, color, h.symbol, h).replace(/\n/g, '\n  ')}\n`);
         }
       }
       if (opts.exitCode && results.some((r) => r.hits.length > 0)) process.exitCode = 1;

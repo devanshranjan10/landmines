@@ -148,3 +148,51 @@ describe('database dialect context', () => {
     expect(checkFile(join(root, 'my.ts'), index, myFile).map((h) => h.landmine.id)).toContain('drizzle-team/drizzle-orm#3333');
   });
 });
+
+describe('corroboration: only issue-specific context makes a hit block', () => {
+  const jwtIndex = (): LandmineIndex => ({
+    schema: 1,
+    generator: 'test',
+    generatedAt: '2026-10-21T00:00:00Z',
+    lockfiles: [],
+    packages: [{ ecosystem: 'npm', name: 'jsonwebtoken', version: '9.0.2', dev: false, status: 'ok', searchHits: 1, verified: 1, landmines: 1, dropped: { unverified: 0, unaffected: 0, incidental: 0 } }],
+    landmines: [
+      {
+        id: 'auth0/node-jsonwebtoken#1031',
+        ecosystem: 'npm',
+        package: 'jsonwebtoken',
+        version: '9.0.2',
+        issue: { number: 1031, title: 'ReDoS in verify() when audience option is a RegExp', url: 'u', createdAt: '2026-01-01', updatedAt: '2026-01-01', author: 'a', labels: [], reactions: 0, comments: 0 },
+        evidence: { strength: 'strong', where: 'body', kind: 'adjacent', quote: 'jsonwebtoken 9.0.2' },
+        symbols: [
+          { name: 'verify', score: 1, sources: ['title'] },
+          { name: 'jwt.verify', score: 0.7, sources: ['span'] },
+          { name: 'audience', score: 0.7, sources: ['span'] },
+          { name: 'jwt', score: 0.2, sources: ['import'] },
+        ],
+      },
+    ],
+  });
+
+  it('verify() alone is a heads-up; verify() with an audience option blocks', () => {
+    const plain = "import jwt from 'jsonwebtoken';\nexport const check = (t: string) => jwt.verify(t, secret);\n";
+    const withAudience = "import jwt from 'jsonwebtoken';\nexport const check = (t: string) => jwt.verify(t, secret, { audience: /api/ });\n";
+    const [a] = checkFile(join(root, 'a.ts'), jwtIndex(), plain);
+    const [b] = checkFile(join(root, 'b.ts'), jwtIndex(), withAudience);
+    expect(a?.corroboratedBy).toBeUndefined();
+    expect(b?.corroboratedBy).toBe('audience');
+  });
+
+  it('the matched symbol, its own parts, bare import names and generic words never corroborate', async () => {
+    const { corroboration } = await import('../src/match.js');
+    const l = jwtIndex().landmines[0] as Landmine;
+    const ctx = (text: string): Parameters<typeof corroboration>[2] => ({ fileText: text, tokens: new Set(text.match(/[A-Za-z_$][\w$]*/g) ?? []) });
+    expect(corroboration(l, 'verify', ctx('jwt.verify(token)'))).toBeUndefined();
+    expect(corroboration(l, 'verify', ctx('const audience = 1'))).toBe('audience');
+  });
+
+  it('a driver import path named in the issue corroborates (drizzle-orm/node-postgres)', () => {
+    const hits = checkFile(join(root, 'db.ts'), index);
+    expect(hits.find((h) => h.landmine.id === 'drizzle-team/drizzle-orm#3402')?.corroboratedBy).toBe('drizzle-orm/node-postgres');
+  });
+});

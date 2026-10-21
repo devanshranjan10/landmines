@@ -165,13 +165,27 @@ describe('runHook', () => {
     expect(respond('cursor', 'warn', 'x')).toBeUndefined();
   });
 
-  it('python edits are matched through import names', () => {
+  it('python edits are matched through import names; a bare symbol match is a heads-up, not a block', () => {
+    const edit = (newString: string): string =>
+      JSON.stringify({ session_id: 'py', hook_event_name: 'PreToolUse', tool_name: 'Edit', cwd: root, tool_input: { file_path: join(root, 'src', 'client.py'), old_string: 'import requests\n', new_string: newString } });
+    const bare = runHook(edit('import requests\n\nrequests.put(url, data=payload)\n'), { stateDir: state() });
+    expect(bare.decision).toBe('context');
+    expect(bare.hits[0]?.id).toMatch(/^psf\/requests#/);
+    const ctx = JSON.parse(bare.stdout) as { hookSpecificOutput: Record<string, string> };
+    expect(ctx.hookSpecificOutput.permissionDecision).toBeUndefined();
+    expect(ctx.hookSpecificOutput.additionalContext).toMatch(/^landmine \(heads-up, not blocking\)/);
+    // the same call in a file that also uses urllib3, which the issue names, is corroborated and blocks
+    const corroborated = runHook(edit('import requests\nimport urllib3\n\nrequests.put(url, data=payload)\n'), { stateDir: state() });
+    expect(corroborated.decision).toBe('deny');
+    expect(JSON.parse(corroborated.stdout)).toMatchObject({ hookSpecificOutput: { permissionDecision: 'deny' } });
+  });
+
+  it('a heads-up stays silent on harnesses with no non-blocking context channel', () => {
     const r = runHook(
-      JSON.stringify({ session_id: 'py', hook_event_name: 'PreToolUse', tool_name: 'Edit', cwd: root, tool_input: { file_path: join(root, 'src', 'client.py'), old_string: 'import requests\n', new_string: 'import requests\n\nrequests.put(url, data=payload)\n' } }),
+      JSON.stringify({ session_id: 'g2', hook_event_name: 'BeforeTool', tool_name: 'replace', cwd: root, tool_input: { file_path: join(root, 'src', 'client.py'), old_string: 'import requests\n', new_string: 'import requests\n\nrequests.put(url, data=payload)\n' } }),
       { stateDir: state() },
     );
-    expect(r.decision).toBe('deny');
-    expect(r.hits[0]?.id).toMatch(/^psf\/requests#/);
+    expect(r).toMatchObject({ stdout: '', decision: 'none' });
   });
 
   it('the built CLI hook exits 0 and prints the JSON', async () => {

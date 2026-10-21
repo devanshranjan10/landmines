@@ -82,21 +82,26 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
 
     const mode = opts.mode ?? 'block';
     const session = sessionKey(payload, (opts.now ?? (() => new Date()))());
-    const fresh: typeof hits = [];
-    for (const h of hits) {
-      if (fresh.length >= MAX_HITS) break;
-      const state = new ShownState(h.root, session, opts.stateDir ?? env.LANDMINE_STATE_DIR);
-      if (!state.has(h.landmine.id) && state.claim(h.landmine.id)) fresh.push(h);
-    }
+    const stateFor = (h: (typeof hits)[number]): ShownState => new ShownState(h.root, session, opts.stateDir ?? env.LANDMINE_STATE_DIR);
+    const unseen = hits.filter((h) => !stateFor(h).has(h.landmine.id));
     const summary = hits.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file }));
+    if (unseen.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };
+
+    // Block only on corroborated hits; a bare symbol match is passed on as a heads-up.
+    const corroborated = unseen.filter((h) => h.corroboratedBy);
+    const blocking = mode === 'block' && corroborated.length > 0;
+    const candidates = blocking ? corroborated : unseen;
+    const fresh = candidates.filter((h) => stateFor(h).claim(h.landmine.id)).slice(0, MAX_HITS);
     if (fresh.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };
 
-    const stdout = respond(harness, mode, modelMessage(fresh, mode)) ?? '';
+    const messageMode = blocking ? 'block' : mode === 'warn' ? 'warn' : 'heads-up';
+    const stdout = respond(harness, blocking ? 'block' : 'warn', modelMessage(fresh, messageMode)) ?? '';
     return {
       stdout,
       harness,
-      decision: stdout ? (mode === 'block' ? 'deny' : 'context') : 'none',
+      decision: stdout ? (blocking ? 'deny' : 'context') : 'none',
       hits: fresh.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file })),
+      ...(stdout ? {} : { reason: 'heads-up only, and this harness has no way to pass context without blocking' }),
     };
   } catch (err) {
     return none(`internal error: ${(err as Error).message}`);

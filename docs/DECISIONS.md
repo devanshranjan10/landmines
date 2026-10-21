@@ -151,3 +151,26 @@ analysis fixes stayed invisible for 24 h. Scan now caches raw registry and GitHu
 responses per package version in `.landmine/cache/`, git-ignored via
 `.landmine/.gitignore`, and always re-analyses. The index stays small enough to commit.
 
+**D-27 — Block only on corroborated hits; a bare symbol match is a heads-up.** We ran
+`check` on 60 real files fetched from public repos that import the held-out packages.
+Of 28 hits, 2 were relevant, 1 partly relevant and 25 noise. In the noisy hits the
+code did use the buggy API, but not under the condition that triggers the bug.
+Examples:
+- `jwt.verify` without `audience`, against a ReDoS that needs an `audience` RegExp
+- `make_subplots` without `hoversubplots`
+
+A hit now blocks only when the file also contains a second, issue-specific symbol:
+an option, plugin, sibling API, or driver import path. The match must add a novel,
+non-generic part and cannot be a bare import binding. Uncorroborated hits reach the
+model as non-blocking context ("heads-up, not blocking … may well not apply") on
+Claude Code and Codex, and stay silent on Cursor and Gemini CLI, which have no
+non-blocking pre-edit channel.
+
+This rule was designed after seeing those 60 files, so it is measured on a fresh set
+of real files (docs/ACCURACY.md).
+
+**D-28 — Python module paths are namespaces.** The issue's own `import`/`from` lines
+show which dotted names are modules (`sklearn.model_selection`, `torch.distributed`).
+Those, plus lowercase middle segments of chains rooted at the package, are scored as
+generic. Touching a module says nothing about which function is buggy.
+
