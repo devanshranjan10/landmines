@@ -1,4 +1,5 @@
 import { execFile, execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -14,9 +15,9 @@ import { hookCommand, install, preferredNode, uninstall } from '../src/install.j
 import { scan } from '../src/scan.js';
 
 const run = promisify(execFile);
-const HTTP_DIR = new URL('./fixtures/http/scan-demo/', import.meta.url).pathname;
-const FIXTURE_PROJECT = new URL('./fixtures/projects/scan-demo/', import.meta.url).pathname;
-const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
+const HTTP_DIR = fileURLToPath(new URL('./fixtures/http/scan-demo/', import.meta.url));
+const FIXTURE_PROJECT = fileURLToPath(new URL('./fixtures/projects/scan-demo/', import.meta.url));
+const CLI = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 const DB_TS = "import { drizzle } from 'drizzle-orm/node-postgres';\nexport const db = drizzle({ connection: process.env.DATABASE_URL! });\n";
 const TEARDOWN = 'afterAll(async () => {\n  await db.$client.end();\n});\n';
 

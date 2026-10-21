@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { fileURLToPath } from 'node:url';
 import { issueSymbols, looksLikeCode, spanChains } from '../src/analyze/issueSymbols.js';
 import { buildLandmines } from '../src/analyze/landmine.js';
 import { splitFences } from '../src/analyze/markdown.js';
@@ -258,7 +259,7 @@ describe('workarounds', () => {
 });
 
 describe('real corpus (recorded GitHub data)', () => {
-  const gh = new GitHubClient({ http: replayHttp(new URL('./fixtures/http/corpus/', import.meta.url).pathname), token: 't' });
+  const gh = new GitHubClient({ http: replayHttp(fileURLToPath(new URL('./fixtures/http/corpus/', import.meta.url))), token: 't' });
 
   it('drizzle-orm 0.36.0: #3402 points at $client, quotes the @ts-expect-error workaround, notes cant-reproduce', async () => {
     const { issues } = await searchVersionIssues(gh, 'drizzle-team/drizzle-orm', '0.36.0', 50);

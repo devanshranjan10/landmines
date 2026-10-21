@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -9,7 +10,7 @@ import type { Landmine, LandmineIndex, TriggerCard } from '../src/types.js';
 import { projectUsage } from '../src/usage.js';
 
 const run = promisify(execFile);
-const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
+const CLI = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 
 function landmine(n: number, over: Partial<Landmine> = {}): Landmine {
   return {

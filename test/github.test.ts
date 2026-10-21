@@ -1,4 +1,5 @@
 import { describe, expect, it, vi } from 'vitest';
+import { fileURLToPath } from 'node:url';
 import { GitHubClient, GitHubError } from '../src/github/client.js';
 import { canonicalRepo, searchVersionIssues, versionQuery } from '../src/github/issues.js';
 import { findToken } from '../src/github/token.js';
@@ -6,7 +7,7 @@ import { fakeHttp, replayHttp } from '../src/http.js';
 import { parseGitHubRepo } from '../src/registry/repoUrl.js';
 import { npmMetadataUrl, resolveNpmRepo, resolvePypiRepo } from '../src/registry/resolve.js';
 
-const http = replayHttp(new URL('./fixtures/http/clients/', import.meta.url).pathname);
+const http = replayHttp(fileURLToPath(new URL('./fixtures/http/clients/', import.meta.url)));
 const client = (h = http, extra: Partial<ConstructorParameters<typeof GitHubClient>[0]> = {}): GitHubClient =>
   new GitHubClient({ http: h, token: 'test-token', sleep: () => Promise.resolve(), ...extra });
 

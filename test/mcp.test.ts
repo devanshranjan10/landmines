@@ -1,4 +1,5 @@
 import { cpSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { Client, InMemoryTransport } from '@modelcontextprotocol/client';
@@ -9,8 +10,8 @@ import { createMcpServer, searchLandmines } from '../src/mcp.js';
 import { scan } from '../src/scan.js';
 import type { LandmineIndex } from '../src/types.js';
 
-const HTTP_DIR = new URL('./fixtures/http/scan-demo/', import.meta.url).pathname;
-const FIXTURE_PROJECT = new URL('./fixtures/projects/scan-demo/', import.meta.url).pathname;
+const HTTP_DIR = fileURLToPath(new URL('./fixtures/http/scan-demo/', import.meta.url));
+const FIXTURE_PROJECT = fileURLToPath(new URL('./fixtures/projects/scan-demo/', import.meta.url));
 
 let root: string;
 let index: LandmineIndex;

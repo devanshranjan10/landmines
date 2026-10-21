@@ -1,4 +1,5 @@
 import { mkdtempSync, writeFileSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -8,7 +9,7 @@ import { parseRequirements, pep503, pep508Name } from '../src/lockfiles/python.j
 import { parseYarnV1, splitKeys } from '../src/lockfiles/yarn.js';
 import { parseJsonc } from '../src/util/jsonc.js';
 
-const FIX = new URL('./fixtures/lockfiles/', import.meta.url).pathname;
+const FIX = fileURLToPath(new URL('./fixtures/lockfiles/', import.meta.url));
 
 function summary(dir: string): { deps: string[]; skipped: string[] } {
   const r = readDependencies(join(FIX, dir));

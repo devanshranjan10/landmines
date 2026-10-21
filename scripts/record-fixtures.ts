@@ -5,6 +5,7 @@
  *   npx tsx scripts/record-fixtures.ts clients
  */
 import { rmSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
 import { GitHubClient } from '../src/github/client.js';
 import { canonicalRepo, searchVersionIssues } from '../src/github/issues.js';
 import { findToken } from '../src/github/token.js';
@@ -26,7 +27,7 @@ export const CORPUS: Array<[Dependency['ecosystem'], string, string]> = [
 ];
 
 const set = process.argv[2] ?? 'clients';
-const dir = new URL(`../test/fixtures/http/${set}/`, import.meta.url).pathname;
+const dir = fileURLToPath(new URL(`../test/fixtures/http/${set}/`, import.meta.url));
 
 const token = await findToken();
 if (!token) throw new Error('No GitHub token found');

@@ -1,4 +1,5 @@
 import { execFileSync } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -362,7 +363,7 @@ describe('providers (recorded responses)', () => {
 });
 
 describe('check --staged', () => {
-  const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
+  const CLI = fileURLToPath(new URL('../dist/cli.js', import.meta.url));
 
   it('addedLines keeps only added lines', () => {
     expect(addedLines('--- a/x\n+++ b/x\n@@ -1 +1,2 @@\n-old\n+new\n+more\n context')).toBe('new\nmore');

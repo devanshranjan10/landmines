@@ -1,4 +1,5 @@
 import { execFile } from 'node:child_process';
+import { fileURLToPath } from 'node:url';
 import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -13,8 +14,8 @@ import { scan } from '../src/scan.js';
 import { readIndex, writeIndex } from '../src/store.js';
 
 const run = promisify(execFile);
-const FIXTURE_PROJECT = new URL('./fixtures/projects/scan-demo/', import.meta.url).pathname;
-const HTTP_DIR = new URL('./fixtures/http/scan-demo/', import.meta.url).pathname;
+const FIXTURE_PROJECT = fileURLToPath(new URL('./fixtures/projects/scan-demo/', import.meta.url));
+const HTTP_DIR = fileURLToPath(new URL('./fixtures/http/scan-demo/', import.meta.url));
 const NOW = new Date('2026-10-21T12:00:00Z');
 
 function project(): string {
@@ -126,7 +127,7 @@ describe('cli scan (built binary, replayed HTTP)', () => {
 
   it('prints the summary and exits 0', async () => {
     const root = project();
-    const { stdout } = await run(process.execPath, [new URL('../dist/cli.js', import.meta.url).pathname, 'scan', '--root', root, '--max-issues', '30', '--quiet'], {
+    const { stdout } = await run(process.execPath, [fileURLToPath(new URL('../dist/cli.js', import.meta.url)), 'scan', '--root', root, '--max-issues', '30', '--quiet'], {
       env: { ...process.env, LANDMINE_HTTP_REPLAY: HTTP_DIR, NO_COLOR: '1' },
     });
     expect(stdout).toContain('Found 23 open issues filed against your exact versions in 3 of 6 packages.');
@@ -135,7 +136,7 @@ describe('cli scan (built binary, replayed HTTP)', () => {
   it('fails clearly without a lockfile', async () => {
     const empty = mkdtempSync(join(tmpdir(), 'lm-empty-'));
     await expect(
-      run(process.execPath, [new URL('../dist/cli.js', import.meta.url).pathname, 'scan', '--root', empty], { env: { ...process.env, LANDMINE_HTTP_REPLAY: HTTP_DIR } }),
+      run(process.execPath, [fileURLToPath(new URL('../dist/cli.js', import.meta.url)), 'scan', '--root', empty], { env: { ...process.env, LANDMINE_HTTP_REPLAY: HTTP_DIR } }),
     ).rejects.toMatchObject({ code: 2, stderr: expect.stringContaining('No supported lockfile found') as unknown });
   });
 });
