@@ -222,3 +222,31 @@ with pydantic#10544.
     comments.
   - `--harness all` checks every target before writing any.
 
+
+## v0.2 (2026-10-21, second session)
+
+**D-32 — Process for v0.2.** The owner asked for evals, benchmarks, "SOTA" and support
+for every coding agent. When asked, they chose "Autonomous, up to ~$100". So, as in
+v0.1, I approve my own spec and plan, log decisions here, and stop only when it is
+built, benchmarked and documented. The spec is
+`docs/superpowers/specs/2026-10-21-landmine-v0.2-design.md`, and the plan sits next to
+it in `plans/`.
+
+**D-33 — What "SOTA" means in this repo.** No public benchmark measures this task
+(eval research, RESEARCH §8). Claiming SOTA on GitChameleon, VersiCode or SWE-bench
+would be a category error. So we build landmine-bench v0, freeze a dev/test split
+before tuning, run named baselines on it, and every "best" claim is scoped to "best
+measured arm on landmine-bench v0". The README headline is the test-split table,
+whatever it shows.
+
+**D-34 — Trigger cards over a hook-time LLM judge.** A judge on every matching edit adds
+seconds, a network call and non-determinism. A card is written once per issue at scan
+time and checked offline in the hook, which keeps it at about 0.1 s. This follows the
+QLCoder pattern (eval research §4). Cards are opt-in and need a provider. Without one,
+v0.1 behaviour is unchanged.
+
+**D-35 — The static rules file is both a feature and a baseline.** Vercel found a
+passive AGENTS.md index beat on-demand skills in their agent evals. A
+`KNOWN_ISSUES` section is also the only thing that works in *every* agent. So
+`landmine rules` ships, and the bench measures it as its own arm against the hook.
+If it wins, the README says so.
