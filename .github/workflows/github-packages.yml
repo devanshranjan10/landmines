@@ -1,0 +1,27 @@
+name: github-packages
+# Publishes the same package to GitHub Packages as @devanshranjan10/landmines (GitHub's npm registry only takes packages
+# scoped to the repo owner), so it shows in the repo's Packages sidebar. npm itself stays the main channel: `landmines`.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+permissions:
+  contents: read
+  packages: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+          scope: '@devanshranjan10'
+          cache: npm
+      - run: npm ci
+      - name: scope the package name for GitHub Packages
+        run: npm pkg set name=@devanshranjan10/landmines
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
