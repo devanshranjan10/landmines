@@ -82,6 +82,16 @@ D-29), the same prompt was run again against the final `dist/`.
 - It made 2 more edits, and the hook let both through.
 - The run took 7 turns and $0.28.
 
+### 3c. Re-run after the code-review fixes (D-31)
+
+This run used the build at commit `ed2cb4d`, which changed stdin handling and the
+show-once bookkeeping. Files: `claude-session-postreview.jsonl` and
+`claude-hook-log-postreview.jsonl`.
+
+The outcome was the same: the `db.$client.end()` edit was denied once, citing
+drizzle-orm#3402; the next two edits were allowed; and Claude used its own `pg.Pool`,
+linking the issue in its answer. The run took 9 turns and $0.29.
+
 ## 4. Live Codex CLI session
 
 **Setup.** codex-cli 0.159.0. The demo was copied to `/tmp/lm-codex-demo` with its own
