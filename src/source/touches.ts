@@ -47,9 +47,11 @@ function rootsFor(binds: Binding[], aliases: Map<string, Binding>): Map<string, 
   return roots;
 }
 
+/** Index just past the bracket closing the one at `i`; gives up (end of code) after 5,000 characters. */
 function skipBalanced(code: string, i: number, open: string, close: string): number {
   let depth = 0;
-  for (let j = i; j < code.length; j++) {
+  const limit = Math.min(code.length, i + 5000);
+  for (let j = i; j < limit; j++) {
     const c = code[j];
     if (c === open) depth++;
     else if (c === close) {

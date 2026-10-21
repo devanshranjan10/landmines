@@ -8,7 +8,7 @@ import { findProjectRoot } from './lockfiles/index.js';
 import { HARNESSES, type Harness } from './hook/payload.js';
 import type { HookMode } from './hook/respond.js';
 import { runHook } from './hook/run.js';
-import { hookCommand, install, installMcp, mcpCommand, uninstall } from './install.js';
+import { hookCommand, install, installMcp, mcpCommand, preflight, uninstall } from './install.js';
 import { checkFile } from './match.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
@@ -161,6 +161,14 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         opts.command ??
         hookCommand({ execPath: process.execPath, script, version: VERSION, mode: opts.mode, headsUp: Boolean(opts.headsUp), ...(env.PATH ? { pathEnv: env.PATH } : {}) });
       const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : [opts.harness];
+      // Check every target first, so `--harness all` never leaves a partial install behind.
+      for (const h of targets) {
+        try {
+          preflight(root, h);
+        } catch (err) {
+          throw new CliError(`${(err as Error).message} Nothing was installed.`);
+        }
+      }
       for (const h of targets) {
         const r = install(root, h, command);
         process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: ${h} hook in ${relative(process.cwd(), r.file) || r.file}\n`);
@@ -235,10 +243,27 @@ function modeArg(value: string): HookMode {
   throw new InvalidArgumentError('expected block or warn');
 }
 
-async function readStdin(): Promise<string> {
-  const chunks: Buffer[] = [];
-  for await (const chunk of process.stdin) chunks.push(typeof chunk === 'string' ? Buffer.from(chunk) : (chunk as Buffer));
-  return Buffer.concat(chunks).toString('utf8');
+/** Hook payloads are small; stop at 10 MB or after 5 s so a harness that leaves stdin open cannot hang us. */
+function readStdin(maxBytes = 10_000_000, timeoutMs = 5000): Promise<string> {
+  return new Promise((resolveText) => {
+    const chunks: Buffer[] = [];
+    let size = 0;
+    const finish = (): void => {
+      clearTimeout(timer);
+      process.stdin.removeAllListeners('data');
+      process.stdin.pause();
+      resolveText(Buffer.concat(chunks).toString('utf8'));
+    };
+    const timer = setTimeout(finish, timeoutMs);
+    process.stdin.on('data', (chunk: Buffer | string) => {
+      const b = typeof chunk === 'string' ? Buffer.from(chunk) : chunk;
+      size += b.length;
+      if (size > maxBytes) return finish();
+      chunks.push(b);
+    });
+    process.stdin.once('end', finish);
+    process.stdin.once('error', finish);
+  });
 }
 
 function loadIndex(start: string): LandmineIndex {

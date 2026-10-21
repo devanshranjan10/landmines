@@ -45,7 +45,9 @@ const KEYWORDS = new Set(
 export function chainsIn(text: string): string[][] {
   const chains: string[][] = [];
   // Kebab-case words (`drizzle-orm`, `node-postgres`) are names of things, not identifiers.
-  const re = /(?<![-\w$])[A-Za-z_$][\w$]*(?:\s*(?:\([^()]*\))?\s*\??\.\s*[A-Za-z_$][\w$]*)*(?![\w$]|-\w)/g;
+  // Each repetition is `[ws](args)?[ws]?.ident` with whitespace on one side of the optional args only, so the
+  // engine never has two ways to split a run of spaces (that was quadratic on long blank runs).
+  const re = /(?<![-\w$])[A-Za-z_$][\w$]*(?:(?:[ \t]*\([^()\n]{0,500}\))?[ \t]*\??\.[ \t]*[A-Za-z_$][\w$]*)*(?![\w$]|-\w)/g;
   for (const m of text.matchAll(re)) {
     const segs = m[0]
       .replace(/\([^()]*\)/g, '')

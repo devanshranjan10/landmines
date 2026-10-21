@@ -106,17 +106,25 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
   const aliases = packageAliases(ctx).map((a) => a.toLowerCase());
   const mentions: Mention[] = [];
   for (const m of text.matchAll(re)) {
+    // Everything below looks at most WINDOW characters around the mention, so cost is linear in the
+    // number of mentions, and a dump with thousands of them stops at MAX_MENTIONS.
+    if (mentions.length >= MAX_MENTIONS) break;
     const index = m.index ?? 0;
     const end = index + m[0].length;
-    const lineStart = text.lastIndexOf('\n', index - 1) + 1;
-    const lineEndRaw = text.indexOf('\n', end);
-    const lineEnd = lineEndRaw < 0 ? text.length : lineEndRaw;
+    const back = text.slice(Math.max(0, index - WINDOW), index);
+    const nl = back.lastIndexOf('\n');
+    const lineStart = nl >= 0 ? index - back.length + nl + 1 : Math.max(0, index - WINDOW);
+    const fwd = text.slice(end, end + WINDOW);
+    const fwdNl = fwd.indexOf('\n');
+    const lineEnd = fwdNl >= 0 ? end + fwdNl : Math.min(text.length, end + WINDOW);
     const line = text.slice(lineStart, lineEnd);
     const before = text.slice(lineStart, index);
     const sentenceStart = Math.max(before.lastIndexOf('. '), before.lastIndexOf('! '), before.lastIndexOf('? '));
     const pre = before.slice(sentenceStart + 1).slice(-80);
     const post = text.slice(end, Math.min(lineEnd, end + 60));
-    const token = before.slice(before.search(/\S*$/));
+    let t = before.length;
+    while (t > 0 && !/\s/.test(before[t - 1] ?? ' ')) t--;
+    const token = before.slice(t);
 
     let kind: MentionKind = 'plain';
     if (/:\/\/|www\.|[\w-]+\.(?:com|org|net|io|dev|sh|app)\//i.test(token)) kind = 'url';
@@ -138,7 +146,7 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
     }
     if (affected && FROM_CUE.test(pre) && MIGRATION.test(line)) affected = false;
     if (affected && POST_UNAFFECTED.test(post)) affected = false;
-    const sentenceEnd = text.slice(end).search(/[.!?](?:\s|$)|\n\s*\n/);
+    const sentenceEnd = fwd.search(/[.!?](?:\s|$)|\n[ \t]*\n/);
     const rest = text.slice(end, sentenceEnd < 0 ? Math.min(text.length, end + 160) : end + sentenceEnd);
     if (affected && SENTENCE_UNAFFECTED.test(rest.slice(0, 160)) && !NEGATION.test(rest.slice(0, rest.search(SENTENCE_UNAFFECTED)))) affected = false;
 
@@ -153,9 +161,7 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
     if (named && !NOT_A_NAME.has(named) && !aliases.some((a) => named === a || named === `${a}.js` || named === `${a}js`)) other = true;
     // One entry in a comma-separated run of versions ("from versions: 1.22.0, 1.22.1, …"). Environment
     // dumps (`PyTorch version: 2.5.0`, `numpy 1.26.4` lines) are dense with versions too, but are not lists.
-    const listBefore = /(?:v?\d+(?:\.\d+)+[\w.+-]*\s*,\s*){2,}$/.test(before.slice(-80));
-    const listAfter = /^(?:\s*,\s*v?\d+(?:\.\d+)+[\w.+-]*){2,}/.test(text.slice(end, end + 80));
-    if (listBefore || listAfter) other = true;
+    if (inVersionList(before.slice(-80), text.slice(end, end + 80))) other = true;
     if (kind === 'template') {
       const sameLine = before.slice(-40);
       const prevLabel = text.slice(Math.max(0, lineStart - 400), lineStart).split('\n').filter((l) => l.trim()).at(-1);
@@ -176,6 +182,19 @@ export function findMentions(text: string, ctx: Pick<PackageContext, 'name' | 'v
     });
   }
   return mentions;
+}
+
+const WINDOW = 400;
+const MAX_MENTIONS = 200;
+const VERSIONISH = /^v?\d+(?:\.\d+)+[\w.+-]*$/;
+
+/** Is the mention one entry of a comma-separated run of versions? Split-based, so no regex backtracking. */
+export function inVersionList(before: string, after: string): boolean {
+  const prev = before.split(',');
+  const listBefore = prev.length >= 3 && (prev.at(-1) ?? 'x').trim() === '' && prev.slice(-3, -1).every((p) => VERSIONISH.test(p.trim().split(/\s+/).at(-1) ?? ''));
+  const next = after.split(',');
+  const listAfter = next.length >= 3 && (next[0] ?? 'x').trim() === '' && next.slice(1, 3).every((p) => VERSIONISH.test(p.trim().split(/\s+/)[0] ?? ''));
+  return listBefore || listAfter;
 }
 
 /** `### Version\n\n3.6.0` style: the value sits alone on a short line under a heading/label that says "version". */

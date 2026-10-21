@@ -54,7 +54,7 @@ function jsBindings({ code, strings }: Lexed): Binding[] {
 
   // Static imports.
   const importRe = new RegExp(
-    `(?<![\\w$.])import\\s+(type\\s+)?(?:(${ID})\\s*,?\\s*)?(?:\\{([^}]*)\\}|\\*\\s*as\\s+(${ID}))?\\s*from\\s*(['"])`,
+    `(?<![\\w$.])import\\s+(type\\s+)?(?:(${ID})\\s*,?\\s*)?(?:\\{([^}]{0,3000})\\}|\\*\\s*as\\s+(${ID}))?\\s*from\\s*(['"])`,
     'g',
   );
   for (const m of code.matchAll(importRe)) {
@@ -96,7 +96,7 @@ function jsBindings({ code, strings }: Lexed): Binding[] {
 function pyBindings({ code }: Lexed): Binding[] {
   const out: Binding[] = [];
   // Join backslash continuations and parenthesized import lists onto one logical line.
-  const logical = code.replace(/\\\r?\n/g, ' ').replace(/\(([^)]*)\)/g, (_m, inner: string) => `(${inner.replace(/\s+/g, ' ')})`);
+  const logical = code.replace(/\\\r?\n/g, ' ').replace(/\(([^()]{0,3000})\)/g, (_m, inner: string) => `(${inner.replace(/\s+/g, ' ')})`);
   for (const rawLine of logical.split(/\r?\n|;/)) {
     const line = rawLine.trim();
     const from = /^from\s+([\w.]+)\s+import\s+(.+)$/.exec(line);

@@ -28,8 +28,22 @@ export function isNonBug(title: string, labels: string[]): boolean {
   return labels.some((l) => NON_BUG_LABEL.test(l)) || NON_BUG_TITLE.test(title);
 }
 
+/** Issue text past these lengths is not analysed (GitHub allows 65k; templates and repros come first). */
+export const MAX_BODY = 20_000;
+export const MAX_COMMENT = 8_000;
+
+function capped(issue: RawIssue): RawIssue {
+  return {
+    ...issue,
+    title: issue.title.slice(0, 500),
+    body: issue.body.slice(0, MAX_BODY),
+    comments: issue.comments.map((c) => ({ ...c, body: c.body.slice(0, MAX_COMMENT) })),
+  };
+}
+
 /** Turn raw search hits into verified, scored landmines for one package version. */
-export function buildLandmines(raw: RawIssue[], ctx: BuildContext): BuildResult {
+export function buildLandmines(rawIssues: RawIssue[], ctx: BuildContext): BuildResult {
+  const raw = rawIssues.map(capped);
   const dropped: Record<DropReason, number> = { unverified: 0, unaffected: 0, incidental: 0 };
   const boilerplate = boilerplateBodies(raw);
   const lang: Lang = ctx.ecosystem === 'pypi' ? 'py' : 'js';

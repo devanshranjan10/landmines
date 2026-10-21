@@ -5,12 +5,25 @@ export interface Fence {
 
 /** Remove HTML comments, images and raw tags; keep the text. */
 export function stripNoise(md: string): string {
-  return md
-    .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
-    .replace(/<img[^>]*>/gi, '')
-    .replace(/<\/?(details|summary|p|br|div|span|sub|sup|b|i|strong|em|kbd|a)\b[^>]*>/gi, '')
+  return removeHtmlComments(md)
+    .replace(/!\[[^\]\n]{0,300}\]\([^)\n]{0,1000}\)/g, '')
+    .replace(/<img[^>\n]{0,1000}>/gi, '')
+    .replace(/<\/?(details|summary|p|br|div|span|sub|sup|b|i|strong|em|kbd|a)\b[^>\n]{0,300}>/gi, '')
     .replace(/\r\n/g, '\n');
+}
+
+/** `<!-- … -->` removal by scanning, not regex (an unterminated `<!--` is dropped to the end, like GitHub does). */
+function removeHtmlComments(md: string): string {
+  let out = '';
+  let i = 0;
+  for (;;) {
+    const start = md.indexOf('<!--', i);
+    if (start < 0) return out + md.slice(i);
+    out += md.slice(i, start);
+    const end = md.indexOf('-->', start + 4);
+    if (end < 0) return out;
+    i = end + 3;
+  }
 }
 
 /** Split Markdown into prose (fences replaced by blank lines) and fenced code blocks. */
@@ -51,10 +64,10 @@ export function codeSpans(prose: string): string[] {
 
 /** Drop GitHub task-list lines (issue-template checkboxes). */
 export function dropTaskLists(md: string): string {
-  return md.replace(/^\s*[-*]\s+\[[ xX]\]\s.*$/gm, '');
+  return md.replace(/^[ \t]*[-*][ \t]+\[[ xX]\][ \t].*$/gm, '');
 }
 
 /** Remove quoted replies (`> ...`), which repeat other people's text. */
 export function dropQuotes(md: string): string {
-  return md.replace(/^\s*>.*$/gm, '');
+  return md.replace(/^[ \t]*>.*$/gm, '');
 }

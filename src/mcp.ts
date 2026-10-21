@@ -1,5 +1,5 @@
-import { readFileSync } from 'node:fs';
 import { isAbsolute, resolve } from 'node:path';
+import { readFileOrUndefined } from './hook/payload.js';
 import type { McpServer } from '@modelcontextprotocol/server';
 import { checkFile, fileContext, matchTouches } from './match.js';
 import { landmineDetail } from './message.js';
@@ -77,12 +77,8 @@ export async function createMcpServer(opts: McpOptions = {}): Promise<McpServer>
       let hits;
       if (file) {
         const path = isAbsolute(file) ? file : resolve(opts.root ?? opts.cwd ?? process.cwd(), file);
-        let content: string;
-        try {
-          content = readFileSync(path, 'utf8');
-        } catch {
-          return text(`Cannot read ${path}`, true);
-        }
+        const content = readFileOrUndefined(path);
+        if (content === undefined) return text(`Cannot read ${path} (not a JS/TS or Python file, not a regular file, or over 2 MB)`, true);
         hits = checkFile(path, index, content);
       } else if (code) {
         const lang = language ?? 'js';

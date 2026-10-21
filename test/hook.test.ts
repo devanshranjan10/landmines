@@ -1,4 +1,4 @@
-import { execFile } from 'node:child_process';
+import { execFile, execFileSync } from 'node:child_process';
 import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -308,5 +308,104 @@ describe('install --mcp', () => {
       mcpServers: { other: { type: 'stdio', command: 'x' }, landmine: { type: 'stdio', command: '/nonexistent/node', args: ['/opt/landmine/dist/cli.js', 'mcp'] } },
     });
     expect(mcpCommand({ execPath: 'n', script: '/u/.npm/_npx/1/node_modules/landmines/dist/cli.js', version: '0.1.0' })).toEqual({ command: 'npx', args: ['-y', 'landmines@0.1.0', 'mcp'] });
+  });
+});
+
+describe('code-review regressions', () => {
+  const mkIndex = (dir: string, n: number): void => {
+    const landmines = Array.from({ length: n }, (_, i) => ({
+      id: `o/foo#${i + 1}`,
+      ecosystem: 'npm' as const,
+      package: 'foo',
+      version: '1.0.0',
+      issue: { number: i + 1, title: `methodA${i} breaks with optionB${i}`, url: `u${i}`, createdAt: '2026-01-01', updatedAt: '2026-01-01', author: 'a', labels: [], reactions: 0, comments: 0 },
+      evidence: { strength: 'strong' as const, where: 'body' as const, kind: 'adjacent' as const, quote: 'foo@1.0.0' },
+      symbols: [
+        { name: `methodA${i}`, score: 1, sources: ['title' as const] },
+        { name: `optionB${i}`, score: 1, sources: ['title' as const] },
+      ],
+    }));
+    mkdirSync(join(dir, '.landmine'), { recursive: true });
+    writeFileSync(
+      join(dir, '.landmine', 'index.json'),
+      JSON.stringify({
+        schema: 1,
+        generator: 't',
+        generatedAt: '2026-01-01',
+        lockfiles: [],
+        packages: [{ ecosystem: 'npm', name: 'foo', version: '1.0.0', dev: false, status: 'ok', searchHits: n, verified: n, landmines: n, dropped: { unverified: 0, unaffected: 0, incidental: 0 } }],
+        landmines,
+      }),
+    );
+  };
+  const editPayload = (dir: string, code: string, extra: Record<string, unknown> = {}): string =>
+    JSON.stringify({ session_id: 's', hook_event_name: 'PreToolUse', tool_name: 'Write', cwd: dir, tool_input: { file_path: join(dir, 'a.ts'), content: code }, ...extra });
+
+  it('issues beyond the first three are still shown on a later edit', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lm-five-'));
+    mkIndex(dir, 5);
+    const code = `import foo from 'foo';\n${[0, 1, 2, 3, 4].map((i) => `foo.methodA${i}({ optionB${i}: 1 });`).join('\n')}\n`;
+    const st = state();
+    const first = runHook(editPayload(dir, code), { stateDir: st });
+    expect(first.decision).toBe('deny');
+    expect(first.hits).toHaveLength(3);
+    const second = runHook(editPayload(dir, code), { stateDir: st });
+    expect(second.decision).toBe('deny');
+    expect(second.hits).toHaveLength(2);
+    expect(runHook(editPayload(dir, code), { stateDir: st }).decision).toBe('none');
+  });
+
+  it('a silent heads-up on Gemini does not use up the issue; the later corroborated edit still blocks', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lm-gem-'));
+    mkIndex(dir, 1);
+    const st = state();
+    const g = (code: string): string =>
+      JSON.stringify({ session_id: 'g', hook_event_name: 'BeforeTool', tool_name: 'write_file', cwd: dir, tool_input: { file_path: join(dir, 'a.ts'), content: code } });
+    expect(runHook(g("import foo from 'foo';\nfoo.methodA0();\n"), { stateDir: st, headsUp: true }).stdout).toBe('');
+    const later = runHook(g("import foo from 'foo';\nfoo.methodA0({ optionB0: true });\n"), { stateDir: st, headsUp: true });
+    expect(JSON.parse(later.stdout)).toMatchObject({ decision: 'deny' });
+  });
+
+  it('never reads FIFOs, devices or non-source files', async () => {
+    const { readFileOrUndefined } = await import('../src/hook/payload.js');
+    const dir = mkdtempSync(join(tmpdir(), 'lm-fifo-'));
+    execFileSync('mkfifo', [join(dir, 'pipe.ts')]);
+    expect(readFileOrUndefined(join(dir, 'pipe.ts'))).toBeUndefined();
+    writeFileSync(join(dir, 'notes.txt'), 'x');
+    expect(readFileOrUndefined(join(dir, 'notes.txt'))).toBeUndefined();
+    expect(readFileOrUndefined('/dev/zero')).toBeUndefined();
+  });
+
+  it('install never removes look-alike foreign hooks; uninstall removes custom commands via the registry', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lm-own-'));
+    mkdirSync(join(dir, '.claude'));
+    const foreign = { matcher: 'Bash', hooks: [{ type: 'command', command: '/home/u/landmine-api/scripts/pre-commit-hook.sh' }] };
+    writeFileSync(join(dir, '.claude', 'settings.json'), JSON.stringify({ hooks: { PreToolUse: [foreign] } }));
+    install(dir, 'claude', 'node "/opt/x/landmine/dist/cli.js" hook');
+    uninstall(dir, 'claude');
+    expect(JSON.parse(readFileSync(join(dir, '.claude', 'settings.json'), 'utf8'))).toEqual({ hooks: { PreToolUse: [foreign] } });
+    install(dir, 'cursor', '/opt/bin/lm-run check-edits');
+    install(dir, 'cursor', '/opt/bin/lm-run check-edits');
+    expect((JSON.parse(readFileSync(join(dir, '.cursor', 'hooks.json'), 'utf8')) as { hooks: { preToolUse: unknown[] } }).hooks.preToolUse).toHaveLength(1);
+    uninstall(dir, 'cursor');
+    expect(JSON.parse(readFileSync(join(dir, '.cursor', 'hooks.json'), 'utf8'))).toEqual({ version: 1, hooks: {} });
+  });
+
+  it('settings with comments are refused, and --harness all writes nothing', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lm-jsonc-'));
+    writeFileSync(join(dir, 'package-lock.json'), '{"lockfileVersion":3,"packages":{"":{}}}');
+    mkdirSync(join(dir, '.gemini'));
+    writeFileSync(join(dir, '.gemini', 'settings.json'), '{\n  // my theme\n  "theme": "dark"\n}\n');
+    await expect(run(process.execPath, [CLI, 'install', '--root', dir, '--harness', 'all'])).rejects.toMatchObject({
+      code: 1,
+      stderr: expect.stringContaining('contains comments') as unknown,
+    });
+    expect(() => readFileSync(join(dir, '.claude', 'settings.json'))).toThrow();
+    expect(readFileSync(join(dir, '.gemini', 'settings.json'), 'utf8')).toContain('// my theme');
+  });
+
+  it('state lives in a per-user directory', async () => {
+    const { defaultStateDir } = await import('../src/hook/state.js');
+    expect(defaultStateDir()).toMatch(/landmine-[\w.-]+$/);
   });
 });

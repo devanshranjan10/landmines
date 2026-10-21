@@ -106,10 +106,14 @@ enough for public repositories. The hook never touches the network.
 | `landmine mcp [--root]` | Runs an MCP server over stdio with three tools: `landmine_check` (a file or snippet), `landmine_search` (error text or API name) and `landmine_list`. |
 | `landmine list [package] [--all]` | Shows indexed issues. By default, only the ones the hook can act on. |
 | `landmine check <files…> [--exit-code]` | Treats whole files as just written and reports matches, marked `[blocks: …]` or `[heads-up only]`. |
-| `landmine uninstall [--harness …]` | Removes landmine's hook entries only. |
+| `landmine uninstall [--harness …]` | Removes landmine's hook entries only. Installed commands are tracked in `.landmine/installed.json`. |
 | `landmine hook` | The hook entry point: harness payload on stdin, response on stdout. Always exits 0. |
 
 Re-run `scan` after you change dependencies. The hook only reads the index.
+
+If a settings file contains comments, `install` refuses to rewrite it (that would drop
+the comments) and writes nothing. Add the entry by hand; the shapes are in
+`src/install.ts`.
 
 **Hook behavior.**
 - The default is `--mode block`. landmine denies an edit once per issue per agent

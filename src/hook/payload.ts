@@ -1,4 +1,5 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, statSync } from 'node:fs';
+import { langForPath } from '../source/lang.js';
 import { isAbsolute, resolve } from 'node:path';
 import { parseApplyPatch } from './patch.js';
 
@@ -45,8 +46,15 @@ export function workDir(p: Payload, env: NodeJS.ProcessEnv): string {
 
 export type ReadFile = (path: string) => string | undefined;
 
+/** Larger files are not read: the hook has a few seconds, and nobody hand-edits 2 MB of source. */
+export const MAX_FILE_BYTES = 2_000_000;
+
+/** Read a source file the hook can analyse. Never blocks on FIFOs or devices, never reads huge files. */
 export const readFileOrUndefined: ReadFile = (path) => {
   try {
+    if (!langForPath(path)) return undefined;
+    const st = statSync(path);
+    if (!st.isFile() || st.size > MAX_FILE_BYTES) return undefined;
     return readFileSync(path, 'utf8');
   } catch {
     return undefined;

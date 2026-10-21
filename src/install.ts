@@ -1,6 +1,8 @@
 import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from 'node:fs';
 import { delimiter, dirname, join } from 'node:path';
 import type { Harness } from './hook/payload.js';
+import { INDEX_DIR } from './store.js';
+import { parseJsonc } from './util/jsonc.js';
 
 export interface InstallResult {
   file: string;
@@ -10,7 +12,18 @@ export interface InstallResult {
 
 type Json = Record<string, unknown>;
 
-const IS_OURS = /\blandmines?\b[^|&;]*\bhook\b/;
+/**
+ * Commands landmine itself writes: `npx -y landmines@x hook`, `landmine hook` (bin on PATH), or
+ * `node ".../landmine(s)/dist/cli.js" hook`. Deliberately narrow, so `/home/u/landmine-api/pre-commit-hook.sh`
+ * and other people's hooks are never touched. Custom `--command`s are tracked in .landmine/installed.json.
+ */
+const IS_OURS = [
+  /(?:^|\s)npx\s+(?:-y\s+|--yes\s+)*landmines(?:@\S+)?\s+hook(?:\s|$)/,
+  /(?:^|[\s"'])landmines?\s+hook(?:\s|$)/,
+  /[\\/]landmines?[\\/]dist[\\/]cli\.js["']?\s+hook(?:\s|$)/,
+  /#landmine hook$/,
+];
+const isOurs = (command: string, registry: Set<string>): boolean => registry.has(command) || IS_OURS.some((re) => re.test(command));
 
 const STATUS = 'landmine: checking for known open bugs';
 
@@ -76,14 +89,50 @@ function readJson(file: string): Json {
   if (!existsSync(file)) return {};
   const text = readFileSync(file, 'utf8');
   if (!text.trim()) return {};
-  const parsed: unknown = JSON.parse(text);
+  let parsed: unknown;
+  try {
+    parsed = JSON.parse(text);
+  } catch {
+    let jsonc = false;
+    try {
+      parseJsonc(text);
+      jsonc = true;
+    } catch {
+      // not JSONC either
+    }
+    // Rewriting would silently drop the user's comments, so stop and say what to add by hand.
+    throw new Error(
+      jsonc ? `${file} contains comments; landmine will not rewrite it. Add the hook entry by hand (see README).` : `${file} is not valid JSON; not touching it`,
+    );
+  }
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) throw new Error(`${file} is not a JSON object; not touching it`);
   return parsed as Json;
 }
 
-function withoutOurs(list: unknown, layout: Layout, command?: string): Json[] {
+/** Throws if installing into this harness would fail, before anything is written. */
+export function preflight(root: string, harness: Harness): void {
+  readJson(layouts(root)[harness].file);
+}
+
+const REGISTRY = join(INDEX_DIR, 'installed.json');
+
+function readRegistry(root: string): Record<string, string[]> {
+  try {
+    const r = JSON.parse(readFileSync(join(root, REGISTRY), 'utf8')) as unknown;
+    return typeof r === 'object' && r !== null ? (r as Record<string, string[]>) : {};
+  } catch {
+    return {};
+  }
+}
+
+function writeRegistry(root: string, reg: Record<string, string[]>): void {
+  mkdirSync(join(root, INDEX_DIR), { recursive: true });
+  writeFileSync(join(root, REGISTRY), `${JSON.stringify(reg, null, 2)}\n`);
+}
+
+function withoutOurs(list: unknown, layout: Layout, registry: Set<string>): Json[] {
   if (!Array.isArray(list)) return [];
-  const ours = (c: string): boolean => IS_OURS.test(c) || (command !== undefined && c === command);
+  const ours = (c: string): boolean => isOurs(c, registry);
   return list
     .filter((e): e is Json => typeof e === 'object' && e !== null)
     .map((entry) => {
@@ -99,13 +148,16 @@ export function install(root: string, harness: Harness, command: string): Instal
   const config = readJson(layout.file);
   const before = JSON.stringify(config);
   const hooks = typeof config.hooks === 'object' && config.hooks !== null && !Array.isArray(config.hooks) ? (config.hooks as Json) : {};
-  hooks[layout.event] = [...withoutOurs(hooks[layout.event], layout, command), layout.build(command)];
+  const reg = readRegistry(root);
+  const known = new Set([...(reg[harness] ?? []), command]);
+  hooks[layout.event] = [...withoutOurs(hooks[layout.event], layout, known), layout.build(command)];
   const next: Json = { ...(layout.topLevel ?? {}), ...config, hooks };
   const changed = JSON.stringify(next) !== before;
   if (changed) {
     mkdirSync(dirname(layout.file), { recursive: true });
     writeFileSync(layout.file, `${JSON.stringify(next, null, 2)}\n`);
   }
+  if (!(reg[harness] ?? []).includes(command)) writeRegistry(root, { ...reg, [harness]: [...(reg[harness] ?? []), command] });
   return { file: layout.file, changed, notes: layout.notes };
 }
 
@@ -117,11 +169,16 @@ export function uninstall(root: string, harness: Harness): InstallResult {
   const before = JSON.stringify(config);
   const hooks = typeof config.hooks === 'object' && config.hooks !== null && !Array.isArray(config.hooks) ? (config.hooks as Json) : undefined;
   if (!hooks) return { file: layout.file, changed: false, notes: [] };
-  const kept = withoutOurs(hooks[layout.event], layout);
+  const reg = readRegistry(root);
+  const kept = withoutOurs(hooks[layout.event], layout, new Set(reg[harness] ?? []));
   if (kept.length) hooks[layout.event] = kept;
   else delete hooks[layout.event];
   const changed = JSON.stringify(config) !== before;
   if (changed) writeFileSync(layout.file, `${JSON.stringify(config, null, 2)}\n`);
+  if (reg[harness]) {
+    delete reg[harness];
+    writeRegistry(root, reg);
+  }
   return { file: layout.file, changed, notes: [] };
 }
 

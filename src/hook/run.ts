@@ -96,18 +96,28 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
     if (mode === 'block' && !blocking && !opts.headsUp) {
       return { stdout: '', harness, decision: 'none', hits: summary, reason: 'only uncorroborated matches (heads-up off)' };
     }
+    // Cursor and Gemini CLI have no non-blocking pre-edit channel: a heads-up there prints nothing, so it must
+    // not use up the issue's one showing either.
+    const outputMode = blocking ? 'block' : 'warn';
+    if (respond(harness, outputMode, 'probe') === undefined) {
+      return { stdout: '', harness, decision: 'none', hits: summary, reason: 'heads-up only, and this harness has no way to pass context without blocking' };
+    }
+    // Claim only what is shown (at most MAX_HITS), so anything beyond it can still be shown on a later edit.
     const candidates = blocking ? corroborated : unseen;
-    const fresh = candidates.filter((h) => stateFor(h).claim(h.landmine.id)).slice(0, MAX_HITS);
+    const fresh: typeof hits = [];
+    for (const h of candidates) {
+      if (fresh.length >= MAX_HITS) break;
+      if (stateFor(h).claim(h.landmine.id)) fresh.push(h);
+    }
     if (fresh.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };
 
     const messageMode = blocking ? 'block' : mode === 'warn' ? 'warn' : 'heads-up';
-    const stdout = respond(harness, blocking ? 'block' : 'warn', modelMessage(fresh, messageMode)) ?? '';
+    const stdout = respond(harness, outputMode, modelMessage(fresh, messageMode)) ?? '';
     return {
       stdout,
       harness,
       decision: stdout ? (blocking ? 'deny' : 'context') : 'none',
       hits: fresh.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file })),
-      ...(stdout ? {} : { reason: 'heads-up only, and this harness has no way to pass context without blocking' }),
     };
   } catch (err) {
     return none(`internal error: ${(err as Error).message}`);

@@ -199,3 +199,26 @@ would hoist them into every CLI start, including the hook; hook latency stayed a
 shape `install --mcp` writes to `.mcp.json`), called `landmine_search`, and answered
 with pydantic#10544.
 
+**D-31 — Fixes from an independent code review.** Each one has a regression test.
+- **Hostile issue text could stall `scan`.** Exponential backtracking in the
+  version-list regex: 57 s on one body, now 4 ms. Quadratic `^\s*`, `\s*` and
+  per-mention scans: 6–10 s, now under 5 ms.
+  - Issue bodies are capped at 20k and comments at 8k characters for analysis.
+  - Mentions per text are capped at 200, with bounded windows.
+  - Comment removal is scan-based, and the list check is split-based.
+- **Hook bookkeeping.**
+  - Only the issues actually shown are marked shown. Previously issues 4+ were
+    claimed and never surfaced.
+  - A heads-up that a harness cannot display no longer uses up the issue.
+- **Hook file reads.** The hook reads only regular JS/TS/Python files under 2 MB, so
+  FIFOs and devices can't hang it.
+- **Hook state.** It lives in a per-user directory (`landmine-<uid>`).
+- **Hook stdin.** Capped at 10 MB and 5 s.
+- **install/uninstall.**
+  - Only landmine's own command shapes are recognised, plus a registry of installed
+    commands in `.landmine/installed.json`. Before this, `/home/u/landmine-api/…hook.sh`
+    would have been deleted.
+  - Settings files with comments are refused rather than rewritten without the
+    comments.
+  - `--harness all` checks every target before writing any.
+

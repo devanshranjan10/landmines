@@ -1,7 +1,18 @@
 import { createHash } from 'node:crypto';
 import { closeSync, existsSync, mkdirSync, openSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { tmpdir, userInfo } from 'node:os';
 import { join } from 'node:path';
+
+/** Per user: on Linux the temp dir is shared, and another user's directory would be unwritable. */
+export function defaultStateDir(): string {
+  let user = 'user';
+  try {
+    user = String(process.getuid?.() ?? userInfo().username);
+  } catch {
+    // keep the default
+  }
+  return join(tmpdir(), `landmine-${user}`);
+}
 
 const h = (s: string, n: number): string => createHash('sha1').update(s).digest('hex').slice(0, n);
 
@@ -12,7 +23,7 @@ const h = (s: string, n: number): string => createHash('sha1').update(s).digest(
 export class ShownState {
   private readonly dir: string;
 
-  constructor(root: string, session: string, base: string = join(tmpdir(), 'landmine')) {
+  constructor(root: string, session: string, base: string = defaultStateDir()) {
     this.dir = join(base, h(root, 12), h(session, 16));
   }
 
