@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { beforeAll, describe, expect, it } from 'vitest';
-import { detectAgents } from '../src/agents.js';
+import { defaultRulesFiles, detectAgents } from '../src/agents.js';
 import { GitHubClient } from '../src/github/client.js';
 import { type Harness, HARNESSES, detectHarness, extractEdits } from '../src/hook/payload.js';
 import { FORMAT_FOR } from '../src/hook/respond.js';
@@ -193,6 +193,14 @@ describe('install for every agent', () => {
     for (const d of ['.opencode', '.clinerules', '.kiro']) mkdirSync(join(dir, d));
     writeFileSync(join(dir, 'GEMINI.md'), '');
     expect(detectAgents(dir)).toEqual(['claude', 'gemini', 'kiro', 'cline', 'opencode']);
+  });
+
+  it('rules go to AGENTS.md and CLAUDE.md (Claude Code does not read AGENTS.md), plus GEMINI.md for Gemini CLI', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lm-rulesfiles-'));
+    expect(defaultRulesFiles(dir)).toEqual(['AGENTS.md', 'CLAUDE.md']);
+    expect(defaultRulesFiles(dir, ['codex'])).toEqual(['AGENTS.md']);
+    mkdirSync(join(dir, '.gemini'));
+    expect(defaultRulesFiles(dir)).toEqual(['AGENTS.md', 'CLAUDE.md', 'GEMINI.md']);
   });
 
   it('MCP config for each agent in its own shape', () => {

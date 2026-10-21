@@ -89,7 +89,112 @@ Conditions:
 
 ## Results
 
-RESULTS_PLACEHOLDER
+### Headline: fresh-test, Sonnet 5.5, exec, terse prompts
+
+Two runs on the 21 held-out fresh tasks: run A (seeds 1–2, planned before any test
+data) and run F (seeds 3–4, a confirmatory run pre-registered in D-42 before it ran).
+
+| Arm | Run A | Run F (confirmatory) | Total | Mean cost per run | Mean turns |
+|---|---|---|---|---|---|
+| none | 36/42 | 36/42 | 72/84 (86%) | $0.061 | 6.2 |
+| **rules** | **41/42** | **42/42** | **83/84 (99%)** | $0.069 | 6.1 |
+| hook (v0.1 heuristics) | 35/42 | 37/42 | 72/84 (86%) | $0.063 | 6.5 |
+| cards (hook, blocks) | 38/42 | 38/42 | 76/84 (90%) | $0.064 | 6.4 |
+| cards-warn (hook, context only) | 35/42 | 39/42 | 74/84 (88%) | $0.064 | 6.3 |
+| rules+cards | n/a | 41/42 | 41/42 | $0.073 | 6.4 |
+
+**Pre-registered tests (run F only):**
+- **H1, rules > none: confirmed.** 6 wins, 0 losses, exact McNemar p = 0.031.
+- **H2, rules+cards ≥ rules: not shown.** 0 wins, 1 loss. The card hook added nothing
+  on top of the rules section.
+
+### Every configuration
+
+| Run | Model | Condition | Prompt | none | rules | hook | cards | cards-warn |
+|---|---|---|---|---|---|---|---|---|
+| A | Sonnet | exec | terse | 36/42 | 41/42 | 35/42 | 38/42 | 35/42 |
+| F | Sonnet | exec | terse | 36/42 | 42/42 | 37/42 | 38/42 | 39/42 |
+| B | Sonnet | edit-only | terse | 16/21 | 20/21 | 18/21 | 19/21 | 18/21 |
+| C | Sonnet | exec | spec | 19/21 | 21/21 | 19/21 | 20/21 | 20/21 |
+| D | Haiku | edit-only | terse | 31/42 | 37/42 | 33/42 | 31/42 | 37/42 |
+| E: 2024 set (contaminated control) | Sonnet | exec | spec | 17/18 | 17/18 | 17/18 | 17/18 | n/a |
+
+Paired over the planned fresh runs A–D (126 pairs per comparison):
+
+| Comparison | Wins–losses | Exact McNemar p |
+|---|---|---|
+| rules vs none | 20–3 | 0.0005 |
+| rules vs none, excluding the 3 borderline terse tasks | 16–3 | 0.004 |
+| rules vs cards | 13–2 | 0.007 |
+| rules vs cards-warn | 12–3 | 0.035 |
+| cards-warn vs none | 11–3 | 0.057 |
+| cards vs none | 9–3 | 0.15 |
+| hook vs none | 8–5 | 0.58 |
+
+On the contaminated 2024 set, every arm scores 17/18: the model already knows those
+bugs.
+
+### What this means
+
+- **The static rules section is the best measured arm on landmine-bench v0.** It is
+  ahead in every fresh configuration, and its advantage held up on unseen seeds. It
+  works because the agent reads it before it plans.
+- **The pre-edit hook adds little.** Neither the heuristic hook nor card-based matching
+  is significantly better than nothing.
+- **Why the hook adds little, case by case:**
+  - **The hook can't see the bug's code.** On polars-30043 the bug lives in how a
+    *writer* records statistics, while the agent only edits the reader. The card hook
+    never fires; the rules section prevents the bug.
+  - **A warning that isn't enough.** On networkx-8964 the card hook fired in every run
+    and the agent cited the issue, but its workaround still failed the hidden test.
+  - **Blocking can hurt a weaker model.** With Haiku, blocking cards scored 31/42, the
+    same as no help, while the same cards as context scored 37/42.
+- **Cost.** The rules section adds about 12% to cost per run (a longer CLAUDE.md) and
+  does not add turns.
+
+### The caveat that matters: list length
+
+In the bench, the rules section only lists issues for the task's one indexed package.
+A real project has many more, so the 15-item list has to choose.
+`scripts/bench/rules-inclusion.ts` merged each task's issues with those of a real
+46-dependency project (173 issues armed by cards). Ranked by card confidence, the
+target issue made the top 15 for only **2/21** test tasks, and the top 60 (the
+`--skill` list) for 12/21.
+
+`landmine rules` now ranks by usage: issues whose APIs the project's code already
+calls come first. The target API was already in the seed code for 11/21 test tasks.
+
+**Measured (run G, D-43; prediction recorded before it ran).** Each task's index was
+mixed with the real project's 254 carded issues. Seeds 1–2, paired with run A:
+
+| Arm | Passed | vs none |
+|---|---|---|
+| none (run A) | 36/42 | n/a |
+| rules, task package only (run A) | 41/42 | 5–0 |
+| **rules-noisy-conf** (mixed index, confidence ranking) | **35/42** | 1–2, p = 1.0 |
+| **rules-noisy** (mixed index, usage ranking) | **42/42** | 6–0, p = 0.03 |
+
+- **Confidence ranking in a big project** loses the whole advantage, as predicted.
+- **Usage ranking** keeps it. It is flattered here, though: the noise packages are not
+  imported by the task project, so usage ranking pushes them all down.
+
+**How much competition there is in real repos** (`scripts/bench/real-usage.ts`). Three
+public repos were cloned, scanned and carded:
+- Cards are partial, because the Claude login hit its session limit mid-run.
+- Uncarded issues use the heuristic arming.
+
+| Repo | Packages | Armed issues | API already used (usage 2) | Package imported, API not used (usage 1) |
+|---|---|---|---|---|
+| expense.fyi (Next.js app) | 61 | 52 | 9 | 8 |
+| page-spy-web (web app) | 77 | 117 | 20 | 71 |
+| zpy (Python) | 7 | 23 | 4 | 16 |
+
+**Realistic reading.**
+- When the bug's API is already used somewhere in the codebase, the 15-item list will
+  usually contain it. That was true for the seed projects of 11/21 test tasks.
+- When the agent reaches for an API from an imported package that the code doesn't
+  use yet, a large repo can crowd it out: page-spy-web has 71 such issues.
+- `--skill` (60 items) and `landmine_search` over MCP are the fallbacks.
 
 ## Offline tracks (no agent)
 

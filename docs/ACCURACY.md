@@ -108,6 +108,40 @@ Labels: `eval/realcode/labels-c1.json`, `eval/realcode/labels-c3.json`, and
   they are **off by default** (D-29). `--heads-up` passes them to the agent as
   non-blocking context, and `--mode warn` turns every match into context.
 
+## 2b. Trigger cards (v0.2)
+
+`landmine cards` has a model write one card per issue. The hook checks cards offline.
+- **What was carded.** All 523 issues behind landmine-bench, plus the 254 issues of a
+  real 46-dependency project. Claude Opus wrote them through the Claude Code CLI.
+- **What the cards say.** Of the bench's 523:
+  - about 20% were judged not a bug, or not in the pinned version, which disarms them;
+  - about 7% failed the self-check (the issue's own repro code does not satisfy the
+    card) and are disarmed too.
+
+**Trap track.** Offline, fresh-dev, tuned on these same tasks:
+- cards block **10/10** naive solutions, against 4/10 for the heuristic hook;
+- cards also block 4/10 correct solutions, against 2/10.
+
+**False blocks on real code.** Same method as §2: whole files, worst case, labelled by
+an Opus judge that sees the file and the issue's condition. R2 is 150 files from repos
+not used anywhere else, checked after the policy froze:
+
+| Arm | File × version pairs blocked | Blocks plausibly relevant | Clearly relevant |
+|---|---|---|---|
+| heuristic hook | 2/192 | 0/2 | 0 |
+| cards | 29/192 (15%) | 9/34 | 0 |
+
+- **Cards interrupt far more often than the heuristic hook.** About three quarters of
+  those interruptions do not apply.
+- **Their main blind spot is semantic conditions tokens can't express:**
+  - "named import under native ESM" (jsonwebtoken#963);
+  - "an array of objects, not arrays" (PapaParse#1174);
+  - "a numeric character reference in the input" (fast-xml-parser#892).
+- **They earn their keep elsewhere.** Cards' main value turned out to be better
+  *text* for the rules section (the condition and the workaround), not better
+  matching. On landmine-bench the rules section beat every hook arm
+  ([`BENCHMARK.md`](BENCHMARK.md)).
+
 ## 3. Things that limit recall (not measured)
 
 - **Only open issues that literally name the exact version string are found.**

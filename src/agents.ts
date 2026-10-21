@@ -32,8 +32,14 @@ export function detectAgents(root: string): Harness[] {
   return ['claude', ...found];
 }
 
-/** Instruction files to put the known-bugs section in: those that exist, else AGENTS.md (read by most agents). */
-export function defaultRulesFiles(root: string): string[] {
-  const existing = RULES_TARGETS.filter((f) => existsSync(join(root, f)));
-  return existing.length ? [...existing] : ['AGENTS.md'];
+/**
+ * Instruction files to put the known-bugs section in: AGENTS.md (read by most agents), CLAUDE.md for Claude Code
+ * (which does not read AGENTS.md), GEMINI.md when Gemini CLI is in use, and any of them that already exist.
+ */
+export function defaultRulesFiles(root: string, agents: Harness[] = detectAgents(root)): string[] {
+  const want = new Set<string>(['AGENTS.md']);
+  if (agents.includes('claude')) want.add('CLAUDE.md');
+  if (agents.includes('gemini')) want.add('GEMINI.md');
+  for (const f of RULES_TARGETS) if (existsSync(join(root, f))) want.add(f);
+  return RULES_TARGETS.filter((f) => want.has(f));
 }

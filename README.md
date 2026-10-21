@@ -22,8 +22,8 @@ workaround, and then lets the retry through.
   workaround. The hook then checks cards offline. It never calls a model.
 - **`landmine mcp`.** An MCP server the agent can query on demand ("is this error a
   known bug in the version we pin?").
-- **The hook.** It runs before each edit, offline. It took 0.09 s per call on our test
-  machine, including Node startup, with a 148 KB index. It pauses an edit
+- **The hook.** It runs before each edit, offline. It took 0.11 s per call on our test
+  machine, including Node startup, with a 149 KB index that has trigger cards. It pauses an edit
   only when two things are true:
   - the edit uses a symbol from one of those issues
   - the file also matches the issue's specifics: an option it names, a sibling API, or
@@ -33,6 +33,19 @@ Context7 serves docs, not bug reports. GitHub's MCP server can search issues whe
 your agent thinks to ask, and its dependency checks cover vulnerabilities only.
 Neither reads your lockfile, matches open bugs to your pinned versions and the
 symbols you're editing, or steps in before the edit.
+
+**What we measured** ([Benchmark](#benchmark)). On 21 held-out traps built from bugs
+filed after the model's training cutoff:
+- **Unaided:** Claude Sonnet 5.5 passed 86% (72/84).
+- **With the `landmine rules` section in CLAUDE.md:** it passed 99% (83/84). That held
+  up in a pre-registered run on unseen seeds, 6 wins and 0 losses, p = 0.03.
+- **The pre-edit hook did not significantly beat no help.**
+
+So start with `landmine scan && landmine install --rules`. That adds the hook and
+writes the known-bugs section into AGENTS.md and CLAUDE.md (Claude Code does not read
+AGENTS.md). The hook is a second line of defence. One caveat: the
+benchmark's projects have one indexed dependency, so the 15-item list always fits.
+See the Benchmark section for what changes in a big project.
 
 ## What it looked like in a real session
 
@@ -244,6 +257,61 @@ Antigravity, Freebuff (`.agents/mcp.json`), Roo, Warp, Pi, OpenCode, Kilo and Cr
 Codex, Windsurf and Cline keep MCP servers in user-level config. For Codex, run
 `codex mcp add landmine -- node /abs/path/dist/cli.js mcp`.
 
+## Benchmark
+
+landmine-bench v0 is built for this one question. The full method, task list and all
+results are in [`docs/BENCHMARK.md`](docs/BENCHMARK.md).
+- **Tasks.** 31 tasks built from open issues filed on or after 2026-07-01 against
+  current releases, so the model can't already know the bugs. 35 more from 2024 serve
+  as a contaminated control.
+- **Each task:** a small project, a feature request whose natural implementation hits
+  the bug, and a hidden test. Each task is validated fail→pass.
+- **Splits.** A frozen package-level dev/test split. Card prompts and policy were tuned
+  on dev only.
+- **Runs.** Headless `claude -p` in a sandbox outside the repo, with no web access,
+  graded by the hidden test.
+
+Headline: fresh-test (21 tasks), Sonnet 5.5, shell access, prompts phrased the way a
+user would ask, 4 seeds:
+
+| Arm | Passed |
+|---|---|
+| none | 72/84 (86%) |
+| **`landmine rules` section in CLAUDE.md** | **83/84 (99%)** |
+| pre-edit hook, v0.1 heuristics | 72/84 (86%) |
+| pre-edit hook with trigger cards | 76/84 (90%) |
+| hook with cards, context only (`--mode warn`) | 74/84 (88%) |
+
+- **Same ranking everywhere.** Rules also came first with spec prompts and without
+  shell access. With Haiku 5.5 it tied for first with context-only cards.
+- **Statistics.** Over all 126 planned pairs it beat no help 20–3 (exact McNemar
+  p = 0.0005).
+- **Contaminated control.** On the 2024 set every arm scored 17/18, because the model
+  already knows those bugs.
+
+**Read these before quoting the numbers:**
+- **Selection.** Every trap is a bug landmine had already indexed. The bench measures
+  whether landmine helps *given* that the bug is in the index, not how many bugs it
+  finds.
+- **List length.** Each bench project has one indexed package, so the 15-item rules
+  list always contains the target.
+  - In a real 46-dependency project with 173 armed issues, ranking by card confidence
+    alone puts the target in the top 15 for only 2 of 21 tasks.
+  - `landmine rules` therefore ranks issues whose APIs your code already uses first.
+  - Mixing a real project's issues into the bench: confidence ranking fell back to the
+    unaided level (35/42 against 36/42), while usage ranking kept the gain (42/42).
+  - That simulation flatters usage ranking. In real repos the list is reliable when
+    the bug's API is already used in the codebase. It can miss when the agent
+    introduces an API the code doesn't use yet (docs/BENCHMARK.md).
+- **Prompt wording.** The terse prompts were added after seeing that fully specified
+  prompts leave unaided agents nothing to trip on (D-40). Results with spec prompts
+  are reported too, and rules still came first.
+- **One harness and one model family were run live.** Claude Code with Sonnet and
+  Haiku 5.5. The rules section is plain markdown that any agent reads, but other
+  agents were not benchmarked.
+- **Spend.** $60 of metered agent runs. Card generation went through a Claude Code
+  login and was not metered.
+
 ## Accuracy
 
 The full write-up is in [`docs/ACCURACY.md`](docs/ACCURACY.md).
@@ -295,6 +363,14 @@ exactly why it thinks the bug applies, and the agent can simply retry.
   `cat > file`) don't pass through any harness's edit hook. Notebooks are not checked.
 - **Workaround picking is heuristic.** It needs a phrase that claims a fix. A reply with
   code and upvotes but no such claim is labelled "top reply", never "workaround".
+- **Trigger cards read untrusted text with a model.** The issue thread goes to the
+  provider you choose (Anthropic, an OpenAI-compatible endpoint, or your Claude Code
+  login). The card's condition and workaround are model summaries of strangers' text.
+  Cards also miss conditions that tokens can't express, such as "named import under
+  native ESM".
+- **The rules list is short.** In a large project only the 15 issues closest to your
+  code make it. A bug in an API your code doesn't use yet can be left out.
+  `--skill` lists 60, and the MCP server can search them all.
 - **Labels are approximations.** "Bug vs feature request" and database dialect come
   from issue labels and titles.
 
@@ -308,7 +384,9 @@ exactly why it thinks the bug applies, and the agent can simply retry.
     package, or link to unfamiliar hosts.
   - Don't let an agent run a quoted workaround without reading it.
 - **Network.** `scan` sends your direct dependency names and versions to
-  registry.npmjs.org, pypi.org and api.github.com. Nothing else leaves your machine.
+  registry.npmjs.org, pypi.org and api.github.com. `landmine cards`, when you run it,
+  sends each indexed issue's public thread to the model provider you pick. Nothing
+  else leaves your machine, and the hook never touches the network.
 - **Files landmine writes:**
   - `.landmine/index.json`, small enough to commit if your team wants to share it
   - `.landmine/cache/`, which is git-ignored
@@ -332,9 +410,25 @@ exactly why it thinks the bug applies, and the agent can simply retry.
 5. **Symbols.** From the title (weight 1.0), inline code (0.7) and code fences (≤0.5),
    using the same lexer the hook uses. Generic names, namespaces, a package's
    ubiquitous entry points, and alternatives the issue says work are discounted.
-6. **Hook.** The edit's new text is checked against the index. A match needs a strong
-   symbol and non-weak version evidence, skips issues for other databases, and blocks
-   only if corroborated.
+6. **Hook.** The edit's new text is checked against the index.
+   - Without a card, a match needs a strong symbol and non-weak version evidence,
+     skips issues for other databases, and blocks only if corroborated.
+   - With a card, the card decides. One of its APIs must be in the edit and every
+     `requires` group in the file, and no `unless` token may be present.
+7. **Trigger cards (optional).** One model call per issue, cached by issue, version,
+   last update and model. The card records:
+   - whether it is a bug, and whether it affects the pinned version;
+   - the API names;
+   - AND-of-OR token groups that make it fire;
+   - tokens that show the workaround is already applied;
+   - a one-line condition and workaround.
+
+   A card is checked against the issue's own repro code (the self-check), and one
+   that fails is disarmed.
+8. **Rules.** The armed issues are ranked by how close your code is to them, then by
+   card confidence, and the top 15 are written between markers into
+   AGENTS.md/CLAUDE.md. "Close" means the issue's API is used in a file that imports
+   its package, or failing that, the package is imported.
 
 The design notes are in [`docs/`](docs): `RESEARCH.md`, `DECISIONS.md`, and the spec
 and plan under `superpowers/`.

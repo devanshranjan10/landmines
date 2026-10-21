@@ -7,8 +7,10 @@ res = {}
 for f in files:
     for l in open(f):
         r = json.loads(l)
-        res[(f, r['task'], r['seed'], r['arm'])] = r['pass']
-keys = {(f, t, s) for (f, t, s, arm) in res}
+        # Pair on the configuration, not the file, so arms from separate runs of the same setup line up.
+        cfg = (r.get('model'), r.get('condition', 'exec'), r.get('prompt', 'spec'))
+        res[(cfg, r['task'], r['seed'], r['arm'])] = r['pass']
+keys = {(c, t, s) for (c, t, s, arm) in res}
 wins = losses = both = neither = 0
 for k in keys:
     if (*k, a) not in res or (*k, b) not in res: continue

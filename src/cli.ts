@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { Command, InvalidArgumentError } from 'commander';
 import { GitHubClient } from './github/client.js';
@@ -183,7 +183,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('--heads-up', 'block mode: also pass weaker matches to the agent as non-blocking context')
     .option('--command <cmd>', 'exact command the agents should run (default: this landmine install)')
     .option('--mcp [agents]', `also register the landmine MCP server (comma-separated: ${Object.keys(MCP_TARGETS).join(', ')}; default claude)`)
-    .option('--rules [files]', `also write the known-bugs section into agent instruction files (default: ${RULES_TARGETS.join(', ')} that exist, else AGENTS.md)`)
+    .option('--rules [files]', 'also write the known-bugs section into agent instruction files (default: AGENTS.md, CLAUDE.md, GEMINI.md if Gemini CLI is in use, and any that exist)')
     .action((opts: { root?: string; harness: Harness[] | 'auto' | 'all'; mode: HookMode; headsUp?: boolean; command?: string; mcp?: boolean | string; rules?: boolean | string }) => {
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
       const script = process.argv[1] ? realpathSync(process.argv[1]) : '';
@@ -217,7 +217,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       const index = readIndex(root);
       if (opts.rules) {
         if (!index) throw new CliError('No .landmine/index.json yet: run `landmine scan` before `install --rules`.');
-        const files = opts.rules === true ? defaultRulesFiles(root) : opts.rules.split(',').map((x) => x.trim()).filter(Boolean);
+        const files = opts.rules === true ? defaultRulesFiles(root, targets) : opts.rules.split(',').map((x) => x.trim()).filter(Boolean);
         const section = renderRules(index, undefined, projectUsage(root, index));
         for (const f of files) process.stdout.write(`Rules ${writeRules(resolve(root, f), section)}: ${f}\n`);
       }
@@ -250,6 +250,14 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         const skill = join(root, SKILL_PATH);
         if (existsSync(skill) && readFileSync(skill, 'utf8').includes('landmine-managed')) {
           rmSync(dirname(skill), { recursive: true, force: true });
+          // Leave no empty .agents/skills (or .agents) behind.
+          for (const dir of [join(root, '.agents', 'skills'), join(root, '.agents')]) {
+            try {
+              if (readdirSync(dir).length === 0) rmSync(dir, { recursive: true });
+            } catch {
+              // already gone
+            }
+          }
           process.stdout.write(`Removed: ${SKILL_PATH}\n`);
         }
       }

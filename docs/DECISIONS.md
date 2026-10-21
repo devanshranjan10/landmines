@@ -383,3 +383,28 @@ changed.
 - **Prediction, recorded before running:** `rules-noisy-conf` loses most of the rules
   advantage.
 - The noise index is frozen in `bench/fixtures/noise-fresh-a.json`.
+
+**D-44: The rules section leads; the hook becomes a second line of defence.**
+
+*Evidence* (full tables in BENCHMARK.md):
+- **Headline.** On fresh-test, the rules section beat no help 20–3 across the planned
+  runs (p = 0.0005), and 6–0 in the pre-registered confirmatory run (p = 0.03).
+- **The hook arms.** Neither the heuristic hook nor card matching was significantly
+  better than nothing.
+- **Big projects.** With a real project's issues mixed in:
+  - confidence ranking lost the whole advantage (35/42 against 36/42 unaided);
+  - usage ranking kept it (42/42), in a simulation that flatters it.
+
+*Changes:*
+- **README.** It now leads with `landmine install --rules`.
+- **Rules ranking.** `landmine rules` and `install --rules` rank by project usage by
+  default. `--rank confidence` gives the old order.
+- **Default files.** `install --rules` now writes CLAUDE.md as well as AGENTS.md. Before
+  this, a project with neither file got only AGENTS.md, which Claude Code does not
+  read, while the benchmark used CLAUDE.md. That was a gap between what was measured
+  and what users would get, and it is closed.
+
+*Kept as is:*
+- **Hook defaults.** The hook's block-once policy and card threshold are unchanged. No
+  evidence favoured another policy for Sonnet. For Haiku, context-only cards (37/42)
+  beat blocking cards (31/42), which is worth revisiting with more data.
