@@ -1,0 +1,11 @@
+node_modules
+**/node_modules
+dist
+bench/.venv
+bench/.venv-*
+bench/.work
+**/__pycache__
+.landmine
+eval/**/.landmine
+landmines-*.tgz
+.git

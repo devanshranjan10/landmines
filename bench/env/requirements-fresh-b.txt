@@ -1,3 +1,4 @@
+# Exact environment bench/.venv-fresh-b, frozen from the environment the published results used.
 annotated-doc==0.0.5
 annotated-types==0.8.0
 cloudpickle==3.1.2

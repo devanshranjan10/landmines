@@ -4,7 +4,7 @@
 import { spawn } from 'node:child_process';
 import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { homedir, tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { dirname, join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { BENCH, type Task, loadTasks, materialize, prompt, runHidden, triggerPresent, splitIds } from './lib.js';
 import { ARMS, type Arm, prepareArm } from './prepare.js';
@@ -28,6 +28,14 @@ const { values } = parseArgs({
     condition: { type: 'string', default: 'exec' },
     // spec: prompt.txt (edge cases stated); terse: prompt-terse.txt (how a user would ask).
     prompt: { type: 'string', default: 'spec' },
+    // Any agent: --agent cmd --agent-cmd 'my-agent --cwd {dir} --prompt-file {prompt_file}'. Placeholders: {dir} (the
+    // working copy), {prompt_file} (the prompt, in a file outside the working copy), {prompt} (shell-quoted),
+    // {model}, and {task_dir} (the task's own directory: for harness self-tests only, never give it to a real agent).
+    'agent-cmd': { type: 'string' },
+    // Any tool under test: --arm custom --setup-cmd 'npx my-tool init' runs in the working copy before the agent starts.
+    'setup-cmd': { type: 'string' },
+    // Name recorded for a custom agent or arm (e.g. "aider+my-tool"), so leaderboard rows are self-describing.
+    label: { type: 'string' },
   },
 });
 
@@ -192,7 +200,49 @@ function runCodex(task: Task, dir: string, transcript: string, hookLog: string):
 function agentErrored(o: AgentOutcome): boolean {
   if (o.timedOut) return false;
   if (values.agent === 'codex') return !o.tokens;
+  if (values.agent === 'cmd') return false; // a generic agent's exit code is its own business, not an infra failure
   return !o.costUsd || /hit your (session|usage) limit|rate limit|overloaded|API Error/i.test(o.resultText ?? '');
+}
+
+function shellQuote(s: string): string {
+  return `'${s.replace(/'/g, `'\\''`)}'`;
+}
+
+function fill(template: string, vars: Record<string, string>): string {
+  return template.replace(/\{(dir|prompt_file|prompt|model|task_dir)\}/g, (_, k: string) => (k === 'prompt' ? shellQuote(vars[k] ?? '') : (vars[k] ?? '')));
+}
+
+/** Run a shell command in the working copy and wait for it (setup commands and generic agents). */
+function runShell(command: string, dir: string, env: NodeJS.ProcessEnv, timeoutMs: number): Promise<{ code: number | null; out: string; timedOut: boolean; ms: number }> {
+  return new Promise((resolve) => {
+    const started = Date.now();
+    const child = spawn('sh', ['-c', command], { cwd: dir, env, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    child.stdout.on('data', (d: Buffer) => (out += d.toString()));
+    child.stderr.on('data', (d: Buffer) => (out += d.toString()));
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+    }, timeoutMs);
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      resolve({ code, out, timedOut, ms: Date.now() - started });
+    });
+  });
+}
+
+/** A generic agent: any command line, given the working copy and the prompt (see --agent-cmd). */
+async function runCmd(task: Task, dir: string, transcript: string, hookLog: string): Promise<AgentOutcome> {
+  const template = values['agent-cmd'];
+  if (!template) throw new Error('--agent cmd needs --agent-cmd');
+  const text = prompt(task, values.prompt === 'terse' ? 'terse' : 'spec');
+  const promptFile = join(dirname(transcript), 'prompt.txt');
+  writeFileSync(promptFile, text);
+  const command = fill(template, { dir, prompt_file: promptFile, prompt: text, model: values.model, task_dir: task.dir });
+  const r = await runShell(command, dir, { ...process.env, LANDMINE_DEBUG_LOG: hookLog }, 20 * 60_000);
+  writeFileSync(transcript, r.out);
+  return { exitCode: r.code, durationMs: r.ms, transcript: r.out, timedOut: r.timedOut };
 }
 
 function hookEvents(path: string): Array<{ decision: string; hits: Array<{ id: string }> }> {
@@ -226,7 +276,19 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     mkdirSync(sandbox, { recursive: true });
     dir = materialize(task, sandbox);
     prepareArm(task, dir, arm, values.agent === 'codex' ? 'AGENTS.md' : 'CLAUDE.md');
-    outcome = values.agent === 'codex' ? await runCodex(task, dir, transcript, hookLog) : await runClaude(task, dir, arm, transcript, hookLog);
+    if (arm === 'custom') {
+      const setup = values['setup-cmd'];
+      if (setup) {
+        const r = await runShell(fill(setup, { dir, prompt_file: '', prompt: '', model: values.model, task_dir: '' }), dir, process.env, 10 * 60_000);
+        if (r.code !== 0) throw new Error(`--setup-cmd failed (${String(r.code)}): ${r.out.slice(-300)}`);
+      }
+    }
+    outcome =
+      values.agent === 'codex'
+        ? await runCodex(task, dir, transcript, hookLog)
+        : values.agent === 'cmd'
+          ? await runCmd(task, dir, transcript, hookLog)
+          : await runClaude(task, dir, arm, transcript, hookLog);
     if (!agentErrored(outcome)) break;
   }
   if (!outcome) throw new Error('no attempt ran');
@@ -241,6 +303,7 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     arm,
     seed,
     agent: values.agent,
+    ...(values.label ? { label: values.label } : {}),
     model: MODEL,
     condition: values.condition,
     prompt: values.prompt,
