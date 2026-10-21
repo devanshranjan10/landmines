@@ -142,6 +142,45 @@ posted.
    - a second agent (Codex) on the rules arm;
    - a fresh-task set built from issues landmine did *not* pick, for recall.
 
+## Production readiness (2026-10-21, D-48)
+
+**Reviews.** Three independent read-only reviews covered:
+- hook, install and plugins;
+- scan, network and cards;
+- packaging, CLI and release.
+
+Every confirmed defect was fixed with a regression test (CHANGELOG 0.2.0 "Fixed").
+
+**The gate** (typecheck, lint, 323 tests, build) passes on:
+- macOS;
+- Linux (`node:22-bookworm` in Docker);
+- a fresh clone.
+
+**Verified live this pass:**
+- MCP: all three tools through Claude Code.
+- The hook in Claude Code with the new untrusted-block message.
+- OpenCode 1.18.33 loading the new plugin shape.
+- Node 18: the clear version error.
+- The tarball: installs and runs on Node 22.
+
+**Added:**
+- CI (Linux, macOS and Windows on Node 22.12.0, 22 and 24, a pack smoke test, and
+  benchmark validation).
+- A release workflow (tagged publish with provenance).
+- CHANGELOG, SECURITY and CONTRIBUTING.
+
+**Still needs you before production:**
+1. **Create the public GitHub repo.** Then:
+   - add `repository`, `homepage` and `bugs` to package.json (npm provenance needs a
+     matching `repository`);
+   - replace `YOUR_GITHUB` and `<owner>` placeholders;
+   - add the `NPM_TOKEN` secret, or set up npm trusted publishing.
+2. **Publish `landmines` to npm soon.** The name is free today, and every
+   npx-installed hook runs `npx -y landmines@<version>`, so a squatter could take it.
+   Tag `v0.2.0`, or run `npm login && npm publish`.
+3. **Delete the README's "Before the first npm release" paragraph** after publishing.
+4. **Watch the first CI run on Windows.** Nothing has been run live there.
+
 ## Launch readiness (not launched)
 
 - **landmine-bench is packaged as a public benchmark.**
