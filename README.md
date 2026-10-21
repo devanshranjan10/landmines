@@ -1,5 +1,10 @@
 # landmine
 
+[![npm](https://img.shields.io/npm/v/landmines)](https://www.npmjs.com/package/landmines)
+[![ci](https://github.com/devanshranjan10/landmines/actions/workflows/ci.yml/badge.svg)](https://github.com/devanshranjan10/landmines/actions/workflows/ci.yml)
+[![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
+[![landmine-bench](https://img.shields.io/badge/landmine--bench-86%25%E2%86%9299%25-3987e5)](docs/BENCHMARK.md)
+
 Your coding agent is about to write `await db.$client.end()`. Your lockfile pins
 drizzle-orm **0.36.0**, an open GitHub issue filed against exactly that version
 says this call is broken, and a stranger in the thread posted the way around it.

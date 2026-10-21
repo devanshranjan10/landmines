@@ -181,8 +181,17 @@ Every confirmed defect was fixed with a regression test (CHANGELOG 0.2.0 "Fixed"
   [devanshranjan10/homebrew-tap](https://github.com/devanshranjan10/homebrew-tap).
   Install, `brew test` and `brew audit --strict --online` all pass on macOS arm64.
 
+**CI is green** on Linux, macOS and Windows, each on Node 22.12.0, 22 and 24, plus
+benchmark validation on x86-64 Linux. Getting Windows green took:
+- `fileURLToPath` in the tests;
+- LF line endings;
+- JSON-escaped fixture paths;
+- a POSIX-only shell-hook test;
+- real-path display for `check --staged`.
+
 **Still open:**
-- The first CI run on Windows.
+- The `check --staged` Windows path fix is newer than 0.2.0, so it ships in the next
+  release.
 - npm provenance for future releases. Add an `NPM_TOKEN` secret, or set up trusted
   publishing, and push a tag.
 - Each release needs the formula regenerated with
