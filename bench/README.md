@@ -51,7 +51,7 @@ the issue thread, does the agent avoid it?
 Requires Node ≥ 22.12, [uv](https://docs.astral.sh/uv/), git, and about 1.7 GB of disk.
 
 ```sh
-git clone https://github.com/devanshranjan10/landmine && cd landmine
+git clone https://github.com/devanshranjan10/landmines && cd landmines
 npm ci && npm run build
 bench/setup.sh                              # pinned Python envs + npm task deps
 npx tsx scripts/bench/validate.ts           # every task fail→pass on your machine: expect 66/66
@@ -230,6 +230,6 @@ The bug itself is never mentioned in the prompt.
 @misc{landminebench2026,
   title  = {landmine-bench: Do Coding Agents Avoid Known Open Bugs in Pinned Dependency Versions?},
   year   = {2026},
-  note   = {Version 0. https://github.com/devanshranjan10/landmine}
+  note   = {Version 0. https://github.com/devanshranjan10/landmines}
 }
 ```

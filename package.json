@@ -7,11 +7,11 @@
   "author": "Devansh Ranjan",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/devanshranjan10/landmine.git"
+    "url": "git+https://github.com/devanshranjan10/landmines.git"
   },
-  "homepage": "https://github.com/devanshranjan10/landmine#readme",
+  "homepage": "https://github.com/devanshranjan10/landmines#readme",
   "bugs": {
-    "url": "https://github.com/devanshranjan10/landmine/issues"
+    "url": "https://github.com/devanshranjan10/landmines/issues"
   },
   "bin": {
     "landmine": "dist/cli.js",
