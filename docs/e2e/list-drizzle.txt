@@ -1,0 +1,12 @@
+▲ drizzle-orm@0.36.0 · `$count` · drizzle-team/drizzle-orm#3493 [BUG]: db.$count inside relational query "extras" generates SQL with incorrect table names
+    https://github.com/drizzle-team/drizzle-orm/issues/3493
+    strong evidence — the issue template says "What version of `drizzle-orm` are you using? 0.36.0" · opened 2024-11-05 · 26 comments · 53 reactions
+    workaround (@MickL): 5 months old issue, critical bug, marked with priority, still nothing? The docs suggest: ```ts import { users } from '.models'; const result = await db.query.us…
+    maintainer: labelled "bug/fixed-in-beta"
+▲ drizzle-orm@0.36.0 · `auto_increment` · drizzle-team/drizzle-orm#3333 [BUG]: Getting started with MariaDB: "You have an error in your SQL syntax" - create table with serial auto_increment
+    https://github.com/drizzle-team/drizzle-orm/issues/3333
+    strong evidence — the issue template says "What version of `drizzle-orm` are you using? 0.36.0" · opened 2024-11-01 · 3 comments · 5 reactions
+    workaround (@mees-, 1 reaction): I found this issue because I encountered the same problem as well, and I've found a solution that works in drizzle for now: # Solution ``` const myTable = mysql…
+▲ drizzle-orm@0.36.0 · `mapGetResult` · drizzle-team/drizzle-orm#3394 [BUG]: "Cannot read properties of undefined" because empty "rows" data was not excluded
+    https://github.com/drizzle-team/drizzle-orm/issues/3394
+    strong evidence — the issue template says "What version of `drizzle-orm` are you using? 0.36.0" · opened 2024-11-02 · 2 comments · 1 reaction

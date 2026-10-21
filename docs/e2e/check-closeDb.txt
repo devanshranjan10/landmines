@@ -1,0 +1,5 @@
+src/closeDb.ts
+  ▲ drizzle-orm@0.36.0 · `$client.end` [blocks: also uses `drizzle-orm/node-postgres`] · drizzle-team/drizzle-orm#3402 [BUG]: node-postgres client doesn't have end function
+      https://github.com/drizzle-team/drizzle-orm/issues/3402
+      medium evidence — the issue template says "What version of `drizzle-orm` are you using? 0.36.0" (labelled bug/cant-reproduce) · opened 2024-11-04 · 5 comments · 3 reactions
+      workaround (@cluah, 1 reaction): I think the type is wrong? ``` // @ts-expect-error await db.$client.end(); // <--- it actually works ``` the other way around: ``` import { drizzle } from 'driz…

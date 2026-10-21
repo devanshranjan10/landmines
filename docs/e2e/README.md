@@ -8,14 +8,17 @@ format it. The demo project is `examples/demo`.
 
 ```sh
 cd examples/demo
-node ../../dist/cli.js scan
+node ../../dist/cli.js scan --refresh
 ```
 
-- Output: `scan.txt` (stdout) and `scan.stderr.txt` (progress).
+- Output: `scan.txt` (stdout) and `scan.stderr.txt` (progress). Final build, re-run
+  live with `--refresh`.
 - 7 direct dependencies, from `package-lock.json` and `requirements.txt`.
-- The whole scan took 14 s, measured with `time`.
-- Result: **84 open issues filed against the exact pinned versions**. 67 of them are
-  tied to specific symbols and 30 have a workaround in the comments.
+- The whole scan took 13 s.
+- Result: **71 open issues filed against the exact pinned versions**. 53 of them are
+  tied to specific symbols and 26 have a workaround in the comments.
+- An earlier build reported 84 on the same project. The stricter analysis that came
+  out of the accuracy work (docs/ACCURACY.md) drops more search noise.
 
 ## 2. Check (no network)
 
@@ -25,9 +28,11 @@ node ../../dist/cli.js check src/db.ts src/dates.ts app/models.py
 
 - Output: `check.txt`.
 - The demo's own files use none of the buggy symbols, so nothing matches.
-- An earlier run did match: it flagged `serial` against drizzle-orm#3333, a
-  MariaDB-only bug, in a Postgres file. That false positive led to the dialect filter
-  (DECISIONS D-25). The run above is after the fix.
+- An earlier build flagged `serial` against drizzle-orm#3333, a MariaDB-only bug, in a
+  Postgres file. That false positive led to the dialect filter (DECISIONS D-25).
+- `check-closeDb.txt` is a file that calls `db.$client.end()` through
+  `drizzle-orm/node-postgres`. It shows `[blocks: also uses drizzle-orm/node-postgres]`.
+- `list-drizzle.txt` shows `landmine list drizzle-orm`.
 
 ## 3. Live Claude Code session
 
