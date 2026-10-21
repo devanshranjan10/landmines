@@ -1,5 +1,5 @@
 import { execFile, execFileSync } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
@@ -391,7 +391,7 @@ describe('code-review regressions', () => {
     install(dir, 'cursor', '/opt/bin/lm-run check-edits');
     expect((JSON.parse(readFileSync(join(dir, '.cursor', 'hooks.json'), 'utf8')) as { hooks: { preToolUse: unknown[] } }).hooks.preToolUse).toHaveLength(1);
     uninstall(dir, 'cursor');
-    expect(JSON.parse(readFileSync(join(dir, '.cursor', 'hooks.json'), 'utf8'))).toEqual({ version: 1, hooks: {} });
+    expect(existsSync(join(dir, '.cursor', 'hooks.json'))).toBe(false); // only landmine's entry was in it
   });
 
   it('settings with comments are refused, and --harness all writes nothing', async () => {
@@ -400,7 +400,7 @@ describe('code-review regressions', () => {
     mkdirSync(join(dir, '.gemini'));
     writeFileSync(join(dir, '.gemini', 'settings.json'), '{\n  // my theme\n  "theme": "dark"\n}\n');
     await expect(run(process.execPath, [CLI, 'install', '--root', dir, '--harness', 'all'])).rejects.toMatchObject({
-      code: 1,
+      code: 2,
       stderr: expect.stringContaining('contains comments') as unknown,
     });
     expect(() => readFileSync(join(dir, '.claude', 'settings.json'))).toThrow();
@@ -410,5 +410,23 @@ describe('code-review regressions', () => {
   it('state lives in a per-user directory', async () => {
     const { defaultStateDir } = await import('../src/hook/state.js');
     expect(defaultStateDir()).toMatch(/landmine-[\w.-]+$/);
+  });
+});
+
+describe('portable install commands', () => {
+  it('picks the most portable way to start landmine for how it was installed', async () => {
+    const { hookCommand, launcher, mcpCommand } = await import('../src/install.js');
+    const base = { execPath: '/usr/bin/node', version: '0.2.0', pathEnv: '' };
+    // A dev dependency of the project: works for every teammate after `npm ci`, no absolute paths.
+    expect(hookCommand({ ...base, root: '/repo', script: '/repo/node_modules/landmines/dist/cli.js', mode: 'block' })).toBe('npx --no-install landmines hook');
+    expect(mcpCommand({ ...base, root: '/repo', script: '/repo/node_modules/landmines/dist/cli.js' })).toEqual({ command: 'npx', args: ['--no-install', 'landmines', 'mcp'] });
+    // Throwaway caches of npx, pnpm dlx and bunx: the pinned npx form.
+    for (const script of ['/h/.npm/_npx/ab/node_modules/landmines/dist/cli.js', '/h/.cache/pnpm/dlx/x/node_modules/landmines/dist/cli.js', '/tmp/bunx-501-landmines/node_modules/landmines/dist/cli.js']) {
+      expect(launcher({ ...base, root: '/repo', script }).kind).toBe('npx');
+    }
+    // Windows MCP clients need cmd /c for .cmd shims.
+    expect(mcpCommand({ ...base, root: 'C:/repo', script: 'C:\\repo\\node_modules\\landmines\\dist\\cli.js', platform: 'win32' })).toEqual({ command: 'cmd', args: ['/c', 'npx', '--no-install', 'landmines', 'mcp'] });
+    // A source checkout: absolute paths, reported as such so the CLI can warn.
+    expect(launcher({ ...base, root: '/repo', script: '/src/landmine/dist/cli.js' }).kind).toBe('path');
   });
 });

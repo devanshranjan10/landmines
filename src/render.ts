@@ -117,7 +117,12 @@ export function renderScanSummary(
   for (const n of extra.notes) out.push(paint(opts, 'dim', `  Note: ${n}`));
   if (clean.length || unresolved.length || unpinned.length || droppedParts.length || t.weak || extra.notes.length) out.push('');
 
-  if (t.issues === 0) {
+  const errored = index.packages.filter((p) => p.status === 'error');
+  const stale = errored.filter((p) => p.stale);
+  if (stale.length) out.push(paint(opts, 'yellow', `${plural(stale.length, 'package')} could not be fetched; kept the previous scan's issues for them: ${stale.map((p) => p.name).join(', ')}.`));
+  if (t.issues === 0 && errored.length) {
+    out.push(`No open issues found in the packages that were searched, but ${plural(errored.length, 'package')} could not be searched (see above). Run \`landmine scan\` again later.`);
+  } else if (t.issues === 0) {
     out.push(`${paint(opts, 'green', 'No open issues')} are filed against the exact versions you pin.`);
   } else {
     out.push(

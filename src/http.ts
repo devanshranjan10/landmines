@@ -7,8 +7,11 @@ export interface Http {
   fetch(url: string, init?: RequestInit): Promise<Response>;
 }
 
+/** Longest any single request may take; a stalled connection otherwise holds a scan worker for minutes. */
+export const REQUEST_TIMEOUT_MS = 30_000;
+
 export const liveHttp: Http = {
-  fetch: (url, init) => globalThis.fetch(url, init),
+  fetch: (url, init) => globalThis.fetch(url, { signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS), ...init }),
 };
 
 interface Recording {

@@ -1,8 +1,8 @@
-import { chmodSync, existsSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { chmodSync, existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, rmdirSync, writeFileSync } from 'node:fs';
 import { delimiter, dirname, join } from 'node:path';
 import type { Harness } from './hook/payload.js';
 import { MANAGED_MARKER, ampPlugin, clineHookScript, clinePlugin, opencodePlugin, piExtension } from './plugins.js';
-import { INDEX_DIR } from './store.js';
+import { INDEX_DIR, ensureIndexGitignore } from './store.js';
 import { parseJsonc } from './util/jsonc.js';
 
 export interface InstallResult {
@@ -165,13 +165,16 @@ function layouts(root: string): Record<Harness, Layout> {
     ),
     cline: {
       kind: 'owned',
+      // The file hook is a POSIX shell script: on native Windows only the plugin is written.
       files: [
-        { file: p('.clinerules', 'hooks', 'PreToolUse'), content: clineHookScript, executable: true },
+        ...(process.platform === 'win32' ? [] : [{ file: p('.clinerules', 'hooks', 'PreToolUse'), content: clineHookScript, executable: true }]),
         { file: p('.cline', 'plugins', 'landmine.ts'), content: clinePlugin },
       ],
       notes: [
         'Cline CLI: the plugin in .cline/plugins blocks one edit and sends the reason to the model.',
-        'Cline file hooks (.clinerules/hooks, VS Code: enable Hooks in settings) can only add context, so there the issue arrives as a warning before the next step.',
+        process.platform === 'win32'
+          ? 'Cline file hooks are shell scripts, so on Windows only the plugin is installed.'
+          : 'Cline file hooks (.clinerules/hooks, VS Code: enable Hooks in settings) can only add context, so there the issue arrives as a warning before the next step.',
       ],
     },
     opencode: { kind: 'owned', files: [{ file: p('.opencode', 'plugins', 'landmine.ts'), content: (c) => opencodePlugin(c, 'opencode') }], notes: ['OpenCode loads .opencode/plugins/*.ts at startup.'] },
@@ -232,7 +235,13 @@ function readRegistry(root: string): Record<string, string[]> {
 }
 
 function writeRegistry(root: string, reg: Record<string, string[]>): void {
+  // Nothing installed any more: no registry file either.
+  if (Object.keys(reg).length === 0) {
+    rmSync(join(root, REGISTRY), { force: true });
+    return;
+  }
   mkdirSync(join(root, INDEX_DIR), { recursive: true });
+  ensureIndexGitignore(root);
   writeFileSync(join(root, REGISTRY), `${JSON.stringify(reg, null, 2)}\n`);
 }
 
@@ -322,6 +331,7 @@ export function uninstall(root: string, harness: Harness): InstallResult {
     for (const f of layout.files) {
       if (existsSync(f.file) && ownedByUs(f.file)) {
         rmSync(f.file);
+        pruneEmptyDirs(dirname(f.file), root);
         changed = true;
       }
     }
@@ -329,6 +339,12 @@ export function uninstall(root: string, harness: Harness): InstallResult {
     return { file: layout.files.map((f) => f.file).join(', '), changed, notes: [] };
   }
   if (!existsSync(layout.file)) return { file: layout.file, changed: false, notes: [] };
+  // A config landmine never touched is none of its business, even if it is JSONC it could not parse.
+  const raw = readFileSync(layout.file, 'utf8');
+  if (!raw.includes('landmine') && !(reg[harness] ?? []).some((c) => raw.includes(JSON.stringify(c).slice(1, -1)))) {
+    forget();
+    return { file: layout.file, changed: false, notes: [] };
+  }
   const config = readJson(layout.file);
   const before = JSON.stringify(config);
   let holder: Json | undefined = config;
@@ -342,18 +358,59 @@ export function uninstall(root: string, harness: Harness): InstallResult {
   else delete holder[layout.event];
   // An Antigravity-style `{ "landmine": {} }` wrapper that is now empty goes too.
   if (layout.path.length === 1 && layout.path[0] === 'landmine' && Object.keys(holder).length === 0) delete config.landmine;
+  pruneEmpty(config, layout.path);
   const changed = JSON.stringify(config) !== before;
-  if (changed) writeFileSync(layout.file, `${JSON.stringify(config, null, 2)}\n`);
+  if (changed) {
+    // A config file with nothing left in it goes: an empty project hooks file can shadow the user's global one.
+    if (isDeepEmpty(withoutVersion(config))) {
+      rmSync(layout.file);
+      pruneEmptyDirs(dirname(layout.file), root);
+    } else writeFileSync(layout.file, `${JSON.stringify(config, null, 2)}\n`);
+  }
   forget();
   return { file: layout.file, changed, notes: [] };
 }
 
-/** The MCP server command, as `.mcp.json` / `claude mcp add` want it (no shell quoting). */
-export function mcpCommand(opts: { execPath: string; script: string; version: string; pathEnv?: string }): { command: string; args: string[] } {
-  if (/[\\/]_npx[\\/]/.test(opts.script)) return { command: 'npx', args: ['-y', `landmines@${opts.version}`, 'mcp'] };
-  const node = preferredNode(opts.execPath, opts.pathEnv);
-  return { command: node === 'node' ? 'node' : opts.execPath, args: [opts.script, 'mcp'] };
+/** Remove the now-empty objects along `path` (e.g. `{ "hooks": {} }` after the last hook is gone). */
+function pruneEmpty(config: Json, path: readonly string[]): void {
+  for (let depth = path.length; depth > 0; depth--) {
+    let parent: Json | undefined = config;
+    for (const key of path.slice(0, depth - 1)) parent = parent?.[key] as Json | undefined;
+    const key = path[depth - 1];
+    if (!parent || key === undefined) return;
+    const value = parent[key];
+    if (typeof value === 'object' && value !== null && !Array.isArray(value) && Object.keys(value).length === 0) delete parent[key];
+    else return;
+  }
 }
+
+/** A hooks file holding only its schema `version` (Cursor, Copilot) is a stub. */
+function withoutVersion(config: Json): Json {
+  const { version: _version, ...rest } = config;
+  return rest;
+}
+
+function isDeepEmpty(value: unknown): boolean {
+  if (Array.isArray(value)) return value.every(isDeepEmpty);
+  if (typeof value === 'object' && value !== null) return Object.values(value).every(isDeepEmpty);
+  return false;
+}
+
+/** Remove empty directories from `dir` up to (not including) the project root. */
+function pruneEmptyDirs(dir: string, root: string): void {
+  let current = dir;
+  while (current.startsWith(root) && current !== root) {
+    try {
+      if (readdirSync(current).length > 0) return;
+      rmdirSync(current); // only ever removes an empty directory
+    } catch {
+      return;
+    }
+    current = dirname(current);
+  }
+}
+
+/** The MCP server command, as `.mcp.json` / `claude mcp add` want it (no shell quoting). */
 
 /** Project-level MCP config files and the shape each agent expects (docs/research/harnesses.md §4). */
 export const MCP_TARGETS = {
@@ -424,8 +481,56 @@ export function preferredNode(execPath: string, pathEnv: string | undefined): st
 }
 
 /** The command a harness should run. Stable installs get an absolute script path; npx runs get a pinned npx call. */
-export function hookCommand(opts: { execPath: string; script: string; version: string; mode: 'block' | 'warn'; headsUp?: boolean; pathEnv?: string }): string {
+export interface LaunchOptions {
+  execPath: string;
+  /** Real path of the running landmine script (dist/cli.js). */
+  script: string;
+  version: string;
+  /** The project being installed into. */
+  root?: string;
+  pathEnv?: string;
+  platform?: NodeJS.Platform;
+}
+
+/**
+ * How agents should start landmine, chosen for portability, since these commands land in config files teams commit:
+ * - `project`: a dev dependency of this project. `npx --no-install landmines` finds it for every teammate after `npm ci`.
+ * - `npx`: a throwaway npx / pnpm dlx / bunx / yarn dlx cache. The pinned `npx -y landmines@<version>` works anywhere.
+ * - `global`: a global install with `landmine` on PATH.
+ * - `path`: anything else (a source checkout). Absolute paths that only work on this machine.
+ */
+export function launcher(opts: LaunchOptions): { kind: 'project' | 'npx' | 'global' | 'path'; argv: string[] } {
+  const norm = opts.script.replace(/\\/g, '/');
+  const root = opts.root?.replace(/\\/g, '/').replace(/\/$/, '');
+  if (root && norm.startsWith(`${root}/node_modules/`)) return { kind: 'project', argv: ['npx', '--no-install', 'landmines'] };
+  if (/\/_npx\/|\/dlx[-/]|\/bunx-|\/\.yarn\/berry\/|\/xfs-/.test(norm)) return { kind: 'npx', argv: ['npx', '-y', `landmines@${opts.version}`] };
+  const win = (opts.platform ?? process.platform) === 'win32';
+  if (/\/node_modules\/landmines\/dist\//.test(norm) && onPath(win ? ['landmine.cmd', 'landmine.exe'] : ['landmine'], opts.pathEnv)) return { kind: 'global', argv: ['landmine'] };
+  const node = preferredNode(opts.execPath, opts.pathEnv);
+  return { kind: 'path', argv: [node === 'node' ? 'node' : opts.execPath, opts.script] };
+}
+
+function onPath(names: string[], pathEnv: string | undefined): boolean {
+  for (const dir of (pathEnv ?? '').split(delimiter)) {
+    if (dir && names.some((n) => existsSync(join(dir, n)))) return true;
+  }
+  return false;
+}
+
+export function hookCommand(opts: LaunchOptions & { mode: 'block' | 'warn'; headsUp?: boolean }): string {
   const suffix = `${opts.mode === 'warn' ? ' --mode warn' : ''}${opts.headsUp && opts.mode === 'block' ? ' --heads-up' : ''}`;
-  if (/[\\/]_npx[\\/]/.test(opts.script)) return `npx -y landmines@${opts.version} hook${suffix}`;
-  return `${preferredNode(opts.execPath, opts.pathEnv)} "${opts.script}" hook${suffix}`;
+  const { kind, argv } = launcher(opts);
+  if (kind === 'path') {
+    const [node = 'node', script = ''] = argv;
+    return `${node === 'node' ? 'node' : `"${node}"`} "${script}" hook${suffix}`;
+  }
+  return `${argv.join(' ')} hook${suffix}`;
+}
+
+export function mcpCommand(opts: LaunchOptions): { command: string; args: string[] } {
+  const { argv } = launcher(opts);
+  const [command = 'node', ...rest] = argv;
+  // Native Windows MCP clients start the command directly, and npx / landmine are .cmd shims there.
+  if ((opts.platform ?? process.platform) === 'win32' && (command === 'npx' || command === 'landmine')) return { command: 'cmd', args: ['/c', command, ...rest, 'mcp'] };
+  return { command, args: [...rest, 'mcp'] };
 }

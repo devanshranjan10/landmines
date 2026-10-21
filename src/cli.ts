@@ -1,4 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { homedir } from 'node:os';
 import { dirname, join, relative, resolve } from 'node:path';
 import { Command, InvalidArgumentError } from 'commander';
 import { GitHubClient } from './github/client.js';
@@ -6,16 +7,16 @@ import { findToken } from './github/token.js';
 import { type Http, liveHttp, recordingHttp, replayHttp } from './http.js';
 import { findProjectRoot } from './lockfiles/index.js';
 import { HARNESSES, type Harness } from './hook/payload.js';
-import { FORMATS, type Format, type HookMode } from './hook/respond.js';
+import { FORMATS, FORMAT_FOR, type Format, type HookMode, canWarn } from './hook/respond.js';
 import { runHook } from './hook/run.js';
-import { MCP_TARGETS, type McpTarget, hookCommand, install, installMcp, mcpCommand, preflight, uninstall } from './install.js';
+import { MCP_TARGETS, type McpTarget, hookCommand, install, installMcp, launcher, mcpCommand, preflight, uninstall } from './install.js';
 import { defaultRulesFiles, detectAgents } from './agents.js';
 import { checkFile, fileContext, matchTouches } from './match.js';
 import { type StagedFile, stagedFiles } from './staged.js';
 import { projectUsage } from './usage.js';
 import { langForPath } from './source/lang.js';
 import { touches } from './source/touches.js';
-import { PROVIDERS, type ProviderName, provider } from './llm.js';
+import { PROVIDERS, type ProviderName, anthropicSdkAvailable, claudeCliAvailable, provider } from './llm.js';
 import { humanLandmine } from './message.js';
 import { shareText } from './share.js';
 import { isArmed } from './policy.js';
@@ -36,6 +37,9 @@ function httpFromEnv(env: NodeJS.ProcessEnv): { http: Http; replay: boolean } {
   return { http: liveHttp, replay: false };
 }
 
+/** Default cap on new model calls per `landmine cards` run, so a big monorepo never runs up a surprise bill. */
+const CARDS_DEFAULT_MAX = 50;
+
 function positiveInt(value: string): number {
   const n = Number(value);
   if (!Number.isInteger(n) || n < 1 || n > 1000) throw new InvalidArgumentError('expected an integer from 1 to 1000');
@@ -45,10 +49,25 @@ function positiveInt(value: string): number {
 class CliError extends Error {
   constructor(
     message: string,
-    readonly exitCode = 1,
+    readonly exitCode = 2,
   ) {
     super(message);
   }
+}
+
+/**
+ * The project to write agent configuration into. Refuses a lockfile found in the home directory: there, the agent
+ * config directories (.claude, .cursor, .codex …) are the user-level ones for every project.
+ */
+function requireProjectRoot(explicit: string | undefined): string {
+  if (explicit) return resolve(explicit);
+  const root = requireRoot(undefined);
+  if (resolve(root) === resolve(homedir())) {
+    throw new CliError(
+      `The nearest lockfile is in your home directory (${root}), so this would edit your user-level agent settings. Run it inside a project, or pass --root ${root} if that is really what you want.`,
+    );
+  }
+  return root;
 }
 
 function requireRoot(dir: string | undefined): string {
@@ -90,6 +109,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       const result = await scan({ root, http, github, maxIssues: opts.maxIssues, refresh: Boolean(opts.refresh), offline: Boolean(opts.offline), prod: Boolean(opts.prod), log });
       if (opts.json) {
         process.stdout.write(`${JSON.stringify(result.index, null, 2)}\n`);
+        if (result.failed > 0) process.exitCode = 2;
         return;
       }
       const rel = result.indexFile ? relative(process.cwd(), result.indexFile) : undefined;
@@ -97,6 +117,11 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       process.stdout.write(
         `\n${renderScanSummary(result.index, { skipped: result.skipped, notes: result.notes, reused: result.reused, ...(indexFile ? { indexFile } : {}) }, { color: wantsColor(process.stdout, env) })}`,
       );
+      // A partial scan is not a clean result: say so, and fail CI.
+      if (result.failed > 0) {
+        process.stderr.write(`landmine: ${result.failed} package${result.failed === 1 ? '' : 's'} could not be fetched (network, registry or GitHub rate limit). Re-run \`landmine scan\` later.\n`);
+        process.exitCode = 2;
+      }
     });
 
   program
@@ -106,16 +131,19 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('--staged', 'check the lines staged for commit instead (a pre-commit check for agents without hooks)')
     .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest one above each file)')
     .option('--json', 'machine-readable output')
-    .option('--exit-code', 'exit with status 1 when anything matches (for CI)')
-    .action((files: string[], opts: { root?: string; json?: boolean; exitCode?: boolean; staged?: boolean }) => {
+    .option('--exit-code', 'exit 1 when a match would block an edit (for CI and pre-commit); exit 2 on errors')
+    .option('--strict', 'with --exit-code: also fail on heads-up matches (most of which do not apply)')
+    .action((files: string[], opts: { root?: string; json?: boolean; exitCode?: boolean; strict?: boolean; staged?: boolean }) => {
       const color = { color: wantsColor(process.stdout, env) };
       const results: Array<{ file: string; hits: ReturnType<typeof checkFile> }> = [];
       if (opts.staged) {
         let staged: StagedFile[];
         try {
           staged = stagedFiles(process.cwd());
-        } catch {
-          throw new CliError('--staged needs a git repository');
+        } catch (err) {
+          const e = err as NodeJS.ErrnoException & { stderr?: Buffer | string };
+          const detail = e.code === 'ENOENT' ? 'git is not installed or not on PATH' : String(e.stderr ?? e.message).trim().split('\n')[0];
+          throw new CliError(`--staged: ${detail}`);
         }
         for (const f of staged) {
           const lang = langForPath(f.path);
@@ -147,7 +175,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
           for (const h of r.hits) process.stdout.write(`  ${humanLandmine(h.landmine, color, h.symbol, h).replace(/\n/g, '\n  ')}\n`);
         }
       }
-      if (opts.exitCode && results.some((r) => r.hits.length > 0)) process.exitCode = 1;
+      if (opts.exitCode && results.some((r) => r.hits.some((h) => opts.strict || h.corroboratedBy))) process.exitCode = 1;
     });
 
   program
@@ -186,28 +214,39 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('--mcp [agents]', `also register the landmine MCP server (comma-separated: ${Object.keys(MCP_TARGETS).join(', ')}; default claude)`)
     .option('--rules [files]', 'also write the known-bugs section into agent instruction files (default: AGENTS.md, CLAUDE.md, GEMINI.md if Gemini CLI is in use, and any that exist)')
     .action((opts: { root?: string; harness: Harness[] | 'auto' | 'all'; mode: HookMode; headsUp?: boolean; command?: string; mcp?: boolean | string; rules?: boolean | string }) => {
-      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const root = requireProjectRoot(opts.root);
       const script = process.argv[1] ? realpathSync(process.argv[1]) : '';
-      const command =
-        opts.command ??
-        hookCommand({ execPath: process.execPath, script, version: VERSION, mode: opts.mode, headsUp: Boolean(opts.headsUp), ...(env.PATH ? { pathEnv: env.PATH } : {}) });
-      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : opts.harness === 'auto' ? detectAgents(root) : opts.harness;
-      // Check every target first, so a multi-agent install never leaves a partial install behind.
+      const launch = { execPath: process.execPath, script, version: VERSION, root, ...(env.PATH ? { pathEnv: env.PATH } : {}) };
+      const command = opts.command ?? hookCommand({ ...launch, mode: opts.mode, headsUp: Boolean(opts.headsUp) });
+      let targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : opts.harness === 'auto' ? detectAgents(root) : opts.harness;
+      // Check every target first, so a multi-agent install never leaves a partial install behind. Agents found by
+      // auto-detection whose config cannot be edited safely are skipped with a note; ones the user named are an error.
+      const skippedTargets: string[] = [];
       for (const h of targets) {
         try {
           preflight(root, h);
         } catch (err) {
-          throw new CliError(`${(err as Error).message} Nothing was installed.`);
+          if (opts.harness !== 'auto') throw new CliError(`${(err as Error).message} Nothing was installed.`);
+          skippedTargets.push(`${h}: ${(err as Error).message}`);
         }
       }
+      targets = targets.filter((h) => !skippedTargets.some((x) => x.startsWith(`${h}:`)));
+      for (const n of skippedTargets) process.stdout.write(`Skipped ${n}\n`);
       for (const h of targets) {
         const r = install(root, h, command);
         process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: ${h} hook in ${r.file.split(', ').map((f) => relative(process.cwd(), f) || f).join(', ')}\n`);
         for (const n of r.notes) process.stdout.write(`  ${n}\n`);
       }
       process.stdout.write(`  Command: ${command}\n`);
+      if (!opts.command && launcher(launch).kind === 'path') {
+        process.stdout.write('  Note: this command uses absolute paths that only work on this machine. For a team, add landmine as a dev dependency (`npm i -D landmines`) and run `npx landmines install` again.\n');
+      }
+      if (opts.mode === 'warn') {
+        const silent = targets.filter((h) => !canWarn(FORMAT_FOR[h]));
+        if (silent.length) process.stdout.write(`  Note: ${silent.join(', ')} cannot show a non-blocking warning, so in warn mode landmine stays silent there.\n`);
+      }
       if (opts.mcp) {
-        const server = mcpCommand({ execPath: process.execPath, script, version: VERSION, ...(env.PATH ? { pathEnv: env.PATH } : {}) });
+        const server = mcpCommand(launch);
         const mcpTargets = opts.mcp === true ? ['claude'] : opts.mcp.split(',').map((x) => x.trim()).filter(Boolean);
         for (const t of mcpTargets) {
           if (!(t in MCP_TARGETS)) throw new CliError(`Unknown MCP target ${t}; expected one of ${Object.keys(MCP_TARGETS).join(', ')}`);
@@ -231,11 +270,17 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
     .option('--harness <names>', `comma-separated: ${HARNESSES.join(', ')}; or all`, harnessList, 'all')
     .action((opts: { root?: string; harness: Harness[] | 'auto' | 'all' }) => {
-      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const root = requireProjectRoot(opts.root);
       const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : opts.harness === 'auto' ? detectAgents(root) : opts.harness;
+      // Each agent on its own: one config landmine cannot read must not leave the others installed.
       for (const h of targets) {
-        const r = uninstall(root, h);
-        if (r.changed) process.stdout.write(`Removed: ${h} hook from ${r.file.split(', ').map((f) => relative(process.cwd(), f) || f).join(', ')}\n`);
+        try {
+          const r = uninstall(root, h);
+          if (r.changed) process.stdout.write(`Removed: ${h} hook from ${r.file.split(', ').map((f) => relative(process.cwd(), f) || f).join(', ')}\n`);
+        } catch (err) {
+          process.stderr.write(`landmine: could not remove the ${h} hook: ${(err as Error).message}\n`);
+          process.exitCode = 2;
+        }
       }
       if (opts.harness === 'all') {
         for (const f of RULES_TARGETS) {
@@ -274,7 +319,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('--max <n>', 'most issues to list', positiveInt, DEFAULT_MAX_RULES)
     .action((opts: { root?: string; write?: string[]; max: number; skill?: boolean; rank: string }) => {
       if (opts.rank !== 'usage' && opts.rank !== 'confidence') throw new CliError('--rank must be usage or confidence');
-      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const root = requireProjectRoot(opts.root);
       const index = loadIndex(root);
       // Rank by what this project's code uses, so the short list goes to the issues it is closest to.
       const usage = opts.rank === 'usage' ? projectUsage(root, index) : undefined;
@@ -305,32 +350,48 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest directory with a lockfile)')
     .option('--provider <name>', `${PROVIDERS.join(' | ')} (default: anthropic with ANTHROPIC_API_KEY, openai with OPENAI_API_KEY, else claude-cli)`)
     .option('--model <id>', 'model id (default depends on the provider)')
-    .option('--max <n>', 'most issues to card', positiveInt)
+    .option('--max <n>', `most new model calls this run (default ${CARDS_DEFAULT_MAX}; cached cards are free and always applied)`, positiveInt)
+    .option('--all', 'no cap on model calls: card every issue now')
     .option('--concurrency <n>', 'parallel model calls', positiveInt, 4)
     .option('--from <dir>', 'apply precomputed cards (<owner_repo_N>@<version>.json) instead of calling a model')
     .option('--export <dir>', 'also copy every card into <dir> in the --from layout')
     .option('-q, --quiet', 'no progress output')
-    .action(async (opts: { root?: string; provider?: string; model?: string; max?: number; concurrency: number; from?: string; export?: string; quiet?: boolean }) => {
+    .action(async (opts: { root?: string; provider?: string; model?: string; max?: number; all?: boolean; concurrency: number; from?: string; export?: string; quiet?: boolean }) => {
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
       const index = loadIndex(root);
       const log = opts.quiet ? () => {} : (m: string) => process.stderr.write(`${m}\n`);
-      const { addCards, exportCards, loadCards } = await import('./cards.js');
+      const { addCards, cardPlan, exportCards, loadCards } = await import('./cards.js');
       if (opts.from) {
         const n = loadCards(index, resolve(opts.from));
         writeIndex(root, index);
         process.stdout.write(`Applied ${n} card${n === 1 ? '' : 's'} from ${opts.from}\n`);
       } else {
-        const name = (opts.provider ?? (env.ANTHROPIC_API_KEY ? 'anthropic' : env.OPENAI_API_KEY ? 'openai' : 'claude-cli')) as ProviderName;
+        let name = (opts.provider ?? (env.ANTHROPIC_API_KEY ? 'anthropic' : env.OPENAI_API_KEY ? 'openai' : 'claude-cli')) as ProviderName;
         if (!PROVIDERS.includes(name)) throw new CliError(`unknown provider ${name}; use one of ${PROVIDERS.join(', ')}`);
+        // The Anthropic SDK is an optional peer: when it is not installed and no provider was asked for, fall back to a
+        // Claude Code login rather than failing (npx and global installs cannot see the project's node_modules).
+        if (name === 'anthropic' && !opts.provider && !(await anthropicSdkAvailable())) {
+          log('ANTHROPIC_API_KEY is set but @anthropic-ai/sdk is not installed; using the claude CLI instead (pass --provider anthropic after `npm i @anthropic-ai/sdk`).');
+          name = 'claude-cli';
+        }
+        if (name === 'claude-cli' && !(await claudeCliAvailable())) {
+          throw new CliError('`landmine cards` needs a model: install Claude Code (`claude` on PATH, logged in), set ANTHROPIC_API_KEY with @anthropic-ai/sdk installed, or set OPENAI_API_KEY (any OpenAI-compatible endpoint via OPENAI_BASE_URL).');
+        }
         const llm = await provider(name, { env, ...(opts.model ? { model: opts.model } : {}) });
-        log(`Writing trigger cards with ${llm.name}:${llm.model}`);
-        const run = await addCards(root, index, llm, { ...(opts.max ? { max: opts.max } : {}), concurrency: opts.concurrency, log });
+        const maxNew = opts.all ? undefined : (opts.max ?? CARDS_DEFAULT_MAX);
+        const plan = cardPlan(root, index, llm);
+        log(
+          `Trigger cards with ${llm.name}:${llm.model}: ${plan.cached + plan.uncached} candidate issue${plan.cached + plan.uncached === 1 ? '' : 's'}, ${plan.cached} already cached, ` +
+            `${maxNew === undefined || plan.uncached <= maxNew ? plan.uncached : maxNew} model call${plan.uncached === 1 ? '' : 's'} this run.`,
+        );
+        const run = await addCards(root, index, llm, { ...(maxNew !== undefined ? { maxNew } : {}), concurrency: opts.concurrency, log });
         writeIndex(root, index);
         const armed = index.landmines.filter((l) => l.card && isArmed(l)).length;
         process.stdout.write(
           `Cards: ${run.generated} written, ${run.cached} from cache, ${run.failed.length} failed, ${run.rejected.length} unusable · ${armed} issue${armed === 1 ? '' : 's'} armed by a card\n`,
         );
-        if (run.failed.length) process.exitCode = 1;
+        if (run.skipped) process.stdout.write(`${run.skipped} more issue${run.skipped === 1 ? '' : 's'} left for the next run (cap of ${String(maxNew)} model calls; use --max or --all).\n`);
+        if (run.failed.length) process.exitCode = 2;
       }
       if (opts.export) process.stdout.write(`Exported ${exportCards(index, resolve(opts.export))} cards to ${opts.export}\n`);
     });
@@ -439,7 +500,7 @@ export async function main(argv: string[], env: NodeJS.ProcessEnv = process.env)
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     process.stderr.write(`landmine: ${message}\n`);
-    return err instanceof CliError ? err.exitCode : 1;
+    return err instanceof CliError ? err.exitCode : 2;
   }
 }
 

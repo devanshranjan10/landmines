@@ -157,3 +157,33 @@ describe('findToken', () => {
     expect(await findToken({}, () => Promise.reject(new Error('no gh')))).toBeUndefined();
   });
 });
+
+describe('GraphQL rate limits and partial data', () => {
+  it('waits until the reset from the headers, and gives up when that is too far away', async () => {
+    const waits: number[] = [];
+    let calls = 0;
+    const now = 1_800_000_000_000;
+    const h = fakeHttp(() => {
+      calls++;
+      return new Response(JSON.stringify({ errors: [{ type: 'RATE_LIMITED', message: 'API rate limit exceeded' }] }), {
+        status: 200,
+        headers: { 'x-ratelimit-reset': String(Math.floor(now / 1000) + 50 * 60) },
+      });
+    });
+    const c = client(h, { now: () => now, sleep: (ms) => (waits.push(ms), Promise.resolve()) });
+    await expect(c.graphql('query', {})).rejects.toMatchObject({ kind: 'rate-limit' });
+    expect(calls).toBe(1); // a 50-minute reset is past maxWaitMs: no pointless sleeping
+    expect(waits).toEqual([]);
+  });
+
+  it('skips null nodes that come with partial-data errors', async () => {
+    const node = {
+      number: 7, title: 't', url: 'https://github.com/o/r/issues/7', body: 'b', createdAt: '2026-01-01T00:00:00Z', updatedAt: '2026-01-01T00:00:00Z',
+      author: { login: 'a' }, authorAssociation: 'NONE', labels: { nodes: [] }, reactions: { totalCount: 0 },
+      comments: { totalCount: 0 }, firstComments: { nodes: [null] }, lastComments: { nodes: [] },
+    };
+    const h = fakeHttp(() => new Response(JSON.stringify({ data: { search: { issueCount: 2, pageInfo: { hasNextPage: false, endCursor: null }, nodes: [null, node] } }, errors: [{ message: 'partial' }] }), { status: 200 }));
+    const r = await searchVersionIssues(client(h), 'o/r', '1.0.0', 10);
+    expect(r.issues.map((i) => i.number)).toEqual([7]);
+  });
+});

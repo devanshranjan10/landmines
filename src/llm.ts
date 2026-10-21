@@ -71,22 +71,67 @@ async function anthropic(opts: ProviderOptions): Promise<LlmProvider> {
   };
 }
 
+const CLAUDE_TIMEOUT_MS = 180_000;
+
 function runClaude(args: string[], input: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    const child = spawn('claude', args, { stdio: ['pipe', 'pipe', 'pipe'] });
+    // On Windows `claude` is a .cmd shim, which only a shell can start.
+    const child = spawn('claude', args, { stdio: ['pipe', 'pipe', 'pipe'], shell: process.platform === 'win32' });
     let out = '';
     let err = '';
+    let settled = false;
+    const settle = (fn: () => void): void => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      fn();
+    };
     child.stdout.on('data', (d: Buffer) => (out += d.toString()));
     child.stderr.on('data', (d: Buffer) => (err += d.toString()));
-    const timer = setTimeout(() => child.kill('SIGTERM'), 180_000);
-    child.on('error', reject);
-    child.on('close', (code) => {
-      clearTimeout(timer);
-      if (code === 0) resolve(out);
-      else reject(new Error(`claude exited ${String(code)}: ${(err || out).slice(0, 300)}`));
-    });
+    // Ask politely, then insist: a child that ignores SIGTERM (or keeps its pipes open) must not hang the worker.
+    const timer = setTimeout(() => {
+      child.kill('SIGTERM');
+      setTimeout(() => child.kill('SIGKILL'), 5_000).unref();
+      settle(() => reject(new Error(`claude did not answer within ${CLAUDE_TIMEOUT_MS / 1000}s`)));
+    }, CLAUDE_TIMEOUT_MS);
+    child.on('error', (e: NodeJS.ErrnoException) =>
+      settle(() => reject(e.code === 'ENOENT' ? new Error('the `claude` CLI is not installed or not on PATH (needed for --provider claude-cli)') : e)),
+    );
+    child.on('close', (code) =>
+      settle(() => (code === 0 ? resolve(out) : reject(new Error(`claude exited ${String(code)}: ${(err || out).slice(0, 300)}`)))),
+    );
+    child.stdin.on('error', () => {}); // the child may exit before reading its input
     child.stdin.end(input);
   });
+}
+
+/** Is the `claude` CLI there at all? Checked once, up front, instead of failing every issue separately. */
+export function claudeCliAvailable(): Promise<boolean> {
+  return new Promise((resolve) => {
+    const child = spawn('claude', ['--version'], { stdio: 'ignore', shell: process.platform === 'win32' });
+    const timer = setTimeout(() => {
+      child.kill('SIGKILL');
+      resolve(false);
+    }, 15_000);
+    child.on('error', () => {
+      clearTimeout(timer);
+      resolve(false);
+    });
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      resolve(code === 0);
+    });
+  });
+}
+
+/** Can the optional Anthropic SDK be loaded from here? */
+export async function anthropicSdkAvailable(): Promise<boolean> {
+  try {
+    await import('@anthropic-ai/sdk');
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 /**

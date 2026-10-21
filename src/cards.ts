@@ -1,5 +1,5 @@
 import { createHash } from 'node:crypto';
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { z } from 'zod';
 import { splitFences } from './analyze/markdown.js';
@@ -169,6 +169,8 @@ export interface CardRun {
   failed: Array<{ id: string; error: string }>;
   rejected: Array<{ id: string; reason: string }>;
   noRawText: number;
+  /** Left for a later run because of the per-run cap on model calls. */
+  skipped: number;
 }
 
 /** Which landmines get a card: anything with non-weak version evidence (the card, not the heuristics, decides if it arms). */
@@ -177,13 +179,40 @@ export function cardCandidates(index: LandmineIndex, max = Infinity): Landmine[]
 }
 
 /** Write a card onto every candidate landmine, from cache when possible. Mutates and returns the index. */
+/** A cached card, or undefined when there is none or the file is unreadable (a corrupt file is just a cache miss). */
+function readCard(file: string): TriggerCard | undefined {
+  try {
+    const card = JSON.parse(readFileSync(file, 'utf8')) as TriggerCard;
+    return typeof card === 'object' && card !== null && Array.isArray(card.apis) ? card : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+/** Write via a temp file and rename, so a crash mid-write never leaves a half-written card behind. */
+function writeCard(file: string, card: TriggerCard): void {
+  mkdirSync(dirname(file), { recursive: true });
+  const tmp = `${file}.${process.pid}.tmp`;
+  writeFileSync(tmp, `${JSON.stringify(card, null, 2)}\n`);
+  renameSync(tmp, file);
+}
+
+/** How many candidates already have a cached card for this model, and how many would need a model call. */
+export function cardPlan(root: string, index: LandmineIndex, llm: Pick<LlmProvider, 'name' | 'model'>, max?: number): { cached: number; uncached: number } {
+  let cached = 0;
+  const todo = cardCandidates(index, max);
+  for (const l of todo) if (readCard(cardCacheFile(root, l, `${llm.name}:${llm.model}`))) cached++;
+  return { cached, uncached: todo.length - cached };
+}
+
 export async function addCards(
   root: string,
   index: LandmineIndex,
   llm: LlmProvider,
-  opts: { max?: number; concurrency?: number; log?: (m: string) => void } = {},
+  opts: { max?: number; maxNew?: number; concurrency?: number; log?: (m: string) => void } = {},
 ): Promise<CardRun> {
-  const run: CardRun = { generated: 0, cached: 0, failed: [], rejected: [], noRawText: 0 };
+  const run: CardRun = { generated: 0, cached: 0, failed: [], rejected: [], noRawText: 0, skipped: 0 };
+  let started = 0;
   const raws = new Map<string, Map<number, RawIssue>>();
   const todo = cardCandidates(index, opts.max);
   let next = 0;
@@ -192,11 +221,18 @@ export async function addCards(
       const l = todo[next++];
       if (!l) break;
       const file = cardCacheFile(root, l, `${llm.name}:${llm.model}`);
-      if (existsSync(file)) {
-        l.card = JSON.parse(readFileSync(file, 'utf8')) as TriggerCard;
+      const cachedCard = readCard(file);
+      if (cachedCard) {
+        l.card = cachedCard;
         run.cached++;
         continue;
       }
+      // Cap on model calls per run (cost control); the rest are left for the next run.
+      if (opts.maxNew !== undefined && started >= opts.maxNew) {
+        run.skipped++;
+        continue;
+      }
+      started++;
       const key = `${l.ecosystem}:${l.package}@${l.version}`;
       if (!raws.has(key)) raws.set(key, rawIssuesFor(root, l));
       const raw = raws.get(key)?.get(l.issue.number);
@@ -206,8 +242,7 @@ export async function addCards(
         const { card, reject } = toCard(out, l, raw, { provider: llm.name, model: llm.model });
         if (card) {
           l.card = card;
-          mkdirSync(dirname(file), { recursive: true });
-          writeFileSync(file, `${JSON.stringify(card, null, 2)}\n`);
+          writeCard(file, card);
         }
         if (reject) run.rejected.push({ id: l.id, reason: reject });
         run.generated++;
@@ -227,8 +262,9 @@ export function loadCards(index: LandmineIndex, dir: string): number {
   let n = 0;
   for (const l of index.landmines) {
     const file = join(dir, `${cardFileStem(l)}.json`);
-    if (!existsSync(file)) continue;
-    l.card = JSON.parse(readFileSync(file, 'utf8')) as TriggerCard;
+    const card = readCard(file);
+    if (!card) continue;
+    l.card = card;
     n++;
   }
   return n;

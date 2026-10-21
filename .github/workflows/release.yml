@@ -1,0 +1,25 @@
+name: release
+# Publishes to npm with provenance when a version tag (v0.2.0) is pushed. Needs the NPM_TOKEN secret, or switch to
+# npm trusted publishing (OIDC) once the package exists on npm. Provenance needs package.json `repository` to match this repo.
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+          cache: npm
+      - run: npm ci
+      - name: tag matches package.json
+        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
+      - run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

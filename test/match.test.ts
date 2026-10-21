@@ -111,6 +111,17 @@ describe('cli check / list', () => {
     await expect(run(process.execPath, [CLI, 'check', '--exit-code', join(root, 'db.ts')])).rejects.toMatchObject({ code: 1 });
   });
 
+  it('--exit-code fails only on matches that would block; --strict also on heads-ups', async () => {
+    const file = join(root, 'schema.ts');
+    writeFileSync(file, "import { serial } from 'drizzle-orm/mysql-core';\nexport const id = serial('id');\n");
+    const { stdout } = await run(process.execPath, [CLI, 'check', '--json', file]);
+    const hits = (JSON.parse(stdout) as Array<{ hits: Array<{ blocks: boolean }> }>)[0]?.hits ?? [];
+    expect(hits.length).toBeGreaterThan(0);
+    expect(hits.every((h) => !h.blocks)).toBe(true);
+    await expect(run(process.execPath, [CLI, 'check', '--exit-code', file])).resolves.toBeDefined();
+    await expect(run(process.execPath, [CLI, 'check', '--exit-code', '--strict', file])).rejects.toMatchObject({ code: 1 });
+  });
+
   it('check --json', async () => {
     const { stdout } = await run(process.execPath, [CLI, 'check', '--json', join(root, 'db.ts')]);
     const parsed = JSON.parse(stdout) as Array<{ hits: Array<{ id: string }> }>;

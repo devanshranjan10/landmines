@@ -491,3 +491,26 @@ of the CLI build, the same for every arm, and cannot bias an arm comparison.
 - **Limit.** The competitor arms got the same prompt as every other arm, so nobody told
   them to check for known bugs. An instructed web arm would be a stronger baseline; it
   was not run.
+
+**D-48: Production-readiness pass.** Three independent read-only reviews covered:
+- hook, install and plugins;
+- scan, network and cards;
+- packaging, CLI and release.
+
+The MCP server was reviewed and driven live in Claude Code. Every confirmed finding was
+fixed with a regression test (see CHANGELOG 0.2.0 "Fixed"), except these, left on
+purpose:
+- **Searches are not paged down on 502s.** Pages stay at 25. The fix needs live GitHub
+  measurement.
+- **No interactive `--yes` for cards.** The default cap of 50 model calls, printed up
+  front, covers the cost risk.
+- **Windows has not been run live.** CI has a Windows leg.
+
+Verified live in this pass:
+- **MCP.** All three tools, through Claude Code over stdio.
+- **The hook.** Claude Code with the new untrusted-block message: denied once, the agent
+  cited drizzle-orm#3402 and worked around it.
+- **OpenCode 1.18.33.** It loads the new plugin shape and calls its `server` hook
+  factory.
+- **Node 18.** It gets the version message and exits 2.
+- **The packed tarball** installs and runs on Node 22.

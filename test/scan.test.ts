@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process';
-import { cpSync, mkdirSync, mkdtempSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
@@ -136,7 +136,7 @@ describe('cli scan (built binary, replayed HTTP)', () => {
     const empty = mkdtempSync(join(tmpdir(), 'lm-empty-'));
     await expect(
       run(process.execPath, [new URL('../dist/cli.js', import.meta.url).pathname, 'scan', '--root', empty], { env: { ...process.env, LANDMINE_HTTP_REPLAY: HTTP_DIR } }),
-    ).rejects.toMatchObject({ code: 1, stderr: expect.stringContaining('No supported lockfile found') as unknown });
+    ).rejects.toMatchObject({ code: 2, stderr: expect.stringContaining('No supported lockfile found') as unknown });
   });
 });
 
@@ -151,5 +151,32 @@ describe('@types packages', () => {
     const offline: Http = { fetch: () => Promise.reject(new Error('network used')) };
     const r = await scan({ root, ...clients(offline), now: () => NOW, write: false });
     expect(r.index.packages).toMatchObject([{ name: '@types/node', status: 'skipped', detail: 'type definitions (DefinitelyTyped)' }]);
+  });
+});
+
+describe('scan keeps known bugs when a fetch fails', () => {
+  it('offline without a cache (a fresh clone of a committed index) keeps the previous issues and cards', async () => {
+    const root = project();
+    const first = await scan({ root, ...clients(replayHttp(HTTP_DIR)), maxIssues: 30, now: () => NOW });
+    const target = first.index.landmines[0]!;
+    target.card = { isBug: true, affectsPinned: 'yes', apis: ['x'], requires: [], condition: 'kept', confidence: 1, provider: 'p', model: 'm', promptVersion: 2 };
+    writeIndex(root, first.index);
+    rmSync(join(root, '.landmine', 'cache'), { recursive: true, force: true });
+    const offline: Http = { fetch: () => Promise.reject(new Error('network used')) };
+    const again = await scan({ root, ...clients(offline), maxIssues: 30, now: () => NOW, offline: true });
+    expect(again.index.landmines.length).toBe(first.index.landmines.length);
+    expect(again.index.landmines.find((l) => l.id === target.id)?.card?.condition).toBe('kept');
+    expect(again.index.packages.filter((p) => p.stale).length).toBeGreaterThan(0);
+    expect(again.failed).toBe(0); // an offline cache miss is expected, not a failure
+  });
+
+  it('a network failure keeps the previous issues and reports the failure', async () => {
+    const root = project();
+    const first = await scan({ root, ...clients(replayHttp(HTTP_DIR)), maxIssues: 30, now: () => NOW });
+    const down: Http = { fetch: () => Promise.reject(new Error('ECONNRESET')) };
+    const again = await scan({ root, ...clients(down), maxIssues: 30, now: () => NOW, refresh: true });
+    expect(again.failed).toBeGreaterThan(0);
+    expect(again.index.landmines.length).toBe(first.index.landmines.length);
+    expect(renderScanSummary(again.index, { skipped: again.skipped, notes: again.notes }, { color: false })).toMatch(/could not be fetched; kept the previous scan's issues/);
   });
 });

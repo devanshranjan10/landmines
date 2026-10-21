@@ -135,12 +135,13 @@ export async function searchVersionIssues(client: GitHubClient, repo: string, ve
     const first = Math.min(25, max - issues.length);
     const data: GqlSearch = await client.graphql<GqlSearch>(SEARCH_QUERY, { q: versionQuery(repo, version), first, after });
     searchHits = data.search.issueCount;
-    for (const n of data.search.nodes) {
-      if (typeof n.number !== 'number') continue; // pull requests or empty fragments
+    for (const n of data.search.nodes ?? []) {
+      // Pull requests, empty fragments, and nulls GitHub returns alongside partial-data errors.
+      if (!n || typeof n.number !== 'number') continue;
       const seen = new Set<string>();
       const comments: RawComment[] = [];
-      for (const c of [...n.firstComments.nodes, ...n.lastComments.nodes]) {
-        if (seen.has(c.id)) continue;
+      for (const c of [...(n.firstComments?.nodes ?? []), ...(n.lastComments?.nodes ?? [])]) {
+        if (!c || seen.has(c.id)) continue;
         seen.add(c.id);
         comments.push(toComment(c));
       }

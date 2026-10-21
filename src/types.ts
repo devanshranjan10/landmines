@@ -144,6 +144,8 @@ export interface PackageRecord {
   landmines: number;
   dropped: { unverified: number; unaffected: number; incidental: number };
   fetchedAt?: string;
+  /** This scan could not fetch the package; its issues are carried over from the previous scan (`fetchedAt` is theirs). */
+  stale?: true;
 }
 
 export interface LandmineIndex {

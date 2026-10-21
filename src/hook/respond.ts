@@ -46,9 +46,12 @@ export interface HookOutput {
   exitCode: number;
 }
 
-/** Formats that can pass a warning to the model without stopping the edit. */
+/**
+ * Formats that can pass a warning to the model without stopping the edit. The in-process plugins (OpenCode, Kilo,
+ * Cline, Amp, Pi) can only block or allow a tool call, so a warning there would be silently dropped.
+ */
 export function canWarn(format: Format): boolean {
-  return format === 'claude' || format === 'cline' || format === 'plugin';
+  return format === 'claude' || format === 'cline';
 }
 
 /**

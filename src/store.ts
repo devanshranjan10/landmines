@@ -41,3 +41,23 @@ export function findIndexRoot(start: string): string | undefined {
     dir = parent;
   }
 }
+
+/**
+ * Keep machine-specific or bulky files out of git: raw API responses (`cache/`) and the install registry
+ * (`installed.json`, which records this machine's hook commands). index.json and cards/ are meant to be committed.
+ */
+export function ensureIndexGitignore(root: string): void {
+  const file = join(root, INDEX_DIR, '.gitignore');
+  const wanted = ['cache/', 'installed.json'];
+  let text: string;
+  try {
+    text = readFileSync(file, 'utf8');
+  } catch {
+    text = '# landmine: raw GitHub/registry responses and this machine\'s install registry; index.json and cards/ can be committed\n';
+  }
+  const lines = new Set(text.split('\n').map((l) => l.trim()));
+  const missing = wanted.filter((w) => !lines.has(w));
+  if (missing.length === 0 && text.length > 0 && existsSync(file)) return;
+  mkdirSync(join(root, INDEX_DIR), { recursive: true });
+  writeFileSync(file, `${text.replace(/\n*$/, '\n')}${missing.join('\n')}${missing.length ? '\n' : ''}`);
+}

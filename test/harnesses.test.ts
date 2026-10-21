@@ -172,10 +172,12 @@ describe('install for every agent', () => {
     expect(statSync(join(dir, '.clinerules/hooks/PreToolUse')).mode & 0o111).not.toBe(0);
     for (const h of HARNESSES) uninstall(dir, h);
     expect(read('.factory/hooks.json')).toEqual({ PostToolUse: [{ matcher: 'Edit', hooks: [{ type: 'command', command: 'fmt.sh' }] }] });
-    expect(read('.agents/hooks.json')).toEqual({});
-    for (const f of ['.opencode/plugins/landmine.ts', '.kilo/plugin/landmine.ts', '.clinerules/hooks/PreToolUse', '.cline/plugins/landmine.ts', '.kiro/hooks/landmine.json', '.amp/plugins/landmine.ts', '.pi/extensions/landmine.ts']) {
-      expect(existsSync(join(dir, f))).toBe(false);
+    // Nothing left behind: no emptied config stubs (a project hooks file can shadow the user's global one) and no
+    // empty directories, so auto-detection no longer sees agents that were only there because of landmine.
+    for (const f of ['.agents', '.openhands', '.devin', '.github', 'crush.json', '.opencode', '.kilo', '.clinerules', '.cline', '.kiro', '.amp', '.pi', '.codex', '.cursor', '.gemini', '.qwen', '.augment', '.trae', '.claude']) {
+      expect(existsSync(join(dir, f)), f).toBe(false);
     }
+    expect(detectAgents(dir)).toEqual(['claude', 'droid']);
   });
 
   it('never overwrites a foreign file at an owned path', () => {
@@ -223,12 +225,23 @@ describe('generated plugins run (OpenCode V1 calling convention, Cline plugin, P
 
   it('OpenCode: tool.execute.before throws with the issue for the risky edit, passes others', async () => {
     const mod = await load('.opencode/plugins/landmine.ts');
-    const plugin = mod.LandminePlugin as (ctx: { directory: string }) => Promise<Record<string, (i: unknown, o: unknown) => Promise<void>>>;
-    const hooks = await plugin({ directory: root });
+    const plugin = mod.default as {
+      id: string;
+      server: (ctx: { directory: string }) => Promise<Record<string, (i: unknown, o: unknown) => Promise<void>>>;
+      setup: (ctx: unknown) => Promise<void>;
+    };
+    expect(plugin.id).toBe('landmine');
+    const hooks = await plugin.server({ directory: root });
     const before = hooks['tool.execute.before'];
     if (!before) throw new Error('no hook');
     await expect(before({ tool: 'edit', sessionID: `oc-${Date.now()}` }, { args: { filePath: file, oldString: OLD, newString: NEW } })).rejects.toThrow(/drizzle-orm#3402/);
     await expect(before({ tool: 'read', sessionID: 'x' }, { args: { filePath: file } })).resolves.toBeUndefined();
+    // OpenCode 1.18 also calls setup() without a V2 tool API: it must be a no-op, not a crash.
+    await expect(plugin.setup({})).resolves.toBeUndefined();
+    // OpenCode V2: execute.before with `path` field names.
+    let v2: ((e: unknown) => Promise<void>) | undefined;
+    await plugin.setup({ tool: { hook: (_: string, fn: (e: unknown) => Promise<void>) => void (v2 = fn) }, location: { directory: root } });
+    await expect(v2?.({ tool: 'edit', sessionID: `oc2-${Date.now()}`, input: { path: file, oldString: OLD, newString: NEW } })).rejects.toThrow(/drizzle-orm#3402/);
   });
 
   it('Cline plugin returns {skip, reason}; Pi returns {block, reason}; Amp rejects and continues', async () => {

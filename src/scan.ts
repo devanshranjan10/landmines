@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { buildLandmines } from './analyze/landmine.js';
 import { strengthRank } from './analyze/version.js';
@@ -8,7 +8,7 @@ import type { Http } from './http.js';
 import { readDependencies } from './lockfiles/index.js';
 import { importNamesFor } from './pypiNames.js';
 import { resolveRepo } from './registry/resolve.js';
-import { INDEX_DIR, readIndex, writeIndex } from './store.js';
+import { INDEX_DIR, ensureIndexGitignore, readIndex, writeIndex } from './store.js';
 import type { Dependency, LandmineIndex, Landmine, PackageRecord, SkippedDependency } from './types.js';
 import { VERSION } from './version.js';
 
@@ -36,6 +36,8 @@ export interface ScanResult {
   notes: string[];
   indexFile?: string;
   reused: number;
+  /** Packages this scan tried and failed to fetch (network, registry, rate limit). Offline cache misses are not failures. */
+  failed: number;
 }
 
 async function pool<T>(items: T[], size: number, fn: (item: T) => Promise<void>): Promise<void> {
@@ -94,8 +96,7 @@ function readCache(file: string, now: Date, maxIssues: number, anyAge = false): 
 
 function writeCache(root: string, file: string, f: Fetched): void {
   mkdirSync(dirname(file), { recursive: true });
-  const ignore = join(root, INDEX_DIR, '.gitignore');
-  if (!existsSync(ignore)) writeFileSync(ignore, '# raw GitHub/registry responses; index.json can be committed\ncache/\n');
+  ensureIndexGitignore(root);
   writeFileSync(file, JSON.stringify(f));
 }
 
@@ -110,6 +111,8 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
   const landmines: Landmine[] = [];
   let reused = 0;
   let fatal: GitHubError | undefined;
+  // Once GitHub rate-limits us, every further package would wait and fail the same way: stop asking.
+  let rateLimited: string | undefined;
 
   const fetchDep = async (dep: Dependency, started: Date): Promise<Fetched> => {
     const base = { fetchedAt: started.toISOString(), maxIssues, searchHits: 0, issues: [] as RawIssue[] };
@@ -135,6 +138,14 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
     const started = now();
     const rec = emptyRecord(dep, started);
     records.push(rec);
+    if (rateLimited && !opts.offline) {
+      const cached = readCache(cacheFile(opts.root, dep), started, maxIssues, false);
+      if (!cached) {
+        rec.status = 'error';
+        rec.detail = `not searched: ${rateLimited}`;
+        return;
+      }
+    }
     if (dep.ecosystem === 'npm' && dep.name.startsWith('@types/')) {
       // DefinitelyTyped versions mirror the upstream package's, so a version search finds the runtime's issues.
       rec.status = 'skipped';
@@ -183,6 +194,7 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
         fatal = err;
         return;
       }
+      if (err instanceof GitHubError && err.kind === 'rate-limit') rateLimited = err.message;
       rec.status = 'error';
       rec.detail = (err as Error).message;
       log(`  ${dep.name}@${dep.version}: error: ${rec.detail}`);
@@ -190,6 +202,30 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
   });
   if (fatal) throw fatal;
 
+  // A package this scan could not fetch keeps what the previous scan found (cards included) rather than silently
+  // losing its known bugs: the hook would otherwise stop warning about them after one network blip.
+  const previous = readIndex(opts.root);
+  let failed = 0;
+  for (const rec of records) {
+    if (rec.status !== 'error') continue;
+    if (rec.detail !== 'no cached data (offline)') failed++;
+    const prev = previous?.packages.find((p) => p.ecosystem === rec.ecosystem && p.name === rec.name && p.version === rec.version && p.status === 'ok');
+    if (!prev) continue;
+    const kept = (previous?.landmines ?? []).filter((l) => l.ecosystem === rec.ecosystem && l.package === rec.name && l.version === rec.version);
+    landmines.push(...kept);
+    Object.assign(rec, {
+      repo: prev.repo,
+      ...(prev.repoDirectory ? { repoDirectory: prev.repoDirectory } : {}),
+      ...(prev.importNames ? { importNames: prev.importNames } : {}),
+      ...(prev.fetchedAt ? { fetchedAt: prev.fetchedAt } : {}),
+      searchHits: prev.searchHits,
+      verified: prev.verified,
+      landmines: kept.length,
+      dropped: prev.dropped,
+      stale: true,
+      detail: `${rec.detail ?? 'fetch failed'}; kept ${kept.length} issue${kept.length === 1 ? '' : 's'} from the previous scan`,
+    });
+  }
   records.sort((a, b) => a.ecosystem.localeCompare(b.ecosystem) || a.name.localeCompare(b.name) || a.version.localeCompare(b.version));
   landmines.sort(
     (a, b) =>
@@ -208,7 +244,6 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
     landmines,
   };
   // Keep trigger cards from the previous index for issues that have not changed since (re-carding costs model calls).
-  const previous = readIndex(opts.root);
   if (previous) {
     const cards = new Map(previous.landmines.filter((l) => l.card).map((l) => [`${l.id}@${l.version}|${l.issue.updatedAt}`, l.card]));
     for (const l of landmines) {
@@ -216,7 +251,7 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
       if (card) l.card = card;
     }
   }
-  const result: ScanResult = { index, skipped, notes, reused };
+  const result: ScanResult = { index, skipped, notes, reused, failed };
   if (opts.write !== false) result.indexFile = writeIndex(opts.root, index);
   return result;
 }

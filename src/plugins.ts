@@ -27,22 +27,81 @@ function landmine(tool: string, input: unknown, cwd: string, session: string): {
 `;
 }
 
-/** OpenCode (V1 plugin API, also loaded by Kilo Code): throwing in tool.execute.before fails that one tool call. */
+/** Async twin of `landmine()`: OpenCode and Kilo run hooks on their event loop, so the hook must not block it. */
+const ASYNC_CORE = `import { spawn } from "node:child_process";
+
+function landmineAsync(tool: string, input: unknown, cwd: string, session: string): Promise<{ decision: string; message: string } | undefined> {
+  return new Promise((resolve) => {
+    try {
+      const payload = JSON.stringify({ hook_event_name: "PreToolUse", session_id: session, cwd, tool_name: tool, tool_input: input });
+      const child = spawn(LANDMINE_COMMAND, { cwd, shell: true, stdio: ["pipe", "pipe", "ignore"] });
+      let out = "";
+      const timer = setTimeout(() => { child.kill("SIGKILL"); resolve(undefined); }, 10_000);
+      child.stdout.on("data", (d: Buffer) => (out += d.toString()));
+      child.on("error", () => { clearTimeout(timer); resolve(undefined); });
+      child.on("close", () => {
+        clearTimeout(timer);
+        try {
+          const parsed = JSON.parse(out.trim() || "null") as { decision?: unknown; message?: unknown } | null;
+          resolve(parsed && typeof parsed.message === "string" ? { decision: String(parsed.decision), message: parsed.message } : undefined);
+        } catch {
+          resolve(undefined); // never get in the agent's way
+        }
+      });
+      child.stdin.on("error", () => {});
+      child.stdin.end(payload);
+    } catch {
+      resolve(undefined);
+    }
+  });
+}
+`;
+
+/**
+ * OpenCode and Kilo Code. One default export serves every host: `server` is the V1 plugin API (OpenCode up to 1.19,
+ * Kilo), `setup` is OpenCode V2 (`ctx.tool.hook`). Verified against OpenCode 1.18.33: it loads this shape and calls
+ * `server`; it also calls `setup` without `ctx.tool`, which is why `setup` checks first. Throwing fails that one tool
+ * call and the message reaches the model.
+ */
 export function opencodePlugin(command: string, harness: 'opencode' | 'kilo'): string {
-  return `${core(command, harness)}
+  return `${core(command, harness)}${ASYNC_CORE}
 const EDIT_TOOLS = new Set(["edit", "write", "apply_patch", "patch", "multiedit"]);
 
-export const LandminePlugin = async ({ directory }: { directory: string }) => ({
-  "tool.execute.before": async (input: { tool: string; sessionID?: string }, output: { args: unknown }) => {
-    if (!EDIT_TOOLS.has(input.tool)) return;
-    const r = landmine(input.tool, output.args, directory, input.sessionID ?? "");
-    if (r?.decision === "deny") throw new Error(r.message);
+async function check(tool: string, input: unknown, cwd: string, session: string): Promise<void> {
+  const r = await landmineAsync(tool, input, cwd, session);
+  if (r?.decision === "deny") throw new Error(r.message);
+}
+
+export default {
+  id: "landmine",
+  // OpenCode V1 and Kilo Code
+  async server({ directory }: { directory: string }) {
+    return {
+      "tool.execute.before": async (input: { tool: string; sessionID?: string }, output: { args: unknown }) => {
+        if (!EDIT_TOOLS.has(input.tool)) return;
+        await check(input.tool, output.args, directory, input.sessionID ?? "");
+      },
+    };
   },
-});
+  // OpenCode V2
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async setup(ctx: any) {
+    if (typeof ctx?.tool?.hook !== "function") return;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await ctx.tool.hook("execute.before", async (e: any) => {
+      if (!EDIT_TOOLS.has(e?.tool)) return;
+      await check(e.tool, e.input, ctx.location?.directory ?? process.cwd(), e.sessionID ?? "");
+    });
+  },
+};
 `;
 }
 
-/** Cline CLI plugin (`.cline/plugins/`): beforeTool returning `{skip, reason}` blocks one call; the reason reaches the model. */
+/**
+ * Cline CLI plugin (\`.cline/plugins/\`): beforeTool returning \`{skip, reason}\` blocks one call and the reason reaches the
+ * model. Plugins run in worker threads whose cwd need not be the workspace, so the workspace comes from the host's
+ * context when it passes one.
+ */
 export function clinePlugin(command: string): string {
   return `${core(command, 'cline')}
 const EDIT_TOOLS = new Set(["editor", "apply_patch", "write_to_file", "replace_in_file"]);
@@ -53,10 +112,13 @@ export default {
   name: "landmine",
   manifest: { capabilities: ["hooks"] },
   hooks: {
-    beforeTool({ toolCall, input }: { toolCall: { toolName?: string; name?: string; id?: string }; input: unknown }) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    beforeTool(args: any, ctx?: any) {
+      const toolCall = args?.toolCall ?? {};
       const tool = toolCall.toolName ?? toolCall.name ?? "";
       if (!EDIT_TOOLS.has(tool)) return undefined;
-      const r = landmine(tool, input, process.cwd(), SESSION);
+      const cwd = ctx?.cwd ?? args?.ctx?.cwd ?? args?.cwd ?? args?.workspaceRoot ?? process.cwd();
+      const r = landmine(tool, args?.input, cwd, SESSION);
       return r?.decision === "deny" ? { skip: true, reason: r.message } : undefined;
     },
   },

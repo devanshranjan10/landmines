@@ -44,7 +44,8 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "prepublishOnly": "npm run build && npm run check"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.3.1",

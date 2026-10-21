@@ -56,6 +56,9 @@ describe('MCP server', () => {
     const t = textOf(await client.callTool({ name: 'landmine_search', arguments: { query: 'Maximum call stack size exceeded on insert RangeError' } }));
     expect(t).toContain('drizzle-team/drizzle-orm#1740');
     expect(searchLandmines(index, 'zzzz nothing qqqq')).toEqual([]);
+    // Generic words alone match nothing; a specific query keeps only close matches.
+    expect(searchLandmines(index, 'function error value')).toEqual([]);
+    expect(searchLandmines(index, 'node-postgres client end function').map((l) => l.id)).toEqual(['drizzle-team/drizzle-orm#3402']);
   });
 
   it('landmine_list, and a helpful error without an index', async () => {
@@ -69,5 +72,31 @@ describe('MCP server', () => {
     const r = await other.callTool({ name: 'landmine_list', arguments: {} });
     expect(textOf(r)).toContain('Run `landmine scan`');
     expect((r as { isError?: boolean }).isError).toBe(true);
+  });
+
+  it('declares every tool read-only, closed-world and idempotent', async () => {
+    const { tools } = await client.listTools();
+    for (const t of tools) expect(t.annotations).toMatchObject({ readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false });
+  });
+
+  it('landmine_check refuses files outside the project', async () => {
+    const r = await client.callTool({ name: 'landmine_check', arguments: { file: '/etc/hosts' } });
+    expect((r as { isError?: boolean }).isError).toBe(true);
+    expect(textOf(r)).toContain('outside the project');
+    const up = await client.callTool({ name: 'landmine_check', arguments: { file: '../../etc/hosts' } });
+    expect(textOf(up)).toContain('outside the project');
+  });
+
+  it('search and detail use trigger cards: the condition is searchable and shown', () => {
+    const l = index.landmines.find((x) => x.id === 'drizzle-team/drizzle-orm#3402');
+    expect(l).toBeDefined();
+    const carded: LandmineIndex = {
+      ...index,
+      landmines: index.landmines.map((x) =>
+        x === l ? { ...x, card: { isBug: true, affectsPinned: 'yes', apis: ['end'], requires: [], condition: 'the node-postgres pool exposes no shutdown hook through drizzle', workaround: 'Keep your own pg Pool and end it.', confidence: 0.8, provider: 't', model: 'm', promptVersion: 2 } } : x,
+      ),
+    };
+    const [found] = searchLandmines(carded, 'shutdown hook pool');
+    expect(found?.id).toBe('drizzle-team/drizzle-orm#3402');
   });
 });

@@ -90,7 +90,16 @@ export class GitHubClient {
     return undefined;
   }
 
-  private async request(method: string, url: string, body?: string): Promise<{ status: number; text: string }> {
+  /** Wait until the GraphQL rate limit resets (from response headers), or a minute if they say nothing. */
+  private graphqlWait(headers: Headers | undefined): number {
+    const retryAfter = headers?.get('retry-after');
+    if (retryAfter && /^\d+$/.test(retryAfter)) return Number(retryAfter) * 1000;
+    const reset = headers?.get('x-ratelimit-reset');
+    if (reset && /^\d+$/.test(reset)) return Math.max(1000, Number(reset) * 1000 - this.now() + 1000);
+    return 60_000;
+  }
+
+  private async request(method: string, url: string, body?: string): Promise<{ status: number; text: string; headers?: Headers }> {
     return this.limiter.run(async () => {
       for (let attempt = 0; ; attempt++) {
         let res: Response;
@@ -122,7 +131,7 @@ export class GitHubClient {
           continue;
         }
         if (res.status === 401) throw new GitHubError('GitHub rejected the token (401). Check GITHUB_TOKEN or `gh auth status`.', 'auth', 401);
-        return { status: res.status, text };
+        return { status: res.status, text, headers: res.headers };
       }
     });
   }
@@ -137,13 +146,17 @@ export class GitHubClient {
 
   async graphql<T>(query: string, variables: Record<string, unknown>): Promise<T> {
     for (let attempt = 0; ; attempt++) {
-      const { status, text } = await this.request('POST', `${this.apiBase}/graphql`, JSON.stringify({ query, variables }));
+      const { status, text, headers } = await this.request('POST', `${this.apiBase}/graphql`, JSON.stringify({ query, variables }));
       if (status >= 400) throw new GitHubError(`GitHub GraphQL ${status}: ${text.slice(0, 200)}`, 'http', status);
       const parsed = JSON.parse(text) as { data?: T; errors?: Array<{ type?: string; message?: string }> };
       const rateLimited = parsed.errors?.some((e) => e.type === 'RATE_LIMITED' || /rate limit/i.test(e.message ?? ''));
-      if (rateLimited && attempt < this.maxRetries) {
-        this.log('GitHub GraphQL rate limit; waiting 60s');
-        await this.sleep(60_000);
+      if (rateLimited) {
+        const wait = this.graphqlWait(headers);
+        if (attempt >= this.maxRetries || wait > this.maxWaitMs) {
+          throw new GitHubError(`GitHub GraphQL rate limit hit; it resets in ~${Math.ceil(wait / 60_000)} min`, 'rate-limit');
+        }
+        this.log(`GitHub GraphQL rate limit; waiting ${Math.ceil(wait / 1000)}s`);
+        await this.sleep(wait);
         continue;
       }
       if (parsed.errors?.length && !parsed.data) {

@@ -44,7 +44,7 @@ filed after the model's training cutoff:
   the agent never once used web search or Context7. It didn't think to look.
 - **The pre-edit hook did not significantly beat no help.**
 
-So start with `landmine scan && landmine install --rules`. That adds the hook and
+So start with `npx landmines scan && npx landmines install --rules`. That adds the hook and
 writes the known-bugs section into AGENTS.md and CLAUDE.md (Claude Code does not read
 AGENTS.md). The hook is a second line of defence. One caveat: the
 benchmark's projects have one indexed dependency, so the 15-item list always fits.
@@ -90,29 +90,39 @@ Transcripts, hook logs and diffs are in [`docs/e2e/`](docs/e2e/README.md).
 
 ## Install
 
-landmine is **not published to npm yet**. The package name is `landmines`, and it
-installs `landmine` and `landmines` commands. Build it from a checkout (Node ≥ 22.12):
+Node ≥ 22.12. The npm package is **`landmines`** (with an s; `landmine` on npm is an
+unrelated package). It installs the `landmine` and `landmines` commands.
 
 ```sh
-npm install
-npm run build
-node /path/to/landmine/dist/cli.js scan       # run inside your project
-node /path/to/landmine/dist/cli.js install
+npx landmines scan                 # find the open issues filed against your exact versions
+npx landmines install --rules      # known-bugs section in AGENTS.md + CLAUDE.md, plus the pre-edit hook
 ```
 
-To try it the way `npx` would run it, pack it first:
+**For a team, add it as a dev dependency:**
 
 ```sh
-npm pack
-npx --package=/path/to/landmine/landmines-0.2.0.tgz landmines scan
+npm i -D landmines
+npx landmines scan && npx landmines install --rules
 ```
 
-This was tested from an empty directory.
+`install` then writes the hook as `npx --no-install landmines hook`. That command works
+for every teammate after `npm ci`, with no absolute paths and no network. Install
+picks the command that matches how you installed:
 
-**Hook command when run through npx.** In that case `landmine install` writes the hook
-command as `npx -y landmines@0.2.0 hook`, which only works once the package is on
-npm. Until then, run `install` from the built checkout (it writes
-`node "/abs/path/dist/cli.js" hook`) or pass `--command`.
+| Installed as | Command it writes |
+|---|---|
+| dev dependency | `npx --no-install landmines hook` |
+| `npx` / `pnpm dlx` / `bunx` | the pinned `npx -y landmines@<version> hook` |
+| global (`npm i -g landmines`) | `landmine hook` |
+| source checkout | absolute paths, with a warning |
+
+Commit `.landmine/index.json` (and `.landmine/cards/`) so teammates and CI share one
+index. `.landmine/.gitignore` keeps the raw cache and the per-machine install registry
+out of git.
+
+**Before the first npm release.** These were tested by installing the packed tarball
+into an empty directory. Until the release, build from a checkout and use
+`node /path/to/landmine/dist/cli.js` in place of `npx landmines`.
 
 **GitHub token.** `scan` needs one, because GitHub search and GraphQL require auth. It
 uses `GITHUB_TOKEN`, then `GH_TOKEN`, then `gh auth token`. A token with no scopes is
@@ -120,18 +130,31 @@ enough for public repositories. The hook never touches the network.
 
 ## Usage
 
+Run each command as `npx landmines <command>` (or plain `landmine <command>` after a
+global install).
+
 | Command | What it does |
 |---|---|
-| `landmine scan [--refresh] [--max-issues 100] [--prod] [--json]` | Reads lockfiles, queries npm/PyPI/GitHub, and writes `.landmine/index.json`. Raw responses are cached for 24 h in `.landmine/cache/`, which is git-ignored, so re-scans are fast. |
-| `landmine install [--harness auto\|all\|<names>] [--mode block\|warn] [--heads-up] [--mcp [agents]] [--rules [files]]` | Adds the hook or plugin for each agent (default `auto`: Claude Code plus every agent whose config directory exists) and leaves your other hooks alone. Running it again is harmless. `--mcp` registers the MCP server in each agent's config; `--rules` writes the known-bugs section into AGENTS.md / CLAUDE.md / GEMINI.md. |
-| `landmine rules [--write <files…>] [--skill] [--max 15]` | Prints, or writes between `<!-- landmine:start/end -->` markers, a short "known open bugs" section any agent reads. `--skill` writes the full list as an Agent Skill in `.agents/skills/landmine/SKILL.md`. |
-| `landmine cards [--provider anthropic\|claude-cli\|openai] [--model id] [--max n]` | Writes a trigger card per indexed issue (cached per issue, version and model). `claude-cli` uses an existing Claude Code login; `openai` takes any OpenAI-compatible endpoint (`OPENAI_BASE_URL`). Re-scans keep the cards of unchanged issues. |
-| `landmine mcp [--root]` | Runs an MCP server over stdio with three tools: `landmine_check` (a file or snippet), `landmine_search` (error text or API name) and `landmine_list`. |
-| `landmine list [package] [--all]` | Shows indexed issues. By default, only the ones the hook can act on. |
-| `landmine check <files…> [--exit-code]` | Treats whole files as just written and reports matches, marked `[blocks: …]` or `[heads-up only]`. |
-| `landmine check --staged [--exit-code]` | Checks only the lines staged for commit, for a pre-commit hook or CI. A backstop for agents with no pre-edit hook, not an interruption. |
-| `landmine uninstall [--harness …]` | Removes landmine's hook entries, plugin files, rules sections and skill only. Installed commands are tracked in `.landmine/installed.json`. |
-| `landmine hook [--harness name] [--format fmt]` | The hook entry point: harness payload on stdin, response on stdout. The payload's shape identifies the agent; `--harness` forces it. Exits 0, except in the `exit2` format, where a block is exit code 2 with the reason on stderr. |
+| `scan [--refresh] [--offline] [--max-issues 100] [--prod] [--json] [-q]` | Reads lockfiles, queries npm, PyPI and GitHub, and writes `.landmine/index.json`.<br>Raw responses are cached for 24 h in `.landmine/cache/`, which is git-ignored. `--offline` re-analyses the cache with no network.<br>If a package can't be fetched (network, rate limit), its issues from the previous scan are kept and the command exits 2. |
+| `install [--harness auto\|all\|<names>] [--mode block\|warn] [--heads-up] [--mcp [agents]] [--rules [files]]` | Adds the hook or plugin for each agent: by default Claude Code plus every agent whose config is in the project.<br>Leaves your other hooks alone, and running it again is harmless. Agents whose config it can't safely edit (for example, a settings file with comments) are skipped with a note.<br>`--mcp` registers the MCP server. `--rules` writes the known-bugs section into AGENTS.md and CLAUDE.md. |
+| `rules [--write <files…>] [--skill] [--max 15] [--rank usage\|confidence]` | Prints, or writes between `<!-- landmine:start/end -->` markers, a short "known open bugs" section any agent reads.<br>Ranked by the APIs your code uses. `--skill` writes the full list as an Agent Skill in `.agents/skills/landmine/SKILL.md`. |
+| `cards [--provider anthropic\|claude-cli\|openai] [--model id] [--max 50] [--all] [--from dir] [--export dir]` | Writes a trigger card per indexed issue, cached per issue, version and model.<br>At most 50 new model calls per run unless you pass `--all`. It prints the count first.<br>`claude-cli` uses an existing Claude Code login. `openai` takes any OpenAI-compatible endpoint (`OPENAI_BASE_URL`). `anthropic` needs `@anthropic-ai/sdk` installed. |
+| `check <files…> [--exit-code [--strict]] [--json]` | Treats whole files as just written and reports matches, marked `[blocks: …]` or `[heads-up only]`. |
+| `check --staged [--exit-code]` | Checks only the lines staged for commit, for a pre-commit hook or CI. A backstop for agents with no pre-edit hook. |
+| `mcp [--root]` | Runs an MCP server over stdio. Its read-only tools are `landmine_check` (a file in the project, or a snippet), `landmine_search` (error text or API name) and `landmine_list`. |
+| `list [package] [--all] [--json]` | Shows indexed issues. By default, only the ones the hook can act on. |
+| `share` | Prints one postable line about this project's scan, plus a README badge. Counts and package names only. |
+| `uninstall [--harness …]` | Removes landmine's hook entries, plugin files, rules sections and skill. It deletes config files and directories it leaves empty, and skips config it never touched. |
+| `hook [--harness name] [--format fmt]` | The hook entry point: harness payload on stdin, response on stdout. The payload's shape identifies the agent; `--harness` forces it. |
+
+**Exit codes:**
+- 0: success.
+- 1: `check --exit-code` found a match that would block an edit. With `--strict`, a
+  heads-up match counts too.
+- 2: an error or a partial result: bad input, a scan that couldn't fetch every
+  package, or cards that failed.
+- The hook always exits 0 (it fails open), except in the `exit2` format, where a block is
+  exit code 2 with the reason on stderr.
 
 Re-run `scan` after you change dependencies. The hook only reads the index.
 
@@ -242,8 +265,8 @@ keys, patch formats). The response is written in each agent's own deny format.
 | OpenHands | `.openhands/hooks.json` | yes | payloads from docs |
 | Trae | `.trae/hooks.json` | yes | payloads from docs |
 | Antigravity | `.agents/hooks.json` | yes | payloads from docs |
-| OpenCode | plugin, `.opencode/plugins/landmine.ts` | yes (throws) | plugin executed in tests against a stub host; a live run here failed on the model provider's balance, not on landmine |
-| Kilo Code | plugin, `.kilo/plugin/landmine.ts` | yes (throws) | as OpenCode |
+| OpenCode | plugin, `.opencode/plugins/landmine.ts` (V1 `server` + V2 `setup`) | yes (throws) | **loaded live** in OpenCode 1.18.33: the host calls the plugin's hook factory. A blocked edit was not run live (the model provider had no balance) |
+| Kilo Code | plugin, `.kilo/plugin/landmine.ts` (same file shape as OpenCode) | yes (throws) | built from Kilo's docs; executed in tests against a stub host |
 | Cline | plugin `.cline/plugins/landmine.ts` (skips the call) + `PreToolUse` file hook (context only) | plugin: yes | plugin executed in tests against a stub host |
 | Amp | plugin, `.amp/plugins/landmine.ts` | yes (`reject-and-continue`) | plugin executed in tests against a stub host |
 | Pi | extension, `.pi/extensions/landmine.ts` | yes | extension executed in tests against a stub host |
@@ -385,6 +408,11 @@ exactly why it thinks the bug applies, and the agent can simply retry.
 - **Only GitHub-hosted packages.** `@types/*` packages are skipped because their
   versions mirror the runtime's. Packages whose issues live elsewhere (Django) are
   reported as not searched.
+- **Windows has not been run live.** The CI matrix includes Windows. Install writes
+  `cmd /c` MCP commands and skips Cline's shell-script hook there, but no agent has
+  been run with landmine on Windows yet.
+- **The MCP server only reads.** Its tools declare `readOnlyHint`, and
+  `landmine_check` refuses files outside the project.
 - **Some edits are invisible.** Edits made through shell commands (`sed -i`,
   `cat > file`) don't pass through any harness's edit hook. Notebooks are not checked.
 - **Workaround picking is heuristic.** It needs a phrase that claims a fix. A reply with
@@ -402,9 +430,12 @@ exactly why it thinks the bug applies, and the agent can simply retry.
 
 ## Security and privacy
 
-- **Untrusted quotes.** Workarounds are strangers' text, which makes them a
-  prompt-injection channel.
-  - Every quote is framed to the model as untrusted.
+- **Untrusted quotes.** Issue titles, quotes, workarounds and trigger-card summaries are
+  strangers' text (or a model's summary of it), which makes them a prompt-injection
+  channel.
+  - Everything taken from an issue reaches the agent inside one delimited block that
+    is labelled untrusted. landmine's own words stay outside it, and look-alike
+    delimiters inside issue text are neutralized.
   - HTML and quoted replies are stripped, and length is capped.
   - Quotes are flagged when they pipe a download into a shell, install a different
     package, or link to unfamiliar hosts.

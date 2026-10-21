@@ -11,10 +11,25 @@ export interface RepoResolution {
   detail?: string;
 }
 
-async function getJson(http: Http, url: string): Promise<{ status: number; json?: unknown }> {
-  const res = await http.fetch(url, { headers: { Accept: 'application/json', 'User-Agent': USER_AGENT } });
-  if (!res.ok) return { status: res.status };
-  return { status: res.status, json: (await res.json()) };
+/** Backoff between registry retries; tests set it to 0. */
+export const registryRetry = { baseDelayMs: 500 };
+
+/** GET JSON from a registry, retrying network errors, 429 and 5xx with backoff (registries blip under load). */
+async function getJson(http: Http, url: string, attempts = 3): Promise<{ status: number; json?: unknown }> {
+  for (let attempt = 0; ; attempt++) {
+    try {
+      const res = await http.fetch(url, { headers: { Accept: 'application/json', 'User-Agent': USER_AGENT } });
+      if ((res.status === 429 || res.status >= 500) && attempt < attempts - 1) {
+        await new Promise((r) => setTimeout(r, registryRetry.baseDelayMs * 2 ** attempt));
+        continue;
+      }
+      if (!res.ok) return { status: res.status };
+      return { status: res.status, json: await res.json() };
+    } catch (err) {
+      if (attempt >= attempts - 1) throw err;
+      await new Promise((r) => setTimeout(r, registryRetry.baseDelayMs * 2 ** attempt));
+    }
+  }
 }
 
 function obj(v: unknown): Record<string, unknown> {

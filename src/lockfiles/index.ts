@@ -66,6 +66,15 @@ export interface ReadResult {
 }
 
 /** Read every supported lockfile at `root` and return exact direct dependency versions. */
+/** Run a lockfile parser, naming the file when it fails (a merge-conflicted lockfile otherwise says only "Unexpected token"). */
+function parsing<T>(file: string, fn: () => T): T {
+  try {
+    return fn();
+  } catch (err) {
+    throw new Error(`could not parse ${file}: ${(err as Error).message}`, { cause: err });
+  }
+}
+
 export function readDependencies(root: string, opts: { prod?: boolean } = {}): ReadResult {
   const results: LockfileResult[] = [];
   const lockfiles: string[] = [];
@@ -76,23 +85,30 @@ export function readDependencies(root: string, opts: { prod?: boolean } = {}): R
     lockfiles.push(npmLock);
     const text = readText(join(root, npmLock)) ?? '';
     const pkg = readPackageJson(root);
-    if (npmLock === 'pnpm-lock.yaml') results.push(parsePnpmLock(text, npmLock));
-    else if (npmLock === 'yarn.lock') results.push(parseYarnLock(text, root, pkg, npmLock));
-    else if (npmLock === 'bun.lock') results.push(parseBunLock(text, npmLock));
-    else results.push(parseNpmLock(text, pkg, npmLock));
+    results.push(
+      parsing(npmLock, () =>
+        npmLock === 'pnpm-lock.yaml'
+          ? parsePnpmLock(text, npmLock)
+          : npmLock === 'yarn.lock'
+            ? parseYarnLock(text, root, pkg, npmLock)
+            : npmLock === 'bun.lock'
+              ? parseBunLock(text, npmLock)
+              : parseNpmLock(text, pkg, npmLock),
+      ),
+    );
   } else if (existsSync(join(root, 'bun.lockb'))) {
     notes.push('bun.lockb (binary) is not supported. Run `bun install --save-text-lockfile` to write bun.lock.');
   }
 
   const pyLock = PY_LOCKS.find((f) => existsSync(join(root, f)));
-  if (pyLock === 'uv.lock') results.push(parseUvLock(join(root, pyLock), pyLock));
-  else if (pyLock === 'poetry.lock') results.push(parsePoetryLock(join(root, pyLock), join(root, 'pyproject.toml'), pyLock));
-  else if (pyLock === 'Pipfile.lock') results.push(parsePipfileLock(join(root, pyLock), join(root, 'Pipfile'), pyLock));
+  if (pyLock === 'uv.lock') results.push(parsing(pyLock, () => parseUvLock(join(root, pyLock), pyLock)));
+  else if (pyLock === 'poetry.lock') results.push(parsing(pyLock, () => parsePoetryLock(join(root, pyLock), join(root, 'pyproject.toml'), pyLock)));
+  else if (pyLock === 'Pipfile.lock') results.push(parsing(pyLock, () => parsePipfileLock(join(root, pyLock), join(root, 'Pipfile'), pyLock)));
   if (pyLock) lockfiles.push(pyLock);
   else {
     for (const req of requirementFiles(root)) {
       lockfiles.push(req);
-      results.push(parseRequirements(join(root, req), root, req));
+      results.push(parsing(req, () => parseRequirements(join(root, req), root, req)));
     }
   }
 
