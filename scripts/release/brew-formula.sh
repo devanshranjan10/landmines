@@ -10,7 +10,7 @@ url="https://registry.npmjs.org/landmines/-/landmines-${version}.tgz"
 sha="$(curl -fsSL "$url" | shasum -a 256 | cut -d' ' -f1)"
 cat <<RUBY
 class Landmines < Formula
-  desc "Known open bugs in your exact dependency versions, where your coding agent reads them"
+  desc "Known open bugs in your pinned dependency versions, for coding agents"
   homepage "https://github.com/devanshranjan10/landmines"
   url "${url}"
   sha256 "${sha}"

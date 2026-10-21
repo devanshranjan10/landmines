@@ -169,17 +169,25 @@ Every confirmed defect was fixed with a regression test (CHANGELOG 0.2.0 "Fixed"
 - A release workflow (tagged publish with provenance).
 - CHANGELOG, SECURITY and CONTRIBUTING.
 
-**Still needs you before production:**
-1. **Create the public GitHub repo.** Then:
-   - add `repository`, `homepage` and `bugs` to package.json (npm provenance needs a
-     matching `repository`);
-   - replace `devanshranjan10` and `<owner>` placeholders;
-   - add the `NPM_TOKEN` secret, or set up npm trusted publishing.
-2. **Publish `landmines` to npm soon.** The name is free today, and every
-   npx-installed hook runs `npx -y landmines@<version>`, so a squatter could take it.
-   Tag `v0.2.0`, or run `npm login && npm publish`.
-3. **Delete the README's "Before the first npm release" paragraph** after publishing.
-4. **Watch the first CI run on Windows.** Nothing has been run live there.
+**Released 2026-10-21:**
+- **npm:** [`landmines@0.2.0`](https://www.npmjs.com/package/landmines). Verified with
+  `npx landmines` from the public registry on clean Linux and on macOS, including a
+  live scan.
+- **GitHub:** the public repo
+  [devanshranjan10/landmines](https://github.com/devanshranjan10/landmines). The old
+  `…/landmine` URL redirects.
+- **Homebrew:** `brew install devanshranjan10/tap/landmines`, or the alias `…/landmine`.
+  The public tap is
+  [devanshranjan10/homebrew-tap](https://github.com/devanshranjan10/homebrew-tap).
+  Install, `brew test` and `brew audit --strict --online` all pass on macOS arm64.
+
+**Still open:**
+- The first CI run on Windows.
+- npm provenance for future releases. Add an `NPM_TOKEN` secret, or set up trusted
+  publishing, and push a tag.
+- Each release needs the formula regenerated with
+  `scripts/release/brew-formula.sh <version> > ../homebrew-tap/Formula/landmines.rb`.
+- `landmine` (no s) on npm belongs to someone else. It has had one 0.0.1 release.
 
 ## Launch readiness (not launched)
 

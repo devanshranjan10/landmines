@@ -90,8 +90,9 @@ Transcripts, hook logs and diffs are in [`docs/e2e/`](docs/e2e/README.md).
 
 ## Install
 
-Node ≥ 22.12. The npm package is **`landmines`** (with an s; `landmine` on npm is an
-unrelated package). It installs the `landmine` and `landmines` commands.
+Node ≥ 22.12. The npm package is [**`landmines`**](https://www.npmjs.com/package/landmines)
+(with an s; `landmine` on npm is an unrelated package). It installs the `landmine` and
+`landmines` commands.
 
 ```sh
 npx landmines scan                 # find the open issues filed against your exact versions
@@ -120,9 +121,12 @@ Commit `.landmine/index.json` (and `.landmine/cards/`) so teammates and CI share
 index. `.landmine/.gitignore` keeps the raw cache and the per-machine install registry
 out of git.
 
-**Before the first npm release.** These were tested by installing the packed tarball
-into an empty directory. Until the release, build from a checkout and use
-`node /path/to/landmine/dist/cli.js` in place of `npx landmines`.
+**Other ways to install:**
+
+```sh
+npm i -g landmines                              # global: `landmine` and `landmines` on PATH
+brew install devanshranjan10/tap/landmines      # Homebrew (also: devanshranjan10/tap/landmine)
+```
 
 **GitHub token.** `scan` needs one, because GitHub search and GraphQL require auth. It
 uses `GITHUB_TOKEN`, then `GH_TOKEN`, then `gh auth token`. A token with no scopes is

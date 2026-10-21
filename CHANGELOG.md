@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.2.0 (unreleased)
+## 0.2.0 (2026-10-21)
 
 **Headline.** A known-bugs section in the agent's instructions measurably helps.
 Claude Sonnet 5.5 went from 86% to 99% on landmine-bench's held-out tasks; see
