@@ -169,7 +169,9 @@ describe('install for every agent', () => {
     expect(read('crush.json')).toEqual({ hooks: { PreToolUse: [{ name: 'landmine', matcher: '^(edit|multiedit|write)$', command: `${CMD} --harness crush`, timeout: 10 }] } });
     expect(readFileSync(join(dir, '.opencode/plugins/landmine.ts'), 'utf8')).toContain('"tool.execute.before"');
     expect(readFileSync(join(dir, '.kilo/plugin/landmine.ts'), 'utf8')).toContain('--harness kilo --format plugin');
-    expect(statSync(join(dir, '.clinerules/hooks/PreToolUse')).mode & 0o111).not.toBe(0);
+    // The Cline file hook is a shell script, written on POSIX only.
+    if (process.platform !== 'win32') expect(statSync(join(dir, '.clinerules/hooks/PreToolUse')).mode & 0o111).not.toBe(0);
+    else expect(existsSync(join(dir, '.clinerules/hooks/PreToolUse'))).toBe(false);
     for (const h of HARNESSES) uninstall(dir, h);
     expect(read('.factory/hooks.json')).toEqual({ PostToolUse: [{ matcher: 'Edit', hooks: [{ type: 'command', command: 'fmt.sh' }] }] });
     // Nothing left behind: no emptied config stubs (a project hooks file can shadow the user's global one) and no
@@ -263,7 +265,7 @@ describe('generated plugins run (OpenCode V1 calling convention, Cline plugin, P
     });
   });
 
-  it('the Cline hook script runs and prints context', () => {
+  it.skipIf(process.platform === 'win32')('the Cline hook script runs and prints context (POSIX shell)', () => {
     const dir = mkdtempSync(join(tmpdir(), 'lm-cline-'));
     install(dir, 'cline', nodeCmd);
     const out = execFileSync(join(dir, '.clinerules/hooks/PreToolUse'), { input: JSON.stringify(PAYLOADS.cline()), encoding: 'utf8', env: { ...process.env, LANDMINE_STATE_DIR: mkdtempSync(join(tmpdir(), 'lm-state-')) } });

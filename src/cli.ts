@@ -37,6 +37,19 @@ function httpFromEnv(env: NodeJS.ProcessEnv): { http: Http; replay: boolean } {
   return { http: liveHttp, replay: false };
 }
 
+/** A path relative to the working directory, comparing real paths (Windows can mix 8.3 short and long names). */
+function displayPath(path: string): string {
+  const real = (p: string): string => {
+    try {
+      return realpathSync.native(p);
+    } catch {
+      return p;
+    }
+  };
+  const rel = relative(real(process.cwd()), real(path));
+  return rel && !rel.startsWith('..') ? rel.split('\\').join('/') : path;
+}
+
 /** Default cap on new model calls per `landmine cards` run, so a big monorepo never runs up a surprise bill. */
 const CARDS_DEFAULT_MAX = 50;
 
@@ -150,7 +163,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
           if (!lang) continue;
           const index = loadIndex(opts.root ?? dirname(f.path));
           const found = touches({ fileText: f.fileText, changedText: f.changedText, lang });
-          results.push({ file: relative(process.cwd(), f.path) || f.path, hits: matchTouches(found, index, lang, fileContext(f.fileText, lang, f.changedText)) });
+          results.push({ file: displayPath(f.path), hits: matchTouches(found, index, lang, fileContext(f.fileText, lang, f.changedText)) });
         }
       } else if (files.length === 0) {
         throw new CliError('Name the files to check, or pass --staged.');

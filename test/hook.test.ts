@@ -269,9 +269,12 @@ describe('install / uninstall', () => {
   });
 });
 
+/** A path as it appears inside a JSON string (Windows backslashes escaped). */
+const jsonPath = (p: string): string => JSON.stringify(p).slice(1, -1);
+
 describe('captured Claude Code payloads (live session in examples/demo, docs/e2e)', () => {
   const load = (name: string, projectRoot: string): string =>
-    readFileSync(new URL(`./fixtures/payloads/${name}`, import.meta.url), 'utf8').split('${ROOT}').join(projectRoot).split('${HOME}').join(tmpdir());
+    readFileSync(new URL(`./fixtures/payloads/${name}`, import.meta.url), 'utf8').split('${ROOT}').join(jsonPath(projectRoot)).split('${HOME}').join(jsonPath(tmpdir()));
 
   it('denies the real first edit (db.$client.end) and stays silent on the real retry', () => {
     mkdirSync(join(root, 'src'), { recursive: true });
@@ -286,7 +289,7 @@ describe('captured Claude Code payloads (live session in examples/demo, docs/e2e
 
 describe('captured Codex CLI payloads (live codex exec session, docs/e2e)', () => {
   const load = (name: string, projectRoot: string): string =>
-    readFileSync(new URL(`./fixtures/payloads/${name}`, import.meta.url), 'utf8').split('${ROOT}').join(projectRoot).split('${HOME}').join(tmpdir());
+    readFileSync(new URL(`./fixtures/payloads/${name}`, import.meta.url), 'utf8').split('${ROOT}').join(jsonPath(projectRoot)).split('${HOME}').join(jsonPath(tmpdir()));
 
   it('denies the real apply_patch that adds db.$client.end() and allows the owned-pool retry', () => {
     mkdirSync(join(root, 'src'), { recursive: true });
@@ -311,7 +314,7 @@ describe('install --mcp', () => {
     expect(JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))).toEqual({
       mcpServers: { other: { type: 'stdio', command: 'x' }, landmine: { type: 'stdio', command: '/nonexistent/node', args: ['/opt/landmine/dist/cli.js', 'mcp'] } },
     });
-    expect(mcpCommand({ execPath: 'n', script: '/u/.npm/_npx/1/node_modules/landmines/dist/cli.js', version: '0.1.0' })).toEqual({ command: 'npx', args: ['-y', 'landmines@0.1.0', 'mcp'] });
+    expect(mcpCommand({ execPath: 'n', script: '/u/.npm/_npx/1/node_modules/landmines/dist/cli.js', version: '0.1.0', platform: 'linux' })).toEqual({ command: 'npx', args: ['-y', 'landmines@0.1.0', 'mcp'] });
   });
 });
 
@@ -420,7 +423,7 @@ describe('portable install commands', () => {
     const base = { execPath: '/usr/bin/node', version: '0.2.0', pathEnv: '' };
     // A dev dependency of the project: works for every teammate after `npm ci`, no absolute paths.
     expect(hookCommand({ ...base, root: '/repo', script: '/repo/node_modules/landmines/dist/cli.js', mode: 'block' })).toBe('npx --no-install landmines hook');
-    expect(mcpCommand({ ...base, root: '/repo', script: '/repo/node_modules/landmines/dist/cli.js' })).toEqual({ command: 'npx', args: ['--no-install', 'landmines', 'mcp'] });
+    expect(mcpCommand({ ...base, root: '/repo', script: '/repo/node_modules/landmines/dist/cli.js', platform: 'linux' })).toEqual({ command: 'npx', args: ['--no-install', 'landmines', 'mcp'] });
     // Throwaway caches of npx, pnpm dlx and bunx: the pinned npx form.
     for (const script of ['/h/.npm/_npx/ab/node_modules/landmines/dist/cli.js', '/h/.cache/pnpm/dlx/x/node_modules/landmines/dist/cli.js', '/tmp/bunx-501-landmines/node_modules/landmines/dist/cli.js']) {
       expect(launcher({ ...base, root: '/repo', script }).kind).toBe('npx');
