@@ -86,8 +86,8 @@ posted.
   - Simulated with a real 46-dependency project's issues mixed in: confidence ranking
     lost the whole gain, while usage ranking kept it, but that simulation flatters
     usage ranking.
-  - In three real repos, issues whose API the code already uses numbered 9, 20 and 4,
-    so the list mostly fits.
+  - In three fully carded real repos, issues whose API the code already uses numbered
+    14, 26 and 4, so the list fits in two of them.
   - When the agent introduces an API the code doesn't use yet, the list can miss it.
 - **Selection bias.** Every trap is a bug landmine had already indexed. Recall is still
   not measured.
@@ -149,6 +149,6 @@ posted.
 
 Nothing blocking.
 - Cursor live runs need `cursor-agent` logged in.
-- The default Claude login hit its session limit at the end of the night (it resets at
-  6:10 pm IST). All benchmark runs had already finished cleanly; only the extra
-  real-repo carding was cut short, and its partial state is stated.
+- The default Claude login hit its session limit at the end of the night. All
+  benchmark runs had already finished cleanly, and the cut-off real-repo carding was
+  finished later on a second account.

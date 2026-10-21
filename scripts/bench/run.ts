@@ -187,6 +187,13 @@ function runCodex(task: Task, dir: string, transcript: string, hookLog: string):
   });
 }
 
+/** The session failed before the agent worked on the task: no cost or tokens at all, or an error result. */
+function agentErrored(o: AgentOutcome): boolean {
+  if (o.timedOut) return false;
+  if (values.agent === 'codex') return !o.tokens;
+  return !o.costUsd || /hit your (session|usage) limit|rate limit|overloaded|API Error/i.test(o.resultText ?? '');
+}
+
 function hookEvents(path: string): Array<{ decision: string; hits: Array<{ id: string }> }> {
   if (!existsSync(path)) return [];
   return readFileSync(path, 'utf8')
@@ -201,13 +208,27 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
   rmSync(base, { recursive: true, force: true });
   mkdirSync(base, { recursive: true });
   const sandbox = join(SANDBOX, key);
-  rmSync(sandbox, { recursive: true, force: true });
-  mkdirSync(sandbox, { recursive: true });
-  const dir = materialize(task, sandbox);
-  prepareArm(task, dir, arm, values.agent === 'codex' ? 'AGENTS.md' : 'CLAUDE.md');
   const hookLog = join(base, 'hook.jsonl');
   const transcript = join(base, 'transcript.jsonl');
-  const outcome = values.agent === 'codex' ? await runCodex(task, dir, transcript, hookLog) : await runClaude(task, dir, arm, transcript, hookLog);
+  // An agent session that never reached the model (rate or usage limit, API error) says nothing about the task:
+  // start it again from a fresh copy, with backoff, and if it still fails mark it so analysis can drop it.
+  let dir = '';
+  let outcome: AgentOutcome | undefined;
+  let attempts = 0;
+  for (; attempts < 4; attempts++) {
+    if (attempts > 0) {
+      console.log(`RETRY ${key} (attempt ${attempts + 1}): the agent session errored before doing the task`);
+      await new Promise((r) => setTimeout(r, attempts * 120_000));
+    }
+    rmSync(sandbox, { recursive: true, force: true });
+    rmSync(hookLog, { force: true });
+    mkdirSync(sandbox, { recursive: true });
+    dir = materialize(task, sandbox);
+    prepareArm(task, dir, arm, values.agent === 'codex' ? 'AGENTS.md' : 'CLAUDE.md');
+    outcome = values.agent === 'codex' ? await runCodex(task, dir, transcript, hookLog) : await runClaude(task, dir, arm, transcript, hookLog);
+    if (!agentErrored(outcome)) break;
+  }
+  if (!outcome) throw new Error('no attempt ran');
   const hidden = runHidden(task, dir);
   const events = hookEvents(hookLog);
   const issueNo = task.issue.split('#')[1] ?? '';
@@ -235,6 +256,8 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     durationMs: outcome.durationMs,
     agentExit: outcome.exitCode,
     timedOut: outcome.timedOut,
+    attempts: Math.min(attempts + 1, 4),
+    ...(agentErrored(outcome) ? { agentError: true } : {}),
     hiddenOutput: hidden.pass ? undefined : hidden.output.slice(-800),
     finishedAt: new Date().toISOString(),
   };

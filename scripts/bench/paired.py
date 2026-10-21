@@ -7,6 +7,7 @@ res = {}
 for f in files:
     for l in open(f):
         r = json.loads(l)
+        if r.get('agentError') or 'error' in r: continue  # not a result: the session never reached the model
         # Pair on the configuration, not the file, so arms from separate runs of the same setup line up.
         cfg = (r.get('model'), r.get('condition', 'exec'), r.get('prompt', 'spec'))
         res[(cfg, r['task'], r['seed'], r['arm'])] = r['pass']

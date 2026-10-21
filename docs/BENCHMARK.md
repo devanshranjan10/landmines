@@ -179,21 +179,20 @@ mixed with the real project's 254 carded issues. Seeds 1–2, paired with run A:
   imported by the task project, so usage ranking pushes them all down.
 
 **How much competition there is in real repos** (`scripts/bench/real-usage.ts`). Three
-public repos were cloned, scanned and carded:
-- Cards are partial, because the Claude login hit its session limit mid-run.
-- Uncarded issues use the heuristic arming.
+public repos were cloned, scanned and fully carded:
 
 | Repo | Packages | Armed issues | API already used (usage 2) | Package imported, API not used (usage 1) |
 |---|---|---|---|---|
-| expense.fyi (Next.js app) | 61 | 52 | 9 | 8 |
-| page-spy-web (web app) | 77 | 117 | 20 | 71 |
+| expense.fyi (Next.js app) | 61 | 48 | 14 | 6 |
+| page-spy-web (web app) | 77 | 87 | 26 | 48 |
 | zpy (Python) | 7 | 23 | 4 | 16 |
 
 **Realistic reading.**
-- When the bug's API is already used somewhere in the codebase, the 15-item list will
-  usually contain it. That was true for the seed projects of 11/21 test tasks.
+- When the bug's API is already used somewhere in the codebase, the 15-item list
+  contains it in smaller repos (expense.fyi, zpy). That was true for the seed projects of 11/21 test tasks.
+- In larger repos even the usage-2 group can overflow 15 items: page-spy-web has 26.
 - When the agent reaches for an API from an imported package that the code doesn't
-  use yet, a large repo can crowd it out: page-spy-web has 71 such issues.
+  use yet, a large repo can crowd it out: page-spy-web has 48 such issues.
 - `--skill` (60 items) and `landmine_search` over MCP are the fallbacks.
 
 ## Offline tracks (no agent)

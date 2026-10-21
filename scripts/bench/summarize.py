@@ -6,7 +6,8 @@ excl = set()
 if '--exclude' in sys.argv: excl = set(sys.argv[sys.argv.index('--exclude') + 1].split(','))
 args = [a for a in args if not set(a.split(',')) <= excl]
 rows = [json.loads(l) for f in args for l in open(f) if l.strip()]
-rows = [r for r in rows if r['task'] not in excl]
+# Sessions that never reached the model (agentError) or crashed in the harness (error) are not results.
+rows = [r for r in rows if r['task'] not in excl and not r.get('agentError') and 'error' not in r]
 by = collections.defaultdict(list)
 for r in rows: by[(r.get('model'), r.get('condition', 'exec'), r.get('prompt', 'spec'), r['arm'])].append(r)
 for k in sorted(by):

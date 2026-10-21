@@ -300,9 +300,10 @@ user would ask, 4 seeds:
   - `landmine rules` therefore ranks issues whose APIs your code already uses first.
   - Mixing a real project's issues into the bench: confidence ranking fell back to the
     unaided level (35/42 against 36/42), while usage ranking kept the gain (42/42).
-  - That simulation flatters usage ranking. In real repos the list is reliable when
-    the bug's API is already used in the codebase. It can miss when the agent
-    introduces an API the code doesn't use yet (docs/BENCHMARK.md).
+  - That simulation flatters usage ranking. In three real repos, issues whose API the
+    code already uses numbered 4, 14 and 26, so the 15-item list holds all of them in
+    the two smaller repos. It can miss bugs in the largest repo, or bugs in an API the
+    code doesn't use yet (docs/BENCHMARK.md).
 - **Prompt wording.** The terse prompts were added after seeing that fully specified
   prompts leave unaided agents nothing to trip on (D-40). Results with spec prompts
   are reported too, and rules still came first.
