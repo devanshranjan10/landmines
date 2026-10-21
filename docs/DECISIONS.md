@@ -361,3 +361,25 @@ changed.
   1–2 are not pooled into the confirmatory test.
 - `rules+cards` was added after seeing run A, so any claim about it rests on seeds
   3–4 only.
+
+**D-43: The rules section in a realistic project, recorded before running.**
+- **The problem.** In the bench, the rules section lists only the task package's
+  issues. A real project has many more. eval/fresh-a has 46 dependencies and 173
+  issues armed by cards.
+- **Offline check** (`scripts/bench/rules-inclusion.ts`). Each task's issues were
+  merged with fresh-a's (the task's own package removed from the noise). Ranked by
+  card confidence, the target issue makes the top 15 for **2/21** fresh-test tasks
+  and the top 60 for 12/21. So the bench's rules result overstates what a 15-item
+  section does in a big project.
+- **Response: usage ranking.** `landmine rules` now ranks by what the project's code
+  uses:
+  - an issue whose API appears in a file importing its package ranks first;
+  - then issues in imported packages.
+- **Two new arms, to bracket the real effect.** Both use the merged index and seeds 1–2
+  on fresh-test, paired with run A's `none` and `rules`.
+  - **`rules-noisy-conf`** (confidence ranking): the pessimistic bound.
+  - **`rules-noisy`** (usage ranking): the optimistic bound. The noise packages are not
+    imported by the task project, so the simulation flatters usage ranking.
+- **Prediction, recorded before running:** `rules-noisy-conf` loses most of the rules
+  advantage.
+- The noise index is frozen in `bench/fixtures/noise-fresh-a.json`.

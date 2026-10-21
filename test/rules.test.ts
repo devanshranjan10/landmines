@@ -6,6 +6,7 @@ import { promisify } from 'node:util';
 import { describe, expect, it } from 'vitest';
 import { RULES_END, RULES_START, SKILL_PATH, mergeRules, renderRules, renderSkill, rulesLandmines, stripRules } from '../src/rules.js';
 import type { Landmine, LandmineIndex, TriggerCard } from '../src/types.js';
+import { projectUsage } from '../src/usage.js';
 
 const run = promisify(execFile);
 const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
@@ -119,5 +120,27 @@ describe('rules section', () => {
     mkdirSync(join(root, '.agents', 'skills', 'landmine'), { recursive: true });
     writeFileSync(join(root, SKILL_PATH), 'mine');
     await expect(run(process.execPath, [CLI, 'rules', '-r', root, '--skill'])).rejects.toThrow(/not written by landmine/);
+  });
+
+  it('ranks issues by how close the project code is to them', () => {
+    const root = mkdtempSync(join(tmpdir(), 'lm-usage-'));
+    mkdirSync(join(root, 'src'));
+    mkdirSync(join(root, 'node_modules', 'dayjs'), { recursive: true });
+    writeFileSync(join(root, 'src', 'a.ts'), "import dayjs from 'dayjs';\nexport const f = (d) => dayjs(d).add(1, 'day');\n");
+    writeFileSync(join(root, 'node_modules', 'dayjs', 'x.js'), "import zod from 'zod'; zod.object();\n");
+    const ls = [
+      landmine(1, { card: card({ apis: ['tz'], confidence: 1 }) }),
+      landmine(2, { card: card({ apis: ['add'], confidence: 0.6 }) }),
+      landmine(3, { package: 'zod', id: 'colinhacks/zod#3', card: card({ apis: ['object'], confidence: 1 }) }),
+    ];
+    const idx = { ...index(ls), packages: [] };
+    const usage = projectUsage(root, idx);
+    expect([...usage.entries()]).toEqual([
+      ['iamkun/dayjs#1@1.11.13', 1],
+      ['iamkun/dayjs#2@1.11.13', 2],
+      ['colinhacks/zod#3@1.11.13', 0],
+    ]);
+    expect(rulesLandmines(idx, 15, usage).map((l) => l.issue.number)).toEqual([2, 1, 3]);
+    expect(rulesLandmines(idx, 15).map((l) => l.issue.number)).toEqual([3, 1, 2]); // confidence, then reactions
   });
 });

@@ -12,6 +12,7 @@ import { MCP_TARGETS, type McpTarget, hookCommand, install, installMcp, mcpComma
 import { defaultRulesFiles, detectAgents } from './agents.js';
 import { checkFile, fileContext, matchTouches } from './match.js';
 import { type StagedFile, stagedFiles } from './staged.js';
+import { projectUsage } from './usage.js';
 import { langForPath } from './source/lang.js';
 import { touches } from './source/touches.js';
 import { PROVIDERS, type ProviderName, provider } from './llm.js';
@@ -217,7 +218,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       if (opts.rules) {
         if (!index) throw new CliError('No .landmine/index.json yet: run `landmine scan` before `install --rules`.');
         const files = opts.rules === true ? defaultRulesFiles(root) : opts.rules.split(',').map((x) => x.trim()).filter(Boolean);
-        const section = renderRules(index);
+        const section = renderRules(index, undefined, projectUsage(root, index));
         for (const f of files) process.stdout.write(`Rules ${writeRules(resolve(root, f), section)}: ${f}\n`);
       }
       if (!index) process.stdout.write('  No index yet. Run `landmine scan` so the hook has something to match.\n');
@@ -260,16 +261,20 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest directory with a lockfile)')
     .option('-w, --write <files...>', `markdown files to update between landmine markers (e.g. ${RULES_TARGETS.join(' ')})`)
     .option('--skill', `also write the full list as an Agent Skill (${SKILL_PATH})`)
+    .option('--rank <how>', 'usage: issues whose APIs your code uses first (default); confidence: card confidence only', 'usage')
     .option('--max <n>', 'most issues to list', positiveInt, DEFAULT_MAX_RULES)
-    .action((opts: { root?: string; write?: string[]; max: number; skill?: boolean }) => {
+    .action((opts: { root?: string; write?: string[]; max: number; skill?: boolean; rank: string }) => {
+      if (opts.rank !== 'usage' && opts.rank !== 'confidence') throw new CliError('--rank must be usage or confidence');
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
       const index = loadIndex(root);
-      const section = renderRules(index, opts.max);
+      // Rank by what this project's code uses, so the short list goes to the issues it is closest to.
+      const usage = opts.rank === 'usage' ? projectUsage(root, index) : undefined;
+      const section = renderRules(index, opts.max, usage);
       if (opts.skill) {
         const path = join(root, SKILL_PATH);
         const before = existsSync(path) ? readFileSync(path, 'utf8') : undefined;
         if (before !== undefined && !before.includes('landmine-managed')) throw new CliError(`${SKILL_PATH} exists and was not written by landmine; not overwriting it.`);
-        const after = renderSkill(index);
+        const after = renderSkill(index, undefined, usage);
         mkdirSync(dirname(path), { recursive: true });
         if (before !== after) writeFileSync(path, after);
         process.stdout.write(`${before === undefined ? 'created' : before === after ? 'unchanged' : 'updated'}: ${SKILL_PATH}\n`);

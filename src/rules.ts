@@ -19,12 +19,20 @@ function ticks(name: string): string {
   return `\`${name.replace(/`/g, '')}\``;
 }
 
-/** Landmines worth a standing instruction: armed, a bug per the card if there is one, best first. */
-export function rulesLandmines(index: LandmineIndex, max = DEFAULT_MAX_RULES): Landmine[] {
+/** How close the project's code is to each issue (see usage.ts), keyed `id@version`. */
+export type Usage = Map<string, 0 | 1 | 2>;
+
+/**
+ * Landmines worth a standing instruction: armed, a bug per the card if there is one, best first. With `usage`, issues
+ * whose API the project's code already uses come first, then issues in packages it imports.
+ */
+export function rulesLandmines(index: LandmineIndex, max = DEFAULT_MAX_RULES, usage?: Usage): Landmine[] {
+  const near = (l: Landmine): number => usage?.get(`${l.id}@${l.version}`) ?? 0;
   return index.landmines
     .filter((l) => isArmed(l))
     .sort(
       (a, b) =>
+        near(b) - near(a) ||
         (b.card?.confidence ?? 0) - (a.card?.confidence ?? 0) ||
         STRENGTH[b.evidence.strength] - STRENGTH[a.evidence.strength] ||
         Number(Boolean(b.workaround)) - Number(Boolean(a.workaround)) ||
@@ -44,8 +52,8 @@ function entry(l: Landmine): string {
 }
 
 /** The marker-delimited section `landmine rules` writes into AGENTS.md / CLAUDE.md / GEMINI.md. */
-export function renderRules(index: LandmineIndex, max = DEFAULT_MAX_RULES): string {
-  const picked = rulesLandmines(index, max);
+export function renderRules(index: LandmineIndex, max = DEFAULT_MAX_RULES, usage?: Usage): string {
+  const picked = rulesLandmines(index, max, usage);
   const total = index.landmines.filter((l) => isArmed(l)).length;
   const head = [
     RULES_START,
@@ -68,13 +76,13 @@ export const SKILL_MAX = 60;
  * The same list as an Agent Skill: frontmatter the agent sees up front (name, a description naming the packages), and
  * the full list loaded only when the agent opens it. Owned by landmine: the whole file is regenerated.
  */
-export function renderSkill(index: LandmineIndex, max = SKILL_MAX): string {
-  const picked = rulesLandmines(index, max);
+export function renderSkill(index: LandmineIndex, max = SKILL_MAX, usage?: Usage): string {
+  const picked = rulesLandmines(index, max, usage);
   const pkgs = [...new Set(picked.map((l) => `${l.package}@${l.version}`))];
   const description = picked.length
     ? oneLine(`Known open upstream bugs in the exact dependency versions this project pins (${pkgs.join(', ')}). Read before writing or changing code that calls these packages.`, 1000)
     : 'Known open upstream bugs in the exact dependency versions this project pins. None tied to specific APIs right now.';
-  const body = renderRules(index, max)
+  const body = renderRules(index, max, usage)
     .split('\n')
     .filter((line) => line !== RULES_START && line !== RULES_END)
     .join('\n')
