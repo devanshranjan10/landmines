@@ -133,6 +133,11 @@ npm i -g landmines                              # global: `landmine` and `landmi
 brew install devanshranjan10/tap/landmines      # Homebrew (also: devanshranjan10/tap/landmine)
 ```
 
+The same package is also on GitHub Packages as
+[`@devanshranjan10/landmines`](https://github.com/devanshranjan10/landmines/pkgs/npm/landmines).
+Installing from there needs a GitHub token with `read:packages`; npm is the simpler
+route.
+
 **GitHub token.** `scan` needs one, because GitHub search and GraphQL require auth. It
 uses `GITHUB_TOKEN`, then `GH_TOKEN`, then `gh auth token`. A token with no scopes is
 enough for public repositories. The hook never touches the network.

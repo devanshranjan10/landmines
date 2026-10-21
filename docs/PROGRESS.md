@@ -176,6 +176,9 @@ Every confirmed defect was fixed with a regression test (CHANGELOG 0.2.0 "Fixed"
 - **GitHub:** the public repo
   [devanshranjan10/landmines](https://github.com/devanshranjan10/landmines). The old
   `…/landmine` URL redirects.
+- **GitHub Packages:** `@devanshranjan10/landmines@0.2.0`, linked to the repo.
+  `.github/workflows/github-packages.yml` publishes it on every GitHub release, or when
+  run by hand. It uses the repo's own token.
 - **Homebrew:** `brew install devanshranjan10/tap/landmines`, or the alias `…/landmine`.
   The public tap is
   [devanshranjan10/homebrew-tap](https://github.com/devanshranjan10/homebrew-tap).
