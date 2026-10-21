@@ -1,0 +1,19 @@
+{
+  "id": "rich-4216",
+  "issue": "Textualize/rich#4216",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "rich",
+  "version": "15.0.0",
+  "tier": "B",
+  "set": "fresh",
+  "venv": ".venv-fresh-a",
+  "entry": ["app/report.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "\\.print\\(\\s*heading\\((?:[^()]|\\([^()]*\\))*\\)\\s*(?:,\\s*(?:style|end|markup|highlight)\\s*=[^,()]*)*\\)",
+    "about": "Console.print(text) with a Text that carries justify='center' and no justify= passed to print() itself"
+  },
+  "summary": "Console.print(Text(..., justify='center')) ignores the Text's own justify (renders left-aligned) unless justify= is also passed to print(); it works inside Panel/Group"
+}

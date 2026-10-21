@@ -1,0 +1,19 @@
+{
+  "id": "polars-30105",
+  "issue": "pola-rs/polars#30105",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "polars",
+  "version": "2.0.0",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-b",
+  "entry": ["app/window.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "\\.extend\\([\\s\\S]*(\\.tail\\(|\\.slice\\(|\\[\\s*-)|(\\.tail\\(|\\.slice\\(|\\[\\s*-)[\\s\\S]*\\.extend\\(",
+    "about": "DataFrame.extend() on a frame that was previously trimmed with tail()/slice() (a uniquely owned offset slice), which corrupts its Boolean values and null positions"
+  },
+  "summary": "DataFrame.extend / Series.extend / scatter on a uniquely owned offset slice (e.g. the result of tail()) read the Boolean bitmap and validity from bit 0 instead of the slice offset, so existing Boolean values and nulls are silently changed"
+}

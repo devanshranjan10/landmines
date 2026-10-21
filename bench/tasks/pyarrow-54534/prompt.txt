@@ -1,0 +1,5 @@
+The climate portal is switching to CSV uploads. Please implement `export_csv(table, path)` in `app/climate.py`.
+
+It takes one station's observation table (as built by `observations()` / `load_station()`) and writes it to `path` as a CSV file with a header row and the columns `observed_at`, `tmax_c`, `tmin_c`, `precip_mm`, one line per observation in table order. `observed_at` must be written as an ISO 8601 date-time with a UTC offset (or `Z`) that denotes exactly the moment of the observation, to the second; the portal parses it with a standard ISO 8601 parser and places everything on a common UTC timeline, including our oldest records (Central Park goes back to 1869, Phoenix Park to 1880).
+
+Keep the existing exports working and don't change dependencies.

@@ -13,8 +13,10 @@ function mulberry32(seed: number): () => number {
   };
 }
 
+// `--set fresh` freezes bench/split-fresh.json for the post-cutoff tasks; the 2024 split (bench/split.json) is never re-rolled.
+const set = process.argv.includes('--set') ? process.argv[process.argv.indexOf('--set') + 1] : '2024';
 const SEED = 20261021;
-const tasks = loadTasks();
+const tasks = loadTasks().filter((t) => (t.set ?? '2024') === set);
 const byPkg = new Map<string, string[]>();
 for (const t of tasks) byPkg.set(t.package, [...(byPkg.get(t.package) ?? []), t.id]);
 const pkgs = [...byPkg.keys()].sort();
@@ -27,5 +29,5 @@ const dev: string[] = [];
 const test: string[] = [];
 for (const p of pkgs) (dev.length < Math.round(tasks.length / 3) ? dev : test).push(...(byPkg.get(p) ?? []));
 const out = { seed: SEED, frozenAt: new Date().toISOString(), rule: 'whole packages per side; packages go to dev until it reaches a third of the tasks; the package that crosses the line goes to dev too', dev: dev.sort(), test: test.sort() };
-writeFileSync(join(BENCH, 'split.json'), `${JSON.stringify(out, null, 2)}\n`);
+writeFileSync(join(BENCH, set === '2024' ? 'split.json' : `split-${set}.json`), `${JSON.stringify(out, null, 2)}\n`);
 console.log(`dev ${dev.length}: ${dev.join(' ')}\ntest ${test.length}: ${test.join(' ')}`);

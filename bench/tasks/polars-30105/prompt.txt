@@ -1,0 +1,5 @@
+The security dashboard's `EventWindow` (in `app/window.py`) is supposed to hold only the most recent `max_rows` sign-in events, but `append` never drops anything, so the collector process keeps growing until it gets restarted.
+
+Please make `append` enforce the cap: after every call, the window must contain exactly the last `max_rows` events received so far, in arrival order (or all of them while there are fewer than `max_rows`), with every column (`event_id`, `ts`, `user`, `success`, `reviewed`) unchanged from what the collector sent. A single batch can be larger than `max_rows`. `frame()`, `failure_rate()` and `pending_review()` should then reflect only the events still in the window.
+
+Keep the existing exports working and don't change dependencies.

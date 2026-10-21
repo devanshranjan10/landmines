@@ -1,0 +1,9 @@
+{
+  "name": "crm-export",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "papaparse": "5.7.0"
+  }
+}

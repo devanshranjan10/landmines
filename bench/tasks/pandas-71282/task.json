@@ -1,0 +1,19 @@
+{
+  "id": "pandas-71282",
+  "issue": "pandas-dev/pandas#71282",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pandas",
+  "version": "3.0.6",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-b",
+  "entry": ["app/scores.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "(?<![\\s\\S])(?![\\s\\S]*(to_numeric\\(|\\.astype\\(\\s*([\"'](float|float64|Float64|double)[\"']|float)|infer_objects\\())[\\s\\S]*\\bcut\\(",
+    "about": "pd.cut on the object-dtype score column (numbers mixed with NaN) without converting it to a numeric dtype first"
+  },
+  "summary": "pd.cut on an object-dtype Series that contains NaN assigns some later values to the wrong bin (silently), e.g. 95 lands in the lowest bin"
+}

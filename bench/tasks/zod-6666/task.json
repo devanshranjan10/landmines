@@ -1,0 +1,15 @@
+{
+  "id": "zod-6666",
+  "issue": "colinhacks/zod#6666",
+  "related": ["ajv-validator/ajv#2664"],
+  "ecosystem": "npm",
+  "package": "zod",
+  "version": "4.6.7",
+  "tier": "A",
+  "set": "fresh",
+  "entry": ["src/results.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": {},
+  "trigger": { "regex": "constructor['\"]?\\s*:\\s*(?:z\\.optional\\(|z\\.[^,}\\n]*\\.(?:optional|exactOptional|default|nullish|catch)\\()", "about": "declares an optional/defaulted object key named `constructor` in a zod object schema" },
+  "summary": "zod 4 reads Object.prototype members for absent keys, so an optional `constructor` key rejects objects that lack it (\"expected string, received function\")"
+}

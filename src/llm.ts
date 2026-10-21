@@ -81,8 +81,7 @@ function runClaude(args: string[], input: string): Promise<string> {
  * The Claude Code CLI in print mode, so an existing Claude Code login works without an API key. Minimal system prompt,
  * no tools, no settings or MCP servers, structured output via --json-schema.
  */
-async function claudeCli(opts: ProviderOptions): Promise<LlmProvider> {
-  const { toJSONSchema } = await import('zod');
+function claudeCli(opts: ProviderOptions): LlmProvider {
   const exec = opts.exec ?? runClaude;
   const model = opts.model ?? DEFAULT_MODELS['claude-cli'];
   return {
@@ -98,7 +97,7 @@ async function claudeCli(opts: ProviderOptions): Promise<LlmProvider> {
         '--output-format',
         'json',
         '--json-schema',
-        JSON.stringify(toJSONSchema(schema)),
+        JSON.stringify(await jsonSchema(schema)),
         '--system-prompt',
         system,
         '--tools',
@@ -118,8 +117,7 @@ async function claudeCli(opts: ProviderOptions): Promise<LlmProvider> {
 }
 
 /** Any OpenAI-compatible chat endpoint (OpenAI, OpenRouter, Ollama, LM Studio, vLLM): OPENAI_API_KEY, OPENAI_BASE_URL. */
-async function openai(opts: ProviderOptions): Promise<LlmProvider> {
-  const { toJSONSchema } = await import('zod');
+function openai(opts: ProviderOptions): LlmProvider {
   const env = opts.env ?? process.env;
   const base = (env.OPENAI_BASE_URL ?? 'https://api.openai.com/v1').replace(/\/$/, '');
   const fetcher = opts.http ?? { fetch: (u: string, i?: RequestInit) => globalThis.fetch(u, i) };
@@ -137,7 +135,7 @@ async function openai(opts: ProviderOptions): Promise<LlmProvider> {
             { role: 'system', content: system },
             { role: 'user', content: user },
           ],
-          response_format: { type: 'json_schema', json_schema: { name: 'trigger_card', schema: toJSONSchema(schema), strict: false } },
+          response_format: { type: 'json_schema', json_schema: { name: 'trigger_card', schema: await jsonSchema(schema), strict: false } },
         }),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
@@ -146,6 +144,13 @@ async function openai(opts: ProviderOptions): Promise<LlmProvider> {
       return schema.parse(JSON.parse(text.replace(/^```(?:json)?\s*|\s*```$/g, '')));
     },
   };
+}
+
+/** JSON Schema for a zod schema, without the `$schema` draft URL (the claude CLI's validator cannot resolve it). */
+async function jsonSchema(schema: z.ZodType): Promise<Record<string, unknown>> {
+  const { toJSONSchema } = await import('zod');
+  const { $schema: _draft, ...rest } = toJSONSchema(schema) as Record<string, unknown>;
+  return rest;
 }
 
 export async function provider(name: ProviderName, opts: ProviderOptions = {}): Promise<LlmProvider> {

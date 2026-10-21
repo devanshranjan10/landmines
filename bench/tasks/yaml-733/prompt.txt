@@ -1,0 +1,7 @@
+Our editor snippet library is stored as YAML in a shared repo (`importSnippets` in `src/snippets.js` loads it). Please implement `exportSnippets(library)`, which serialises a library object (format documented in the file) back to YAML text so the "Save to repo" button can write it.
+
+Requirements:
+- The repo's YAML style uses 4-space indentation, so nested mappings must be indented by 4 spaces per level (the snippet names 4 spaces in under `snippets:`, their fields 8 spaces in).
+- Exporting must be lossless: `importSnippets(exportSnippets(lib))` must give back exactly `lib`. Snippet bodies are code and whitespace matters: they're multi-line, may or may not end with a newline, and often start with indentation themselves (fragments meant to be pasted inside a function body).
+
+We already use the `yaml` package for this file, so please stay with it. Keep the existing exports working and don't change dependencies.

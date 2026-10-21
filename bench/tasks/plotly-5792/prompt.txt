@@ -1,0 +1,10 @@
+Ops wants a one-page overview figure for the morning stand-up.
+
+Please implement `overview_figure(stats)` in `app/dashboard.py`, returning one Plotly figure built with subplots:
+
+- top row: the daily orders trend as a line (`go.Scatter`, x = `stats.days`, y = `stats.orders_per_day`) spanning the full width of the figure;
+- bottom row: two bar charts side by side, orders by channel on the left (`stats.by_channel`) and orders by region on the right (`stats.by_region`), categories in dict order;
+- each row labelled on the right-hand side of the figure with a row title, `Trend` for the top row and `Breakdown` for the bottom row (Plotly's usual row-title placement, vertically centred on the row);
+- `template="plotly_white"` and no legend, like `comparison_figure`.
+
+Keep the existing exports working and don't change dependencies.

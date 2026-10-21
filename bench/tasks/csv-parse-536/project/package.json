@@ -1,0 +1,9 @@
+{
+  "name": "warehouse-import",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "csv-parse": "7.0.3"
+  }
+}

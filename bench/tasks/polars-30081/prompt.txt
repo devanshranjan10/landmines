@@ -1,0 +1,5 @@
+The contest dashboard is getting three new widgets: "Top scores", "Most tests passed" and "Latest submissions". All three should be served by one query, `top_entries(lf, by, n)` in `app/leaderboard.py`, which is currently a stub.
+
+It takes the LazyFrame from `load_submissions`, the name of the column to rank by (`"score"`, `"tests_passed"` or `"submitted_at"` for the three widgets) and `n`, and returns a DataFrame with the `n` submissions that have the highest value in that column, highest first, with all submission columns. When two submissions have the same value, the one submitted earlier comes first. If there are fewer than `n` submissions, return all of them.
+
+Keep the existing exports working and don't change dependencies.

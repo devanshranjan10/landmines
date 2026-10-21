@@ -1,0 +1,19 @@
+{
+  "id": "pyarrow-54535",
+  "issue": "apache/arrow#54535",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pyarrow",
+  "version": "26.0.0",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-b",
+  "entry": ["app/extracts.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "(?<![\\s\\S])(?![\\s\\S]*ignore_empty_lines\\s*=\\s*False)[\\s\\S]*read_csv\\(",
+    "about": "pyarrow.csv.write_csv + read_csv with default ParseOptions (ignore_empty_lines=True): a null in a one-column table is written as an empty line and skipped on read"
+  },
+  "summary": "pyarrow.csv.write_csv writes a null of a single-column table as an empty line; read_csv skips empty lines by default, so null rows silently disappear on a write/read round trip"
+}

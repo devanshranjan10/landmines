@@ -1,0 +1,19 @@
+{
+  "id": "scipy-26409",
+  "issue": "scipy/scipy#26409",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "scipy",
+  "version": "1.18.1",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-a",
+  "entry": ["app/risk.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "poisson_binom(\\([^()]*\\))?\\.(sf|logsf)\\(|1(\\.0*)?\\s*-\\s*(stats\\.)?poisson_binom(\\([^()]*\\))?\\.cdf\\(",
+    "about": "takes the upper tail of scipy.stats.poisson_binom via sf/logsf (or 1 - cdf), which is computed as 1 - cdf and loses tails below ~1e-16"
+  },
+  "summary": "scipy.stats.poisson_binom.sf/logsf compute 1 - cdf, so small upper-tail probabilities (e.g. all 3 replicas with p=1e-6 failing, 1e-18) come out as 0 or ~1e-16 instead of the true value"
+}

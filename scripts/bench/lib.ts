@@ -99,3 +99,16 @@ export function triggerPresent(task: Task, dir: string): boolean {
     return existsSync(p) && re.test(readFileSync(p, 'utf8'));
   });
 }
+
+/**
+ * Task ids for a split name: `dev` / `test` (2024 set, bench/split.json), `fresh-dev` / `fresh-test`
+ * (bench/split-fresh.json), `fresh` / `2024` (a whole set), or `all` (undefined: every task).
+ */
+export function splitIds(split: string): string[] | undefined {
+  if (split === 'all') return undefined;
+  if (split === 'fresh' || split === '2024') return loadTasks().filter((t) => (t.set ?? '2024') === split).map((t) => t.id);
+  const [file, key] = split.startsWith('fresh-') ? ['split-fresh.json', split.slice('fresh-'.length)] : ['split.json', split];
+  const ids = (JSON.parse(readFileSync(join(BENCH, file), 'utf8')) as Record<string, unknown>)[key];
+  if (!Array.isArray(ids)) throw new Error(`no split ${split} (bench/${file})`);
+  return ids as string[];
+}

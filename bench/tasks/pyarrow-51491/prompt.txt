@@ -1,0 +1,5 @@
+The QA team wants a review queue for the rain-gauge archive. Please implement `readings_for_review(root)` in `app/gauges.py`.
+
+It should return, as a pyarrow Table with the archive's columns (`station`, `ts`, `mm`), every reading in the archive under `root` whose `mm` value is not exactly 0.0. That covers both rainfall readings (mm > 0) and failed samples, which the gauges record as NaN: failed samples must always be included. Sort the result by `station`, then `ts`.
+
+Keep the existing exports working and don't change dependencies.

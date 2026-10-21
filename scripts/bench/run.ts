@@ -6,7 +6,7 @@ import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, wr
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
-import { BENCH, type Task, loadTasks, materialize, prompt, runHidden, triggerPresent } from './lib.js';
+import { BENCH, type Task, loadTasks, materialize, prompt, runHidden, triggerPresent, splitIds } from './lib.js';
 import { ARMS, type Arm, prepareArm } from './prepare.js';
 
 const { values } = parseArgs({
@@ -38,13 +38,6 @@ const RESULTS = join(BENCH, 'results', `${runId}.jsonl`);
 mkdirSync(WORK, { recursive: true });
 mkdirSync(join(BENCH, 'results'), { recursive: true });
 
-function splitIds(split: string): string[] | undefined {
-  if (split === 'all') return undefined;
-  const s = JSON.parse(readFileSync(join(BENCH, 'split.json'), 'utf8')) as Record<string, string[]>;
-  const ids = s[split];
-  if (!ids) throw new Error(`no split ${split} in bench/split.json`);
-  return ids;
-}
 
 interface AgentOutcome {
   exitCode: number | null;

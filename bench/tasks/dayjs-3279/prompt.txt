@@ -1,0 +1,7 @@
+We import calendar events from .ics files and need to schedule their reminders. Each VALARM has a TRIGGER relative to the event start, given as an iCalendar (RFC 5545) duration string.
+
+Please implement `alarmTime(startIso, trigger)` in `src/alarms.js`. It gets the event start as an ISO date-time string (UTC) and the TRIGGER value, and returns the time the reminder should fire as `YYYY-MM-DDTHH:mm:ssZ` in UTC.
+
+TRIGGER values we see in practice use days, hours, minutes and seconds, for example `-PT15M` (15 minutes before the start), `-PT1H30M`, `-P1D` (a day before), `PT0S` (at the start) and `PT5M` / `+PT5M` (5 minutes after the start). A leading `-` means before the event start; no sign or `+` means at or after it.
+
+This module already uses dayjs with the duration plugin, so please stay with dayjs. Keep the existing exports working and don't change dependencies.

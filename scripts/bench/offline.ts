@@ -6,7 +6,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { runHook } from '../../src/hook/run.js';
-import { BENCH, type Task, loadTasks, materialize } from './lib.js';
+import { type Task, loadTasks, materialize, splitIds } from './lib.js';
 import { type Arm, prepareArm } from './prepare.js';
 
 const { values } = parseArgs({
@@ -18,10 +18,6 @@ const { values } = parseArgs({
   },
 });
 
-function ids(split: string): string[] | undefined {
-  if (split === 'all') return undefined;
-  return (JSON.parse(readFileSync(join(BENCH, 'split.json'), 'utf8')) as Record<string, string[]>)[split];
-}
 
 interface Probe {
   decision: string;
@@ -49,7 +45,7 @@ function probe(task: Task, dir: string, which: 'naive' | 'fixed'): Probe[] {
 
 const arm = values.arm as Arm;
 const rows = [];
-for (const task of loadTasks(ids(values.split))) {
+for (const task of loadTasks(splitIds(values.split))) {
   const dir = materialize(task);
   prepareArm(task, dir, arm);
   const naive = probe(task, dir, 'naive');

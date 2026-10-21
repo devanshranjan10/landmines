@@ -1,0 +1,5 @@
+The economics team wants the weekly KPI table in Stata too. Please implement `export_weekly(df, path)` in `app/stata_export.py`: it writes a frame like the one `load_weekly` returns to a Stata `.dta` file at `path`, with the columns `week`, `region`, `orders`, `revenue` (no index column).
+
+`week` must be stored as a Stata weekly date (format `%tw`), so they can use Stata's weekly-date functions on it. Each row has to land in the Stata week of the calendar year its `week` date belongs to. Reminder of Stata's weekly calendar: every year has exactly 52 weeks, week 1 starts on January 1, each week is 7 days long except week 52, which runs to December 31 (8 or 9 days).
+
+Keep the existing exports working and don't change dependencies.

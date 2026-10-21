@@ -1,0 +1,19 @@
+{
+  "id": "plotly-5827",
+  "issue": "plotly/plotly.py#5827",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "plotly",
+  "version": "7.1.0",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-b",
+  "entry": ["app/charts.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "\\.unique\\(\\)[\\s\\S]*?\\bname\\s*=\\s*(?!str\\(|f[\"'])[A-Za-z_][\\w.\\[\\]]*\\s*[,)]",
+    "about": "passes a value taken from Series.unique() (a NumPy scalar for integer columns) straight to a trace's name="
+  },
+  "summary": "graph_objects string properties such as Scatter(name=...) reject NumPy integer scalars (e.g. values from Series.unique() of an int column) with ValueError, while Python ints are accepted and converted"
+}

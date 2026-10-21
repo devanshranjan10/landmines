@@ -1,0 +1,43 @@
+
+landmine scanned 46 direct dependencies from package-lock.json, requirements.txt
+
+  ajv@8.20.0          9 open issues · 8 tied to symbols · 2 workarounds
+  axios@1.20.0        11 open issues · 11 tied to symbols · 0 workarounds
+  date-fns@4.4.0      3 open issues · 2 tied to symbols · 0 workarounds
+  dayjs@1.11.23       9 open issues · 7 tied to symbols · 0 workarounds
+  knex@3.3.0          7 open issues · 7 tied to symbols · 1 workaround
+  lodash-es@4.18.1    2 open issues · 1 tied to symbols · 0 workarounds
+  luxon@3.7.2         8 open issues · 5 tied to symbols · 1 workaround
+  marked@18.0.11      1 open issue · 1 tied to symbols · 1 workaround
+  papaparse@5.7.0     2 open issues · 2 tied to symbols · 0 workarounds
+  semver@7.8.5        5 open issues · 5 tied to symbols · 0 workarounds
+  valibot@1.4.2       2 open issues · 1 tied to symbols · 0 workarounds
+  yaml@2.9.0          3 open issues · 1 tied to symbols · 0 workarounds
+  zod@4.5.4           2 open issues · 2 tied to symbols · 0 workarounds
+  arrow@1.4.0         5 open issues · 4 tied to symbols · 0 workarounds
+  click@8.5.0         1 open issue · 1 tied to symbols · 0 workarounds
+  jinja2@3.1.6        11 open issues · 10 tied to symbols · 3 workarounds
+  marshmallow@4.3.1   1 open issue · 1 tied to symbols · 0 workarounds
+  msgspec@0.21.1      1 open issue · 1 tied to symbols · 0 workarounds
+  networkx@3.6.1      2 open issues · 2 tied to symbols · 0 workarounds
+  numpy@2.5.2         6 open issues · 6 tied to symbols · 4 workarounds
+  pandas@3.0.5        16 open issues · 14 tied to symbols · 4 workarounds
+  pendulum@3.2.0      4 open issues · 3 tied to symbols · 2 workarounds
+  plotly@7.0.0        11 open issues · 6 tied to symbols · 2 workarounds
+  polars@1.44.1       11 open issues · 11 tied to symbols · 3 workarounds
+  pyarrow@25.0.1      28 open issues · 26 tied to symbols · 4 workarounds
+  pydantic@2.13.5     2 open issues · 2 tied to symbols · 0 workarounds
+  pyyaml@6.0.3        13 open issues · 8 tied to symbols · 1 workaround
+  requests@2.34.2     3 open issues · 3 tied to symbols · 0 workarounds
+  rich@15.0.0         19 open issues · 18 tied to symbols · 7 workarounds
+  scikit-learn@1.9.0  9 open issues · 8 tied to symbols · 1 workaround
+  scipy@1.18.1        26 open issues · 23 tied to symbols · 4 workarounds
+
+  No open issues name the exact version: csv-parse@7.0.2, decimal.js@10.6.0, fast-xml-parser@5.11.1, immer@11.1.18, jose@6.2.10, ky@2.1.0, kysely@0.29.5, mathjs@15.2.0, qs@6.16.0, superjson@2.2.6, uuid@14.0.2, attrs@26.1.0, sqlalchemy@2.0.52, typer@0.27.2
+  Not searched: orjson (issues disabled)
+  Search hits dropped: 11 that never mention the version; 6 that only name it as working, fixed or upgraded-from; 32 that only mention it in links or hidden comments.
+  47 weaker mentions (version only in an unconfirmed comment) kept in the index but never trigger the hook.
+
+Found 233 open issues filed against your exact versions in 31 of 46 packages.
+200 point at specific symbols the hook will watch. 40 have a workaround in the comments.
+Index: eval/fresh-a/.landmine/index.json

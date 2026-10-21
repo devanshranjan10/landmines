@@ -1,0 +1,5 @@
+Sales wants to download contacts from the CRM as a spreadsheet. Please implement `toCsv(records)` in `src/export.js`: it receives an array of contact records as returned by the CRM API (plain objects with string, number or boolean values) and returns CSV text with a header row, one line per record, in input order.
+
+The API omits optional fields that are empty, so records don't all have the same keys. The export must contain a column for every field that appears in any of the records, ordered by first appearance (walking the records in order, then each record's keys in order); records without a value for a column get an empty cell. An empty `records` array gives an empty string. Values containing commas, quotes or line breaks must be quoted properly so Excel and `fromCsv` read them back unchanged.
+
+We use Papa Parse for CSV here (see `fromCsv`), so please stay with it. Keep the existing exports working and don't change dependencies.

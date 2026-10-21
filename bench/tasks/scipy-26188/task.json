@@ -1,0 +1,19 @@
+{
+  "id": "scipy-26188",
+  "issue": "scipy/scipy#26188",
+  "related": ["boostorg/math#1464"],
+  "ecosystem": "pypi",
+  "package": "scipy",
+  "version": "1.18.1",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-a",
+  "entry": ["app/power.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "\\bncf(\\.sf\\(|\\([^()]*(\\([^()]*\\)[^()]*)*\\)\\.sf\\()",
+    "about": "computes ANOVA power with scipy.stats.ncf.sf (or a frozen ncf(...).sf), which returns -cdf instead of 1-cdf when the noncentrality is 0"
+  },
+  "summary": "scipy.stats.ncf.sf(x, dfn, dfd, nc=0) returns -ncf.cdf(x) (a negative probability) instead of 1 - cdf, so power at effect size 0 comes out as about -0.95 instead of alpha"
+}

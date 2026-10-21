@@ -1,0 +1,5 @@
+Please implement `parseProducts(xml)` in `src/feed.js` for the supplier catalog import. The feed format is documented at the top of the file. It should return one object per `<product>`, in feed order, shaped `{ sku, brand, title, price, currency }`: `sku`, `brand` and `title` as strings, `price` as a number, `currency` from the price's attribute. A feed can contain a single product or none at all (return `[]` then).
+
+Suppliers generate these files with all kinds of tools, so text and attribute values may use any standard XML escaping: the predefined entities (`&amp;`, `&lt;`, ...) as well as numeric character references (`&#233;`, `&#xE9;`). Titles and brands must come out as the plain decoded text, because they go straight into the shop's search index.
+
+We already parse these feeds with fast-xml-parser (see `supplierOf`), so please stay with it. Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,10 @@
+Please implement `parseResults(payload)` in `src/results.js`. It receives the classification array from the timing API (already `JSON.parse`d). Each row looks like
+
+    { "position": 1, "driver": "VER", "constructor": "Red Bull Racing", "points": 25 }
+
+and the function should validate the rows and return them as `{ position, driver, constructor, points }` objects:
+- `position`: positive integer, `driver`: 3-letter driver code, `points`: number >= 0 (half points exist);
+- `constructor` (the team) is optional: the API leaves it out for some historic entries and for test sessions. Return the team name when present and `null` when the field is absent; if present it must be a non-empty string.
+- Any invalid row (missing driver, wrong types, ...) should make the function throw.
+
+Validation in this module is done with zod (see `parseDrivers`), so please stay with zod. Keep the existing exports working and don't change dependencies.

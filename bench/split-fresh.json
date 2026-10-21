@@ -1,0 +1,40 @@
+{
+  "seed": 20261021,
+  "frozenAt": "2026-10-21T08:38:03.195Z",
+  "rule": "whole packages per side; packages go to dev until it reaches a third of the tasks; the package that crosses the line goes to dev too",
+  "dev": [
+    "arrow-1341",
+    "papaparse-1174",
+    "rich-4214",
+    "rich-4216",
+    "scipy-26188",
+    "scipy-26406",
+    "scipy-26409",
+    "semver-904",
+    "yaml-733",
+    "zod-6666"
+  ],
+  "test": [
+    "csv-parse-536",
+    "date-fns-4384",
+    "dayjs-3279",
+    "fast-xml-parser-892",
+    "networkx-8964",
+    "pandas-67949",
+    "pandas-68026",
+    "pandas-70811",
+    "pandas-71280",
+    "pandas-71282",
+    "plotly-5792",
+    "plotly-5805",
+    "plotly-5827",
+    "polars-30043",
+    "polars-30081",
+    "polars-30105",
+    "pyarrow-51162",
+    "pyarrow-51368",
+    "pyarrow-51491",
+    "pyarrow-54534",
+    "pyarrow-54535"
+  ]
+}

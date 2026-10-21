@@ -1,0 +1,9 @@
+{
+  "name": "activity-feed",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "date-fns": "4.4.0"
+  }
+}

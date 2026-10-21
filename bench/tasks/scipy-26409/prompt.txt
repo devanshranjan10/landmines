@@ -1,0 +1,6 @@
+The capacity planner needs to show the data-loss risk of each placement group. Please implement in `app/risk.py`:
+
+- `loss_probability(p_fail, tolerated)`: `p_fail` is a sequence with each node's failure probability for the window, `tolerated` is how many simultaneous node failures the group survives (e.g. 2 for 3-way replication). Return the probability that more than `tolerated` nodes fail in the same window, as a float.
+- `durability_nines(p_fail, tolerated)`: the same risk expressed in nines, i.e. `-log10(loss_probability(...))`.
+
+Per-node failure probabilities in our fleet are typically between 1e-6 and 1e-2 and groups have 3 to 12 nodes, so loss probabilities are often extremely small; the planner compares groups by their nines, which must be accurate to within 0.01. Keep the existing exports working and don't change dependencies.

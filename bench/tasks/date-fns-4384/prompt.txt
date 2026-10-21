@@ -1,0 +1,9 @@
+The activity feed needs relative timestamps next to each item. Please implement `relativeLabel(date, now)` in `src/activity.js` (`now` defaults to the current time and is passed explicitly in tests).
+
+Requirements:
+- Past items read like "45 seconds ago" / "3 hours ago", future ones (scheduled items) like "in 2 hours".
+- Use a single unit: seconds under a minute, minutes under an hour, hours under a day, otherwise days. The feed only shows items from the last four weeks, so days is the largest unit we need.
+- Round to the nearest whole number of that unit (90 seconds is "2 minutes ago"), and singular for 1 ("1 hour ago").
+- A label must never read "60 seconds", "60 minutes" or "24 hours"; those are "1 minute", "1 hour" and "1 day".
+
+We already use date-fns in this module, so please stay with it. Keep the existing exports working and don't change dependencies.

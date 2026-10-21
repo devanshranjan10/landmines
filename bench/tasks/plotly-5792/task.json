@@ -1,0 +1,19 @@
+{
+  "id": "plotly-5792",
+  "issue": "plotly/plotly.py#5792",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "plotly",
+  "version": "7.1.0",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-b",
+  "entry": ["app/dashboard.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "make_subplots\\([\\s\\S]*?colspan[\\s\\S]*?row_titles\\s*=|make_subplots\\([\\s\\S]*?row_titles\\s*=[\\s\\S]*?colspan",
+    "about": "make_subplots(..., specs with a colspan into the last column, row_titles=[...])"
+  },
+  "summary": "make_subplots positions row_titles using the last-column cell; when that cell is covered by a colspan (None in specs) the titles shift to the wrong row and the last one is dropped"
+}

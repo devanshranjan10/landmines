@@ -1,0 +1,18 @@
+{
+  "name": "fresh-b",
+  "private": true,
+  "dependencies": {
+    "zod": "4.6.7",
+    "kysely": "0.29.7",
+    "yaml": "2.9.1",
+    "uuid": "14.0.3",
+    "valibot": "1.5.0",
+    "jose": "6.2.13",
+    "marked": "18.1.1",
+    "csv-parse": "7.0.3",
+    "fast-xml-parser": "5.11.2",
+    "immer": "11.2.6",
+    "qs": "6.16.1",
+    "ky": "2.2.0"
+  }
+}

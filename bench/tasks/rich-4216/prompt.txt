@@ -1,0 +1,9 @@
+The nightly run summary is also going out by e-mail now, and the mail is plain text shown in a monospace font, so the boxed `summary_card()` doesn't work there.
+
+Please implement `render_report(run)` in `app/report.py`. Render it with Rich at `WIDTH` (60) columns and return the result as a plain string with no ANSI/color codes. Layout:
+
+1. the run title as a heading in the same house style as the cards (use `heading()`, i.e. centered across the 60 columns);
+2. one line per job, in order: `<name>: <status> (<seconds>s)` with seconds to one decimal, e.g. `load-orders: ok (12.4s)`;
+3. a final line `<N> jobs, <M> failed`.
+
+No line may be wider than 60 columns. Keep the existing exports working and don't change dependencies.

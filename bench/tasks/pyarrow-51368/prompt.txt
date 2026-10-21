@@ -1,0 +1,5 @@
+We're moving helpdesk reporting off the vendor's web UI and onto their nightly CSV export. Please implement `load_tickets(path)` in `app/helpdesk.py`.
+
+It reads one export file and returns a pyarrow Table with exactly `TICKET_SCHEMA` (column order and types as declared). The export format is described in the module docstring: UTF-8, comma-separated, a header row, values quoted when needed, Windows (CRLF) line endings. `description` is free text typed by customers and often spans several lines; it must come through exactly as exported, line breaks included, because the support bot quotes it back to customers. A nightly export is usually a few MB.
+
+Keep the existing exports working and don't change dependencies.

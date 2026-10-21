@@ -1,0 +1,15 @@
+{
+  "id": "yaml-733",
+  "issue": "eemeli/yaml#733",
+  "related": [],
+  "ecosystem": "npm",
+  "package": "yaml",
+  "version": "2.9.1",
+  "tier": "A",
+  "set": "fresh",
+  "entry": ["src/snippets.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": {},
+  "trigger": { "regex": "(?<![\\s\\S])(?![\\s\\S]*(?:QUOTE_DOUBLE|QUOTE_SINGLE|blockQuote\\s*:\\s*false))[\\s\\S]*(?:stringify|toString)\\([^;]*\\bindent\\s*:\\s*(?:[13-9]|\\d\\d)", "about": "stringifies with indent != 2 while still letting yaml emit block scalars for strings that start with whitespace" },
+  "summary": "yaml.stringify with indent other than 2 writes the wrong block-scalar indentation indicator (|2) for mapping values whose first line starts with spaces, so parse() adds extra leading spaces"
+}

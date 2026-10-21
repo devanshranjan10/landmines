@@ -1,3 +1,4 @@
+import { execFileSync } from 'node:child_process';
 import { mkdtempSync, mkdirSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
@@ -10,7 +11,8 @@ import { cardMatch, checkFile, fileContext, matchTouches } from '../src/match.js
 import { modelMessage } from '../src/message.js';
 import { isArmed } from '../src/policy.js';
 import { touches } from '../src/source/touches.js';
-import { INDEX_DIR } from '../src/store.js';
+import { addedLines, stagedFiles } from '../src/staged.js';
+import { INDEX_DIR, writeIndex } from '../src/store.js';
 import type { Landmine, LandmineIndex, TriggerCard } from '../src/types.js';
 
 function landmine(over: Partial<Landmine> = {}): Landmine {
@@ -106,6 +108,22 @@ describe('cardMatch', () => {
     expect(cardMatch(card, 'df.fillna(0)', 'df.fillna(0)', 'py')).toBeUndefined();
   });
 
+  it('an unless token (the workaround is applied) silences the card', () => {
+    const card = { ...CARD, unless: ['weeksToDays'] };
+    const guarded = `import { add } from 'date-fns';\nimport { weeksToDays } from 'date-fns';\nexport const due = (d, weeks) => add(d, { weeks: 0, days: weeksToDays(weeks) });\n`;
+    expect(cardMatch(card, guarded, guarded, 'js')).toBeUndefined();
+    expect(cardMatch(card, NAIVE, NAIVE, 'js')).toBeDefined();
+  });
+
+  it('bare numbers count only as argument values, operators only inside strings', () => {
+    const num = { ...CARD, apis: ['wrap'], requires: [['0']] };
+    expect(cardMatch(num, 'wrap(text, width=0)', 'wrap(text, width=0)', 'py')).toBeDefined();
+    expect(cardMatch(num, 'wrap(text, n - 0 + 1)', 'wrap(text, n - 0 + 1)', 'py')).toBeUndefined();
+    const op = { ...CARD, apis: ['satisfies'], requires: [['*']] };
+    expect(cardMatch(op, `satisfies(v, '1.x || *')`, `satisfies(v, '1.x || *')`, 'js')).toBeDefined();
+    expect(cardMatch(op, `satisfies(v, r) * 2`, `satisfies(v, r) * 2`, 'js')).toBeUndefined();
+  });
+
   it('with no requirements, calling the API is enough', () => {
     expect(cardMatch({ ...CARD, requires: [] }, FIXED, FIXED, 'js')).toEqual({ api: 'add' });
   });
@@ -189,7 +207,8 @@ const OUTPUT: CardOutput = {
   isBug: true,
   affectsPinned: 'yes',
   apis: ['add()', '.add'],
-  requires: [['weeks', 'data']],
+  requires: [['weeks', 'data', 'return']],
+  unless: ['weeksToDays', 'add'],
   condition: 'add with  weeks\nignores them',
   workaround: 'Use days: weeks * 7.',
   workaroundComment: 1,
@@ -203,6 +222,7 @@ describe('toCard', () => {
     expect(card).toMatchObject({
       apis: ['add'],
       requires: [['weeks']],
+      unless: ['weeksToDays'],
       condition: 'add with weeks ignores them',
       workaroundUrl: RAW.comments[0]?.url,
       confidence: 1,
@@ -214,6 +234,10 @@ describe('toCard', () => {
     const { card } = toCard({ ...OUTPUT, requires: [['months']] }, landmine(), RAW, { provider: 'test', model: 'm' });
     expect(card?.selfCheck).toBe('fail');
     expect(isArmed(landmine({ card: card! }))).toBe(false);
+  });
+
+  it('drops the package name as an API', () => {
+    expect(toCard({ ...OUTPUT, apis: ['date-fns', 'add'] }, landmine(), RAW, { provider: 'test', model: 'm' }).card?.apis).toEqual(['add']);
   });
 
   it('rejects a bug card with no usable API name', () => {
@@ -285,6 +309,9 @@ describe('providers (recorded responses)', () => {
     });
     expect(await llm.json('sys', 'user', CardSchema)).toEqual(OUTPUT);
     expect(seen).toEqual(expect.arrayContaining(['-p', '--model', 'sonnet', '--tools', '', '--strict-mcp-config', '--no-session-persistence']));
+    const schema = JSON.parse(seen[seen.indexOf('--json-schema') + 1] ?? '{}') as Record<string, unknown>;
+    expect(schema.$schema).toBeUndefined();
+    expect(schema.type).toBe('object');
   });
 
   it('claude-cli surfaces errors', async () => {
@@ -303,5 +330,40 @@ describe('providers (recorded responses)', () => {
     const llm = await provider('openai', { http, env: { OPENAI_BASE_URL: 'http://localhost:1234/v1' } });
     expect(await llm.json('s', 'u', CardSchema)).toEqual(OUTPUT);
     expect(body.response_format?.type).toBe('json_schema');
+  });
+});
+
+describe('check --staged', () => {
+  const CLI = new URL('../dist/cli.js', import.meta.url).pathname;
+
+  it('addedLines keeps only added lines', () => {
+    expect(addedLines('--- a/x\n+++ b/x\n@@ -1 +1,2 @@\n-old\n+new\n+more\n context')).toBe('new\nmore');
+  });
+
+  it('checks what the commit adds, not the rest of the file', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'lm-staged-'));
+    const git = (...args: string[]) => execFileSync('git', ['-c', 'user.email=t@t', '-c', 'user.name=t', ...args], { cwd: dir, encoding: 'utf8' });
+    git('init', '-q');
+    writeFileSync(join(dir, 'package-lock.json'), '{}');
+    writeIndex(dir, indexWith(landmine({ card: CARD })));
+    writeFileSync(join(dir, 'due.ts'), FIXED);
+    git('add', 'due.ts');
+    git('commit', '-qm', 'base');
+    expect(stagedFiles(dir)).toEqual([]);
+
+    writeFileSync(join(dir, 'due.ts'), `${FIXED}export const later = (d: Date, weeks: number) => add(d, { weeks });\n`);
+    git('add', 'due.ts');
+    const [f] = stagedFiles(dir);
+    expect(f?.changedText).toBe('export const later = (d: Date, weeks: number) => add(d, { weeks });');
+    const out = execFileSync(process.execPath, [CLI, 'check', '--staged', '--json'], { cwd: dir, encoding: 'utf8' });
+    const [result] = JSON.parse(out) as Array<{ file: string; hits: Array<{ id: string; blocks: boolean }> }>;
+    expect(result).toMatchObject({ file: 'due.ts', hits: [{ id: 'date-fns/date-fns#4384', blocks: true }] });
+
+    // An unrelated line added to a file that already hits the bug: nothing new to report.
+    git('commit', '-qm', 'second');
+    writeFileSync(join(dir, 'due.ts'), `${FIXED}export const later = (d: Date, weeks: number) => add(d, { weeks });\nexport const unrelated = 1;\n`);
+    git('add', 'due.ts');
+    const again = JSON.parse(execFileSync(process.execPath, [CLI, 'check', '--staged', '--json'], { cwd: dir, encoding: 'utf8' })) as Array<{ hits: unknown[] }>;
+    expect(again[0]?.hits).toEqual([]);
   });
 });

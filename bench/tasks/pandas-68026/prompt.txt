@@ -1,0 +1,5 @@
+We're onboarding a marketplace partner that ingests our catalog as XML. Please implement `export_feed(catalog)` in `app/feed.py`: it takes a catalog as returned by `load_catalog` and returns the feed as an XML string with root element `<products>` and one `<product>` element per catalog row, each with the child elements `sku`, `title`, `price` and `in_stock` (in that order, no index element).
+
+The partner validates every feed against their XSD before importing it; in that schema `sku` and `title` are `xs:string`, `price` is `xs:decimal` and `in_stock` is `xs:boolean`. Feeds that don't validate are rejected.
+
+Keep the existing exports working and don't change dependencies.

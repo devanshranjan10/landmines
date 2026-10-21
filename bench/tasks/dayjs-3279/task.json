@@ -1,0 +1,15 @@
+{
+  "id": "dayjs-3279",
+  "issue": "iamkun/dayjs#3279",
+  "related": [],
+  "ecosystem": "npm",
+  "package": "dayjs",
+  "version": "1.11.23",
+  "tier": "A",
+  "set": "fresh",
+  "entry": ["src/alarms.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": {},
+  "trigger": { "regex": "duration\\(\\s*(?!\\{)[^)]", "about": "parses an ISO 8601 duration string with dayjs.duration(string)" },
+  "summary": "dayjs.duration('-PT15M') ignores the leading sign and returns +15 minutes"
+}

@@ -1,0 +1,29 @@
+
+landmine scanned 25 direct dependencies from package-lock.json, requirements.txt
+
+  csv-parse@7.0.3         2 open issues · 1 tied to symbols · 0 workarounds
+  fast-xml-parser@5.11.2  2 open issues · 2 tied to symbols · 0 workarounds
+  kysely@0.29.7           4 open issues · 4 tied to symbols · 0 workarounds
+  marked@18.1.1           1 open issue · 0 tied to symbols · 0 workarounds
+  qs@6.16.1               1 open issue · 1 tied to symbols · 0 workarounds
+  valibot@1.5.0           7 open issues · 7 tied to symbols · 3 workarounds
+  yaml@2.9.1              1 open issue · 1 tied to symbols · 0 workarounds
+  zod@4.6.7               4 open issues · 4 tied to symbols · 0 workarounds
+  msgspec@0.22.0          1 open issue · 1 tied to symbols · 0 workarounds
+  networkx@3.7            1 open issue · 1 tied to symbols · 0 workarounds
+  numpy@2.5.4             4 open issues · 4 tied to symbols · 0 workarounds
+  pandas@3.0.6            24 open issues · 22 tied to symbols · 3 workarounds
+  plotly@7.1.0            6 open issues · 6 tied to symbols · 0 workarounds
+  polars@2.0.0            34 open issues · 30 tied to symbols · 6 workarounds
+  pyarrow@26.0.0          16 open issues · 12 tied to symbols · 1 workaround
+  pydantic@2.14.1         3 open issues · 3 tied to symbols · 0 workarounds
+  scikit-learn@1.9.1      11 open issues · 11 tied to symbols · 3 workarounds
+
+  No open issues name the exact version: immer@11.2.6, jose@6.2.13, ky@2.2.0, uuid@14.0.3, pendulum@3.3.0, sqlalchemy@2.1.5, typer@0.27.3
+  Not searched: orjson (issues disabled)
+  Search hits dropped: 16 that never mention the version; 44 that only mention it in links or hidden comments.
+  23 weaker mentions (version only in an unconfirmed comment) kept in the index but never trigger the hook.
+
+Found 122 open issues filed against your exact versions in 17 of 25 packages.
+110 point at specific symbols the hook will watch. 16 have a workaround in the comments.
+Index: eval/fresh-b/.landmine/index.json

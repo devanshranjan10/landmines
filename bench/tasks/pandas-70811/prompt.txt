@@ -1,0 +1,8 @@
+Recruiting wants to know how candidates prefer to work. The survey's `work_modes` question is multiple choice; the form stores the chosen options joined with " | " (for example `Remote | On site`), and candidates may skip the question.
+
+Please implement in `app/survey.py`, for responses loaded with `load_responses`:
+
+- `work_mode_matrix(responses)`: a DataFrame with one integer 0/1 column per work mode that occurs in the responses, named exactly like the option (e.g. `On site`), columns in alphabetical order, with the same index as `responses`. A respondent who skipped the question has 0 in every column.
+- `work_mode_share(responses)`: `{work mode: fraction of all respondents who selected it}`, as floats.
+
+Keep the existing exports working and don't change dependencies.

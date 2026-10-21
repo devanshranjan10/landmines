@@ -1,0 +1,10 @@
+The dashboard needs a breakdown view next to the monthly totals chart.
+
+Please implement `revenue_by(df, column)` in `app/charts.py`. It takes a sales frame (columns are described in the module docstring) and the name of a column to split by, for example `"region"`, `"channel"` or `"store_id"`, and returns a `plotly.graph_objects.Figure` with one line trace (`go.Scatter`, mode `"lines"`) per distinct value of that column:
+
+- traces appear in the order their value first occurs in the frame (that's the order the extract is curated in, so don't sort);
+- each trace's `name` is the value as text, so the legend reads e.g. `North` or, for stores, `12`;
+- `x` is that group's months in ascending order and `y` the summed revenue per month;
+- use the same `TEMPLATE` as `monthly_totals` and set the legend title to the column name.
+
+Keep the existing exports working and don't change dependencies.

@@ -137,9 +137,12 @@ function hasToken(token: string, s: Scanned): boolean {
     if (s.ids.has(token)) return true;
   } else if (DOTTED_RE.test(token)) {
     if (new RegExp(`(?<![\\w$.])${token.split('.').map(escapeRe).join('\\s*\\.\\s*')}(?![\\w$])`).test(s.code)) return true;
-  } else if (new RegExp(`(?<![\\w$.])${escapeRe(token)}(?![\\w$])`).test(s.code)) {
-    return true;
+  } else if (/[A-Za-z]/.test(token) && new RegExp(`(?<![\\w$.])${escapeRe(token)}(?![\\w$])`).test(s.code)) {
+    return true; // a literal like 1j, -1e9 or 0x10
+  } else if (/^-?\d+(?:\.\d+)?$/.test(token) && new RegExp(`[(,=:\\[]\\s*${escapeRe(token)}\\s*[),\\]}]`).test(s.code)) {
+    return true; // a bare number counts only as an argument or value (`width=0`, `f(x, 0)`), not anywhere in arithmetic
   }
+  // Operators and punctuation (`*`, `||`, `>`) only count inside string literals (format and range strings).
   const inString = new RegExp(`(?<![A-Za-z0-9_])${escapeRe(token)}(?![A-Za-z0-9_])`);
   return s.strings.some((x) => inString.test(x.value));
 }
@@ -152,8 +155,8 @@ export interface CardMatch {
 
 /**
  * Does this code hit the card's trigger? One of the card's APIs must appear in the changed code (as an identifier,
- * or as a quoted option key), and every `requires` group needs one of its tokens somewhere in the file. Comments
- * never count.
+ * or as a quoted option key), every `requires` group needs one of its tokens somewhere in the file, and no `unless`
+ * token (a sign the workaround is applied) may be present. Comments never count.
  */
 export function cardMatch(card: TriggerCard, fileText: string, changedText: string, lang: Lang): CardMatch | undefined {
   const changed = scan(changedText, lang);
@@ -173,6 +176,7 @@ export function cardMatch(card: TriggerCard, fileText: string, changedText: stri
     if (tok === undefined) return undefined;
     via ??= tok;
   }
+  if (card.unless?.some((t) => file.ids.has(t.split('.').at(-1) ?? t))) return undefined;
   return { api, ...(via !== undefined ? { via } : {}) };
 }
 

@@ -112,6 +112,8 @@ export interface TriggerCard {
   apis: string[];
   /** AND of OR-groups of tokens the edited file must also contain (identifiers, option keys, string contents). */
   requires: string[][];
+  /** Identifiers that show the workaround is already applied: any of them in the file silences the card. */
+  unless?: string[];
   /** One line: what goes wrong, and when. */
   condition: string;
   /** One or two lines: how to avoid it at this version. */

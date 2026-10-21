@@ -10,7 +10,10 @@ import { FORMATS, type Format, type HookMode } from './hook/respond.js';
 import { runHook } from './hook/run.js';
 import { MCP_TARGETS, type McpTarget, hookCommand, install, installMcp, mcpCommand, preflight, uninstall } from './install.js';
 import { defaultRulesFiles, detectAgents } from './agents.js';
-import { checkFile } from './match.js';
+import { checkFile, fileContext, matchTouches } from './match.js';
+import { type StagedFile, stagedFiles } from './staged.js';
+import { langForPath } from './source/lang.js';
+import { touches } from './source/touches.js';
 import { PROVIDERS, type ProviderName, provider } from './llm.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
@@ -96,15 +99,33 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
 
   program
     .command('check')
-    .description('Report landmines that whole files touch (as if every line were being edited)')
-    .argument('<files...>', 'JS/TS or Python files')
+    .description('Report landmines that whole files touch (as if every line were being edited), or that staged changes add')
+    .argument('[files...]', 'JS/TS or Python files')
+    .option('--staged', 'check the lines staged for commit instead (a pre-commit check for agents without hooks)')
     .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest one above each file)')
     .option('--json', 'machine-readable output')
     .option('--exit-code', 'exit with status 1 when anything matches (for CI)')
-    .action((files: string[], opts: { root?: string; json?: boolean; exitCode?: boolean }) => {
+    .action((files: string[], opts: { root?: string; json?: boolean; exitCode?: boolean; staged?: boolean }) => {
       const color = { color: wantsColor(process.stdout, env) };
       const results: Array<{ file: string; hits: ReturnType<typeof checkFile> }> = [];
-      for (const file of files) {
+      if (opts.staged) {
+        let staged: StagedFile[];
+        try {
+          staged = stagedFiles(process.cwd());
+        } catch {
+          throw new CliError('--staged needs a git repository');
+        }
+        for (const f of staged) {
+          const lang = langForPath(f.path);
+          if (!lang) continue;
+          const index = loadIndex(opts.root ?? dirname(f.path));
+          const found = touches({ fileText: f.fileText, changedText: f.changedText, lang });
+          results.push({ file: relative(process.cwd(), f.path) || f.path, hits: matchTouches(found, index, lang, fileContext(f.fileText, lang, f.changedText)) });
+        }
+      } else if (files.length === 0) {
+        throw new CliError('Name the files to check, or pass --staged.');
+      }
+      for (const file of opts.staged ? [] : files) {
         const abs = resolve(file);
         if (!existsSync(abs)) throw new CliError(`No such file: ${file}`);
         const index = loadIndex(opts.root ?? dirname(abs));

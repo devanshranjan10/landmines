@@ -1,0 +1,19 @@
+{
+  "id": "pyarrow-51368",
+  "issue": "apache/arrow#51368",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pyarrow",
+  "version": "25.0.1",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-a",
+  "entry": ["app/helpdesk.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "newlines_in_values\\s*=\\s*True",
+    "about": "pyarrow.csv.read_csv/open_csv with ParseOptions(newlines_in_values=True) on a >1 MiB file whose quoted values contain CRLF line breaks"
+  },
+  "summary": "pyarrow's CSV reader silently drops the LF of a CRLF inside a quoted field when the CR is the last byte of a parse block (default block 1 MiB), so a multi-line value loses one byte"
+}

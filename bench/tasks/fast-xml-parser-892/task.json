@@ -1,0 +1,23 @@
+{
+  "id": "fast-xml-parser-892",
+  "issue": "NaturalIntelligence/fast-xml-parser#892",
+  "related": [],
+  "ecosystem": "npm",
+  "package": "fast-xml-parser",
+  "version": "5.11.2",
+  "tier": "A",
+  "set": "fresh",
+  "entry": [
+    "src/feed.js"
+  ],
+  "test": [
+    "node",
+    "hidden/test.mjs"
+  ],
+  "env": {},
+  "trigger": {
+    "regex": "new\\s+XMLParser\\((?![^;]*htmlEntities\\s*:\\s*true)(?!\\{ ignoreAttributes: false, attributeNamePrefix: '@_' \\}\\);\\s*return parser\\.parse\\(xml\\)\\.catalog\\['@_supplier'\\])",
+    "about": "parses product XML with an XMLParser that does not enable htmlEntities (the seed's supplierOf parser is excluded)"
+  },
+  "summary": "fast-xml-parser decodes &amp;/&lt; by default but leaves numeric character references (&#233;, &#xE9;) undecoded unless htmlEntities is enabled"
+}

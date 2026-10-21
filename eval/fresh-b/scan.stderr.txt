@@ -1,0 +1,26 @@
+Scanning eval/fresh-b (token from gh auth token)
+  csv-parse@7.0.3: 2 open issues filed against this version
+  fast-xml-parser@5.11.2: 3 open issues filed against this version
+  immer@11.2.6: 0 open issues filed against this version
+  jose@6.2.13: 0 open issues filed against this version
+  ky@2.2.0: 0 open issues filed against this version
+  marked@18.1.1: 1 open issue filed against this version
+  kysely@0.29.7: 4 open issues filed against this version
+  qs@6.16.1: 1 open issue filed against this version
+  uuid@14.0.3: 0 open issues filed against this version
+  valibot@1.5.0: 7 open issues filed against this version
+  yaml@2.9.1: 1 open issue filed against this version
+  zod@4.6.7: 4 open issues filed against this version
+  msgspec@0.22.0: 2 open issues filed against this version
+  orjson@3.13.0: no GitHub repo found
+  networkx@3.7: 2 open issues filed against this version
+  numpy@2.5.4: 4 open issues filed against this version
+  plotly@7.1.0: 6 open issues filed against this version
+  pendulum@3.3.0: 0 open issues filed against this version
+  pandas@3.0.6: 26 open issues filed against this version
+  pydantic@2.14.1: 3 open issues filed against this version
+  pyarrow@26.0.0: 23 open issues filed against this version
+  polars@2.0.0: 41 open issues filed against this version
+  scikit-learn@1.9.1: 14 open issues filed against this version
+  sqlalchemy@2.1.5: 1 open issue filed against this version
+  typer@0.27.3: 0 open issues filed against this version

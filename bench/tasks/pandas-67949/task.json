@@ -1,0 +1,19 @@
+{
+  "id": "pandas-67949",
+  "issue": "pandas-dev/pandas#67949",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pandas",
+  "version": "3.0.5",
+  "tier": "A",
+  "set": "fresh",
+  "venv": ".venv-fresh-a",
+  "entry": ["app/expenses.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "(?<![\\s\\S])(?![\\s\\S]*\\.astype\\(\\s*([\"'](string|str|object|float|float64|Float64)[\"']|str|object|float)\\s*\\))[\\s\\S]*\\bto_numeric\\(",
+    "about": "pd.to_numeric(..., errors='coerce') applied directly to an Arrow-backed string column (read_csv(dtype_backend='pyarrow')) without first converting it to StringDtype/object or converting the result to numpy float"
+  },
+  "summary": "pd.to_numeric(errors='coerce') on an ArrowDtype string column turns unparseable values into float NaN instead of a missing value: isna() is False for them and sum() returns nan"
+}

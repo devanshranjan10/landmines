@@ -1,0 +1,5 @@
+Support needs to resolve a customer's email address to their pseudonymous record without access to the raw users table. Please implement `lookup(path, email)` in `app/pseudonyms.py`.
+
+It should normalise and hash the email exactly the way `build_index` does, and return the matching row of the index file at `path` as a dict with the keys `email_key`, `user_id`, `region` and `created` (plain Python values), or `None` if no user in the index has that email. Lookups must work for every user in the index; the production index currently holds about 500,000 users.
+
+Keep the existing exports working and don't change dependencies.

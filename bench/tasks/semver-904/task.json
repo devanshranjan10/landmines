@@ -1,0 +1,15 @@
+{
+  "id": "semver-904",
+  "issue": "npm/node-semver#904",
+  "related": [],
+  "ecosystem": "npm",
+  "package": "semver",
+  "version": "7.8.5",
+  "tier": "A",
+  "set": "fresh",
+  "entry": ["src/policy.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": {},
+  "trigger": { "regex": "\\b(?:gtr|ltr|outside)\\s*\\(", "about": "uses semver.gtr / semver.ltr / semver.outside to tell whether a version is above or below a range" },
+  "summary": "semver.gtr/ltr pick the wrong edge when a comparator set has two bounds on one side (e.g. '^4.17.0 >=4.17.21'), so both can return true"
+}
