@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get",
+    "post",
+    "request",
+    "send"
+  ],
+  "requires": [
+    [
+      "fe80"
+    ]
+  ],
+  "condition": "In requests 2.32.x, a request to an IPv6 link-local URL that has a zone ID (e.g. https://[fe80::1%eth0]/) fails with NameResolutionError. The host is taken from urlparse().hostname without brackets and with the zone ID escaped as %25.",
+  "workaround": "Build the request yourself with session.prepare_request(requests.Request(...)), set prepared.url = prepared.url.replace('%25', '%'), then call session.send(prepared). Downgrading to requests 2.31.0 also works.",
+  "workaroundUrl": "https://github.com/psf/requests/issues/6735#issuecomment-2194143025",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

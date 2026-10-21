@@ -1,0 +1,21 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "cytoscape_data"
+  ],
+  "requires": [
+    [
+      "str",
+      "print"
+    ]
+  ],
+  "condition": "cytoscape_data returns a Python dict, not a JSON string, so writing it with str() or print() produces Python repr output that is not valid JSON and that Cytoscape cannot read.",
+  "workaround": "Serialize the dict with the json module, e.g. json.dump(nx.cytoscape_data(G), fh).",
+  "workaroundUrl": "https://github.com/networkx/networkx/issues/7913#issuecomment-2746298497",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

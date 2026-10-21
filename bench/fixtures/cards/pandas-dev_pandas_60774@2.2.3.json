@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_parquet",
+    "read_parquet"
+  ],
+  "requires": [
+    [
+      "datetime64[s]"
+    ]
+  ],
+  "condition": "When a datetime64[s] column is written with to_parquet and read back with read_parquet, it comes back as datetime64[ms] instead of datetime64[s], because pyarrow does not store second resolution.",
+  "workaround": "After read_parquet, cast the column back with .astype(\"datetime64[s]\").",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

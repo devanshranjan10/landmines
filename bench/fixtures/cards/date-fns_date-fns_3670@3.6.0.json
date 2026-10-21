@@ -1,0 +1,17 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "formatRelative",
+    "format"
+  ],
+  "requires": [],
+  "condition": "When bundled with Parcel/Plasmo (before Parcel 2.14.2), format with long tokens like 'p' or formatRelative throws \"Cannot read properties of undefined (reading 'p')\" because the longFormatters module gets tree-shaken out of the bundle.",
+  "workaround": "Import formatters and longFormatters from date-fns and reference them (e.g. const FORCE_BUNDLE = [formatters, longFormatters]), or upgrade Parcel to 2.14.2 or later.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3670#issuecomment-1899246376",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

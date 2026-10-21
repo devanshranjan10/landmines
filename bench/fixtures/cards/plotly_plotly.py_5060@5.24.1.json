@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "updatemenus"
+  ],
+  "requires": [
+    [
+      "update",
+      "relayout"
+    ],
+    [
+      "title"
+    ]
+  ],
+  "unless": [
+    "title.text"
+  ],
+  "condition": "In plotly 6.x, an updatemenus button whose layout args set \"title\" to a plain string clears the title instead of updating it.",
+  "workaround": "Pin plotly to 5.x (e.g. 5.24.1), or likely set the title through the \"title.text\" key or {\"title\": {\"text\": ...}} in the button args.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/5060#issuecomment-3085228164",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

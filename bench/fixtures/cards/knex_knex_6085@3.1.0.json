@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "forShare"
+  ],
+  "requires": [
+    [
+      "noWait",
+      "skipLocked"
+    ]
+  ],
+  "condition": "On MySQL 8.0, forShare().noWait() or .skipLocked() compiles to \"lock in share mode nowait\", which is invalid SQL and makes the query fail.",
+  "workaround": "On MySQL 8, write the lock clause with knex.raw, e.g. append \"for share nowait\" to the query, instead of using forShare().noWait().",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

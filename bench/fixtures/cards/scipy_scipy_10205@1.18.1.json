@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "gaussian_kde"
+  ],
+  "requires": [],
+  "condition": "gaussian_kde raises LinAlgError (not positive definite) when the data is degenerate, i.e. lies in a lower-dimensional subspace or has a singular or near-singular covariance matrix.",
+  "workaround": "Remove the linearly dependent dimensions before fitting, e.g. project the data onto its principal subspace. Another option is to add a little jitter or noise so the covariance matrix is non-singular.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

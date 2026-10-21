@@ -1,0 +1,15 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "acquireConnection"
+  ],
+  "requires": [],
+  "condition": "Feature request: knex has no built-in way to get the Postgres backend pid before a query runs, so you have to acquire and release the connection yourself.",
+  "workaround": "Get a connection with client.acquireConnection(), pass it to the query with .connection(conn), read conn.processID, then release it with client.releaseConnection().",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

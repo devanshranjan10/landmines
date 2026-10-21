@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "FunctionOptions"
+  ],
+  "requires": [
+    [
+      "serialize"
+    ]
+  ],
+  "condition": "Calling serialize() on a pyarrow.compute.FunctionOptions object built directly from the base class with no arguments crashes the interpreter with a segfault.",
+  "workaround": "Don't create the base FunctionOptions class directly. Create a concrete subclass instead, such as pc.CastOptions or pc.ScalarAggregateOptions, before calling serialize().",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

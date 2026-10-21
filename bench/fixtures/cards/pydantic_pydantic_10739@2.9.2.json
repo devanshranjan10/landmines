@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "computed_field",
+    "__rich_repr__",
+    "__repr_args__"
+  ],
+  "requires": [
+    [
+      "property"
+    ]
+  ],
+  "condition": "If model validation fails and something (e.g. rich/structlog traceback rendering) reprs the half-initialized instance, the repr evaluates computed fields that read missing attributes, so a second AttributeError is raised while the original exception is being handled.",
+  "workaround": "Make computed_field properties defensive, e.g. use getattr(self, 'version', None) for fields that may be missing, or turn off local-variable rendering in the rich traceback formatter.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

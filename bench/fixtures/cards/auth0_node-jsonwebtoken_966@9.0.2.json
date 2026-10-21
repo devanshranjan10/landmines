@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sign",
+    "verify"
+  ],
+  "requires": [],
+  "unless": [
+    "createPublicKey",
+    "createPrivateKey"
+  ],
+  "condition": "In 9.x, sign/verify with a string or Buffer secret or PEM key re-creates a KeyObject on every call, making HS256 around 50x slower than in 8.5.1.",
+  "workaround": "Create the key once with crypto.createSecretKey (or createPublicKey/createPrivateKey for asymmetric keys) and pass that KeyObject to sign/verify.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/966#issuecomment-2391189590",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "_metadata"
+  ],
+  "requires": [
+    [
+      "Series"
+    ],
+    [
+      "_constructor"
+    ]
+  ],
+  "unless": [
+    "_name"
+  ],
+  "condition": "A Series subclass that overrides _metadata without including '_name' loses its name when indexed with a list or after drop_duplicates.",
+  "workaround": "Include '_name' in the subclass's _metadata, e.g. _metadata = ['_name', 'property'] (or extend pd.Series._metadata).",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61491#issuecomment-2907681693",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

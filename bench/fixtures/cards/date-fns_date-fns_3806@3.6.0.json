@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "likely",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "date-fns/locale"
+    ]
+  ],
+  "condition": "Importing from the date-fns barrel files under ts-jest/vitest (especially with moduleResolution node16) makes test startup and transforms much slower than v2.",
+  "workaround": "Remove moduleResolution node16 from tsconfig (the @node20/tsconfig base sets it), or import individual submodules instead of the barrel files.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3806#issuecomment-2120081872",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

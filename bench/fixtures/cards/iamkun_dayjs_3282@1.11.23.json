@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "cs"
+    ],
+    [
+      "LL",
+      "LLL",
+      "LLLL",
+      "MMMM"
+    ]
+  ],
+  "condition": "With the cs locale, format('LL'/'LLL'/'LLLL') or any format where a day comes before MMMM prints the nominative month name (říjen) when Czech needs the genitive (října).",
+  "workaround": "Use dayjs.updateLocale('cs', ...) to give months a function that returns the genitive names when the format puts a day before the month, the way moment does it.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_sas",
+    "XportReader"
+  ],
+  "requires": [
+    [
+      "xport",
+      "xpt",
+      "XPT",
+      "XportReader"
+    ]
+  ],
+  "condition": "For an XPORT file with records of 80 bytes or less, read_sas miscounts nobs and silently drops trailing rows when some 8-byte character values are all blank, or raises StopIteration when the file has only one row.",
+  "workaround": "Check the row count against the source, or read XPORT files with pyreadstat until the trailing-padding count in _record_count is fixed.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

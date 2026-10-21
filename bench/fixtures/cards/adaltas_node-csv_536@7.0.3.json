@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "parse"
+  ],
+  "requires": [
+    [
+      "bom"
+    ],
+    [
+      "trim",
+      "ltrim"
+    ]
+  ],
+  "unless": [
+    "encoding"
+  ],
+  "condition": "When a UTF-16LE BOM is detected with bom: true and trim/ltrim is enabled, whitespace trimming uses UTF-8 bytes and corrupts field values (e.g. \"a\" becomes \"愀\").",
+  "workaround": "Pass encoding: \"utf16le\" explicitly instead of relying on BOM detection for UTF-16LE input.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

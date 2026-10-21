@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "unknown",
+  "apis": [
+    "astype",
+    "str_len",
+    "strip",
+    "rstrip"
+  ],
+  "requires": [
+    [
+      "\"T\"",
+      "StringDType"
+    ]
+  ],
+  "condition": "Repeatedly converting arrays to StringDType (\"T\") and running numpy.strings operations reportedly leaks memory slowly under production load, but maintainers could not reproduce it.",
+  "workaround": "Use object-dtype arrays or plain Python str operations instead of StringDType.",
+  "confidence": 0.25,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

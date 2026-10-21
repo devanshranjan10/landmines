@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv",
+    "open_csv"
+  ],
+  "requires": [
+    [
+      "newlines_in_values"
+    ]
+  ],
+  "condition": "With newlines_in_values=True, a CRLF inside a quoted field that falls with CR as the last byte of a parser block and LF as the first byte of the next block loses the LF silently.",
+  "workaround": "There's no fix yet. One workaround is to normalize embedded CRLF to LF before reading, or to use another reader such as polars or duckdb.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sink_batches"
+  ],
+  "requires": [
+    [
+      "unpivot"
+    ],
+    [
+      "with_columns",
+      "rename",
+      "replace_time_zone"
+    ]
+  ],
+  "condition": "With the streaming engine, sink_batches peak memory grows with the input length (it is only freed at the end) when the lazy plan computes or renames a column and the callback unpivots each batch.",
+  "workaround": "Split the input into several sink_batches runs over slices of the LazyFrame, or compute the column inside the callback instead of in the plan.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

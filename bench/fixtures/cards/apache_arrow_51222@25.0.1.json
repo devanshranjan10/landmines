@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "binary_slice"
+  ],
+  "requires": [],
+  "condition": "pc.binary_slice with the default stop and start > 0 overflows its output-size calculation, so it raises ArrowInvalid \"Negative buffer resize\" once values are longer than a few hundred bytes.",
+  "workaround": "Pass an explicit stop that is large but finite (for example the maximum value length) instead of relying on the default.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

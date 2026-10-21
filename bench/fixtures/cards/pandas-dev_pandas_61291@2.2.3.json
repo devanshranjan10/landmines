@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "reindex",
+    "take"
+  ],
+  "requires": [
+    [
+      "fill_value"
+    ]
+  ],
+  "condition": "Passing fill_value=None to reindex (or ExtensionArray.take with allow_fill) fills new positions with NaN instead of None, even for object dtype.",
+  "workaround": "After reindexing, replace the NaN in the new positions with None yourself, for example by converting to object dtype and using .where(notna, None).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

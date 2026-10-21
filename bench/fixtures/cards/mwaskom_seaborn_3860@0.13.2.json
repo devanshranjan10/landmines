@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "histplot",
+    "displot"
+  ],
+  "requires": [
+    [
+      "binrange"
+    ]
+  ],
+  "unless": [
+    "bins",
+    "binwidth"
+  ],
+  "condition": "If you pass a wide binrange to tightly clustered data and don't set bins, the automatic bin rule creates a huge number of bins, so the plot hangs or never finishes.",
+  "workaround": "Set the number of bins explicitly, e.g. bins=n, or set binwidth.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3860#issuecomment-3196312770",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

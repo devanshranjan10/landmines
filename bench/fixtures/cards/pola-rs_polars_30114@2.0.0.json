@@ -1,0 +1,14 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv"
+  ],
+  "requires": [],
+  "condition": "In v2, read_csv on very wide CSVs (tens of thousands of columns) peaks at more than 100 times the DataFrame's size in memory and runs about 2x slower than in v1.44.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

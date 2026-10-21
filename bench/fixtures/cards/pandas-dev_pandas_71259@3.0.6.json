@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_datetime",
+    "to_numeric"
+  ],
+  "requires": [
+    [
+      "col"
+    ]
+  ],
+  "condition": "Passing a pd.col expression to pd.to_datetime or pd.to_numeric raises \"TypeError: boolean value of an expression is ambiguous\" instead of producing a lazy expression.",
+  "workaround": "Use a lambda in assign, e.g. df.assign(t=lambda d: pd.to_datetime(d[\"d\"], errors=\"coerce\")).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

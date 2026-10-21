@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "read_database_uri"
+  ],
+  "requires": [],
+  "condition": "Documentation request to add a Redis ADBC driver example; no defect in polars.",
+  "confidence": 0.95,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

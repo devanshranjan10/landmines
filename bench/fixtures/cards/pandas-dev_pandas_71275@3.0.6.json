@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_xml"
+  ],
+  "requires": [
+    [
+      "iterparse"
+    ]
+  ],
+  "condition": "When read_xml's iterparse list repeats a child name (e.g. {\"row\": [\"a\", \"a\"]}) and the file is larger than the parser buffer, some values come back NaN or end up in the wrong column, with no warning.",
+  "workaround": "Don't repeat child names in the iterparse list. Read the file with the xpath path instead, or parse it yourself and read element text only on \"end\" events.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

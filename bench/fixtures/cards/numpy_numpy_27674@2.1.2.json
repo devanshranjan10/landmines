@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ptp"
+  ],
+  "requires": [
+    [
+      "masked_invalid",
+      "masked_array",
+      "MaskedArray",
+      "masked_where",
+      "masked_values",
+      "ma"
+    ]
+  ],
+  "condition": "In numpy 2, np.ptp() on a masked array ignores the mask and returns nan (or a value that includes masked entries) instead of a masked-aware range.",
+  "workaround": "Use np.ma.ptp(arr) or the method arr.ptp() instead of np.ptp(arr).",
+  "workaroundUrl": "https://github.com/numpy/numpy/issues/27674#issuecomment-4229529351",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

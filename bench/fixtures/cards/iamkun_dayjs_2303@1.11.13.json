@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [],
+  "condition": "dayjs.tz / .tz() conversion around a DST transition in the local (or target) timezone produces an offset off by one hour (e.g. +07:00 for Asia/Shanghai when local tz is Australia/Adelaide).",
+  "workaround": "Detect the bad offset by comparing against offsets of neighbouring days and repair with dayjsDate.utcOffset(dayjsDate.utcOffset() + 60, true).",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

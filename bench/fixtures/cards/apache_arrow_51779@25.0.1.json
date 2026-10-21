@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "open_stream",
+    "open_file",
+    "read_schema"
+  ],
+  "requires": [],
+  "condition": "Reading an Arrow IPC stream or file whose dictionary-encoded field leaves out DictionaryEncoding.indexType (the spec allows this and says the indices default to int32) raises \"OSError: Unexpected null field DictionaryEncoding.indexType\" instead of using int32.",
+  "workaround": "Have the writer (for example apache-arrow JS) always set indexType for dictionary fields; pyarrow has no reader-side workaround at this version.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

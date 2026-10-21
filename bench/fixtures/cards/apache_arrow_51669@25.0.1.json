@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "create_encryption_properties",
+    "FileEncryptionProperties",
+    "EncryptionConfiguration"
+  ],
+  "requires": [
+    [
+      "plaintext_footer"
+    ],
+    [
+      "AES_GCM_CTR_V1"
+    ]
+  ],
+  "condition": "If you write a Parquet file with a plaintext footer and the AES_GCM_CTR_V1 algorithm, the footer records AES_GCM_V1 instead. The file can't be read back and fails with \"Failed decryption finalization\".",
+  "workaround": "Use AES_GCM_V1 with a plaintext footer, or keep AES_GCM_CTR_V1 and use an encrypted footer (plaintext_footer=False).",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

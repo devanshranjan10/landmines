@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "pretty_repr",
+    "pprint",
+    "Pretty",
+    "install"
+  ],
+  "requires": [
+    [
+      "__getattr__",
+      "Box",
+      "default_box",
+      "defaultdict"
+    ]
+  ],
+  "condition": "Pretty-printing an object whose __getattr__ auto-creates attributes (e.g. Box(default_box=True)) leaves the attributes `awehoi234_wdfjwljet234_234wdfoijsdfmmnxpi492` and `_fields` on that object, and tuple subclasses like this can be wrongly treated as namedtuples.",
+  "workaround": "After pretty-printing, delete the probe attributes from objects that auto-create attributes, or print them through a plain repr or dict copy instead of rich's pretty printer.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

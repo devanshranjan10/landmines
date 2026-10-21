@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "gather"
+  ],
+  "requires": [
+    [
+      "list"
+    ]
+  ],
+  "condition": "Type checkers like mypy reject Expr.list.gather when it is given a column name as a string, because the type annotation for indices leaves out str, even though the call works at runtime.",
+  "workaround": "Wrap the column name in pl.col, as in list.gather(pl.col(\"idx\")), and not as the bare string \"idx\".",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

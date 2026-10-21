@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "use_enum_values"
+  ],
+  "requires": [
+    [
+      "model_dump",
+      "model_dump_json"
+    ],
+    [
+      "Enum"
+    ]
+  ],
+  "condition": "With use_enum_values=True, when a nested model uses the same Enum type in two or more fields and is referenced from another model, the outer model's enum field keeps the Enum member instead of its value, so model_dump returns the Enum member.",
+  "workaround": "Upgrade to pydantic 2.11+, where enum schemas are no longer inlined.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10570#issuecomment-2898282178",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

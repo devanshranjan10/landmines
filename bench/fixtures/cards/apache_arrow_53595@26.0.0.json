@@ -1,0 +1,23 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_table"
+  ],
+  "requires": [
+    [
+      "from_sparse",
+      "sparse_union",
+      "from_dense",
+      "dense_union",
+      "union"
+    ]
+  ],
+  "condition": "pyarrow.parquet.write_table raises ArrowNotImplementedError for a table with a union column (sparse or dense), whether it is top-level or nested in a list or struct, because Parquet has no union type.",
+  "workaround": "Before writing to Parquet, turn the union column into a struct of its child arrays plus a type-code column, or write the table in a format that supports unions, such as Arrow IPC/Feather.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

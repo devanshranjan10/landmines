@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz",
+    "utcOffset"
+  ],
+  "requires": [],
+  "condition": "When the host is in a timezone with a +00:00 offset (e.g. Europe/London in winter, Lisbon), the utc plugin's valueOf treats a $localOffset of 0 as missing because it uses `||`, so dayjs.tz(string, zone) and utcOffset() can come out one hour off.",
+  "workaround": "Run the process with TZ=UTC, or patch the utc plugin's valueOf to use a null/undefined check (??) on $localOffset instead of ||, as in PR #1678.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/1675#issuecomment-955744086",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

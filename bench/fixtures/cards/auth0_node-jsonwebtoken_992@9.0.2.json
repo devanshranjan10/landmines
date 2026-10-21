@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sign",
+    "verify"
+  ],
+  "requires": [],
+  "condition": "On Node 24.0.0 / Node 25+, loading jsonwebtoken with a lockfile pinned to jwa<=1.4.1 crashes with \"Cannot read properties of undefined (reading 'prototype')\" because buffer-equal-constant-time uses the removed SlowBuffer.",
+  "workaround": "Run `npm upgrade jwa` to pick up jwa@1.4.2 (or 2.0.1), which no longer uses SlowBuffer.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/992#issuecomment-2858355563",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

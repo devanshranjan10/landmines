@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Markdown"
+  ],
+  "requires": [
+    [
+      ">"
+    ]
+  ],
+  "condition": "Markdown blockquotes with several paragraphs render without a blank line between the paragraphs, so the paragraph breaks are lost.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

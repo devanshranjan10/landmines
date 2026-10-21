@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "dehumanize"
+  ],
+  "requires": [],
+  "condition": "dehumanize() drops the minus sign on negative numbers in its input, so \"in -1 hours\" returns +1 hour instead of raising an error.",
+  "workaround": "Check user input for a '-' before the number, and reject it, before passing the string to dehumanize().",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

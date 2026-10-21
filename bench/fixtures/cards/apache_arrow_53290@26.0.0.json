@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "read_csv",
+    "invalid_row_handler"
+  ],
+  "requires": [],
+  "condition": "The CSV reader can't pad short rows with nulls. Rows with fewer fields than the column count raise an error or, with invalid_row_handler, can only be skipped.",
+  "workaround": "Pre-process the file to pad short rows yourself, or use pandas' C engine with names= instead of the pyarrow engine.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

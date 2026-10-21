@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "equal",
+    "not_equal"
+  ],
+  "requires": [
+    [
+      "string_view",
+      "utf8_view"
+    ]
+  ],
+  "unless": [
+    "cast"
+  ],
+  "condition": "Comparing a string_view array with a string or large_string array using pc.equal raises ArrowNotImplementedError because no kernel exists for the mixed types.",
+  "workaround": "Cast one side so both have the same type before comparing, e.g. right.cast(pa.string_view()).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

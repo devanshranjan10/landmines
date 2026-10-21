@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "defineProperty"
+  ],
+  "requires": [
+    [
+      "toJSON"
+    ],
+    [
+      "Error"
+    ],
+    [
+      "writable"
+    ]
+  ],
+  "condition": "If Error.prototype.toJSON has already been defined as non-writable (for example by an error-serialization library), loading axios throws \"TypeError: Cannot assign to read only property 'toJSON'\", because utils.inherits uses Object.assign to set AxiosError.prototype.toJSON.",
+  "workaround": "Define Error.prototype.toJSON with writable: true, or import axios before the library that patches Error.prototype.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "std"
+  ],
+  "requires": [
+    [
+      "win_type"
+    ]
+  ],
+  "condition": "rolling(..., win_type=...).var()/std() gives wrong weighted variance for non-uniform weights because the weights rotate with each observation instead of sliding with the window, and the ddof correction uses the window length instead of the observation count when there are NaNs or min_periods.",
+  "workaround": "Compute the weighted variance yourself for each window, e.g. rolling(window).apply(lambda v: weighted_var(v, weights), raw=True) with numpy, instead of using win_type with var.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

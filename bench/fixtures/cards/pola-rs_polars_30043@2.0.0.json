@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_parquet",
+    "sink_parquet"
+  ],
+  "requires": [
+    [
+      "UInt64",
+      "UInt32"
+    ]
+  ],
+  "condition": "Writing a UInt64/UInt32 column whose values cross 2^63/2^31 into a column chunk with several pages produces row-group statistics with min > max, so scan_parquet predicate pushdown drops rows that match.",
+  "workaround": "Disable statistics when writing (statistics=False), or keep one page per chunk (the default data_page_size). When reading, you can also use read_parquet followed by filter, which skips pruning.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "split",
+    "collect_schema"
+  ],
+  "requires": [
+    [
+      "List"
+    ]
+  ],
+  "condition": "collect_schema() on a LazyFrame that calls .str.split on a List column doesn't raise InvalidOperationError and returns a wrong schema; the error only shows up at collect() as a SchemaError.",
+  "workaround": "Don't use .str.split on list columns. Use .list.eval(pl.element().str.split(...)), or explode the column first.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

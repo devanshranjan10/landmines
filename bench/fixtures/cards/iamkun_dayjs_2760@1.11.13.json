@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "extend"
+  ],
+  "requires": [
+    [
+      "devHelper"
+    ]
+  ],
+  "condition": "Calling dayjs.extend(devHelper) in a browser throws \"ReferenceError: process is not defined\" because the plugin reads process.env without checking that process exists.",
+  "workaround": "Only load the devHelper plugin in Node, or define a global process shim (e.g. window.process = { env: {} }) before extending.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

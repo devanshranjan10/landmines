@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__setitem__"
+  ],
+  "requires": [
+    [
+      "dtype=object",
+      "object"
+    ]
+  ],
+  "unless": [
+    "ravel",
+    "flatten"
+  ],
+  "condition": "Assigning a 2D numpy array with dtype=object (shape (n,1)) to a single DataFrame column via df[\"col\"] = arr raises ValueError: 2 from maybe_infer_to_datetimelike.",
+  "workaround": "Flatten the array before assigning, e.g. df[\"c1\"] = t2.ravel().",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61026#issuecomment-2692286198",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

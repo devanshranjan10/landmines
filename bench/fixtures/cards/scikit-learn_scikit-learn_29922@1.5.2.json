@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "RandomForestRegressor",
+    "DecisionTreeRegressor"
+  ],
+  "requires": [],
+  "unless": [
+    "absolute_error",
+    "StandardScaler",
+    "TransformedTargetRegressor"
+  ],
+  "condition": "With the default squared_error criterion, a very small target scale (around 1e-8 or smaller) pushes impurity values down to machine precision, so trees don't split and the predictions come out almost constant.",
+  "workaround": "Rescale the target to a reasonable magnitude before fitting (and scale predictions back), or use criterion=\"absolute_error\".",
+  "workaroundUrl": "https://github.com/scikit-learn/scikit-learn/issues/29922#issuecomment-2372482748",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

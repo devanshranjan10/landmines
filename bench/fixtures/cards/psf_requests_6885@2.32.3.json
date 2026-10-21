@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "put",
+    "post"
+  ],
+  "requires": [
+    [
+      "https"
+    ]
+  ],
+  "unless": [
+    "allow_redirects"
+  ],
+  "condition": "Sending a large request body over HTTPS to a server that answers 307 and closes the connection before reading the whole body raises SSLError (EOF occurred in violation of protocol) when it should follow the redirect.",
+  "workaround": "Send the first request without the body and with allow_redirects=False. Read the Location header yourself, then send the request with the data to the redirect target.",
+  "workaroundUrl": "https://github.com/psf/requests/issues/6885#issuecomment-2634828315",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

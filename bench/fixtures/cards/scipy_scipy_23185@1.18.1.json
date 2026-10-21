@@ -1,0 +1,15 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "ZlibInputStream"
+  ],
+  "requires": [],
+  "condition": "Two scipy test-suite checks assume an exact zlib compressed length, so they fail on Python 3.14 or with zlib-ng; this is not a runtime defect.",
+  "workaround": "Skip the two TestZlibInputStream tests on Python 3.14 or zlib-ng builds.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

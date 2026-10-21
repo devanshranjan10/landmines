@@ -1,0 +1,8 @@
+Finance wants totals from the expense reports, but the `amount` column is typed in by hand in the card portal: besides numbers it sometimes contains text such as `TBD`, `see receipt` or `12,50`, and sometimes it's blank.
+
+Please implement in `app/expenses.py` (reports come from `load_report`):
+
+- `clean_amounts(report)`: return a copy of the report whose `amount` column is numeric. Anything that isn't a valid number (text or blank) becomes a missing value. Other columns stay as they are, and the input frame must not be modified.
+- `amount_summary(report)`: return `{"total": <float>, "invalid_rows": <int>}`, where `total` is the sum of the valid amounts only and `invalid_rows` is the number of rows whose amount is missing or not a valid number.
+
+Keep the existing exports working and don't change dependencies.

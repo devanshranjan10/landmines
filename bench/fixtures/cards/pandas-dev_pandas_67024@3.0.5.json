@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "extract"
+  ],
+  "requires": [
+    [
+      "ArrowDtype"
+    ]
+  ],
+  "condition": "On a Series with pd.ArrowDtype string data, .str.extract with unnamed capture groups raises ValueError, and with mixed named and unnamed groups raises ArrowInvalid (or, on main with flags, silently returns all-NA for the unnamed group).",
+  "workaround": "Name every capture group with (?P<name>...), or cast the Series to \"string[pyarrow]\"/object dtype before calling str.extract.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

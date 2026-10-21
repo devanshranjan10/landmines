@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "check"
+  ],
+  "requires": [
+    [
+      "createTable",
+      "alterTable",
+      "table"
+    ]
+  ],
+  "condition": "Calling table.check() with a null or undefined predicate crashes during SQL compilation with \"TypeError: Cannot read properties of undefined (reading 'replace')\" in replaceKeyBindings.",
+  "workaround": "Don't pass a null or undefined predicate to table.check(). Only call it when there is a real SQL string, or patch rawFormatter so it returns an empty string when raw.sql is missing.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6175#issuecomment-3364159710",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

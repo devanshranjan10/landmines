@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "ko"
+    ],
+    [
+      "a hh",
+      "A hh",
+      "a h",
+      "A h"
+    ]
+  ],
+  "condition": "With customParseFormat and the 'ko' locale, parsing a string containing 오후 (PM) with an 'a'/'A' meridiem token ignores the PM and returns the AM hour.",
+  "workaround": "Before parsing, replace 오전/오후 with AM/PM yourself (or work out the hour manually) and parse with an English-locale format.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

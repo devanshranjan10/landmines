@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__eq__",
+    "BaseModel"
+  ],
+  "requires": [
+    [
+      "=="
+    ]
+  ],
+  "condition": "Comparing BaseModel instances with == raises RecursionError when a model holds a reference to itself, either directly or through a cycle such as parent/child back-references.",
+  "workaround": "Override __eq__ so it skips fields that point back into the object graph, or keep back-reference fields out of the comparison.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10630#issuecomment-2471017864",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

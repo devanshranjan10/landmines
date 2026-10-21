@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "assume_timezone"
+  ],
+  "requires": [],
+  "condition": "For timestamps after 2037, assume_timezone (and other tz conversions in Arrow's vendored tz.cpp) keeps using the last tabulated UTC offset and ignores the zone's DST footer rule, so it gets the UTC offset wrong (for example, it applies winter time in summer).",
+  "workaround": "Localize the values on the Python side with zoneinfo (datetime.replace(tzinfo=ZoneInfo(...))) before building the Arrow array, so you don't depend on assume_timezone for dates after 2037.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/36110#issuecomment-1593720795",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

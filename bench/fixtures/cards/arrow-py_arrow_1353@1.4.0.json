@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get"
+  ],
+  "requires": [
+    [
+      "\"X\"",
+      "'X'"
+    ]
+  ],
+  "condition": "arrow.get(s, \"X\") on a long, non-matching string of digits takes quadratic time because _TIMESTAMP_RE backtracks, which allows a ReDoS from untrusted input.",
+  "workaround": "Limit the input length or validate it with a non-ambiguous regex such as ^-?\\d+(?:\\.\\d+)?$ before calling arrow.get with \"X\", or convert the value with float() and call arrow.get(float_value).",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_ordering",
+    "FileSystemDataset",
+    "from_buffers",
+    "SubTreeFileSystem"
+  ],
+  "requires": [
+    [
+      "None"
+    ]
+  ],
+  "condition": "Passing None where a required Arrow object (schema, type, fragment, filesystem) is expected, e.g. SortingColumn.from_ordering(None, ...) or DictionaryArray.from_buffers(None, ...), segfaults the interpreter instead of raising TypeError.",
+  "workaround": "Check that schema/type/filesystem/fragment arguments are not None before passing them to these PyArrow APIs.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scan_parquet",
+    "read_parquet"
+  ],
+  "requires": [
+    [
+      "Map"
+    ],
+    [
+      "Datetime"
+    ],
+    [
+      "schema"
+    ]
+  ],
+  "condition": "When a Parquet file has INT96 timestamps inside a Map column and the schema asks for pl.Map(..., pl.Datetime(\"us\")), the map values are still decoded at nanosecond precision, so any timestamp outside the nanosecond range saturates to 2262-04-11.",
+  "workaround": "Declare the column as pl.List(pl.Struct({\"key\": ..., \"value\": pl.Datetime(\"us\")})) instead of pl.Map in the schema.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

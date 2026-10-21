@@ -1,0 +1,5 @@
+Users want to set reminders with relative times instead of typing exact timestamps, using the same phrasing the bot already shows them in the reminder list (`describe()`).
+
+Please implement `parse_relative(text, now)` in `app/reminders.py`. `now` is an ISO 8601 timestamp string; `text` is English like `in 3 hours`, `2 days ago`, `in a week` or `an hour ago`, with units minutes, hours, days or weeks. People also type fractional amounts such as `in 1.5 hours` or `0.5 days ago`. Return an `arrow.Arrow` in UTC. Text that isn't a relative time like this should raise `ValueError`.
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "copy",
+    "reindex"
+  ],
+  "requires": [
+    [
+      "threading",
+      "Thread",
+      "ThreadPoolExecutor"
+    ]
+  ],
+  "unless": [
+    "Lock",
+    "RLock"
+  ],
+  "condition": "Calling DataFrame.copy() or Series.reindex() from multiple threads while another thread mutates (or even just reads) the same object can crash or return an inconsistent result, because pandas is not thread-safe.",
+  "workaround": "Put a lock (threading.Lock) around every access to the shared pandas object, or use multiprocessing instead of threads.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/2728#issuecomment-14997831",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "categorical_multiedge_match",
+    "generic_multiedge_match",
+    "numerical_multiedge_match"
+  ],
+  "requires": [
+    [
+      "subgraph_is_monomorphic",
+      "subgraph_monomorphisms_iter"
+    ]
+  ],
+  "condition": "The multiedge_match helpers test edge-attribute sets for equality, so when two nodes are joined by several edges with different attribute values, subgraph monomorphism checks on MultiGraphs wrongly return False.",
+  "workaround": "Pass a custom edge_match function that compares the attribute values as sets with values1 >= values2 (or as Counters, so repeated values are counted) instead of using categorical_multiedge_match.",
+  "workaroundUrl": "https://github.com/networkx/networkx/issues/7758#issuecomment-2522165518",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

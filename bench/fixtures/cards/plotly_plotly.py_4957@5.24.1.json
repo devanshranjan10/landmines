@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "validate_colors"
+  ],
+  "requires": [],
+  "condition": "validate_colors raises PlotlyError for valid hsl strings and single named colors, but accepts invalid named colors when they are passed in a list.",
+  "workaround": "Don't use validate_colors for named or hsl colors. Use rgb/hex strings instead, or check colors by building a trace (e.g. go.Scatter marker color validation).",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

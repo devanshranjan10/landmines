@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "fillna",
+    "replace"
+  ],
+  "requires": [
+    [
+      "''",
+      "\"\""
+    ]
+  ],
+  "unless": [
+    "astype"
+  ],
+  "condition": "On datetime64 columns, fillna('') or replace(pd.NaT, '') silently leaves NaT in place, because the empty string is parsed as NaT and the column is not upcast to object.",
+  "workaround": "Cast the datetime column to object (astype(object)) or format it as strings with dt.strftime before calling fillna('').",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/11953#issuecomment-1343479736",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

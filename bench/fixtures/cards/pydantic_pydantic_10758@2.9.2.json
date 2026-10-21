@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__pydantic_extra__"
+  ],
+  "requires": [
+    [
+      "Field"
+    ]
+  ],
+  "condition": "If you override the `__pydantic_extra__` annotation with a narrower dict type, pyright reports reportIncompatibleVariableOverride. Adding `| None` to satisfy pyright instead makes pydantic raise PydanticSchemaGenerationError when the class is built.",
+  "workaround": "Add a `# pyright: ignore[reportIncompatibleVariableOverride]` comment, or turn that rule off for the whole project.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10758#issuecomment-2466161227",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

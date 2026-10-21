@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "betaln"
+  ],
+  "requires": [],
+  "condition": "betaln(a, b) returns NaN when min(a,b) is huge (≳1e100) and the ratio of the arguments exceeds 1e6, and is only ~1e-9 accurate for large unequal arguments.",
+  "workaround": "For very large unequal arguments, compute log B(a,b) yourself with an asymptotic expansion in b/a (e.g. lgamma(b) - b*log(a) plus small correction terms), or use jax.scipy.special.betaln or mpmath.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

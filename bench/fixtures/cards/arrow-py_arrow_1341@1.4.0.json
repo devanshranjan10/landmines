@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "dehumanize"
+  ],
+  "requires": [],
+  "condition": "dehumanize() given a fractional quantity like \"1.5 hours ago\" or \"0.5 days ago\" splits the number at the decimal point and silently returns a wrong time (e.g. -5 h instead of -1.5 h).",
+  "workaround": "Don't pass fractional amounts to dehumanize; convert them to whole units of a smaller unit (e.g. \"90 minutes ago\"), or compute with shift(hours=-1.5).",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

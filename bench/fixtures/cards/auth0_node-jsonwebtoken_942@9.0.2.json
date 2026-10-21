@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "decode"
+  ],
+  "requires": [
+    [
+      "verbatimModuleSyntax"
+    ]
+  ],
+  "condition": "Importing jsonwebtoken in a Vite browser bundle fails at runtime with \"Cannot read properties of undefined (reading 'from')\", because the library is Node-only and relies on Buffer.",
+  "workaround": "Don't use jsonwebtoken in the browser. Use a browser-compatible library such as jwt-decode, or polyfill the Node built-ins.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

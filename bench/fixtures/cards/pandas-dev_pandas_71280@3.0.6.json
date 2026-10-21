@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_stata"
+  ],
+  "requires": [
+    [
+      "convert_dates"
+    ],
+    [
+      "tw",
+      "%tw"
+    ]
+  ],
+  "condition": "to_stata with convert_dates \"tw\" stores Dec 31 (and Dec 30 in leap years) as week 1 of the next year instead of week 52 of the same year.",
+  "workaround": "Before writing, compute the %tw values yourself and cap the week index at 51, e.g. 52*(year-1960) + np.minimum(dayofyear0 // 7, 51). Another option is to move Dec 30/31 dates back into week 52.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

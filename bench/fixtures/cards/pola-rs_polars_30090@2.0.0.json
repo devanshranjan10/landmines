@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scan_delta"
+  ],
+  "requires": [
+    [
+      "concat",
+      "join",
+      "union",
+      "collect_all"
+    ]
+  ],
+  "condition": "When a single scan_delta LazyFrame built from a path string is reused in several branches of a plan (e.g. concat), the Delta table is opened and its transaction log re-read several times, and the count varies from run to run. On object storage this multiplies the requests sent.",
+  "workaround": "Open the table once with deltalake.DeltaTable(path) and pass that object to pl.scan_delta instead of passing the path.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

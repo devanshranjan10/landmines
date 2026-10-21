@@ -1,0 +1,30 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "localizedFormat"
+    ],
+    [
+      "'l'",
+      "'ll'",
+      "'lll'",
+      "'llll'",
+      "\"l\"",
+      "\"ll\"",
+      "\"lll\"",
+      "\"llll\""
+    ]
+  ],
+  "condition": "With the localizedFormat plugin, format('l'/'ll'/'lll'/'llll') on the 'en' locale can throw \"TypeError: Cannot read properties of undefined (reading 'replace')\" because the English formats are missing the lowercase tokens. Some setups have reported it, for example when all locales are loaded or in N",
+  "workaround": "Use the uppercase tokens (L, LL, LLL, LLLL) or explicit format strings like 'M/D/YYYY'. You can also add l/ll/lll/llll to the en locale's formats, as PR #2282 does.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2281#issuecomment-1503840483",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

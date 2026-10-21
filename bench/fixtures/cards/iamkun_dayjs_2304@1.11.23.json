@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz",
+    "utcOffset"
+  ],
+  "requires": [],
+  "condition": "When the target wall-clock time falls in a DST gap of the system's local timezone, converting with .tz() or .utcOffset() shifts the time by an hour. Depending on the call, the result is a different instant or the right instant with the wrong hour.",
+  "workaround": "Run with the system timezone set to UTC (e.g. TZ=UTC), where the conversions give correct results.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2304#issuecomment-6103969114",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

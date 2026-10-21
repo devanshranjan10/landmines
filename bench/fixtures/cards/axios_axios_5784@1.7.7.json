@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "interceptors.response.use",
+    "interceptors.request.use",
+    "use"
+  ],
+  "requires": [
+    [
+      "interceptors"
+    ]
+  ],
+  "condition": "When several interceptors are registered separately, an error thrown by a success interceptor is only caught by the error handler in the same use() pair or a later one, not by error interceptors registered earlier. A value returned from an error interceptor also skips success handlers registered ear",
+  "workaround": "Register the success and error handlers together in one use(onFulfilled, onRejected) call, or put the error handling inside a single interceptor, and don't count on handlers from other use() calls running.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

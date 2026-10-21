@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "RichHandler"
+  ],
+  "requires": [
+    [
+      "enable_link_path"
+    ]
+  ],
+  "condition": "On Windows, RichHandler with enable_link_path generates file:// links containing backslashes, so the links don't open in terminals like VS Code or PyCharm.",
+  "workaround": "Monkeypatch LogRender.__call__ so it changes backslashes in link_path to forward slashes and adds a leading '/', or set enable_link_path=False.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

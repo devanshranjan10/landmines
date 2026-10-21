@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "getMetaDataSymbol"
+  ],
+  "requires": [],
+  "condition": "The TypeScript declarations type XMLParser.getMetaDataSymbol() as the boxed Symbol instead of the primitive symbol, so using the result as a property key fails type-checking with TS2322.",
+  "workaround": "Cast the return value, e.g. `XMLParser.getMetaDataSymbol() as unknown as symbol`, until the declarations are fixed to return `symbol | string`.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

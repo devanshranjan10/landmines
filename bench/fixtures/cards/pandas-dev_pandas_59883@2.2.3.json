@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ArrowDtype"
+  ],
+  "requires": [
+    [
+      "string_view",
+      "binary_view"
+    ]
+  ],
+  "condition": "A Series with ArrowDtype(pa.string_view()/binary_view()) that has missing values shows an empty repr, and to_string/to_numpy fail with ArrowNotImplementedError because pyarrow has no filter kernel for view types.",
+  "workaround": "Cast to pa.string()/pa.large_string() instead of string_view before building the pandas Series, or patch ArrowDtype.type to return str for string_view.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/59883#issuecomment-2422565612",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

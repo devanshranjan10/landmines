@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "subDays",
+    "addDays"
+  ],
+  "requires": [],
+  "unless": [
+    "UTCDate",
+    "addHours"
+  ],
+  "condition": "subDays/addDays work in the system's local time, so when the range crosses a DST change, a date built from UTC moves by 23 or 25 hours and the UTC time-of-day shifts by an hour.",
+  "workaround": "To do the math in UTC, wrap the date in UTCDate from @date-fns/utc. To move by exactly 24 hours, use subHours(date, 24) instead.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3750#issuecomment-2028700703",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "set_output",
+    "OneHotEncoder"
+  ],
+  "requires": [
+    [
+      "pandas",
+      "polars"
+    ],
+    [
+      "make_pipeline",
+      "Pipeline",
+      "ColumnTransformer"
+    ]
+  ],
+  "condition": "If set_output(transform='pandas') is set on a Pipeline or ColumnTransformer, it also applies to a nested OneHotEncoder that outputs sparse data, so you get a ValueError even when a later step such as TruncatedSVD would have made the final output dense.",
+  "workaround": "Pass sparse_output=False to OneHotEncoder. Alternatively, call set_output on each step separately (OneHotEncoder().set_output(transform='default')) and don't call it on the outer Pipeline or ColumnTransformer.",
+  "workaroundUrl": "https://github.com/scikit-learn/scikit-learn/issues/30310#issuecomment-2488009443",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

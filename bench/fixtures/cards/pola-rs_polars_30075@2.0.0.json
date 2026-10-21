@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_csv",
+    "write_ndjson",
+    "write_json"
+  ],
+  "requires": [
+    [
+      "convert_time_zone",
+      "replace_time_zone",
+      "time_zone",
+      "Datetime"
+    ]
+  ],
+  "condition": "When a tz-aware Datetime falls in a period where the zone's UTC offset includes seconds (e.g. historical LMT, or Africa/Monrovia before 1972), write_csv/write_ndjson/write_json round the offset to whole minutes, so the written timestamp can be up to 30 s off.",
+  "workaround": "Convert the column to UTC with dt.convert_time_zone(\"UTC\") before writing, or format it yourself with dt.to_string(\"%FT%T%::z\").",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

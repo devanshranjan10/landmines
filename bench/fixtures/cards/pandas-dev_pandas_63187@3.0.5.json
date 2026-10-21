@@ -1,0 +1,29 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "loc"
+  ],
+  "requires": [
+    [
+      "MultiIndex",
+      "from_product",
+      "from_arrays",
+      "from_tuples",
+      "IndexSlice",
+      "set_index"
+    ]
+  ],
+  "unless": [
+    "sort_index",
+    "isin"
+  ],
+  "condition": "Selecting a list of labels on an inner MultiIndex level with .loc[:, [labels]] gives rows in an order that depends on the index's lexsort depth and the order of the labels: sometimes grouped by outer level, sometimes by the order of the labels.",
+  "workaround": "Don't rely on the result's row order. Call sort_index() on the result, or select with a boolean mask (e.g. index.isin(labels, level=1)) to keep the original order.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/63187#issuecomment-3574069719",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

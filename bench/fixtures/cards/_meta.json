@@ -1,0 +1,26 @@
+[
+  {
+    "provider": "claude-cli",
+    "model": "opus",
+    "generatedAt": "2026-10-21T08:39:38.925Z",
+    "split": "fresh-dev"
+  },
+  {
+    "provider": "claude-cli",
+    "model": "opus",
+    "generatedAt": "2026-10-21T08:41:46.116Z",
+    "split": "fresh-dev"
+  },
+  {
+    "provider": "claude-cli",
+    "model": "opus",
+    "generatedAt": "2026-10-21T08:45:56.605Z",
+    "split": "fresh-dev"
+  },
+  {
+    "provider": "claude-cli",
+    "model": "opus",
+    "generatedAt": "2026-10-21T08:55:34.160Z",
+    "split": "all"
+  }
+]

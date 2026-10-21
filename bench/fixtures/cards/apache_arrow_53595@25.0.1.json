@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_table",
+    "from_sparse"
+  ],
+  "requires": [],
+  "condition": "pyarrow.parquet.write_table raises ArrowNotImplementedError when the table has a sparse union column, whether it is top-level or nested in a list or struct.",
+  "workaround": "The thread has no official fix. To write the data, turn the union into a struct of its children plus a type-code column before writing.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

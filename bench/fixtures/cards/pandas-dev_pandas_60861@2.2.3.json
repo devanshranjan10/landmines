@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "groupby",
+    "convert_dtypes"
+  ],
+  "requires": [
+    [
+      "pyarrow",
+      "ArrowDtype"
+    ]
+  ],
+  "condition": "GroupBy aggregations (e.g. first, sum) on ArrowDtype string or decimal columns, such as those produced by convert_dtypes(dtype_backend=\"pyarrow\"), fall back to a pure-Python path and run orders of magnitude slower.",
+  "workaround": "Convert string columns to pd.StringDtype(\"pyarrow\") (e.g. astype(\"string[pyarrow]\")) before grouping.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60861#issuecomment-2638224428",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

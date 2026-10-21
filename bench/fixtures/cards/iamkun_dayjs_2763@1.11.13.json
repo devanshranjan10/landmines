@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "true"
+    ],
+    [
+      "UTC"
+    ]
+  ],
+  "condition": "Calling .tz('UTC', true) (keepLocalTime) on a date already in UTC gives a valueOf that is shifted by the host machine's local offset, even though format() still looks correct.",
+  "workaround": "If the date is already in the target timezone, skip the keepLocalTime conversion, or call .tz(zone) without the true flag.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

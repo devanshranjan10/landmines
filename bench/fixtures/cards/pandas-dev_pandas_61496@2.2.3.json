@@ -1,0 +1,22 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv"
+  ],
+  "requires": [
+    [
+      "string[pyarrow]"
+    ],
+    [
+      "dtype_backend"
+    ]
+  ],
+  "condition": "With dtype_backend=\"pyarrow\", the \"string[pyarrow]\" alias passed in dtype maps to StringDtype(\"pyarrow\") rather than ArrowDtype(pa.string()), so that column ends up with a different dtype from the other columns.",
+  "workaround": "Pass dtype={\"col\": pd.ArrowDtype(pyarrow.string())} instead of the \"string[pyarrow]\" alias.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

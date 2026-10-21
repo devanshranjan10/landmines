@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "unparse"
+  ],
+  "requires": [],
+  "unless": [
+    "columns"
+  ],
+  "condition": "When unparse() is given an array of objects without explicit fields/columns, the header uses only the first object's keys, so keys that first appear in later rows are silently dropped.",
+  "workaround": "Build the union of keys first, e.g. fields = [...new Set(rows.flatMap(Object.keys))]. Then map each row to an array in that order and call Papa.unparse({ fields, data }).",
+  "workaroundUrl": "https://github.com/mholt/PapaParse/issues/1174#issuecomment-6151913713",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

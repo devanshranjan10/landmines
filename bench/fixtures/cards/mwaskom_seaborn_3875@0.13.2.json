@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "histplot"
+  ],
+  "requires": [
+    [
+      "norm"
+    ],
+    [
+      "log_scale"
+    ]
+  ],
+  "condition": "A bivariate histplot (x and y) given norm=LogNorm() together with log_scale raises ValueError because seaborn also passes vmin/vmax alongside the norm.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

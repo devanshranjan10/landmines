@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sort",
+    "top_k",
+    "bottom_k"
+  ],
+  "requires": [
+    [
+      "head",
+      "limit",
+      "slice",
+      "top_k",
+      "bottom_k"
+    ]
+  ],
+  "condition": "With the streaming engine (the default collect), a sort followed by a slice, or top_k/bottom_k, where the same column appears more than once among the sort keys panics with 'assertion failed: keys.width() == 1'.",
+  "workaround": "Remove duplicate sort keys (e.g. sort(\"a\") instead of sort([\"a\",\"a\"])), or collect with engine=\"in-memory\".",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

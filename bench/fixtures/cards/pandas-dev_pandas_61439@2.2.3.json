@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__setitem__"
+  ],
+  "requires": [
+    [
+      "ListConfig",
+      "OmegaConf"
+    ]
+  ],
+  "condition": "Setting DataFrame columns with df[key] = other_df raises \"Cannot set a DataFrame with multiple columns to the single column\" when key is a list-like that is not a list, such as omegaconf ListConfig.",
+  "workaround": "Convert the selector to a plain Python list first, e.g. df[list(cols)] = ...",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

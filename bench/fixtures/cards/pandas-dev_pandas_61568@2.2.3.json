@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "fillna"
+  ],
+  "requires": [],
+  "condition": "DataFrame.fillna(other_dataframe) where the filler has an object column coerces float64 columns to object (or int64 if values are integral) instead of preserving float64.",
+  "workaround": "Fill column-wise, e.g. for each column use df[c].fillna(other[c]) or df[c].where(df[c].notna(), other[c]), so dtypes don't get coerced together.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61568#issuecomment-3016806163",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

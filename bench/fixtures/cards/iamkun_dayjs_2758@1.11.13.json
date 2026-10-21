@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "tz",
+    "utcOffset"
+  ],
+  "requires": [],
+  "condition": "Around a DST transition, dayjs(...).tz(zone).utcOffset() can return the wrong offset. In the report it returned 180 instead of 120 for 2024-10-27T00:59Z, just before the end of European summer time.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

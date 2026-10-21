@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "NuSVC"
+  ],
+  "requires": [
+    [
+      "class_weight"
+    ]
+  ],
+  "condition": "NuSVC silently ignores the class_weight constructor argument, so the fitted model is the same as one trained with no weights.",
+  "workaround": "Turn class_weight into per-sample weights yourself and pass them to fit, e.g. set sample_weight[y == cls] = w for each class, then call fit(X, y, sample_weight=sample_weight).",
+  "workaroundUrl": "https://github.com/scikit-learn/scikit-learn/issues/30332#issuecomment-2504801670",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "startOfDay"
+  ],
+  "requires": [],
+  "unless": [
+    "TZDate",
+    "toZonedTime",
+    "fromZonedTime"
+  ],
+  "condition": "startOfDay computes midnight in the process's local timezone (UTC here), not in some other timezone the user has in mind; this is the intended behaviour.",
+  "workaround": "If you need midnight in a different timezone, use timezone-aware helpers: date-fns-tz toZonedTime/fromZonedTime on v3, or TZDate / the `in` option from @date-fns/tz on v4. You can also set the process TZ.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

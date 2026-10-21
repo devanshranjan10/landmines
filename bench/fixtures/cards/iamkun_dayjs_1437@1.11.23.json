@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "tz",
+    "startOf"
+  ],
+  "requires": [],
+  "condition": "In dayjs 1.10.4, calling startOf on a dayjs.tz date whose offset differs from the system's local offset (e.g. after a DST change) uses the wrong offset, giving the previous day at 23:00.",
+  "workaround": "Upgrade to a release that includes PR #1352 (1.10.5 or later).",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/1437#issuecomment-811102999",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

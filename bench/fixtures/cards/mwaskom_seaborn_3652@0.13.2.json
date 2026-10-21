@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scatterplot"
+  ],
+  "requires": [
+    [
+      "markers"
+    ]
+  ],
+  "condition": "Calling scatterplot with wide-form data, or with style set, and markers=False raises KeyError: 'marker'.",
+  "workaround": "Pass an explicit marker list that has one marker per column, e.g. markers=['.']*len(df.columns).",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

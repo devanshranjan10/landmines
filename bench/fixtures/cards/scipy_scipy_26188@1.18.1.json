@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ncf"
+  ],
+  "requires": [
+    [
+      "sf",
+      "logsf"
+    ],
+    [
+      "nc"
+    ]
+  ],
+  "condition": "With nc=0, stats.ncf.sf returns -cdf, not 1 - cdf. The result is negative, so it is outside [0, 1].",
+  "workaround": "When nc == 0, use f.sf(x, dfn, dfd) or 1 - ncf.cdf(...) instead.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

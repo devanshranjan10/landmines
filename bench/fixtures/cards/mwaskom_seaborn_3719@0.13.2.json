@@ -1,0 +1,30 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "lmplot",
+    "map"
+  ],
+  "requires": [
+    [
+      "axvspan",
+      "axhspan",
+      "fill_between",
+      "axvline",
+      "axhline",
+      "text",
+      "annotate"
+    ]
+  ],
+  "unless": [
+    "hue_kws"
+  ],
+  "condition": "Calling FacetGrid.map on an lmplot grid with a function that doesn't accept a marker argument (e.g. plt.axvspan) raises an AttributeError, because lmplot leaves 'marker' in hue_kws and it gets passed to every mapped function.",
+  "workaround": "Call g.hue_kws.pop(\"marker\") after lmplot and before mapping functions that don't support marker.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3719#issuecomment-2413855575",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,22 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "whereJsonPath"
+  ],
+  "requires": [
+    [
+      "IS",
+      "IS NOT",
+      "is not"
+    ]
+  ],
+  "condition": "whereJsonPath with operator 'IS' / 'IS NOT' throws \"operator not permitted\" because IS is not in the whitelisted operators and JSON path comparisons always bind the right-hand side.",
+  "workaround": "Use whereRaw with the dialect's JSON function, e.g. whereRaw('jsonb_path_query_first(??, ?) IS NULL', ['details', '$.admin']) on Postgres.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6312#issuecomment-3600225848",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

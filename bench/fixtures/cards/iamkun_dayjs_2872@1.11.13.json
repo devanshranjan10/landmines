@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "isoWeek"
+  ],
+  "requires": [],
+  "condition": "isoWeek(n) keeps the current weekday and uses the ISO week-year, so dates before the first ISO week of a year (e.g. 2021-01-01) land in the previous year. This is correct ISO behaviour, not a defect.",
+  "workaround": "Start from a Monday, or call startOf('isoWeek') after setting the week. To get UTC week numbers, use dayjs.utc.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2872#issuecomment-2865979715",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

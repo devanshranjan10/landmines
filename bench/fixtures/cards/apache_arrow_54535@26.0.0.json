@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_csv",
+    "read_csv",
+    "write_dataset"
+  ],
+  "requires": [],
+  "unless": [
+    "ignore_empty_lines"
+  ],
+  "condition": "write_csv writes a null in a one-column table as an empty line, and read_csv skips empty lines by default, so every null row is silently dropped on a round trip.",
+  "workaround": "Read the file back with csv.ParseOptions(ignore_empty_lines=False), or set a non-empty null_string in WriteOptions.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

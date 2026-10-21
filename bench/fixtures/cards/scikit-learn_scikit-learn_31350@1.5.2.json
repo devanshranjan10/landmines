@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "SimpleImputer"
+  ],
+  "requires": [
+    [
+      "most_frequent",
+      "constant"
+    ],
+    [
+      "category",
+      "Categorical",
+      "CategoricalDtype"
+    ]
+  ],
+  "condition": "SimpleImputer with strategy=\"most_frequent\" on a pandas category column returns an object dtype column instead of keeping the category dtype.",
+  "workaround": "After the transform, cast the output columns back to the original dtype, e.g. output.astype(df.dtypes.to_dict()).",
+  "workaroundUrl": "https://github.com/scikit-learn/scikit-learn/issues/31350#issuecomment-2968915370",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

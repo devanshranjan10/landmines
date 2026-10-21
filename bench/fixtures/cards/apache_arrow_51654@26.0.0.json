@@ -1,0 +1,12 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [],
+  "requires": [],
+  "condition": "This is a release checklist for packaging the R arrow package for CRAN, not a defect in pyarrow.",
+  "confidence": 0.97,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

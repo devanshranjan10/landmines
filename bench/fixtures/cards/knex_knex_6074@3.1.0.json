@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "limit"
+  ],
+  "requires": [],
+  "condition": "Calling .limit() on a delete query silently drops the LIMIT clause, so the DELETE removes every row matching the WHERE instead of only the limited batch.",
+  "workaround": "Limit the rows in a subquery instead, e.g. .whereIn('id', knex('t').select('id').where(...).limit(n)).delete(). You can also use knex.raw with an explicit LIMIT on MySQL.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

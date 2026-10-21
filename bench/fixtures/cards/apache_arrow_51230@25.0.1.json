@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ParquetReader",
+    "FlightStreamReader",
+    "FlightMetadataReader",
+    "ServerCallContext"
+  ],
+  "requires": [],
+  "unless": [
+    "open"
+  ],
+  "condition": "Calling methods or properties on directly constructed pyarrow.parquet.ParquetReader (before open()) or flight wrapper classes segfaults the interpreter instead of raising.",
+  "workaround": "Don't construct these wrappers directly. Call ParquetReader.open() before using it, or use ParquetFile, and get Flight readers and writers from client or server APIs.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

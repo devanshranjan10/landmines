@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "minimum_spanning_arborescence",
+    "maximum_spanning_arborescence"
+  ],
+  "requires": [],
+  "condition": "On some weighted digraphs that do have a spanning arborescence, minimum/maximum_spanning_arborescence wrongly raise \"No ... spanning arborescence in G\". This happens because the weight shift applied in minimal_branching is too small.",
+  "workaround": "Catch the exception and retry with transformed weights, e.g. add a large constant (2*sum(abs(w))+1) to every edge weight before calling minimum_branching/maximum_branching and check the result is spanning. Alternatively use the Edmonds class with the arborescence kind.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

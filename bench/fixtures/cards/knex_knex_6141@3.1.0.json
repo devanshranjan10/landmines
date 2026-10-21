@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "commit"
+  ],
+  "requires": [
+    [
+      "transaction"
+    ]
+  ],
+  "condition": "With a manually managed transaction (const trx = await knex.transaction()), await trx.commit() resolves instead of throwing when the COMMIT itself fails (e.g. deferred constraint violation in PostgreSQL), so the data is silently rolled back.",
+  "workaround": "Use the callback form knex.transaction(async (trx) => { ... }) so commit errors reject the transaction promise, or await trx.executionPromise after commit.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

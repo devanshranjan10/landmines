@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "catplot"
+  ],
+  "requires": [],
+  "condition": "catplot with x/y set on an empty DataFrame raises IndexError or ValueError (for most kinds) instead of returning an empty FacetGrid.",
+  "workaround": "Check `df.empty` before calling catplot, and skip the plot or use an axes-level function when the DataFrame has no rows.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

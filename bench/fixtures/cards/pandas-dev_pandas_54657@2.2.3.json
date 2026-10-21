@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "isocalendar"
+  ],
+  "requires": [
+    [
+      "NaT"
+    ]
+  ],
+  "condition": "When the data contains NaT, .dt.isocalendar() returns UInt32 columns with pd.NA, but .dt.year returns float64 with NaN, so the two dtypes don't match.",
+  "workaround": "Cast the result yourself, e.g. s.dt.isocalendar().astype('float64'), so its dtype matches .dt.year.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

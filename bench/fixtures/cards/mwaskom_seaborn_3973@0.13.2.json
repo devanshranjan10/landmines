@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "refline"
+  ],
+  "requires": [
+    [
+      "lmplot"
+    ]
+  ],
+  "unless": [
+    "axhline",
+    "axvline"
+  ],
+  "condition": "Calling FacetGrid.refline on a grid returned by lmplot draws unwanted markers at both ends of each reference line, because lmplot's hue_kws marker gets passed to axvline/axhline.",
+  "workaround": "Draw the reference lines yourself with ax.axhline/ax.axvline on each of g.axes.flat instead of using g.refline, or clear g.hue_kws before calling refline.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

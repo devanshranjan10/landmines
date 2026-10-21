@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "statistics",
+    "row_group",
+    "equals",
+    "column"
+  ],
+  "requires": [
+    [
+      "None"
+    ]
+  ],
+  "condition": "Comparing Parquet Statistics, RowGroupMetaData, ColumnChunkMetaData, ColumnSchema or ParquetSchema with None (== None or .equals(None)) can segfault the interpreter instead of returning False.",
+  "workaround": "Use `is None` / `is not None` identity checks instead of `== None` or `.equals(None)` on Parquet metadata/schema objects.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

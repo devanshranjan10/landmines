@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_sql"
+  ],
+  "requires": [
+    [
+      "ORA$PTT"
+    ]
+  ],
+  "condition": "With an Oracle PRIVATE TEMPORARY table (ORA$PTT_ prefix), SQLAlchemy can't detect that the table exists, so to_sql tries to CREATE TABLE and fails with ORA-32463.",
+  "workaround": "Don't use to_sql for Oracle private temporary tables. Insert the rows yourself with SQLAlchemy, e.g. conn.execute(insert(table), df.to_dict('records')).",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

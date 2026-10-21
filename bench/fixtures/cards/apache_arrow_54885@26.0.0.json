@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "join"
+  ],
+  "requires": [
+    [
+      "large_string"
+    ]
+  ],
+  "condition": "Table.join aborts the Python process (std::length_error in RowEncoder) when the large_string key columns, plus about 9 bytes of overhead per key, add up to more than 2GB.",
+  "workaround": "Keep the total size of the join-key data under 2GB, for example by joining in smaller chunks of the right table.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

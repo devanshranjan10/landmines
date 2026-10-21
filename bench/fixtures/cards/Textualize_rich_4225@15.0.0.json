@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "print_exception",
+    "from_exception",
+    "Traceback",
+    "install"
+  ],
+  "requires": [
+    [
+      "ParseError",
+      "ElementTree",
+      "etree",
+      "defusedxml",
+      "ExpatError"
+    ]
+  ],
+  "condition": "Rendering a SyntaxError subclass whose msg is not a str (e.g. xml ParseError wrapping an ExpatError, as with defusedxml or PyPy) raises TypeError in rich's traceback, masking the original error.",
+  "workaround": "Catch ParseError and re-raise it as a SyntaxError whose message is converted with str(), or render it with a plain traceback (e.g. structlog.dev.plain_traceback) rather than rich.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cidrv6"
+  ],
+  "requires": [],
+  "condition": "z.cidrv6() accepts CIDR strings with fractional prefix lengths like \"2001:db8::/64.5\" because isValidCIDRv6 has no integer check on the prefix.",
+  "workaround": "Add a refine that requires an integer prefix, e.g. .refine(s => /\\/\\d+$/.test(s)), or validate with the JSON Schema pattern.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

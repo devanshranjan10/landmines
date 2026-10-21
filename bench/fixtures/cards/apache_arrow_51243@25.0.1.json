@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "run_query"
+  ],
+  "requires": [
+    [
+      "outputMapping",
+      "output_mapping",
+      "emit"
+    ]
+  ],
+  "condition": "If a Substrait plan's RelCommon.emit output_mapping has an index outside the input schema (including a valid mapping on an aggregate whose grouping keys Arrow drops), run_query can segfault because the index is never bounds-checked.",
+  "workaround": "Before calling run_query, check that every emit outputMapping index falls inside the relation's output schema. Also avoid putting emit on aggregates that use groupings expressionReferences.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

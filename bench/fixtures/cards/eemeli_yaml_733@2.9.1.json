@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "stringify"
+  ],
+  "requires": [
+    [
+      "indent"
+    ]
+  ],
+  "condition": "With an indent option other than 2, stringify() writes the block scalar indentation indicator as 2 for a mapping value whose string begins with a space, so parsing the output back adds extra leading spaces or throws.",
+  "workaround": "Use the default indent: 2 when stringifying strings that may start with whitespace. Or force a quoted scalar style, for example with blockQuote: false.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

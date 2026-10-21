@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "at"
+  ],
+  "requires": [
+    [
+      "MultiIndex",
+      "from_product",
+      "from_tuples",
+      "from_arrays"
+    ]
+  ],
+  "condition": "df.at[row, col_tuple] raises ValueError \"Invalid call for scalar access\" when the DataFrame has a non-unique index and MultiIndex columns, though .loc works.",
+  "workaround": "Use df.loc[row, (a, b)] instead of df.at, or make the index unique first.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

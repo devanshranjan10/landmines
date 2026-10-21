@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz",
+    "add"
+  ],
+  "requires": [
+    [
+      "add"
+    ],
+    [
+      "day",
+      "days",
+      "d"
+    ]
+  ],
+  "condition": "After calling .tz(zone, true), calling .add(n, 'day') gives the right underlying instant, but format() shows the wrong date (it is off by one day) when the local timezone differs from the target zone.",
+  "workaround": "Re-apply the timezone after the arithmetic, for example dt.add(1,'day').tz('UTC'), or use dayjs.utc() for UTC dates.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

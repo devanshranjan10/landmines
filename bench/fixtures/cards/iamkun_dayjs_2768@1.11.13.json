@@ -1,0 +1,21 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "Do"
+    ],
+    [
+      "advancedFormat"
+    ]
+  ],
+  "condition": "Reporter claims format('Do') with advancedFormat renders day 31 as '1st' instead of '31st'.",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

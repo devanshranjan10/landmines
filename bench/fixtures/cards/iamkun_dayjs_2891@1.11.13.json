@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "react-native"
+    ]
+  ],
+  "condition": "On React Native iOS with Hermes, dayjs.tz() and dayjs().tz() compute wrong offsets for IANA zones because Hermes's Intl/toLocaleString ignores timeZone. The parsed result can even change as the device clock ticks.",
+  "workaround": "Load the @formatjs/intl-datetimeformat polyfill (force) on iOS and override tz to derive the offset via formatToParts. Or parse with an explicit numeric offset, e.g. dayjs('...+09:00').",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2891#issuecomment-4799879191",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

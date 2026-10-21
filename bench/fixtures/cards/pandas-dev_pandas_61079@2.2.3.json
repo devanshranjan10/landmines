@@ -1,0 +1,13 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [],
+  "condition": "The pandas 2.2.3 wheel for Python 3.10 on aarch64 Linux was packaged wrong: it bundles musl .so files for every Python version, so auto-patchelf fails when installing with nix and uv2nix.",
+  "workaround": "Pass auto-patchelf --ignore-missing for libc.musl-aarch64.so.1, or build pandas from source.",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

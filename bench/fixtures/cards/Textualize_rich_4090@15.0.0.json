@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_ansi",
+    "AnsiDecoder"
+  ],
+  "requires": [],
+  "condition": "Text.from_ansi (AnsiDecoder.decode) on input with CRLF line endings returns empty lines, dropping all line content, because the trailing \\r is treated as a carriage return.",
+  "workaround": "Normalize line endings before decoding, e.g. Text.from_ansi(s.replace(\"\\r\\n\", \"\\n\")).",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

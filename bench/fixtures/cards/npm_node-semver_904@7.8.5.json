@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "gtr",
+    "ltr",
+    "outside"
+  ],
+  "requires": [],
+  "condition": "gtr/ltr/outside return wrong results (often both true) when a comparator set in the range has two bounds on the same side, e.g. '>1.0.0 >=2.0.0 <3.0.0' or partial versions like '1.2 <1.2.9'.",
+  "workaround": "Compare against the range's bounds yourself, e.g. !satisfies(v, r) && lt(v, minVersion(r)) for ltr, or make each comparator set have only one bound on each side.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

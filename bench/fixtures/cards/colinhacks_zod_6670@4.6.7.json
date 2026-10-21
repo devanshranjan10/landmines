@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "hy"
+  ],
+  "requires": [
+    [
+      "literal",
+      "enum",
+      "nativeEnum"
+    ]
+  ],
+  "condition": "With the Armenian locale (z.locales.hy()), an invalid_value issue that has a single expected value shows 'undefined' instead of the expected value, because the locale reads issue.values[1].",
+  "workaround": "Provide a custom error message for literal/enum schemas, or patch hy.ts so it reads issue.values[0].",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

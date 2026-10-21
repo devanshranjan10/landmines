@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "formatDistanceToNowStrict",
+    "formatDistanceToNow"
+  ],
+  "requires": [],
+  "condition": "formatDistanceToNowStrict returns \"7 days\" rather than \"1 week\" for a date one week ago, which matches the documented behaviour (it reports 1 to 29 days in days).",
+  "workaround": "If you want output in weeks, use intervalToDuration or differenceInWeeks and format the result yourself.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,30 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "nticks",
+    "nbinsx",
+    "name",
+    "xaxis_nticks"
+  ],
+  "requires": [
+    [
+      "unique",
+      "int64",
+      "int32",
+      "float32",
+      "numpy",
+      "np"
+    ]
+  ],
+  "unless": [
+    "tolist"
+  ],
+  "condition": "Graph object integer properties (nticks, nbinsx, active) and string properties (name, text) raise ValueError when given NumPy scalar values such as those from Series.unique().",
+  "workaround": "Convert NumPy scalars to Python types before passing them, e.g. int(v), str(v), or v.item().",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

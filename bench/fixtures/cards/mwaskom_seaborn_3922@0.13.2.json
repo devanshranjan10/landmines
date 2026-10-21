@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "violinplot",
+    "boxenplot",
+    "catplot"
+  ],
+  "requires": [
+    [
+      "hue"
+    ]
+  ],
+  "unless": [
+    "sort_values"
+  ],
+  "condition": "If you use pandas 3 and the hue column has the category dtype, violinplot, boxenplot and catplot can assign the hue groups' data to the wrong colors, so groups appear swapped compared with the legend, even when hue_order is set.",
+  "workaround": "Convert the hue column to str or object before plotting (e.g. df[\"Group\"].astype(str)), or sort the dataframe by the hue column.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3922#issuecomment-4150483885",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

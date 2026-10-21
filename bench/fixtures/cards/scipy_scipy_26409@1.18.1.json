@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sf",
+    "logsf"
+  ],
+  "requires": [
+    [
+      "poisson_binom"
+    ]
+  ],
+  "condition": "poisson_binom.sf/logsf compute 1 - cdf, so small upper-tail probabilities come back as 0/-inf or as values far too large.",
+  "workaround": "For small upper tails, sum poisson_binom.pmf over k..n yourself (or count failures with 1-p) instead of calling sf/logsf.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

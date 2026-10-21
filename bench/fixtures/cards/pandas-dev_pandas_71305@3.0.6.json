@@ -1,0 +1,31 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_excel",
+    "CSSResolver"
+  ],
+  "requires": [
+    [
+      "border",
+      "border-top",
+      "border-bottom",
+      "border-left",
+      "border-right"
+    ],
+    [
+      "indigo",
+      "aqua",
+      "linen",
+      "mintcream",
+      "turquoise"
+    ]
+  ],
+  "condition": "A CSS border shorthand that uses certain named colors (e.g. indigo, aqua, linen, mintcream, turquoise) is misparsed as a size, so Styler.to_excel exports the border as black with zero width.",
+  "workaround": "Write the color as a hex code (e.g. #4B0082), or use separate longhand properties such as border-color, border-style and border-width instead of the shorthand.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

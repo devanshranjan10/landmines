@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "imshow",
+    "write_image"
+  ],
+  "requires": [
+    [
+      "pdf"
+    ]
+  ],
+  "condition": "When a px.imshow figure is exported to PDF with write_image, the heatmap image looks very blurry in macOS Preview, while the axes and legend look fine.",
+  "workaround": "Open the PDF in another viewer such as Firefox, which shows it sharply.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/4846#issuecomment-5512429020",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

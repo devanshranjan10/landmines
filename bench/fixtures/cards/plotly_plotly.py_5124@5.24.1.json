@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "to_json",
+    "to_dict",
+    "to_plotly_json"
+  ],
+  "requires": [],
+  "condition": "Since plotly 6.0, figures built from numpy arrays or pandas series serialize their data arrays as base64 {\"dtype\",\"bdata\"} dicts instead of plain lists in to_json/to_dict output, which breaks code that reads the values back.",
+  "workaround": "Pin plotly to 5.24.1, or decode the bdata yourself; with plotly.js, use v2.28 or later, which understands bdata.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

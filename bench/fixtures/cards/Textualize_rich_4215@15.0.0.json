@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "export_svg",
+    "save_svg"
+  ],
+  "requires": [],
+  "condition": "Console.export_svg() references a clip-path for the last line but never emits the matching <clipPath> definition in <defs>, so the SVG has a dangling reference.",
+  "workaround": "Post-process the SVG to add the missing <clipPath> for the last line, or patch export_svg to build line_offsets from range(y + 1) when any lines were emitted.",
+  "workaroundUrl": "https://github.com/Textualize/rich/issues/4215#issuecomment-5551121542",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

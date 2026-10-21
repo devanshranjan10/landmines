@@ -1,0 +1,6 @@
+The experiment-planning dashboard needs power numbers for our one-way ANOVA tests. Please implement in `app/power.py` (the module docstring has the conventions we use):
+
+- `power(effect_f, k_groups, n_per_group, alpha=ALPHA)`: the probability that the ANOVA F test at level `alpha` rejects the null hypothesis when the true effect size is Cohen's f = `effect_f`. `effect_f` may be a scalar (return a float) or an array of effect sizes (return a NumPy array of the same shape). The dashboard plots power for f from 0 upwards.
+- `min_group_size(effect_f, k_groups, target=0.8, alpha=ALPHA, max_n=10_000)`: the smallest n per group (n >= 2) whose power is at least `target`; raise `ValueError` if even `max_n` isn't enough.
+
+Keep the existing exports working and don't change dependencies.

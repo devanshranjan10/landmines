@@ -1,0 +1,12 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [],
+  "requires": [],
+  "condition": "The Flight SQL ODBC macOS PKG installer and dylib aren't signed yet, so macOS Gatekeeper blocks the install. This is a packaging and release task, not a library bug.",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

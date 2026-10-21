@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "energy_distance",
+    "wasserstein_distance"
+  ],
+  "requires": [
+    [
+      "u_weights",
+      "v_weights"
+    ]
+  ],
+  "condition": "When the weights span an extremely wide dynamic range (some tiny but valid weights), energy_distance and wasserstein_distance can return 0.0 instead of the true distance because of underflow or cancellation in the CDF accumulation.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

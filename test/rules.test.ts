@@ -1,10 +1,10 @@
 import { execFile } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { describe, expect, it } from 'vitest';
-import { RULES_END, RULES_START, mergeRules, renderRules, rulesLandmines, stripRules } from '../src/rules.js';
+import { RULES_END, RULES_START, SKILL_PATH, mergeRules, renderRules, renderSkill, rulesLandmines, stripRules } from '../src/rules.js';
 import type { Landmine, LandmineIndex, TriggerCard } from '../src/types.js';
 
 const run = promisify(execFile);
@@ -97,5 +97,27 @@ describe('rules section', () => {
     expect(readFileSync(join(root, 'AGENTS.md'), 'utf8')).toMatch(/^# Agents\n\n<!-- landmine:start -->/);
     const again = await run(process.execPath, [CLI, 'rules', '-r', root, '--write', 'AGENTS.md']);
     expect(again.stdout).toContain('unchanged:');
+  });
+
+  it('renders an Agent Skill with frontmatter naming the packages', () => {
+    const text = renderSkill(index([landmine(1, { card: card() })]));
+    expect(text).toMatch(/^---\nname: landmine\ndescription: "Known open upstream bugs in the exact dependency versions this project pins \(dayjs@1\.11\.13\)\. [^"]+"\n---\n/);
+    expect(text).toContain('add(duration({ weeks })) ignores the weeks');
+    expect(text).not.toContain(RULES_START);
+  });
+
+  it('cli: --skill writes the skill, refuses a foreign one, and uninstall removes it', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'lm-rules-'));
+    mkdirSync(join(root, '.landmine'));
+    writeFileSync(join(root, 'package-lock.json'), '{}');
+    writeFileSync(join(root, '.landmine', 'index.json'), JSON.stringify(index([landmine(1, { card: card() })])));
+    const wrote = await run(process.execPath, [CLI, 'rules', '-r', root, '--skill']);
+    expect(wrote.stdout).toBe(`created: ${SKILL_PATH}\n`);
+    expect((await run(process.execPath, [CLI, 'rules', '-r', root, '--skill'])).stdout).toBe(`unchanged: ${SKILL_PATH}\n`);
+    await run(process.execPath, [CLI, 'uninstall', '-r', root]);
+    expect(existsSync(join(root, SKILL_PATH))).toBe(false);
+    mkdirSync(join(root, '.agents', 'skills', 'landmine'), { recursive: true });
+    writeFileSync(join(root, SKILL_PATH), 'mine');
+    await expect(run(process.execPath, [CLI, 'rules', '-r', root, '--skill'])).rejects.toThrow(/not written by landmine/);
   });
 });

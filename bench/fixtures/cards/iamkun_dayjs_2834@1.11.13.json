@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "utc"
+    ]
+  ],
+  "condition": "dayjs.utc(...).tz(zone) gives an offset that is wrong by one hour near DST transitions when the host system's time zone has DST (e.g. Windows set to America/Asuncion), because the tz plugin's offset math relies on the local system offset.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

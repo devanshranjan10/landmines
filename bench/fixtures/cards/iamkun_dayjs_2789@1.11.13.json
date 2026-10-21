@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "toString"
+  ],
+  "requires": [],
+  "unless": [
+    "format",
+    "toISOString"
+  ],
+  "condition": "dayjs().toString() returns a UTC string (Date.toUTCString) rather than local time, which is documented behaviour and the reporter wants changed.",
+  "workaround": "Use format() for a local-time string, or toISOString() for an unambiguous timestamp to send to the server.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

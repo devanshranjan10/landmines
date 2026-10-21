@@ -1,0 +1,22 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "concat"
+  ],
+  "requires": [
+    [
+      "horizontal"
+    ]
+  ],
+  "unless": [
+    "POLARS_PROJECTION_PUSHDOWN_PRUNE_STRICT_HCONCAT_INPUTS"
+  ],
+  "condition": "Lazy pl.concat(how=\"horizontal\") keeps at least one column from every input, even inputs none of whose columns are selected later, so unused branches still get computed (a performance limitation, not a wrong result).",
+  "workaround": "Set POLARS_PROJECTION_PUSHDOWN_PRUNE_STRICT_HCONCAT_INPUTS=1 for the whole process to let the optimizer drop unused inputs. This also skips their height check.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

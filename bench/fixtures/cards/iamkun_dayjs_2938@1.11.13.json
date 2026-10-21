@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "isValid"
+  ],
+  "requires": [],
+  "unless": [
+    "customParseFormat"
+  ],
+  "condition": "If you call dayjs(str) on any string without a format, it falls back to new Date(str). Non-date text like \"dall-e-3\" then parses to a valid date, and isValid() returns true.",
+  "workaround": "Pass an explicit format, e.g. dayjs(str, 'MM/DD/YYYY') (with customParseFormat), or validate the string yourself before parsing.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2938#issuecomment-3425932366",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

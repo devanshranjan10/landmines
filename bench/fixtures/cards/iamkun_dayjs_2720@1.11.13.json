@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "Date",
+      "valueOf",
+      "getTime",
+      "now"
+    ]
+  ],
+  "condition": "When dayjs.tz(input, zone) gets a Date or a timestamp instead of a string, it keeps the same instant and doesn't read the input as wall-clock time in that zone. A string input with the same value is read as zone time, so the two give different results.",
+  "workaround": "Pass a string (for example a local datetime string without an offset) to dayjs.tz when you want it read as wall-clock time in the target zone. To convert an instant, use dayjs(date).tz(zone).",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "pointplot"
+  ],
+  "requires": [
+    [
+      "dodge"
+    ],
+    [
+      "hue"
+    ]
+  ],
+  "condition": "pointplot with dodge=True raises ZeroDivisionError when the hue variable has only one level.",
+  "workaround": "Only set dodge=True when the hue column has more than one unique value, e.g. dodge=df[hue].nunique() > 1.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

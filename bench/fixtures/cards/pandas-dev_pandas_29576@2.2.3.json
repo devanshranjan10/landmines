@@ -1,0 +1,31 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "resample"
+  ],
+  "requires": [
+    [
+      "2QS-MAR",
+      "2QS",
+      "3QS",
+      "2Q",
+      "2QE",
+      "2QS-JAN",
+      "2QS-FEB",
+      "2QS-APR",
+      "2QS-MAY",
+      "2QS-JUN",
+      "2QS-SEP",
+      "2QS-DEC"
+    ]
+  ],
+  "condition": "resample with a multi-quarter frequency like '2QS-MAR' anchors bins on the nearest single quarter rather than staying in phase with startingMonth, so bins start in the wrong months.",
+  "workaround": "Set the bin anchor yourself with the origin= argument, or build the bins with pd.date_range starting on the right month and group by them, e.g. pd.date_range(\"1949-09-01\", periods=3, freq=\"2QS-MAR\").",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/29576#issuecomment-5782732522",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

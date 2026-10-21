@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "rename_axis",
+    "set_names"
+  ],
+  "requires": [],
+  "condition": "When a tuple whose length isn't 1 is passed as the name to rename_axis or set_names on an index with one level, it is read as a list of per-level names and raises \"Length of new names must be 1\", even though Index(name=tuple) accepts the same tuple.",
+  "workaround": "Wrap the tuple name in a list, e.g. rename_axis([df.index.name]).",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/66656#issuecomment-5783820433",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

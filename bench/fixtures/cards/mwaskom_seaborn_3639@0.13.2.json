@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "catplot"
+  ],
+  "requires": [
+    [
+      "hue_order"
+    ]
+  ],
+  "condition": "catplot with a numeric hue column and hue_order ignores the order in the plot and draws a legend with empty handles.",
+  "workaround": "Convert the hue column to strings (e.g. df['size'].astype(str)) and pass string values in hue_order.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "validRange"
+  ],
+  "requires": [],
+  "condition": "validRange/Range accept range strings outside range.bnf (whitespace after operators, trailing '*', build metadata after partial versions), silently normalizing them.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

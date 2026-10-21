@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_json"
+  ],
+  "requires": [
+    [
+      "period_range",
+      "to_period",
+      "Period",
+      "PeriodIndex",
+      "PeriodDtype"
+    ]
+  ],
+  "unless": [
+    "to_timestamp"
+  ],
+  "condition": "Calling to_json on a Series/DataFrame containing Period values (e.g. from period_range or dt.to_period) raises OverflowError: Maximum recursion level reached.",
+  "workaround": "Convert the period data to strings (astype(str)) or timestamps (to_timestamp) before calling to_json.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

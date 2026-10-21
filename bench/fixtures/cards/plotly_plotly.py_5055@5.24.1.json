@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "to_html"
+  ],
+  "requires": [
+    [
+      "from_string"
+    ]
+  ],
+  "condition": "With plotly 6.0.0, re-parsing Jinja2 template output that already contains fig.to_html() output via from_string raises TemplateSyntaxError.",
+  "workaround": "Put all the figures' to_html outputs in one dict and render the template a single time, instead of re-parsing the rendered output on each pass.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/5055#issuecomment-2689632725",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,5 @@
+`exportctl ls` prints one export file name per line, which gets very long for big exports. We'd like it laid out as a grid like `print_tags` does, but with fixed-width columns so listings from different sections line up.
+
+Please implement `print_listing(console, names)` in `app/listing.py`: print the names (in the given order, left to right then top to bottom) to the given Rich console in columns that are `COLUMN_WIDTH` characters wide, as many columns per row as fit the console width. File names are never longer than 20 characters. People also run this in narrow tmux panes (20-something columns or less).
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "Z",
+      "ZZ"
+    ],
+    [
+      "true"
+    ]
+  ],
+  "condition": "Strict parsing with customParseFormat and a Z/ZZ offset token gives Invalid Date whenever the input's offset differs from the local timezone, because strict mode re-formats the date in local time and compares it to the input string.",
+  "workaround": "Parse non-strictly and check the result yourself, or strip the offset from the string and parse it with dayjs.utc/utcOffset instead.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

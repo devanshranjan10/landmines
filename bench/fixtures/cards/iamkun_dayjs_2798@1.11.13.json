@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "format",
+    "tz"
+  ],
+  "requires": [
+    [
+      "z"
+    ]
+  ],
+  "condition": "Formatting a timezone date with the 'z' token returns a GMT offset like 'GMT+5:30' rather than an abbreviation like 'IST' or 'BST' for some zones, because it relies on what Intl provides for the locale.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

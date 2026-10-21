@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "as_data_type",
+    "as_arrow_array",
+    "arrow_table"
+  ],
+  "requires": [
+    [
+      "arrow.opaque",
+      "ARROW:extension:name"
+    ]
+  ],
+  "condition": "In R arrow, building an R object for a C++-defined extension type such as arrow.opaque (for example with as_data_type or arrow_table) segfaults, because ExtensionType__r6_class casts the type to RExtensionType without checking it is one.",
+  "workaround": "Don't create the R type object: build tables with as_arrow_table() on a nanoarrow struct array, or read the data from Parquet.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

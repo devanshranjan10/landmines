@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "crosstab"
+  ],
+  "requires": [
+    [
+      "values"
+    ],
+    [
+      "aggfunc"
+    ]
+  ],
+  "condition": "pd.crosstab with values= and aggfunc and the default dropna=True drops rows and columns whose aggregation results are all NaN, even when the groups themselves exist in the data.",
+  "workaround": "Pass dropna=False to crosstab, then drop any unwanted all-NaN rows or columns yourself.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

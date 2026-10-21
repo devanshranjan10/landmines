@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "svd"
+  ],
+  "requires": [],
+  "condition": "When numpy.linalg.svd is called on a very large matrix and can't allocate its workspace, it just prints \"init_gesdd failed init\" and returns without raising an exception, so the failure goes unnoticed.",
+  "workaround": "Check the matrix size before calling svd, or pass full_matrices=False to need less memory, and check the results for NaN or garbage values.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

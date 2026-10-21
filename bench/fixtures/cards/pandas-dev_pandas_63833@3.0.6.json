@@ -1,0 +1,12 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [],
+  "requires": [],
+  "condition": "Release tracking issue for the 3.0.x releases; it doesn't describe a defect.",
+  "confidence": 0.97,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

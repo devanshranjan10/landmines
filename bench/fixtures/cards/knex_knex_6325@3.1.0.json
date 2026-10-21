@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "pgnative"
+  ],
+  "requires": [],
+  "condition": "The knex pgnative test suite fails when pg-native isn't installed. This is a setup problem for contributors running the tests, not a bug in the library.",
+  "workaround": "Install the native driver with `npm i -D pg-native`, then run the pgnative tests again.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6325#issuecomment-3677590114",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

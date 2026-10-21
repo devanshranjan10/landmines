@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [],
+  "condition": "With pyarrow 26.0.0, importing pyarrow raises ImportError when NumPy 1.x is installed, because the wheel metadata doesn't say it needs numpy>=2, so pip and uv never upgrade NumPy.",
+  "workaround": "Install \"numpy>=2\" alongside pyarrow 26 (or add it to a constraints file), or pin pyarrow<26 if you must stay on NumPy 1.x.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/53954#issuecomment-6221951390",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

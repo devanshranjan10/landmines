@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "update_layout",
+    "Bar"
+  ],
+  "requires": [
+    [
+      "x unified"
+    ],
+    [
+      "pattern_shape"
+    ]
+  ],
+  "condition": "With hovermode=\"x unified\", the unified hover label shows the wrong legend swatch style (the generic trace style) for bar traces that have per-point marker colors or pattern_shape arrays.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

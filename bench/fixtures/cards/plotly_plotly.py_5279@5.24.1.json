@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "FigureWidget",
+    "on_change"
+  ],
+  "requires": [
+    [
+      "width",
+      "height"
+    ]
+  ],
+  "condition": "In plotly 6.x, a layout.on_change callback on \"width\" never fires when a responsive FigureWidget is resized, and callbacks no longer run once when the widget is first rendered.",
+  "workaround": "Stay on plotly 5.24.1, where these callbacks work.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

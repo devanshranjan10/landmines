@@ -1,0 +1,31 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "drop_null"
+  ],
+  "requires": [
+    [
+      "UnionArray",
+      "union",
+      "dense_union",
+      "sparse_union",
+      "from_dense",
+      "from_sparse",
+      "RunEndEncodedArray",
+      "run_end_encoded",
+      "run_end_encode"
+    ]
+  ],
+  "unless": [
+    "is_valid"
+  ],
+  "condition": "drop_null returns union or run-end-encoded values unfiltered, keeping the logical nulls, because these types have no validity bitmap.",
+  "workaround": "Build a mask with pc.is_valid(values) and filter on it explicitly instead of calling drop_null.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/43851#issuecomment-6292079012",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

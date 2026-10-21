@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "rolling_corr",
+    "rolling_cov"
+  ],
+  "requires": [],
+  "condition": "rolling_corr/rolling_cov use mean(xy)-mean(x)mean(y), causing catastrophic cancellation and wildly wrong results on data with large magnitude relative to its variance (e.g. prices).",
+  "workaround": "Subtract a constant (e.g. the column mean or first value) from the inputs before calling rolling_cov/rolling_corr; covariance and correlation don't change when a constant is subtracted.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

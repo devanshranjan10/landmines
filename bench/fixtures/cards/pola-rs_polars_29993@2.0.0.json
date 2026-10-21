@@ -1,0 +1,21 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "agg",
+    "explode",
+    "unique"
+  ],
+  "requires": [
+    [
+      "group_by"
+    ]
+  ],
+  "condition": "Inside group_by().agg(), flattening a list column with explode().drop_nulls().unique() runs about 7x slower than a string join/split round-trip.",
+  "workaround": "Use list.join(\"~\").implode().list.join(\"~\") in the agg, then str.split(\"~\").list.unique(). This loses data if values contain the separator, and empty lists leave \"\" entries.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

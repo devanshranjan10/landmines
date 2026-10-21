@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cumsum",
+    "cumprod"
+  ],
+  "requires": [
+    [
+      "int8[pyarrow]",
+      "int16[pyarrow]",
+      "int32[pyarrow]",
+      "uint8[pyarrow]",
+      "uint16[pyarrow]",
+      "uint32[pyarrow]",
+      "ArrowDtype",
+      "pyarrow"
+    ]
+  ],
+  "condition": "Calling cumsum/cumprod on a narrow integer ArrowDtype Series raises ArrowInvalid: overflow when the running total exceeds the storage width. NumPy-backed and masked dtypes widen to 64-bit instead.",
+  "workaround": "Cast to int64[pyarrow] (or the numpy int64 dtype) before calling cumsum, e.g. s.astype(\"int64[pyarrow]\").cumsum(), or use groupby(...).cumsum(), which upcasts.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

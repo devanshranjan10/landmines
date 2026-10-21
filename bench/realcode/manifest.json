@@ -1,0 +1,1052 @@
+[
+  {
+    "pkg": "arrow",
+    "repo": "arrow-py/arrow",
+    "path": "arrow/api.py",
+    "sha": "6fd2640da5fd0e718e73aeba49ac52930c1204b7",
+    "url": "https://github.com/arrow-py/arrow/blob/2224255c4acc594d734cef0bbc83360452a67983/arrow/api.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "ZumoLabs/zpy",
+    "path": "zpy/viz.py",
+    "sha": "4ef763e0e4c7b3d11337394f0c3fb80a6b31c2bd",
+    "url": "https://github.com/ZumoLabs/zpy/blob/e12c47d414dceb457ce128bf87c67fbd4479f14a/zpy/viz.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "PhotonQuantum/pysjtu",
+    "path": "export.py",
+    "sha": "647b73c65fde7402f30be02725a3deca9c286709",
+    "url": "https://github.com/PhotonQuantum/pysjtu/blob/570889f73ab783fb85b8d6a923ae5a19dafb3188/export.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "YujiShen/TimeReport",
+    "path": "time_api.py",
+    "sha": "f53dfa6a3a74d48afdcd8bd2b439256e73331163",
+    "url": "https://github.com/YujiShen/TimeReport/blob/c6fe7c5d67fddc66c3b23dbf355fe7f1ec536cbe/time_api.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "caspartse/eBooksAssistant",
+    "path": "common.py",
+    "sha": "ff2cca004fcfa3b4acda5613da5ece481f63739b",
+    "url": "https://github.com/caspartse/eBooksAssistant/blob/bd515d2d8db827d64777db2791c9017f89c4af09/common.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "rosdyana/CNN-Financial-Data",
+    "path": "get_data.py",
+    "sha": "d648a272fb99431771855805aa71579532b34b55",
+    "url": "https://github.com/rosdyana/CNN-Financial-Data/blob/e4846d7a9c4f308c3a4c8e05146f85805dfa8075/get_data.py"
+  },
+  {
+    "pkg": "axios",
+    "repo": "clansty/superstar-checkin",
+    "path": "index.ts",
+    "sha": "277ceffc696ecb3dc7a5d8df7405b62b186bc221",
+    "url": "https://github.com/clansty/superstar-checkin/blob/1e6b9ed270a90de48905c226e5e72277d4808f77/index.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "conekta/conekta-node",
+    "path": "base.ts",
+    "sha": "d117d273567e5c1769c00747bdfb56f1327fcfc2",
+    "url": "https://github.com/conekta/conekta-node/blob/a32513dc96e6d5f0795207226452a4acd53de2c2/base.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "ref-tools/ref-tools-mcp",
+    "path": "index.ts",
+    "sha": "119cac0be362a40a5b68bf9f1f95db9a7bb004e8",
+    "url": "https://github.com/ref-tools/ref-tools-mcp/blob/f5feb829cc7bdd18fb9b276c27e3f391b2c4132c/index.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "onfido/onfido-node",
+    "path": "base.ts",
+    "sha": "24b00e892bf64cfd04dcc752f8fe007b234eb282",
+    "url": "https://github.com/onfido/onfido-node/blob/b4712616a25d9d71d9646bf1c2a273a934ad8838/base.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "tango-crypto/cardano-wallet-js",
+    "path": "base.ts",
+    "sha": "40387d7f0742a60539f76486591dd1d69791aab6",
+    "url": "https://github.com/tango-crypto/cardano-wallet-js/blob/10ac16590b45f3b9d5815641f5dd41e93bb890c1/base.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "1openwindow/azure-openai-node",
+    "path": "base.ts",
+    "sha": "ad518a152f0efd9894295a84900b38a13e9891d6",
+    "url": "https://github.com/1openwindow/azure-openai-node/blob/793b473a4b0a1529fa693546d6f5a87f19d29a45/base.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "jsforce/jsforce",
+    "path": "src/csv.ts",
+    "sha": "b2e5c461cc317f29d974d2842240e068385b8fc6",
+    "url": "https://github.com/jsforce/jsforce/blob/e26fd745e08e83c2ff6960bd6b11f7512e1e5883/src/csv.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "SpoonX/wetland",
+    "path": "src/Seeder.ts",
+    "sha": "e573c265362174449dd551cba8a1abb162c3b447",
+    "url": "https://github.com/SpoonX/wetland/blob/78abeb380dbf0dfc9c0d5236dbb02e63c8980aaf/src/Seeder.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "melink14/rikaikun",
+    "path": "utils/update-db.ts",
+    "sha": "7a90c7a7f3563ac71cc1c8d4605ec1393257292b",
+    "url": "https://github.com/melink14/rikaikun/blob/b9cb6f05797f373474ac2567618c0b0db09459d6/utils/update-db.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "docker/setup-docker-action",
+    "path": "src/context.ts",
+    "sha": "3ab54fd8e27f5baa6221775591c79bb494f678b8",
+    "url": "https://github.com/docker/setup-docker-action/blob/a9800db2f4826034f8eb3951ba2ca4d1395c0556/src/context.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "aubryio/minotor",
+    "path": "src/gtfs/utils.ts",
+    "sha": "006227af23ac634ddb9649ecb6cd495e6ead45e2",
+    "url": "https://github.com/aubryio/minotor/blob/80c395bcc7db1523e7f267ef1803591fca181386/src/gtfs/utils.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "NoelDeMartin/media-kraken",
+    "path": "src/utils/CSV.ts",
+    "sha": "e0465fd7ee7b68c072d78249a612a315af588f5a",
+    "url": "https://github.com/NoelDeMartin/media-kraken/blob/c7e78d6d503c219680dcdd1b7946ffd830a14624/src/utils/CSV.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "zen-browser/www",
+    "path": "src/mods.ts",
+    "sha": "db071fa2b598aa22c1e2cdc3df13b29040f57358",
+    "url": "https://github.com/zen-browser/www/blob/f8e6ef2b3aaa8c5cc970c273e87857a2d8200083/src/mods.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "marnusw/date-fns-tz",
+    "path": "src/index.ts",
+    "sha": "0ad96705edc6a07c5e2126573297d25b96d2d4d1",
+    "url": "https://github.com/marnusw/date-fns-tz/blob/4f3383b26a5907a73b14512a2701f3dfd8cf1579/src/index.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "FranckFreiburger/vue3-sfc-loader",
+    "path": "src/index.ts",
+    "sha": "525e481a47508f5c69d07b09994fea5343494430",
+    "url": "https://github.com/FranckFreiburger/vue3-sfc-loader/blob/bed17ac565fc36f74970db56ca1a12fe0cc412f4/src/index.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "gokulkrishh/expense.fyi",
+    "path": "lib/date.ts",
+    "sha": "182dab645e6ac0185e0662e6daa753e3d09c8b56",
+    "url": "https://github.com/gokulkrishh/expense.fyi/blob/258d173406ac5f04a4ff03db8457dc087f2fbd65/lib/date.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "OpenSprinkler/OpenSprinkler-Weather",
+    "path": "src/cache.ts",
+    "sha": "c6df62d8290e97503ef5a8635d8f3bddf6b69456",
+    "url": "https://github.com/OpenSprinkler/OpenSprinkler-Weather/blob/07b3689d80dfc03d3147f146bf1cc51e6c2f69fe/src/cache.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "contentful/contentful-import",
+    "path": "lib/index.ts",
+    "sha": "51fc58fde79adf60520306332d110a0400645bdb",
+    "url": "https://github.com/contentful/contentful-import/blob/230adc1401661ad19ee1b461e483f1c4eebe1b93/lib/index.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "HuolalaTech/page-spy-web",
+    "path": "src/init.ts",
+    "sha": "7786fa6f7bb1d3eb0a22f6770172d720bcc2d193",
+    "url": "https://github.com/HuolalaTech/page-spy-web/blob/8b7ab96fa5b1f5ec60cf1d6579a7d0eeed21f44c/src/init.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "ineo6/hosts",
+    "path": "src/hosts.ts",
+    "sha": "ddbcb518b0ac96af23cd62e200d20234628037fa",
+    "url": "https://github.com/ineo6/hosts/blob/1c71596436c48cd3bbe54ead0980e2abfb27a3f7/src/hosts.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "Mayandev/notion-avatar",
+    "path": "src/utils.ts",
+    "sha": "288178326e875b95ca4d5712dd2830f2955c564a",
+    "url": "https://github.com/Mayandev/notion-avatar/blob/d59791d24db741e307d8c91ac9f38f92e033ad46/src/utils.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "Path-Check/safeplaces-dct-app",
+    "path": "app/Util.ts",
+    "sha": "4ea737a5c557bef192828aaaaf79c1e008a69649",
+    "url": "https://github.com/Path-Check/safeplaces-dct-app/blob/d5461a6d39f654854362932f5c3050ca33e0459d/app/Util.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "Evansy/MallChatWeb",
+    "path": "src/main.ts",
+    "sha": "fdc7bf7fdfcf8b39ffb779d89fc3a37868705fd5",
+    "url": "https://github.com/Evansy/MallChatWeb/blob/cebb1fa9687075ae81b8991d2061463c0883724b/src/main.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "FrankerFaceZ/FrankerFaceZ",
+    "path": "src/main.ts",
+    "sha": "c4c1d0e417b67b773cc36cf5c86007f6b6f0689b",
+    "url": "https://github.com/FrankerFaceZ/FrankerFaceZ/blob/fe229eadc0abdb35b03980bf2b3255adffdb5c87/src/main.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "rejetto/hfs",
+    "path": "src/webdav.ts",
+    "sha": "0d2b2d570eb5e159bf3b8963ca51171791d36bbb",
+    "url": "https://github.com/rejetto/hfs/blob/5e98ac6a56d15f6925dfe3bf3e5a3963ed71be8b/src/webdav.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "nutstore/obsidian-nutstore-sync",
+    "path": "src/api/delta.ts",
+    "sha": "e7784573f54938dec8ae15c878b554dd2b4e368a",
+    "url": "https://github.com/nutstore/obsidian-nutstore-sync/blob/79d35b4e8b47ac43d3531ceb888a722ee942dc5e/src/api/delta.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "AreWeAntiCheatYet/AreWeAntiCheatYet",
+    "path": "tools/feed.ts",
+    "sha": "a254a5651c37a8aca71d78bf64f3dd6d4c55c126",
+    "url": "https://github.com/AreWeAntiCheatYet/AreWeAntiCheatYet/blob/d876c32d21c69067406e3db44a12ae6633fb5fa7/tools/feed.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "fjc0k/vtils",
+    "path": "src/x/parseXml.ts",
+    "sha": "88108548c7aa61f6adae9f64d5ffa12f67fe393e",
+    "url": "https://github.com/fjc0k/vtils/blob/0c5c5b2f98647b8b933ad815441c5d4d4cc1f015/src/x/parseXml.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "uxiew/epub2MD",
+    "path": "src/xml/parseXml.ts",
+    "sha": "62b472b2ab42a2db91f23aa0a43616481ae3c436",
+    "url": "https://github.com/uxiew/epub2MD/blob/f1a32a0cfc0213c7ede4fd79419b1dd4d08d26b4/src/xml/parseXml.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "forcedotcom/source-deploy-retrieve",
+    "path": "src/utils/metadata.ts",
+    "sha": "437ebe2ae070a3bd1351528a7d07050695875c54",
+    "url": "https://github.com/forcedotcom/source-deploy-retrieve/blob/f70de5c3638582213c8633b91988f4b38db2fc86/src/utils/metadata.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "zwave-js/zwave-js-ui",
+    "path": "api/app.ts",
+    "sha": "c7b7b907e12033aeaa21991fd2f07b943ec74581",
+    "url": "https://github.com/zwave-js/zwave-js-ui/blob/c523b15b18d361e234539d46ab1d7fa7d5e9263b/api/app.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "gitranks/gitranks-ui",
+    "path": "codegen.ts",
+    "sha": "636ffc8271a040e64b75fc159d12129e10539dac",
+    "url": "https://github.com/gitranks/gitranks-ui/blob/df4a3bebcd6a1f436c797f014ac42c35a47e31e2/codegen.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "neo9/n9-node-micro",
+    "path": "src/jwt.ts",
+    "sha": "8a06b8c53073e5e431212130aff63e7facba4b1e",
+    "url": "https://github.com/neo9/n9-node-micro/blob/1688a7a11a6ba153a2cf2f0e60bebbd2722b22c7/src/jwt.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "KOSASIH/pi-coin-tesla-pay",
+    "path": "api/api.ts",
+    "sha": "79ca886cf316314d2bfcc92e615ddfa589ea7f91",
+    "url": "https://github.com/KOSASIH/pi-coin-tesla-pay/blob/bac1dfadc6519264f095e2be6f1b7876b4522838/api/api.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "pmcalabrese/express-typescript-boilerplate",
+    "path": "src/app.ts",
+    "sha": "e2d5c335816935d3409a656466bbd43a273b17c9",
+    "url": "https://github.com/pmcalabrese/express-typescript-boilerplate/blob/7f7bac6deaff1a56c303e8b8dd32c0b18018aa79/src/app.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "jitsi/token-generator",
+    "path": "src/jwt.ts",
+    "sha": "cce2129536630df10b34a9b59021f3aa27a8b5e8",
+    "url": "https://github.com/jitsi/token-generator/blob/99c28f21f8c0dd029f2fbe27b6018b14c5329445/src/jwt.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "balena-os/balena-supervisor",
+    "path": "src/db.ts",
+    "sha": "4b01584fd75d751e1aae035bd486f450e5788a69",
+    "url": "https://github.com/balena-os/balena-supervisor/blob/f0062cc72fda576d335ff9265255c10d93cb7da7/src/db.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "knex/knex-schema-inspector",
+    "path": "lib/index.ts",
+    "sha": "53de8fd187e7230d882205754263ed231f4fb42b",
+    "url": "https://github.com/knex/knex-schema-inspector/blob/ab277052f03b0e6730a9f7c23de0a1b8d3c8fe58/lib/index.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "rmp135/sql-ts",
+    "path": "src/Typings.ts",
+    "sha": "0a9e0027b892c5b4ebd50cbf3405027150b4188e",
+    "url": "https://github.com/rmp135/sql-ts/blob/3eb70b5477125414f817b492e0dc9b1624841082/src/Typings.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "SpoonX/wetland",
+    "path": "src/Query.ts",
+    "sha": "8e87d399cf1b20c6945d308b7140c8a7b74aa93d",
+    "url": "https://github.com/SpoonX/wetland/blob/78abeb380dbf0dfc9c0d5236dbb02e63c8980aaf/src/Query.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "leapfrogtechnology/sync-db",
+    "path": "src/init.ts",
+    "sha": "f9bfbc23770ef88e4402bf8744964fd48f3a7196",
+    "url": "https://github.com/leapfrogtechnology/sync-db/blob/442b6df657c844c694fd30ecaa33ed38a3c276a3/src/init.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "haltcase/trilogy",
+    "path": "src/types.ts",
+    "sha": "924629feb00bcc2ef774e914d9b83e123d06313b",
+    "url": "https://github.com/haltcase/trilogy/blob/6d73d7307456084c4e9c259105f87ebc01ce7727/src/types.ts"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "severian42/GraphRAG-Local-UI",
+    "path": "app.py",
+    "sha": "890e4568e215d52bd50d9d4f78231d9c8651ba27",
+    "url": "https://github.com/severian42/GraphRAG-Local-UI/blob/4b4b16755654c4614b4c76244acd2ebeeaa0835e/app.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "SELinuxProject/setools",
+    "path": "sedta",
+    "sha": "9b580fc0f36d75ff89dcf37ce1fb2f72e5b66bca",
+    "url": "https://github.com/SELinuxProject/setools/blob/e2fe988d53879208541b1309ec203fe814bbb3c1/sedta"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "vz-risk/Verum",
+    "path": "ui.py",
+    "sha": "92e7bcd32a4f81b55ca7ec4acd68b70745575d62",
+    "url": "https://github.com/vz-risk/Verum/blob/6c42d551db7931e25a3474c15e3e5757aa0ff5db/ui.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "xmweijh/CommunityDetection",
+    "path": "KL.py",
+    "sha": "6166c2eafa5bf16135b60cbeee6113b967fbbeed",
+    "url": "https://github.com/xmweijh/CommunityDetection/blob/6fb9a4e4d9e204843342eff795b6fb0c2eade21e/KL.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "tonyfischetti/sake",
+    "path": "sake",
+    "sha": "42d3c613c67ef309ebd9acde03f7474982ab391d",
+    "url": "https://github.com/tonyfischetti/sake/blob/7cc4569594a246964bb18104fd90b733779a3c9e/sake"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "sorrowise/euler",
+    "path": "060.py",
+    "sha": "03e13105683b85095b2ba1a05d88b9c82fb2f4fd",
+    "url": "https://github.com/sorrowise/euler/blob/dcae31ccbd7c2e17c135e9447e22525b0fb33da8/060.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "samyachour/EKG_Analysis",
+    "path": "R.py",
+    "sha": "a3eb3a37f4392ba5d550f54129c71776519f906a",
+    "url": "https://github.com/samyachour/EKG_Analysis/blob/42a763064d0eacf682f120738ce51cf535f8a612/R.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "tkphd/KKS-binary-solidification",
+    "path": "c.py",
+    "sha": "fd233b3da612d4a9800efcfd387b1f89ca5b4765",
+    "url": "https://github.com/tkphd/KKS-binary-solidification/blob/09100cc0bcf93494ce8241f98cb65226c3b03f38/c.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "daleroberts/bv",
+    "path": "bv",
+    "sha": "fa62181705dccb32b5da143b8a3ff2edd7805631",
+    "url": "https://github.com/daleroberts/bv/blob/479241ef5cc984c55b742a4d1fd219dc1baba10a/bv"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "samhaug/seispy",
+    "path": "2",
+    "sha": "4737f25ecc6addf70c3811b3e421310e69446238",
+    "url": "https://github.com/samhaug/seispy/blob/78087e3f4b0eb11526dbee8d9b210ac1cc14eb78/2"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "grocid/libPQP",
+    "path": "pqp",
+    "sha": "a2bac7d0815ab4385d93adf83931cb18b71c9b21",
+    "url": "https://github.com/grocid/libPQP/blob/869dfbf86b8fe3a56ba3dbddc86f1291ee0263d1/pqp"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "treangenlab/emu",
+    "path": "emu",
+    "sha": "57c616a2f5661af7bcffd1f9ed3b6af6a4ff5ae2",
+    "url": "https://github.com/treangenlab/emu/blob/3a1a1118783995090f164351c5dc8c3fac7efe3a/emu"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "ziyangwang007/UNet-Seg",
+    "path": "1.py",
+    "sha": "65f23af746b112a0f9fddf431a35f6f06fc5100c",
+    "url": "https://github.com/ziyangwang007/UNet-Seg/blob/23171ffc8086d85ec03ac7ee6afb1f338db5b1a4/1.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "binzhouchn/capsule-pytorch",
+    "path": "m.py",
+    "sha": "ce4da5002508f0f1c38748c63837f9b1513c6f67",
+    "url": "https://github.com/binzhouchn/capsule-pytorch/blob/741bdbb979cd962160c096afe9b84e8e15d11951/m.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "treangenlab/emu",
+    "path": "emu",
+    "sha": "57c616a2f5661af7bcffd1f9ed3b6af6a4ff5ae2",
+    "url": "https://github.com/treangenlab/emu/blob/3a1a1118783995090f164351c5dc8c3fac7efe3a/emu"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "khyox/recentrifuge",
+    "path": "rgf",
+    "sha": "589ca2c12cda112b46728184916354f992f27853",
+    "url": "https://github.com/khyox/recentrifuge/blob/c5b7eeb752f953b2a00d8a3f753d6a1cee8a28c1/rgf"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "fortitude94deng/huawei_remote-sensing",
+    "path": "1.py",
+    "sha": "e58b0f7b76e34ec2269b0909ec0aed03cd50a9dd",
+    "url": "https://github.com/fortitude94deng/huawei_remote-sensing/blob/8288010a3aa4d5900892e422d9bd140c9c27df8c/1.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "khanfarhan10/VaccineAvailabilityNotifier",
+    "path": "v.py",
+    "sha": "f3f83f61d57f661a5f2e7658a554a9ffb2d9c87e",
+    "url": "https://github.com/khanfarhan10/VaccineAvailabilityNotifier/blob/89782d9d0763e2190a2d6309a6598d9220c23d5a/v.py"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "timqian/open-source-jobs",
+    "path": "lib/csv.ts",
+    "sha": "8433705c71000843216603281a1cd1225b6b4dac",
+    "url": "https://github.com/timqian/open-source-jobs/blob/86e114a7aca400029b0f3744fe71360bf90c09ed/lib/csv.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "MyCryptoHQ/MyCrypto",
+    "path": "src/utils/csv.ts",
+    "sha": "0fc9dd47a3c55fd2e294671a24faddf56a29578a",
+    "url": "https://github.com/MyCryptoHQ/MyCrypto/blob/457ec2f0a1cce537275c3b67d7e871f1ae3ae162/src/utils/csv.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "nonbili/NouTube",
+    "path": "lib/export.ts",
+    "sha": "ab523988d71a595335b8a3862ca0ad0cb5fbff99",
+    "url": "https://github.com/nonbili/NouTube/blob/5ef3d6112f630d26b2b62749dc363dbe1b948417/lib/export.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "multiprocessio/datastation",
+    "path": "shared/text.ts",
+    "sha": "5a3ea4297fa86e02cfb71262d66b02a829e3da37",
+    "url": "https://github.com/multiprocessio/datastation/blob/4e72a6e0af28fcda767b0b29bb5dc9b697d05cb3/shared/text.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "data-forge/data-forge-ts",
+    "path": "src/index.ts",
+    "sha": "fa5d85f1229ca5e2de8a748e76a76384f012dfd6",
+    "url": "https://github.com/data-forge/data-forge-ts/blob/4e19deeb5799be87e2b671afae1a7d0004df35d2/src/index.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "bozokopic/opcut",
+    "path": "src_js/csv.ts",
+    "sha": "44e8ed9dabf46fb7974ebbd52a8c63058a019f7a",
+    "url": "https://github.com/bozokopic/opcut/blob/195b8327c2ce3fbc45db5e0e1fe819cf487cfeee/src_js/csv.ts"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "when2buy/stock_llm_tutorial",
+    "path": "t3.py",
+    "sha": "6cca7ce89b464287e7a043ea365ee88454d41177",
+    "url": "https://github.com/when2buy/stock_llm_tutorial/blob/84f123989632397646ebbcf574c49d2e5eb3b9a6/t3.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "RoboticsData/score_lerobot_episodes",
+    "path": "ui.py",
+    "sha": "7cac25fc107dbe536f4604e547e09d15941c5c67",
+    "url": "https://github.com/RoboticsData/score_lerobot_episodes/blob/0d388396e041db40eb0144a8aad0140666190072/ui.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "CodeWithTanim/real-time-stock-market-dashboard",
+    "path": "app.py",
+    "sha": "0c77e8a52982e9045a426ba0da96bec4db770288",
+    "url": "https://github.com/CodeWithTanim/real-time-stock-market-dashboard/blob/af6462326f32632caa5dee2271911e940491de38/app.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "juandspy/adp-payslips-reader",
+    "path": "ui.py",
+    "sha": "e77630f1bb541312f13e224391cb05ec4d8a0878",
+    "url": "https://github.com/juandspy/adp-payslips-reader/blob/f55b2bad7d283c8b1b5315b883593151adf821bc/ui.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "peterajhgraham/real-time-stock-dashboard",
+    "path": "ui.py",
+    "sha": "804ea8fe4ac0fa5f620d1f56fe8d6c77bfd2e45f",
+    "url": "https://github.com/peterajhgraham/real-time-stock-dashboard/blob/d64204a068c1d165428242082a8f053fcb65f5d3/ui.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "zdimension/elecanalysis",
+    "path": "ui.py",
+    "sha": "60ca53fb25a3bc15ed4b41efdc211c3691d49998",
+    "url": "https://github.com/zdimension/elecanalysis/blob/c446aa11a20e5a4b5f1f766a6a058e7d7560f4a4/ui.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "MarcoGorelli/polars-plugins-tutorial",
+    "path": "run.py",
+    "sha": "23168a2590aa2423545e8d20c712c120cdb81a26",
+    "url": "https://github.com/MarcoGorelli/polars-plugins-tutorial/blob/f5a5257116b47566229f64188784eff5fe59d110/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "Zaczero/CBBI",
+    "path": "utils.py",
+    "sha": "1ef6c345ec41d0561334dc3ac2d62eb78063611a",
+    "url": "https://github.com/Zaczero/CBBI/blob/31e4b869d1ecd425040885b820cb75e39a879299/utils.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "DerwenAI/strwythura",
+    "path": "app.py",
+    "sha": "7e76df8830bd3df2e98d7eb28842d7190a95f25b",
+    "url": "https://github.com/DerwenAI/strwythura/blob/690bbabecc14038b6618ff35230bf32e1559d225/app.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "koaning/smartfunc",
+    "path": "app.py",
+    "sha": "f3673e01e9cdf300cf4f441914a10f1c15a19587",
+    "url": "https://github.com/koaning/smartfunc/blob/bc474961456d7094fcb2e62cd9aa5ad8b0d756df/app.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "erichutchins/polars_iptools",
+    "path": "run.py",
+    "sha": "e4b0f6cfc49f859d81137f556734dc712f9fb095",
+    "url": "https://github.com/erichutchins/polars_iptools/blob/4658fc9512b7a710f99d749e6fe04f553dbe78f8/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "MarcoGorelli/polars-reverse-geocode",
+    "path": "t.py",
+    "sha": "e91747153e6b1f1cd5cf1881d4420f3d41c95811",
+    "url": "https://github.com/MarcoGorelli/polars-reverse-geocode/blob/eff069218ba2f9c0a32de7874c2ed6fba3fb95ee/t.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "marsupialtail/quokka",
+    "path": "apps/andy.py",
+    "sha": "42b486c2b5902d3d5b7bc37516f6436606a1631d",
+    "url": "https://github.com/marsupialtail/quokka/blob/1caf62e8a723a4b9117880857d1ccaa75672f315/apps/andy.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "universal-ie/UIE",
+    "path": "uie_json.py",
+    "sha": "0c0c6da4729ee67b09ea129669052e42c166333a",
+    "url": "https://github.com/universal-ie/UIE/blob/c88dd08b8ad0016ec597ebc6f8fff49480367bb2/uie_json.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "0x0L/pgeon",
+    "path": "setup.py",
+    "sha": "241bd9b78e6a1dee3641b962f00c1916db2c65f9",
+    "url": "https://github.com/0x0L/pgeon/blob/e76daa54c3ec32bc99b97b90cca3f8b0896f695f/setup.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "TomScheffers/pyarrow_ops",
+    "path": "compare.py",
+    "sha": "53db30651aeb08a8ba95c4ed1b2239edc367151c",
+    "url": "https://github.com/TomScheffers/pyarrow_ops/blob/d8ee38e47ed064a5e8179d53086ac5ed67c44e6a/compare.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "clickingbuttons/arrow-zig",
+    "path": "read_ipc.py",
+    "sha": "39287a8f9d2886e140b5b135ecc6a46759d591a9",
+    "url": "https://github.com/clickingbuttons/arrow-zig/blob/c74941d19773f2a905d40cb661a32eb33c63ce33/read_ipc.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "jiaqihuang01/DETRIS",
+    "path": "tools/mix.py",
+    "sha": "83eb7c5d6a1546c50aaa2a16ebc9e2c7da0f9ef4",
+    "url": "https://github.com/jiaqihuang01/DETRIS/blob/c94b1e1e5253f51eb3a924fe944a455ffe1d75d6/tools/mix.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "warmshao/FasterLivePortrait",
+    "path": "api.py",
+    "sha": "4a1c7157edeeb8c1c3ec243f778f16fcda376a61",
+    "url": "https://github.com/warmshao/FasterLivePortrait/blob/8aad3602177547aaa5e4beec0c3ef5b7944e7a1f/api.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "bingcicle/bookish-octo-telegram",
+    "path": "app.py",
+    "sha": "138eaac49cf8078dadda50d3bf3eaae69a296be4",
+    "url": "https://github.com/bingcicle/bookish-octo-telegram/blob/55fd42b9cb0f4b0c98fcf9df61e399a0efb0a254/app.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "trinhtuanvubk/Diff-VC",
+    "path": "api.py",
+    "sha": "6bc733e2718c200bee4114dff8285f4fe8998812",
+    "url": "https://github.com/trinhtuanvubk/Diff-VC/blob/d7d9d5f61ef51caf67af56707cd9143c17b69900/api.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "hassancs91/AI-Content-Ideas-Generator-Prototype",
+    "path": "ui.py",
+    "sha": "9ab8a054b24ce1f0b143ec2b2386300ac17ed8fe",
+    "url": "https://github.com/hassancs91/AI-Content-Ideas-Generator-Prototype/blob/e1f5f1a037637d7131413602ad6ecf64341a9ccc/ui.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "seanchatmangpt/dslmodel",
+    "path": "vue.py",
+    "sha": "cb9d7f790ae5c5a6b5aedba18dc840febd35f020",
+    "url": "https://github.com/seanchatmangpt/dslmodel/blob/5648deaa794e0fe90771522b9815ac231625e45b/vue.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "DavidTokar12/SkyAgent",
+    "path": "t.py",
+    "sha": "fd6d80b4022f9df125da19d655bd22c27f1e4616",
+    "url": "https://github.com/DavidTokar12/SkyAgent/blob/d34cbe0083d8c646f2bd0eb147ce87ba9fc177ed/t.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "goodfeli/adversarial",
+    "path": "ll.py",
+    "sha": "a74ca2077b8d69ba34a0f2c61426067c2be17e09",
+    "url": "https://github.com/goodfeli/adversarial/blob/1720041f51efcb92df61d1638f1a74aea2ae74c2/ll.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "PrAYtele/Stable-Texturify",
+    "path": "dp.py",
+    "sha": "e596a9f66be456cd0dfef7511dfd6673b811c8ab",
+    "url": "https://github.com/PrAYtele/Stable-Texturify/blob/072139df32ddcdc40f7396201c4dd61026f9a65e/dp.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "aws/aws-ops-wheel",
+    "path": "run",
+    "sha": "42417da4ee0d8ef6c301c4a2ab0152233285251d",
+    "url": "https://github.com/aws/aws-ops-wheel/blob/505da04c6d0ed8052c11aefbce138d6135387c66/run"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "deeplearningturkiye/kelime_kok_ayirici",
+    "path": "db.py",
+    "sha": "b83ce7b56432dd49fceb7847124900b0bba21578",
+    "url": "https://github.com/deeplearningturkiye/kelime_kok_ayirici/blob/7319967556dda33d92d44b176c79a0edde27d123/db.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "chongruo/pytorch-HED",
+    "path": "run.py",
+    "sha": "c92d2167ed8d72fab2c861290f7cb534f4215a44",
+    "url": "https://github.com/chongruo/pytorch-HED/blob/0a614537dd8aa0d5f7ae5812b235351d89832540/run.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "nmhaddad/Fast-Track",
+    "path": "run.py",
+    "sha": "ddc903b1f5d1037012471848592e180cdcd50a2e",
+    "url": "https://github.com/nmhaddad/Fast-Track/blob/b25e4766b638a3ca52c9bcf62cc3d26b71e91daf/run.py"
+  },
+  {
+    "pkg": "requests",
+    "repo": "mmilidoni/github-downloads-count",
+    "path": "gdc",
+    "sha": "c294ddb66084d7812bcac3b552a5a924d2bd9509",
+    "url": "https://github.com/mmilidoni/github-downloads-count/blob/5c910d69a7876b7bab22f23c206b94faa5f0fa83/gdc"
+  },
+  {
+    "pkg": "requests",
+    "repo": "Hoshinonyaruko/Gensokyo-llm",
+    "path": "t.py",
+    "sha": "5934a35204447a75a7cc02517bd7c0f97d13af2c",
+    "url": "https://github.com/Hoshinonyaruko/Gensokyo-llm/blob/fea90a29a73755846831cdcacaabf6e484e7c145/t.py"
+  },
+  {
+    "pkg": "requests",
+    "repo": "jgm/scripts",
+    "path": "gdc",
+    "sha": "b5549f5e1e83a946c599a7c68a64be14537ed640",
+    "url": "https://github.com/jgm/scripts/blob/9ed0d73d4b8083d28d4602c0af26b64fd1f9a3b6/gdc"
+  },
+  {
+    "pkg": "requests",
+    "repo": "balzss/yip",
+    "path": "yip",
+    "sha": "134129566c3ac93a16ec99cb4ee5fe34f638e218",
+    "url": "https://github.com/balzss/yip/blob/df11a753c0657f34a413ab7ffb0a2120430f0e45/yip"
+  },
+  {
+    "pkg": "requests",
+    "repo": "bpennypacker/phad",
+    "path": "phad",
+    "sha": "bcd61d325c85be977d4a6ef96b007cea18010d9b",
+    "url": "https://github.com/bpennypacker/phad/blob/7635d39e3f04ca08b657ead49ec31a44747bfdf0/phad"
+  },
+  {
+    "pkg": "requests",
+    "repo": "lawandorga/lawandorga-backend-service",
+    "path": "u.py",
+    "sha": "0b5167a96414cc83ec708c98ec93c7c098574fa3",
+    "url": "https://github.com/lawandorga/lawandorga-backend-service/blob/acd7adea197a9d5bda393885e010a9bc0e9a9f04/u.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "FoundationAgents/ReCode",
+    "path": "run.py",
+    "sha": "af997865f22974558548749320a10b6891d9c75f",
+    "url": "https://github.com/FoundationAgents/ReCode/blob/6e7223f71281d914762e78d7bbcf6446d362ecbc/run.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "JorianWoltjer/AutoCaptions",
+    "path": "log.py",
+    "sha": "99facb1065a17a11aa1f65d43d25573b87b3df09",
+    "url": "https://github.com/JorianWoltjer/AutoCaptions/blob/36452ae9aa88ed411502d8b7ec211733b285ecbd/log.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "Cloudzik1337/DiscordUsernameChecker",
+    "path": "ui.py",
+    "sha": "aa27212b2ed6f547166889d2085805d30a13b459",
+    "url": "https://github.com/Cloudzik1337/DiscordUsernameChecker/blob/615bae84883aa66444590acadf034920f51c320d/ui.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "dannywade/net-textorial",
+    "path": "net.py",
+    "sha": "2f7d999c101808fd05bf6dea7a69d36515335c05",
+    "url": "https://github.com/dannywade/net-textorial/blob/ca5dbdb74447c05e986bd43426af37ff8e61cd3f/net.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "RozhakDev/Facemash",
+    "path": "Run.py",
+    "sha": "9f593ae8ad823a438d9723531372387cb361eb9b",
+    "url": "https://github.com/RozhakDev/Facemash/blob/2c7382e92dea7963e1757d3bee905318fe8335d7/Run.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "Macr0phag3/parselmouth",
+    "path": "ui.py",
+    "sha": "9dcd7977ea3eaa12c2d9a26f10ec541148374ec7",
+    "url": "https://github.com/Macr0phag3/parselmouth/blob/9f52667b27989ca94e413fc0a23d4778efb4fdd0/ui.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "ahmedbesbes/Neural-Network-from-scratch",
+    "path": "nn.py",
+    "sha": "d23fb7dca25ed171033abbb73c80c4a2180d049c",
+    "url": "https://github.com/ahmedbesbes/Neural-Network-from-scratch/blob/493be2f4015d345fc68d3addd518c2b127e8c648/nn.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "r9y9/nlp100",
+    "path": "78.py",
+    "sha": "f0a480572cd8e68bd0a249a7ae630974de464fcc",
+    "url": "https://github.com/r9y9/nlp100/blob/391ca6c4fb8afc074ed825404d4ad4efc4467f05/78.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "Okes2024/Air-Quality-Index-Prediction-Using-ML-and-IoT-Sensor-Data",
+    "path": "file",
+    "sha": "62afe5c805efc142a283bed3654d341160e7e135",
+    "url": "https://github.com/Okes2024/Air-Quality-Index-Prediction-Using-ML-and-IoT-Sensor-Data/blob/558d31eab5e9629d302d8c81316659feac259ecf/file"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "peterhurford/kaggle-avito_demand",
+    "path": "cv.py",
+    "sha": "9ee39a3474f719fc128710c996f9579a6ef9c5ff",
+    "url": "https://github.com/peterhurford/kaggle-avito_demand/blob/400e0c649fbafa8a9a3613cf80b12c50a60c883b/cv.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "devanshdalal/Author-Identification-task",
+    "path": "p.py",
+    "sha": "17a1519ff47486e6d84ac1fde601989b4de3a453",
+    "url": "https://github.com/devanshdalal/Author-Identification-task/blob/dff44e8fcdeb56c524205cee6f01a4819c9847dc/p.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "juzstu/TianChi_HaiYang",
+    "path": "hy.py",
+    "sha": "61c270159a3b1272ec1438a3cc2f78c3183b9875",
+    "url": "https://github.com/juzstu/TianChi_HaiYang/blob/e19b309a19b2bd15e992cf150caead250538b6a8/hy.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "google-deepmind/alphageometry",
+    "path": "ar.py",
+    "sha": "01dd8cc749219affe3ba1c50c075145814f3042d",
+    "url": "https://github.com/google-deepmind/alphageometry/blob/6777cb586cbb46beed28db12dc72c69770b68337/ar.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "MrChrisJohnson/implicit-mf",
+    "path": "mf.py",
+    "sha": "ba42c92bfc97d3a3d574d1296ef09885b4bb2e10",
+    "url": "https://github.com/MrChrisJohnson/implicit-mf/blob/1ae21c1f08d3da87610c4821bd63618527171983/mf.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "jilljenn/ktm",
+    "path": "lr.py",
+    "sha": "69fde0a249d30f69cd367dd54e6fe045fce49e39",
+    "url": "https://github.com/jilljenn/ktm/blob/12084d691173147477fb9d373801a67efe55eb4b/lr.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "dsgiitr/Audio-Super-Resolution",
+    "path": "io.py",
+    "sha": "dc45cd1d7d1c49d8d91dfdeeb949d451f0854d0d",
+    "url": "https://github.com/dsgiitr/Audio-Super-Resolution/blob/df4afc9f1173dbb93ccce44fe6c31f3a8efbdab1/io.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "Germey/SentenceDistance",
+    "path": "tf.py",
+    "sha": "891efe07b828c2e8461316585451b985e584bbc7",
+    "url": "https://github.com/Germey/SentenceDistance/blob/d06c6d8d478acf06ab4e2b9ac7d38172d023c735/tf.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "hendrycks/GELUs",
+    "path": "nn.py",
+    "sha": "30627a358c808c6f54cdf35152136c1bbc299d50",
+    "url": "https://github.com/hendrycks/GELUs/blob/2726505c4767eed99dfd89ce0f836fbca44d6a6d/nn.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "akash13singh/lstm_anomaly_thesis",
+    "path": "NN.py",
+    "sha": "9b107236891b9649f4a6708a913fbc25df5c4ff0",
+    "url": "https://github.com/akash13singh/lstm_anomaly_thesis/blob/c9c1aae3545e0412a042f5838e81622c82e8668a/NN.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "APPIAN-PET/APPIAN",
+    "path": "QC.py",
+    "sha": "2b35b2d3068c5919a2b9b1a32fab3486dd8400da",
+    "url": "https://github.com/APPIAN-PET/APPIAN/blob/c70a42aea397f1efa1734fa466601df388ddfa7f/QC.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "tesla-is/NLP",
+    "path": "st.py",
+    "sha": "71695ee37fc47889f20fd8b8213bca7389ea1b72",
+    "url": "https://github.com/tesla-is/NLP/blob/6117ea88ea33a10ec8ea6677ae427a15d1ea9541/st.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "subhadipsinha722133/Machine-Learning",
+    "path": "2.py",
+    "sha": "cb1294bc5741f6def7afa6e51abf5ef362c3e2fd",
+    "url": "https://github.com/subhadipsinha722133/Machine-Learning/blob/cc39d24c2342225e745d735e64fcab4b71ebcd44/2.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "Divyanshu-sharma-coder/Python-Study_Materials-complete",
+    "path": "1.py",
+    "sha": "8cdd323ffd33e9622f3de4a06744f0974bd09aa2",
+    "url": "https://github.com/Divyanshu-sharma-coder/Python-Study_Materials-complete/blob/8820d43fef94fe2a63b054a002951dcf40634144/1.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "breckbaldwin/StanIsThePlanDist",
+    "path": "rv.py",
+    "sha": "96c9f0831ddf3867f6525e92ba78ab437844358e",
+    "url": "https://github.com/breckbaldwin/StanIsThePlanDist/blob/b372a502eb92cc4f7c48c8e1936a8f0ee51fafb6/rv.py"
+  },
+  {
+    "pkg": "semver",
+    "repo": "jhipster/generator-jhipster",
+    "path": "cli/cli.ts",
+    "sha": "9cb47f6f3f07dd7147b62ff1ff0636159f316bdc",
+    "url": "https://github.com/jhipster/generator-jhipster/blob/fd482ca84baa4c3689197fac87a3415feb8fd793/cli/cli.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "neoclide/coc.nvim",
+    "path": "src/util/node.ts",
+    "sha": "2501189c2460694d12251d02c3504479a5ff1ca5",
+    "url": "https://github.com/neoclide/coc.nvim/blob/f39f7117d945179a574cb1fb8f8cd103e78a30ce/src/util/node.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "googleapis/release-please",
+    "path": "src/version.ts",
+    "sha": "e3bfcb1452a978558bafc4b42777e97dbf3009ee",
+    "url": "https://github.com/googleapis/release-please/blob/459f184c9b893ddd7c33e0d28265915bdbb4a15a/src/version.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "zce/caz",
+    "path": "src/inquire.ts",
+    "sha": "8807acc4eae496203c724cf55425bdbf51a9da7c",
+    "url": "https://github.com/zce/caz/blob/39d12de72d8dd61bc1b9be37b7992f12d79acd59/src/inquire.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "argotorg/solc-js",
+    "path": "abi.ts",
+    "sha": "ebe6a8ce089406fbfa49836d2b4aae2db278720a",
+    "url": "https://github.com/argotorg/solc-js/blob/0929a3834c58226ab4a9eed51c4e269a50538526/abi.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "raineorshine/npm-check-updates",
+    "path": "src/bin/cli.ts",
+    "sha": "b53bd1cff1214b1fde18cbe963316bc983696c65",
+    "url": "https://github.com/raineorshine/npm-check-updates/blob/770a0f1db1d0d30c6e97e43d3a275562da9e9a84/src/bin/cli.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "rejetto/hfs",
+    "path": "src/config.ts",
+    "sha": "2071d5142e0ab89458ccfa5126120343c4505672",
+    "url": "https://github.com/rejetto/hfs/blob/5e98ac6a56d15f6925dfe3bf3e5a3963ed71be8b/src/config.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "bostrot/telegram-support-bot",
+    "path": "src/cache.ts",
+    "sha": "d990e761b718aa7fe2dc46d7fba2169752e22f90",
+    "url": "https://github.com/bostrot/telegram-support-bot/blob/5c4bb7386da42647bc4e55e3660238a1ab037b19/src/cache.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "OliverBalfour/obsidian-pandoc",
+    "path": "main.ts",
+    "sha": "9c6955f3334eb153fe75ac6c6bd5c403787049bd",
+    "url": "https://github.com/OliverBalfour/obsidian-pandoc/blob/68ff9e3733cc73055156455721fc736ad45c7d5e/main.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "piglovesyou/graphql-let",
+    "path": "src/init.ts",
+    "sha": "c96e49e94d9c6aca4c9fea38e0721f7089fc764b",
+    "url": "https://github.com/piglovesyou/graphql-let/blob/a5e95fa9d724c9885230c56e804116c84a5fc08d/src/init.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "platers/obsidian-linter",
+    "path": "src/rules.ts",
+    "sha": "e32c3d6e2d21fbd1c90de50e39de6fa8d5b6009c",
+    "url": "https://github.com/platers/obsidian-linter/blob/2d618ed95707e3d11b01a256668c982de51b502a/src/rules.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "urishiraval/obsidian-apple-reminders-plugin",
+    "path": "src/main.ts",
+    "sha": "f1c652ef20d7c5e3176c7415cac53434c0398687",
+    "url": "https://github.com/urishiraval/obsidian-apple-reminders-plugin/blob/7b5abc7cb7b8bed64c112a2dde30fa962ae956a8/src/main.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "wotschofsky/domain-digger",
+    "path": "env.ts",
+    "sha": "716627f2f086ab4241b98d4cbf85e03400b128fc",
+    "url": "https://github.com/wotschofsky/domain-digger/blob/2608d0d5fcfc6724e79f40c1063af7f0ee12b244/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "dflow-sh/dflow",
+    "path": "env.ts",
+    "sha": "6c5cb98dbea220bf643cbef40a179e1346df2a3d",
+    "url": "https://github.com/dflow-sh/dflow/blob/028e2fbbfaea5b3dc3f19d6338b7e49e12e40e2a/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "futantan/agent-skills.md",
+    "path": "env.ts",
+    "sha": "206ab62ccb014326781a43c666465398ca11a08b",
+    "url": "https://github.com/futantan/agent-skills.md/blob/98cd624fb1542ad7880e1112576061bb2874de8e/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "chanshiyucx/zero",
+    "path": "env.ts",
+    "sha": "1a60716bb09857ce21e53abc866958bcf884fcc3",
+    "url": "https://github.com/chanshiyucx/zero/blob/57e1c640624bc6c4c52cbe7192ca7ed57c52beee/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "agustinusnathaniel/vite-react-chakra-starter",
+    "path": "env.ts",
+    "sha": "607a0008143b51def8dd6ba18dcaf76b1ea054e8",
+    "url": "https://github.com/agustinusnathaniel/vite-react-chakra-starter/blob/4bc468dd751c3d4093b3ec4b32ec977f386fcf40/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "JohnMwendwa/nextjs-dashboard",
+    "path": "auth.ts",
+    "sha": "1a9b019a28c9720e8ed44c622545b2c4e35f1ae2",
+    "url": "https://github.com/JohnMwendwa/nextjs-dashboard/blob/6c4ff3bcc19e49c370857d172f4aed7f2dd5e075/auth.ts"
+  }
+]

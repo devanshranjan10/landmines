@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "Progress"
+  ],
+  "requires": [
+    [
+      "transient"
+    ]
+  ],
+  "condition": "Progress(transient=True) leaves a blank line on exit when it has no visible tasks (none were added, or all were added with visible=False).",
+  "workaround": "Add a task that is already complete, e.g. progress.add_task(\"\", completed=100.0), or upgrade to a rich version where this was fixed (it no longer reproduces on 15.0.0).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

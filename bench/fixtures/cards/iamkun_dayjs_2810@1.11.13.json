@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz",
+    "startOf",
+    "add"
+  ],
+  "requires": [
+    [
+      "utc"
+    ],
+    [
+      "month"
+    ]
+  ],
+  "condition": "In the browser, calling dayjs.utc(...).tz('utc').startOf('day') on January 1 and then .add(1,'month').startOf('month') gives a date one year too early (for example 2022-02-01).",
+  "workaround": "Don't call .tz('utc') on a date that is already UTC; use dayjs.utc(...) by itself before startOf/add.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

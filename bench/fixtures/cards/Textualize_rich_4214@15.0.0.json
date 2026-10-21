@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Columns"
+  ],
+  "requires": [
+    [
+      "width"
+    ]
+  ],
+  "condition": "Columns(width=N) raises ZeroDivisionError when it renders and the console width is at most N plus the padding, because the column count comes out as 0.",
+  "workaround": "Make sure the console width is larger than width + padding, or leave out width when space may be tight. The proposed patch clamps column_count with max(1, ...).",
+  "workaroundUrl": "https://github.com/Textualize/rich/issues/4214#issuecomment-5643847624",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

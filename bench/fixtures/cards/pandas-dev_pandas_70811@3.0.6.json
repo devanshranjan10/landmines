@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get_dummies"
+  ],
+  "requires": [
+    [
+      "sep"
+    ],
+    [
+      "object",
+      "category"
+    ]
+  ],
+  "condition": "On object or categorical dtype, str.get_dummies with a multi-character sep splits labels as a regex but tests membership literally, so it gives wrong columns and indicator values.",
+  "workaround": "Replace the separator with a single character before encoding, e.g. s.str.replace(\" | \", \"|\", regex=False).str.get_dummies(sep=\"|\"). Or use the default str dtype.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

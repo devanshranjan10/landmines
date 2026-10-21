@@ -1,0 +1,30 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "unique",
+    "n_unique"
+  ],
+  "requires": [
+    [
+      "group_by"
+    ],
+    [
+      "agg"
+    ],
+    [
+      "streaming"
+    ]
+  ],
+  "unless": [
+    "implode"
+  ],
+  "condition": "In the streaming engine, a multi-column unique()/n_unique() inside group_by().agg() is lowered to one group-by per column, re-reading the source each time, so it runs much slower than in-memory and can spill a lot to disk.",
+  "workaround": "Use pl.col(VALS).implode(maintain_order=False).list.eval(pl.element().unique(maintain_order=False)) in the agg. This keeps all values in memory, though.",
+  "workaroundUrl": "https://github.com/pola-rs/polars/issues/29904#issuecomment-6132119931",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

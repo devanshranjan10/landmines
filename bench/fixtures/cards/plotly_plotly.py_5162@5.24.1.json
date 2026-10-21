@@ -1,0 +1,31 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "Scatter"
+  ],
+  "requires": [
+    [
+      "cross-thin",
+      "x-thin",
+      "asterisk",
+      "hash",
+      "hash-dot",
+      "y-up",
+      "y-left",
+      "y-down",
+      "y-right",
+      "line-ew",
+      "line-ns",
+      "line-ne",
+      "line-nw"
+    ]
+  ],
+  "condition": "Line-only marker symbols such as 'cross-thin', 'asterisk', 'hash', 'y-up' and 'line-ew' do not show up in a subplot, probably because they have no fill and are drawn only by the marker outline.",
+  "workaround": "The thread does not give a fix. Setting a visible marker outline, such as marker=dict(line=dict(width=2, color=...)), is likely to make these line-only symbols show up.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

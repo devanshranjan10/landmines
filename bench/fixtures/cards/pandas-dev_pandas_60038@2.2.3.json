@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_numpy"
+  ],
+  "requires": [
+    [
+      "convert_dtypes",
+      "Float64",
+      "Int64",
+      "pyarrow",
+      "numpy_nullable",
+      "dtype_backend"
+    ]
+  ],
+  "condition": "Calling DataFrame.to_numpy() on two or more columns with nullable (Float64) or pyarrow dtypes returns an object-dtype array, not float64.",
+  "workaround": "Pass the dtype explicitly, e.g. df.to_numpy(dtype=\"float64\", na_value=np.nan).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

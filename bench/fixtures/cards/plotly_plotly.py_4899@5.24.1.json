@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "show",
+    "renderers"
+  ],
+  "requires": [
+    [
+      "notebook",
+      "notebook_connected"
+    ]
+  ],
+  "unless": [
+    "iframe",
+    "vscode"
+  ],
+  "condition": "With pio.renderers.default set to \"notebook\" or \"notebook_connected\", fig.show() renders a blank output in JupyterLab 4.3 or VS Code notebooks.",
+  "workaround": "Set pio.renderers.default = \"iframe\", or add \"vscode\" to the renderer string when working in VS Code.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/4899#issuecomment-2493200080",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

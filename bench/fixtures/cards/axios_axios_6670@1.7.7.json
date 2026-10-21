@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "get"
+  ],
+  "requires": [],
+  "condition": "In browsers, a network failure throws a generic AxiosError 'Network Error' whose stack trace only points to the XHR adapter's onerror handler and doesn't show the calling code.",
+  "workaround": "Log request details yourself in a wrapper or interceptor, and check the browser console or network tab for CORS, mixed-content or connectivity failures.",
+  "workaroundUrl": "https://github.com/axios/axios/issues/6670#issuecomment-4883674108",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,465 @@
+{
+  "summary": {
+    "arm": "hook",
+    "split": "all",
+    "tasks": 35,
+    "naiveBlockedOnTarget": 6,
+    "naiveBlockedAny": 6,
+    "fixedBlockedAny": 6,
+    "fixedBlockedOnTarget": 5
+  },
+  "rows": [
+    {
+      "task": "axios-6587",
+      "issue": "axios/axios#6587",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "date-fns-3873",
+      "issue": "date-fns/date-fns#3873",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "date-fns/date-fns#3873",
+        "date-fns/date-fns#3233"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "dayjs-2750",
+      "issue": "iamkun/dayjs#2750",
+      "naiveDecision": "deny",
+      "naiveTarget": true,
+      "naiveIds": [
+        "iamkun/dayjs#2750",
+        "iamkun/dayjs#2479"
+      ],
+      "fixedDecision": "deny",
+      "fixedTarget": true,
+      "fixedIds": [
+        "iamkun/dayjs#2750"
+      ]
+    },
+    {
+      "task": "dayjs-2762",
+      "issue": "iamkun/dayjs#2762",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "iamkun/dayjs#2762",
+        "iamkun/dayjs#3013",
+        "iamkun/dayjs#2891",
+        "iamkun/dayjs#2718",
+        "iamkun/dayjs#2750",
+        "iamkun/dayjs#2479"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "iamkun/dayjs#2762",
+        "iamkun/dayjs#3013"
+      ]
+    },
+    {
+      "task": "dayjs-2797",
+      "issue": "iamkun/dayjs#2797",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#3013",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ]
+    },
+    {
+      "task": "dayjs-2818",
+      "issue": "iamkun/dayjs#2818",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ]
+    },
+    {
+      "task": "dayjs-2901",
+      "issue": "iamkun/dayjs#2901",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "dayjs-2938",
+      "issue": "iamkun/dayjs#2938",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#2891",
+        "iamkun/dayjs#2744",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871",
+        "iamkun/dayjs#3239"
+      ]
+    },
+    {
+      "task": "dayjs-3013",
+      "issue": "iamkun/dayjs#3013",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#3013",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "iamkun/dayjs#2797",
+        "iamkun/dayjs#3013",
+        "iamkun/dayjs#2782",
+        "iamkun/dayjs#2871"
+      ]
+    },
+    {
+      "task": "jsonwebtoken-1000",
+      "issue": "auth0/node-jsonwebtoken#1000",
+      "naiveDecision": "deny",
+      "naiveTarget": true,
+      "naiveIds": [
+        "auth0/node-jsonwebtoken#1000"
+      ],
+      "fixedDecision": "deny",
+      "fixedTarget": true,
+      "fixedIds": [
+        "auth0/node-jsonwebtoken#1000"
+      ]
+    },
+    {
+      "task": "knex-5775",
+      "issue": "knex/knex#5775",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "knex-6074",
+      "issue": "knex/knex#6074",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "knex-6163",
+      "issue": "knex/knex#6163",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "networkx-7758",
+      "issue": "networkx/networkx#7758",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "numpy-27540",
+      "issue": "numpy/numpy#27540",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "numpy-27580",
+      "issue": "numpy/numpy#27580",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "numpy-27674",
+      "issue": "numpy/numpy#27674",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "numpy-27679",
+      "issue": "numpy/numpy#27679",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pandas-11953",
+      "issue": "pandas-dev/pandas#11953",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pandas-29576",
+      "issue": "pandas-dev/pandas#29576",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "pandas-dev/pandas#60038",
+        "pandas-dev/pandas#60671",
+        "pandas-dev/pandas#61177"
+      ]
+    },
+    {
+      "task": "pandas-61223",
+      "issue": "pandas-dev/pandas#61223",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pandas-61568",
+      "issue": "pandas-dev/pandas#61568",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pandas-62072",
+      "issue": "pandas-dev/pandas#62072",
+      "naiveDecision": "deny",
+      "naiveTarget": true,
+      "naiveIds": [
+        "pandas-dev/pandas#62072"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "plotly-4957",
+      "issue": "plotly/plotly.py#4957",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "plotly/plotly.py#4957"
+      ],
+      "fixedDecision": "deny",
+      "fixedTarget": false,
+      "fixedIds": [
+        "plotly/plotly.py#4924"
+      ]
+    },
+    {
+      "task": "pydantic-10570",
+      "issue": "pydantic/pydantic#10570",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pydantic-10629",
+      "issue": "pydantic/pydantic#10629",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pydantic-10694",
+      "issue": "pydantic/pydantic#10694",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "pydantic-10891",
+      "issue": "pydantic/pydantic#10891",
+      "naiveDecision": "deny",
+      "naiveTarget": true,
+      "naiveIds": [
+        "pydantic/pydantic#10891"
+      ],
+      "fixedDecision": "deny",
+      "fixedTarget": true,
+      "fixedIds": [
+        "pydantic/pydantic#10891"
+      ]
+    },
+    {
+      "task": "pyyaml-868",
+      "issue": "yaml/pyyaml#868",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "yaml/pyyaml#868"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "yaml/pyyaml#868"
+      ]
+    },
+    {
+      "task": "requests-6917",
+      "issue": "psf/requests#6917",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": []
+    },
+    {
+      "task": "scikit-learn-30332",
+      "issue": "scikit-learn/scikit-learn#30332",
+      "naiveDecision": "deny",
+      "naiveTarget": true,
+      "naiveIds": [
+        "scikit-learn/scikit-learn#30332"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "scikit-learn/scikit-learn#30332"
+      ]
+    },
+    {
+      "task": "scikit-learn-30935",
+      "issue": "scikit-learn/scikit-learn#30935",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "scikit-learn/scikit-learn#30935"
+      ],
+      "fixedDecision": "deny",
+      "fixedTarget": true,
+      "fixedIds": [
+        "scikit-learn/scikit-learn#30935"
+      ]
+    },
+    {
+      "task": "scikit-learn-31350",
+      "issue": "scikit-learn/scikit-learn#31350",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "scikit-learn/scikit-learn#31350"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "scikit-learn/scikit-learn#31350"
+      ]
+    },
+    {
+      "task": "seaborn-3641",
+      "issue": "mwaskom/seaborn#3641",
+      "naiveDecision": "none",
+      "naiveTarget": false,
+      "naiveIds": [
+        "mwaskom/seaborn#3641",
+        "mwaskom/seaborn#3728",
+        "mwaskom/seaborn#3834"
+      ],
+      "fixedDecision": "none",
+      "fixedTarget": false,
+      "fixedIds": [
+        "mwaskom/seaborn#3641",
+        "mwaskom/seaborn#3728",
+        "mwaskom/seaborn#3834"
+      ]
+    },
+    {
+      "task": "seaborn-3825",
+      "issue": "mwaskom/seaborn#3825",
+      "naiveDecision": "deny",
+      "naiveTarget": true,
+      "naiveIds": [
+        "mwaskom/seaborn#3825"
+      ],
+      "fixedDecision": "deny",
+      "fixedTarget": true,
+      "fixedIds": [
+        "mwaskom/seaborn#3825"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "model_validate",
+    "errors"
+  ],
+  "requires": [
+    [
+      "populate_by_name"
+    ],
+    [
+      "alias_generator",
+      "alias"
+    ]
+  ],
+  "condition": "When a model uses aliases with populate_by_name=True and the input uses field names, the ValidationError loc shows the snake_case field name rather than the alias, unlike V1.",
+  "workaround": "Post-process exc.errors() and convert each string loc item to the alias (e.g. with to_camel) before you return errors to clients.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10866#issuecomment-3666723469",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

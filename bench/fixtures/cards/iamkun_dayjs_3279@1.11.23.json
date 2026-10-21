@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "duration"
+  ],
+  "requires": [],
+  "condition": "dayjs.duration() given an ISO 8601 string with a leading '-' sign (e.g. '-P1D', '-PT1H') ignores the sign and returns a positive duration, which breaks round trips of negative durations through toISOString().",
+  "workaround": "Strip the leading '-' yourself, parse the rest, then negate the result, e.g. dayjs.duration(-dayjs.duration(s.slice(1)).asMilliseconds()).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

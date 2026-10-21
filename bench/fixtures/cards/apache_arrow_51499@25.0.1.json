@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "strftime"
+  ],
+  "requires": [
+    [
+      "%s",
+      "%k",
+      "%l",
+      "%P",
+      "%-d",
+      "%i"
+    ]
+  ],
+  "condition": "pyarrow.compute.strftime copies unsupported format specifiers like %s, %k, %l, %P or %-d into the output as literal text instead of formatting them or raising an error.",
+  "workaround": "To get epoch seconds, skip %s and use pc.cast(pc.cast(arr, pa.timestamp(\"s\")), pa.int64()) instead.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/51499#issuecomment-5853851421",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

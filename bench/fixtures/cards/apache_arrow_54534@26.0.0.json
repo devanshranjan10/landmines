@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_csv",
+    "cast"
+  ],
+  "requires": [
+    [
+      "timestamp"
+    ]
+  ],
+  "condition": "Casting a timestamp with a non-UTC time zone to string (and so write_csv) prints the offset without its seconds part, so for historical offsets such as LMT or Africa/Monrovia before 1972 the written instant is off by up to 59 seconds.",
+  "workaround": "Cast zoned timestamps to the \"UTC\" time zone before casting to string or writing CSV, so they are formatted with Z.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

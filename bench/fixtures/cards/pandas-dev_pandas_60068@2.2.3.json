@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ArrowDtype"
+  ],
+  "requires": [
+    [
+      "string_view",
+      "binary_view"
+    ]
+  ],
+  "condition": "ArrowDtype wrapping pa.string_view() raises NotImplementedError from its .type property, so printing or dtype checks on the DataFrame fail (e.g. after to_pandas(types_mapper=pd.ArrowDtype)).",
+  "workaround": "Cast string_view columns to pa.string() (or large_string) before calling to_pandas(types_mapper=pd.ArrowDtype).",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

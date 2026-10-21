@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "utc"
+  ],
+  "requires": [],
+  "unless": [
+    "customParseFormat"
+  ],
+  "condition": "When dayjs.utc() gets a non-ISO date string such as 'Fri, Jan 28 2025', it falls back to native Date parsing in local time, so in timezones ahead of UTC the result is shifted to the previous day.",
+  "workaround": "Pass ISO 'YYYY-MM-DD' strings, or use the customParseFormat plugin and pass an explicit format, e.g. dayjs.utc(str, 'ddd, MMM D YYYY').",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

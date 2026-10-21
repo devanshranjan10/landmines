@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "read_parquet"
+  ],
+  "requires": [
+    [
+      "s3://"
+    ]
+  ],
+  "unless": [
+    "storage_options",
+    "anon"
+  ],
+  "condition": "read_parquet on a public s3:// file fails with an OSError (ACCESS_DENIED) when AWS credentials are set in the environment, because it skips the anonymous-retry fallback that read_csv uses.",
+  "workaround": "Pass storage_options={\"anon\": True} for public buckets, or unset AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY; some users pinned pandas 2.0.3.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/53701#issuecomment-1938858240",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

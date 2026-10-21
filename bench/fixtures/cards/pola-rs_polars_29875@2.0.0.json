@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_ndjson",
+    "read_json"
+  ],
+  "requires": [],
+  "unless": [
+    "schema"
+  ],
+  "condition": "If you call read_ndjson/read_json without a schema, JSON objects are read as a Struct containing every key seen across rows, never as a Map, so map-like objects turn into wide structs with mostly null fields.",
+  "workaround": "Pass schema_overrides={\"map_field\": pl.Map(pl.String, pl.Int64)}, or a full schema, so the column is read as a Map.",
+  "workaroundUrl": "https://github.com/pola-rs/polars/issues/29875#issuecomment-6130173259",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

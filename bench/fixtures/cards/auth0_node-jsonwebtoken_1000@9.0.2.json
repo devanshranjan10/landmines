@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sign"
+  ],
+  "requires": [
+    [
+      "issuer",
+      "subject",
+      "audience",
+      "jwtid",
+      "expiresIn",
+      "notBefore"
+    ]
+  ],
+  "condition": "When jwt.sign is called with a callback and an option like issuer/subject/audience conflicts with a claim already in the payload, the callback is invoked twice: first with the error, then with a signed token.",
+  "workaround": "Don't set the same claim both in the payload and in the options. You can also wrap the callback so it only runs once, or use the synchronous sign inside try/catch.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

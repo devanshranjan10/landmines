@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "model_rebuild"
+  ],
+  "requires": [
+    [
+      "force"
+    ],
+    [
+      "_types_namespace"
+    ]
+  ],
+  "condition": "Calling model_rebuild(force=True, _types_namespace=...) on a model whose forward-referenced fields were already resolved keeps the old annotation, so the schema does not reflect the new definition.",
+  "workaround": "Redefine the model, for example inside a factory function, after the forward-referenced type changes. You can also post-process the generated JSON schema.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

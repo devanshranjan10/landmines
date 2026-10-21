@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "setDefault"
+    ]
+  ],
+  "unless": [
+    "utc"
+  ],
+  "condition": "When dayjs.tz.setDefault is in effect, calling dayjs.tz() on an ISO string with a 'Z' or offset ignores the offset and treats it as wall-clock time in the target zone, so every zone gives the same time.",
+  "workaround": "Parse the string as UTC first and then convert it, e.g. dayjs.utc(str).tz('Asia/Hong_Kong') or dayjs(str).tz(zone), instead of dayjs.tz(str, zone).",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

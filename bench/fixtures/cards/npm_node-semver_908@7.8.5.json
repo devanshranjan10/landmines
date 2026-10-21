@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Range",
+    "satisfies"
+  ],
+  "requires": [
+    [
+      "Comparator"
+    ]
+  ],
+  "condition": "A Range built from a Comparator object (new Range(comparator) or satisfies(v, comparator)) has undefined options, so testing a prerelease version throws TypeError reading 'includePrerelease'.",
+  "workaround": "Pass the comparator's string form instead, e.g. new Range(comparator.value) or satisfies(v, comparator.value).",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

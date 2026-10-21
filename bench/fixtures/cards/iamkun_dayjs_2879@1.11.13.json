@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "extend"
+  ],
+  "requires": [],
+  "condition": "With a namespace import (import * as dayjs) under native ESM or bundler interop, dayjs.extend is undefined, so calling it throws \"not a function\".",
+  "workaround": "Import the ESM build with a default import: import dayjs from 'dayjs/esm', and import plugins from 'dayjs/esm/plugin/...'.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2879#issuecomment-2906852805",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

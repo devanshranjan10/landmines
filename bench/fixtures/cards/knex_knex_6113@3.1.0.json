@@ -1,0 +1,29 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "dropColumn",
+    "alterTable",
+    "alter"
+  ],
+  "requires": [
+    [
+      "mssql"
+    ],
+    [
+      "user",
+      "order",
+      "group",
+      "table",
+      "key",
+      "index"
+    ]
+  ],
+  "condition": "On MSSQL, dropping or altering a column on a table whose name is a reserved word (e.g. user) generates dynamic EXEC('ALTER TABLE user DROP CONSTRAINT ...') without brackets, so it fails with a syntax error.",
+  "workaround": "Rename the table to a name that isn't a reserved word, or drop the default constraint yourself with knex.raw (e.g. ALTER TABLE [user] DROP CONSTRAINT ...) before calling dropColumn.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

@@ -26,6 +26,8 @@ const { values } = parseArgs({
     dry: { type: 'boolean', default: false },
     // exec: the agent may run shell commands (default). edit-only: Read/Edit/Write/Glob/Grep only, no Bash.
     condition: { type: 'string', default: 'exec' },
+    // spec: prompt.txt (edge cases stated); terse: prompt-terse.txt (how a user would ask).
+    prompt: { type: 'string', default: 'spec' },
   },
 });
 
@@ -52,7 +54,7 @@ interface AgentOutcome {
 function runClaude(task: Task, dir: string, arm: Arm, transcript: string, hookLog: string): Promise<AgentOutcome> {
   const args = [
     '-p',
-    prompt(task),
+    prompt(task, values.prompt === 'terse' ? 'terse' : 'spec'),
     '--model',
     values.model,
     '--output-format',
@@ -145,6 +147,7 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     agent: values.agent,
     model: values.model,
     condition: values.condition,
+    prompt: values.prompt,
     pass: hidden.pass,
     triggerInFinal: triggerPresent(task, dir),
     hookFired: fired.length,

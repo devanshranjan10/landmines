@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "vectorize"
+  ],
+  "requires": [
+    [
+      "StringDType"
+    ]
+  ],
+  "unless": [
+    "otypes"
+  ],
+  "condition": "np.vectorize applied to a StringDType array returns a fixed-width U array instead of StringDType, because the outputs are plain Python str scalars.",
+  "workaround": "Pass otypes=[np.dtypes.StringDType()] to np.vectorize explicitly.",
+  "workaroundUrl": "https://github.com/numpy/numpy/issues/27700#issuecomment-2454778773",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

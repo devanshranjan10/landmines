@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "draw_networkx_edges"
+  ],
+  "requires": [
+    [
+      "connectionstyle"
+    ],
+    [
+      "MultiDiGraph",
+      "MultiGraph"
+    ]
+  ],
+  "condition": "For multigraphs, draw_networkx_edges picks each edge's entry from a connectionstyle list by its edge key instead of its position in the edge list, so parallel edges can get the wrong style and overlap.",
+  "workaround": "Pass a connectionstyle list with one entry per multiedge index, its length being the largest number of parallel edges between any node pair. Or draw each node pair's multiedges in a separate draw_networkx_edges call.",
+  "workaroundUrl": "https://github.com/networkx/networkx/issues/7951#issuecomment-2776219959",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

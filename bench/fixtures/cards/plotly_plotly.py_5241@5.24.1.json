@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_image",
+    "to_image"
+  ],
+  "requires": [],
+  "condition": "In plotly 5.x, the error message says to run `pip install -U kaleido`, which installs kaleido 1.0+. That version is not compatible with plotly 5.x, so static image export with write_image/to_image fails.",
+  "workaround": "Pin kaleido below 1.0 (`pip install \"kaleido<1.0.0\"`, e.g. 0.2.1), or upgrade plotly to 6.1.1 or later.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

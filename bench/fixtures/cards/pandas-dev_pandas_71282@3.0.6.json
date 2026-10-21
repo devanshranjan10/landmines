@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cut"
+  ],
+  "requires": [
+    [
+      "object"
+    ]
+  ],
+  "condition": "pd.cut on an object-dtype Series containing NaN puts values into the wrong bin (e.g. 17 goes into (0.0, 0.2] instead of (0.8, inf]).",
+  "workaround": "Convert the data to float before calling cut, e.g. series.astype(float).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

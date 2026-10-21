@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get",
+    "first",
+    "max"
+  ],
+  "requires": [
+    [
+      "arr"
+    ],
+    [
+      "join",
+      "gather"
+    ]
+  ],
+  "condition": "For Array columns whose null rows come from a gather or outer/right join, arr.get/arr.first/arr.max read the values hidden under the null row (e.g. 0.0) and return them instead of null.",
+  "workaround": "Mask the result back to null where the source array is null, e.g. pl.when(pl.col(\"arr\").is_not_null()).then(pl.col(\"arr\").arr.get(1)).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

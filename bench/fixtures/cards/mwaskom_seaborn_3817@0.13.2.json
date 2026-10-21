@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "histplot",
+    "kdeplot"
+  ],
+  "requires": [
+    [
+      "weights"
+    ]
+  ],
+  "condition": "histplot(kde=True) or kdeplot with weights where only one value has a nonzero weight (effectively singular data) raises ValueError: array must not contain infs or NaNs from scipy instead of skipping the KDE with a warning.",
+  "workaround": "Catch the ValueError and fall back to kde=False, or check beforehand that more than one observation has a nonzero weight.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3817#issuecomment-2604794521",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

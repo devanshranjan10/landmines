@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "reindex",
+    "get_indexer"
+  ],
+  "requires": [
+    [
+      "method"
+    ],
+    [
+      "object"
+    ],
+    [
+      "nan",
+      "None"
+    ]
+  ],
+  "condition": "With a fill method (ffill/bfill/nearest), passing an object-dtype target that contains NaN/None to reindex or get_indexer silently matches the labels after the NaN to the wrong positions, or raises a TypeError when the target contains None.",
+  "workaround": "Cast the target index to float64 (e.g. pd.Index(target, dtype=float)) before calling reindex or get_indexer with a method.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

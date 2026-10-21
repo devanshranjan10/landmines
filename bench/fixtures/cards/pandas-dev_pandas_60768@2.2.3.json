@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "crosstab"
+  ],
+  "requires": [
+    [
+      "normalize"
+    ],
+    [
+      "margins"
+    ],
+    [
+      "aggfunc"
+    ]
+  ],
+  "condition": "crosstab with an aggfunc that returns all NaN (e.g. 'skew' on groups with too few values), dropna=True, margins=True and normalize raises IndexError because the table becomes empty after NaNs are dropped.",
+  "workaround": "Pass dropna=False, or check whether the aggregated table is empty before normalizing it yourself.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60768#issuecomment-3539718233",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

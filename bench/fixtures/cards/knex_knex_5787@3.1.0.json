@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "alterTable",
+    "alter"
+  ],
+  "requires": [
+    [
+      "GENERATED",
+      "generated",
+      "storedAs",
+      "virtualAs"
+    ]
+  ],
+  "condition": "On SQLite, an alterTable change that makes knex recreate the table (such as .alter()) copies data with SELECT *. If the table has generated columns, the copy fails with 'has N columns but M values were supplied'.",
+  "workaround": "Avoid altering tables with generated columns in SQLite via knex; instead manually recreate the table with raw SQL explicitly listing non-generated columns in the INSERT ... SELECT.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "select"
+  ],
+  "requires": [
+    [
+      "HDFStore",
+      "read_hdf"
+    ],
+    [
+      "|"
+    ]
+  ],
+  "condition": "An HDFStore.select where string that ORs some condition with an `in` list of more than 31 values gets evaluated as an AND and silently returns too few rows.",
+  "workaround": "Split the OR into two separate select calls and combine the results, or filter in memory with isin after reading, or keep in-lists to 31 values or fewer.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

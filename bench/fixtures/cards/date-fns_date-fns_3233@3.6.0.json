@@ -1,0 +1,14 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "intervalToDuration"
+  ],
+  "requires": [],
+  "condition": "intervalToDuration returns the wrong months/days when the start date falls on a day the end month doesn't have (for example Jan 31 to Feb 28, or starting on Feb 29), giving an off-by-one or otherwise wrong day count.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

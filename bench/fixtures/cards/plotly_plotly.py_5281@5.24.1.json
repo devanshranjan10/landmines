@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "FigureResampler"
+  ],
+  "requires": [],
+  "condition": "Importing plotly_resampler's FigureResampler before plotly.graph_objs is fully initialized triggers a circular import in the plotly template data (_heatmapgl.py importing Heatmapgl from plotly.graph_objs).",
+  "workaround": "Import plotly.graph_objs first, before you import plotly_resampler, so it is fully initialized.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

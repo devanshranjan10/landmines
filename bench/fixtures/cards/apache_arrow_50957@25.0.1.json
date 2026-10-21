@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "concat_tables"
+  ],
+  "requires": [
+    [
+      "unify_schemas"
+    ]
+  ],
+  "condition": "pa.concat_tables silently ignores unknown keyword arguments such as unify_schemas, so passing unify_schemas=False/True has no effect and schema behaviour is decided only by promote_options.",
+  "workaround": "Don't pass unify_schemas. Use promote_options=\"none\", \"default\" or \"permissive\" to control schema unification and type promotion.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

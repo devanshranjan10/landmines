@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "model_validate_json"
+  ],
+  "requires": [
+    [
+      "Enum"
+    ]
+  ],
+  "condition": "An Enum whose member values are tuples gets serialized to a JSON array, and validating that JSON fails with an enum error because a list is not accepted as the tuple value.",
+  "workaround": "Add a __get_pydantic_core_schema__ classmethod to the enum that wraps handler(source_type) in core_schema.no_info_before_validator_function. That function should convert non-member input to a tuple before validation.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

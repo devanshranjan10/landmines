@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_parquet"
+  ],
+  "requires": [],
+  "unless": [
+    "read_table"
+  ],
+  "condition": "When pd.read_parquet is called on a local path, pyarrow wraps a Python file handle in a PyReadableFile. If a ThreadPool worker drops the last reference while the interpreter is finalizing, the process can abort with SIGABRT at exit.",
+  "workaround": "Use pyarrow.parquet.read_table(path, ...).to_pandas() instead of pd.read_parquet. That opens the file natively, so the reader holds no Python file object.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

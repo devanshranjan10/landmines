@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "duration"
+  ],
+  "requires": [
+    [
+      "diff"
+    ],
+    [
+      "days",
+      "hours",
+      "months",
+      "$d",
+      "format"
+    ]
+  ],
+  "condition": "Since v1.11.10, dayjs.duration(ms) built from a diff spanning a month or more splits the milliseconds into months/days/hours using fractional average month/year lengths, so days() and hours() come out wrong (e.g. 11 instead of 23 hours).",
+  "workaround": "Don't break a millisecond duration into calendar parts. Use date2.diff(date1, 'month'), 'day' and 'hour' and work out the remainders yourself, or stay on dayjs 1.11.9.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

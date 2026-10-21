@@ -1,0 +1,31 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scan_ndjson",
+    "read_ndjson"
+  ],
+  "requires": [
+    [
+      "schema_overrides",
+      "schema"
+    ],
+    [
+      "Int8",
+      "Int16",
+      "UInt8",
+      "UInt16",
+      "Time",
+      "Duration",
+      "SMALLINT",
+      "TINYINT"
+    ]
+  ],
+  "condition": "Reading NDJSON with a schema or schema_overrides that declares a top-level column as Int8/Int16/UInt8/UInt16/Time/Duration panics with \"unexpected dtype when deserializing ndjson\" when the column has non-null values.",
+  "workaround": "Read the column as Int64 (or another supported type) in the schema, then cast it to the narrower type afterwards with .cast().",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "transaction"
+  ],
+  "requires": [
+    [
+      "max"
+    ]
+  ],
+  "condition": "Under sustained concurrent load, a small pool (max: 3) runs out of connections and transactions fail with KnexTimeoutError. This is pool exhaustion, not a library defect.",
+  "workaround": "Make the pool bigger (for example, max: 10–20) and make sure every transaction commits or rolls back.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6051#issuecomment-3393437045",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

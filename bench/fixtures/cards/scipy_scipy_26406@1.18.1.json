@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "lfilter",
+    "sosfilt"
+  ],
+  "requires": [
+    [
+      "zi"
+    ]
+  ],
+  "condition": "When the input is empty along the filter axis and zi is given, lfilter returns an uninitialised zf for IIR filters or raises ValueError for FIR filters, and sosfilt raises a reshape ValueError.",
+  "workaround": "Check for an empty block before calling (x.shape[axis] == 0 or x.size == 0). If it is empty, return an empty output and a copy of zi instead of calling lfilter/sosfilt.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/26406#issuecomment-6187088559",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

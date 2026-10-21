@@ -1,0 +1,1 @@
+{"runId":"smoke-2","task":"dayjs-2750","tier":"A","arm":"none","seed":1,"agent":"claude","model":"sonnet","pass":true,"triggerInFinal":true,"hookFired":0,"hookDenied":0,"hookCitedTarget":false,"hookIds":[],"agentMentionedIssue":false,"costUsd":0.0502565,"turns":4,"durationMs":18496,"agentExit":0,"timedOut":false,"finishedAt":"2026-10-21T07:52:49.063Z"}

@@ -271,3 +271,77 @@ until it looks right is a quiet form of tuning. Test covers 8 packages:
 **Selection bias, stated up front.** Every trap was picked *from* landmine's own
 index, so the bench measures conditional effectiveness: given that the bug is
 indexed, does the tool help the agent avoid it? It says nothing about recall.
+
+**D-37: A post-cutoff ("fresh") task set is the headline.** The pilot showed Sonnet
+and Haiku solve the 2024 traps unaided: they already know those bugs. So 31 more
+tasks were built from issues opened on or after 2026-07-01 against current releases.
+They were validated the same way as D-36. One more task (scikit-learn#35032) was
+left unfinished and parked in `bench/.work/incomplete`. It was dropped, not repaired
+after seeing results. The fresh set has its own frozen split (`bench/split-fresh.json`,
+same seed and rule): 10 dev, 21 test. The 2024 set is reported as a contaminated
+control.
+
+**D-38: Card prompt v2 was tuned on fresh-dev only.** Two changes came from v1 on
+fresh-dev:
+- **Footguns count as bugs.** v1 called PapaParse#1174 "not a bug" because the
+  behaviour is documented, yet it silently drops data. The bug definition now counts
+  documented footguns that lose data or give wrong results.
+- **`unless` tokens.** v1 blocked 4 of 10 correct solutions. The new `unless` field
+  names tokens that show the workaround is already applied.
+
+Mechanical filters were added at the same time:
+- the package name never counts as an API;
+- keywords never count as tokens;
+- a bare number counts only in argument position;
+- an operator counts only inside a string literal.
+
+Nothing was looked at on fresh-test or on the 2024 test split before the cards were
+frozen.
+
+**D-39: `check --staged` is the fallback for agents with no pre-edit hook.** It
+checks only the lines a commit adds, against the staged blob, so it can run in a
+pre-commit hook or in CI. It is a safety net after the fact, not an interruption.
+Agents without hooks (Freebuff, Aider, Zed, and others) also get the rules section
+and the MCP server.
+
+**D-40: Terse prompts, added after seeing dev baselines.** With the spec prompts,
+unaided Sonnet and Haiku passed 9–10 of the 10 fresh-dev tasks. The prompts state the
+bug's edge case as a requirement, so a careful agent codes around a bug it has never
+heard of.
+
+A separate agent wrote `prompt-terse.txt` for all 31 fresh tasks under one fixed
+rule:
+- Keep the interface, format and data facts.
+- Remove only sentences that prescribe the edge-case behaviour.
+
+The prompts were not tuned to results. Eight came out identical to the spec prompt,
+and three are flagged borderline in `bench/tasks/TERSE.md`. date-fns-4384 is the most
+at risk, and results are reported with and without the flagged tasks.
+
+This change was made after seeing baselines and it favours the tool, so both prompt
+styles are reported.
+
+On fresh-dev with terse prompts, Sonnet in exec mode still passed 10/10 in every arm.
+**No dev result favoured any card policy, so the policy was frozen unchanged before
+the test split ran:**
+- corroborated heuristic hits and card hits with confidence ≥ 0.5 block once per issue;
+- `cards-warn` is measured as a separate arm.
+
+**Disclosure.** While choosing the policy I printed the card *shapes* for the
+fresh-test targets: whether each has a `requires` group, its confidence, its
+self-check result. No outcomes were printed. They were not used, since nothing
+changed.
+
+**D-41: Real-code false blocks get their own track.**
+- **Setup.** 150 public files that import the bench packages (R1,
+  `bench/realcode/manifest.json`). Each whole file is checked against every bench
+  version of its package. Each block is labelled by an Opus judge
+  (`bench/realcode/labels.json`) that sees the file and the issue's condition, not the
+  arm.
+- **R1 results:**
+  - heuristic hook: 13/192 file × version pairs blocked, 3/16 blocks plausibly
+    relevant;
+  - cards: 43/192 blocked, 11/56 plausibly relevant;
+  - no block was judged to clearly meet the condition, in either arm.
+- **Status.** R1 was looked at while choosing policy, so it is a tuning set. A second
+  set from different repos (R2) is the held-out number.

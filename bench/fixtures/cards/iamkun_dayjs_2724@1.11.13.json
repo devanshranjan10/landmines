@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [],
+  "requires": [
+    [
+      "customParseFormat"
+    ],
+    [
+      "Z",
+      "ZZ"
+    ]
+  ],
+  "condition": "Parsing a date-time string that has a UTC offset (e.g. +03:00) with a custom format may ignore or misread the offset and give the wrong time.",
+  "confidence": 0.25,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

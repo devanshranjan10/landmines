@@ -1,0 +1,5 @@
+For the month-end close we need to hand frozen copies of the ledger to the archiver, which takes pyarrow tables.
+
+Please implement `Ledger.snapshot()` in `app/ledger.py`: it returns the ledger's current entries as a `pyarrow.Table` with the columns `account`, `amount` and `qty` (in that order, no index column). The archiver keeps snapshots around and reads them later, and corrections (`correct_amount`, `adjust_qty`) can still be applied to the ledger after a snapshot has been taken. Taking a snapshot must not change the ledger itself.
+
+Keep the existing exports working and don't change dependencies.

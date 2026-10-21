@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "week"
+  ],
+  "requires": [
+    [
+      "weekOfYear"
+    ]
+  ],
+  "unless": [
+    "isoWeek"
+  ],
+  "condition": "The weekOfYear plugin's week() uses locale (US-style) weeks where the week containing Jan 1 is week 1, so late-December dates such as 2024-12-29..31 return 1 instead of the ISO week 53.",
+  "workaround": "Use the isoWeek plugin and call isoWeek() when you need ISO-8601 week numbers.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

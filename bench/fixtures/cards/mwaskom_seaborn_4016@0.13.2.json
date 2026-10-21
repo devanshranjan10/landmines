@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "heatmap",
+    "clustermap"
+  ],
+  "requires": [
+    [
+      "mask"
+    ]
+  ],
+  "condition": "If a DataFrame mask's columns don't match the data's columns, the label check in _matrix_mask is skipped, and the call crashes with an IndexError about inconsistent shapes in numpy instead of raising the intended ValueError.",
+  "workaround": "Make sure the mask DataFrame has the same index and columns as the data (for example with mask.reindex_like(data)), or pass a numpy array mask of the same shape.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

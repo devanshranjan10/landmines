@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "raw"
+  ],
+  "requires": [
+    [
+      "foreign_keys"
+    ]
+  ],
+  "condition": "With sqlite3, running knex.raw('PRAGMA foreign_keys = ON') only affects one pooled connection, so foreign keys stay unenforced on the other connections and inserts silently skip the constraint checks.",
+  "workaround": "Set pool.afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb) in the knex config so every new connection turns foreign keys on.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/453#issuecomment-54160324",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

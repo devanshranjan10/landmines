@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cast"
+  ],
+  "requires": [
+    [
+      "Decimal",
+      "DECIMAL"
+    ]
+  ],
+  "condition": "Casting Float64 to Decimal double-rounds (x*10^scale rounded to f64, then ties-to-even), so values slightly above a midpoint like 71.47265 round down to 71.4726.",
+  "workaround": "Cast the float to a string first (or use Python's Decimal on the exact value) and then to Decimal. Or round with a correct method before the cast.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

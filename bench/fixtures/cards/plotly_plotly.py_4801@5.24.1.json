@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "FigureWidget"
+  ],
+  "requires": [
+    [
+      "hover_data",
+      "custom_data",
+      "customdata"
+    ]
+  ],
+  "condition": "When a px figure that uses hover_data (customdata) is wrapped in go.FigureWidget, the hover box shows the raw \"%{customdata[0]}\" template text instead of the values.",
+  "workaround": "Show the figure as a plain go.Figure instead of wrapping it in FigureWidget.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

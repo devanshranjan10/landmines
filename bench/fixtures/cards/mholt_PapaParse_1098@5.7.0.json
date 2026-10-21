@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "transformHeader"
+  ],
+  "requires": [
+    [
+      "null"
+    ],
+    [
+      "header"
+    ]
+  ],
+  "condition": "If transformHeader returns null to try to drop a column, the column isn't removed: the rows get a \"null\" key instead.",
+  "workaround": "Parse with header: false and build each row object yourself, picking only the column indexes whose names appear in the header map. Alternatively, delete the unwanted keys after parsing.",
+  "workaroundUrl": "https://github.com/mholt/PapaParse/issues/1098#issuecomment-5611587806",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

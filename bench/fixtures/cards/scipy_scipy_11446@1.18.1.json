@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "unknown",
+  "apis": [
+    "savemat"
+  ],
+  "requires": [
+    [
+      "format"
+    ]
+  ],
+  "condition": "Saving with savemat(format='4') can fail with \"TypeError: write() argument must be str, not bytes\" because the MATLAB v4 writer passes bytes from tostring() to a write call that expects str.",
+  "workaround": "Save in the default MATLAB v5 format (leave out format='4').",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

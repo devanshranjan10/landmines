@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "model_validate_json"
+  ],
+  "requires": [
+    [
+      "Iterable"
+    ]
+  ],
+  "condition": "model_validate_json on a field typed as a union of str and Iterable[T] picks the Iterable arm for a JSON string, so iterating it later raises a confusing ValidationError, even though model_validate(json.loads(...)) keeps the str.",
+  "workaround": "Parse the JSON with json.loads and pass the result to model_validate, or use Sequence/list instead of Iterable in the union.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

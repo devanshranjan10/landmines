@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "dataclass"
+  ],
+  "requires": [
+    [
+      "Generic"
+    ]
+  ],
+  "condition": "Applying pydantic.dataclasses.dataclass to a class that inherits from a parametrized generic stdlib dataclass (e.g. Base[int]) raises TypeError: Parameter list to Generic[...] cannot be empty.",
+  "workaround": "Upgrade to pydantic 2.12+, where the plain case is fixed. Even there, don't also stack @dataclasses.dataclass under the pydantic decorator.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10689#issuecomment-3159707783",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

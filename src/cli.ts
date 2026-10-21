@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative, resolve } from 'node:path';
 import { Command, InvalidArgumentError } from 'commander';
 import { GitHubClient } from './github/client.js';
@@ -18,7 +18,7 @@ import { PROVIDERS, type ProviderName, provider } from './llm.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
 import { renderScanSummary, wantsColor } from './render.js';
-import { DEFAULT_MAX_RULES, RULES_TARGETS, renderRules, stripRules, writeRules } from './rules.js';
+import { DEFAULT_MAX_RULES, RULES_TARGETS, SKILL_PATH, renderRules, renderSkill, stripRules, writeRules } from './rules.js';
 import { scan } from './scan.js';
 import { findIndexRoot, readIndex, writeIndex } from './store.js';
 import type { LandmineIndex } from './types.js';
@@ -246,6 +246,11 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
           else writeFileSync(path, after);
           process.stdout.write(`Removed: rules section from ${f}\n`);
         }
+        const skill = join(root, SKILL_PATH);
+        if (existsSync(skill) && readFileSync(skill, 'utf8').includes('landmine-managed')) {
+          rmSync(dirname(skill), { recursive: true, force: true });
+          process.stdout.write(`Removed: ${SKILL_PATH}\n`);
+        }
       }
     });
 
@@ -254,11 +259,23 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .description('Print (or write into AGENTS.md / CLAUDE.md / GEMINI.md) a short known-open-bugs section any agent reads')
     .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest directory with a lockfile)')
     .option('-w, --write <files...>', `markdown files to update between landmine markers (e.g. ${RULES_TARGETS.join(' ')})`)
+    .option('--skill', `also write the full list as an Agent Skill (${SKILL_PATH})`)
     .option('--max <n>', 'most issues to list', positiveInt, DEFAULT_MAX_RULES)
-    .action((opts: { root?: string; write?: string[]; max: number }) => {
+    .action((opts: { root?: string; write?: string[]; max: number; skill?: boolean }) => {
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
-      const section = renderRules(loadIndex(root), opts.max);
+      const index = loadIndex(root);
+      const section = renderRules(index, opts.max);
+      if (opts.skill) {
+        const path = join(root, SKILL_PATH);
+        const before = existsSync(path) ? readFileSync(path, 'utf8') : undefined;
+        if (before !== undefined && !before.includes('landmine-managed')) throw new CliError(`${SKILL_PATH} exists and was not written by landmine; not overwriting it.`);
+        const after = renderSkill(index);
+        mkdirSync(dirname(path), { recursive: true });
+        if (before !== after) writeFileSync(path, after);
+        process.stdout.write(`${before === undefined ? 'created' : before === after ? 'unchanged' : 'updated'}: ${SKILL_PATH}\n`);
+      }
       if (!opts.write?.length) {
+        if (opts.skill) return;
         process.stdout.write(`${section}\n`);
         return;
       }

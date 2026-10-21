@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "Do"
+    ],
+    [
+      "localizedFormat",
+      "dayjs_plugin_localizedFormat"
+    ]
+  ],
+  "condition": "The Do ordinal token renders as \"17o\" instead of \"17th\" when the advancedFormat plugin is missing, or when it comes from a localized format such as LL and advancedFormat was extended before localizedFormat.",
+  "workaround": "Extend the advancedFormat plugin, which is what handles Do, and extend localizedFormat after it so that LL-style formats are expanded before Do is processed. Alternatively, build the string by hand with localeData().ordinal(date.date()) and remove the brackets.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

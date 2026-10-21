@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "dataset"
+  ],
+  "requires": [
+    [
+      "FileInfo",
+      "get_file_info"
+    ]
+  ],
+  "condition": "pyarrow.dataset.dataset() segfaults when the source list starts with a FileInfo and also contains plain path strings (path-first order raises TypeError instead).",
+  "workaround": "Don't mix types in the source list: pass either all path strings or all FileInfo objects, e.g. convert paths with filesystem.get_file_info(path).",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

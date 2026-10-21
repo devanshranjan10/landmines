@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "post",
+    "put",
+    "request",
+    "prepare"
+  ],
+  "requires": [
+    [
+      "StringIO"
+    ]
+  ],
+  "condition": "When data= is given an io.StringIO holding characters that take more than one byte in UTF-8, requests sets Content-Length to the number of characters, not the number of bytes it sends.",
+  "workaround": "Encode the text to bytes first and pass bytes or io.BytesIO(value.encode('utf-8')) instead of a StringIO.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

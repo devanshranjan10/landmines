@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "transaction"
+  ],
+  "requires": [
+    [
+      "reject"
+    ]
+  ],
+  "condition": "If the knex.transaction callback rejects or throws with undefined (e.g. Promise.reject() with no argument), the transaction rolls back but the returned promise resolves instead of rejecting.",
+  "workaround": "Always reject or throw an actual Error object inside the transaction callback, never a bare Promise.reject() or throw undefined.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

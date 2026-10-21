@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "verify"
+  ],
+  "requires": [
+    [
+      "audience"
+    ],
+    [
+      "RegExp",
+      "/"
+    ]
+  ],
+  "unless": [
+    "re2",
+    "RE2"
+  ],
+  "condition": "jwt.verify with a RegExp audience option runs the token's aud claim through RegExp.test with no length limit, so a backtracking-prone regex plus a crafted aud claim can block the event loop for seconds or minutes (ReDoS).",
+  "workaround": "Use string audiences or regexes that can't backtrack badly (or re2), or cap the length of the aud claim before you rely on regex audience matching.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

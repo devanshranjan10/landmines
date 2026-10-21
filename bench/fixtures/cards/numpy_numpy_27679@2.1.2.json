@@ -1,0 +1,35 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "masked_array",
+    "MaskedArray"
+  ],
+  "requires": [
+    [
+      "+=",
+      "-=",
+      "*=",
+      "__iadd__",
+      "__isub__",
+      "__imul__"
+    ],
+    [
+      "uint8",
+      "int8",
+      "uint16",
+      "int16",
+      "int32",
+      "uint32",
+      "float32",
+      "float16"
+    ]
+  ],
+  "condition": "An in-place arithmetic op with a Python scalar (e.g. +=) on a small-dtype masked array raises _UFuncOutputCastingError under NumPy 2 (NEP 50), even though the same op works on a plain ndarray.",
+  "workaround": "Cast the scalar to the array's dtype before the op (e.g. arr += np.uint8(5)), or apply the op to arr.data directly.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

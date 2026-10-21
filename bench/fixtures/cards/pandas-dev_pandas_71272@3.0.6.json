@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Series",
+    "eval",
+    "DataFrame"
+  ],
+  "requires": [
+    [
+      "int32"
+    ],
+    [
+      "float32"
+    ]
+  ],
+  "condition": "When numexpr is installed, arithmetic between int32 and float32 arrays computes in float32 instead of float64, which rounds the int32 values to 24 bits. This happens for Series longer than 1,000,000 elements and for eval with the numexpr engine at any size.",
+  "workaround": "Set pd.option_context(\"compute.use_numexpr\", False) or use engine=\"python\" for eval. Casting the operands to float64 beforehand also avoids it.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

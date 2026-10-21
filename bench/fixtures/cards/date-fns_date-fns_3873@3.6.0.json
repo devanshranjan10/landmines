@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "intervalToDuration"
+  ],
+  "requires": [],
+  "condition": "intervalToDuration can return negative fields (e.g. { months: 1, hours: -3 }) even when start is before end, especially near month ends.",
+  "workaround": "None in the thread. You can compute the parts yourself with differenceInDays and differenceInHours etc., or treat negative fields as a sign the result needs fixing.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

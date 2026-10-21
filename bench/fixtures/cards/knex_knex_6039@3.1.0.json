@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [
+    [
+      "pool"
+    ]
+  ],
+  "condition": "With knex's pool min left at the default or set above 0 (e.g. 2), idle connections are never released, so the server's connection count keeps climbing until MySQL/MariaDB returns \"Too many connections\".",
+  "workaround": "Set `pool: { min: 0, max: ... }` in the knex config so the idle timeout can close unused connections.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6039#issuecomment-3134948668",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

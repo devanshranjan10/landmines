@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "print"
+  ],
+  "requires": [
+    [
+      "Text"
+    ],
+    [
+      "justify",
+      "overflow",
+      "no_wrap"
+    ]
+  ],
+  "condition": "Console.print(Text(..., justify=...)) ignores the Text's own justify/overflow/no_wrap unless justify= is also passed to print().",
+  "workaround": "Also pass justify= to console.print(), or wrap the Text in a Group/Panel.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

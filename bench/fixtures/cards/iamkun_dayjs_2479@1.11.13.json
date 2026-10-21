@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "duration",
+    "add"
+  ],
+  "requires": [
+    [
+      "weeks",
+      "week"
+    ]
+  ],
+  "condition": "dayjs().add(dayjs.duration({ weeks })) ignores the weeks part and returns the unchanged date (regression since 1.11.8).",
+  "workaround": "Convert the weeks to days in the duration ({ days: weeks * 7 }), or call add(n, 'week') directly instead of passing a duration.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

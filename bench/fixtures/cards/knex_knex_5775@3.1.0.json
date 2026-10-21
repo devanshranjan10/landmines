@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "comment"
+  ],
+  "requires": [
+    [
+      "update",
+      "insert"
+    ]
+  ],
+  "condition": ".comment() is silently dropped on update/insert/delete queries in non-MySQL dialects such as PostgreSQL; it is only added to select queries.",
+  "workaround": "Put the comment in the SQL yourself, e.g. knex.raw('/* comment */ update ...'), or use the mysql dialect, where this was fixed by PR #5738.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

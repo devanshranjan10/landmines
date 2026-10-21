@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "update_layout",
+    "make_subplots"
+  ],
+  "requires": [
+    [
+      "xaxis_type"
+    ],
+    [
+      "shared_xaxes"
+    ]
+  ],
+  "unless": [
+    "update_xaxes"
+  ],
+  "condition": "When a figure from make_subplots(shared_xaxes=True) gets update_layout(xaxis_type=\"category\"), the x-axes stop being linked, so zooming one subplot no longer zooms the others.",
+  "workaround": "Set the type on all x-axes so the matched axes share the same type, e.g. fig.update_xaxes(type=\"category\"), not just xaxis_type.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

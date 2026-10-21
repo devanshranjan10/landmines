@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scipy.linalg"
+  ],
+  "requires": [],
+  "unless": [
+    "OPENBLAS_CORETYPE"
+  ],
+  "condition": "On AArch64 Linux CPUs that have SME but not SVE (e.g. an Apple Silicon VM), the OpenBLAS bundled with scipy picks the armv9sme kernel. It then runs an SVE instruction while loading and crashes with SIGILL as soon as scipy.linalg is imported.",
+  "workaround": "Set the environment variable OPENBLAS_CORETYPE=ARMV8. Another option is to copy libscipy_openblas.so from scipy-openblas32 0.3.34.237.0 over scipy's bundled one, the libscipy_openblas-*.so file in scipy.libs.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/26098#issuecomment-5560435731",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

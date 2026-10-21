@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "weekday"
+  ],
+  "requires": [
+    [
+      "moment-webpack-plugin",
+      "AntdMomentWebpackPlugin"
+    ]
+  ],
+  "condition": "With dayjs 1.11.18 used through @ant-design/moment-webpack-plugin, calls to moment methods throw \"weekday is not a function\". The reporter says 1.11.13 works fine.",
+  "workaround": "Stay on dayjs 1.11.13.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

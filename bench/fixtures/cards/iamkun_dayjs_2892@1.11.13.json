@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "guess"
+  ],
+  "requires": [],
+  "condition": "dayjs.tz.guess() can return an offset string like '+00:00' instead of an IANA zone name such as 'UTC'. This happens when Intl.DateTimeFormat().resolvedOptions().timeZone reports an offset in some Chrome or macOS environments.",
+  "workaround": "Check the result of tz.guess(). If it is an offset string rather than an IANA name, replace it with a fallback such as 'UTC'.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

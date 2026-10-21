@@ -1,0 +1,28 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "MultiIndex",
+    "from_arrays",
+    "align",
+    "join"
+  ],
+  "requires": [
+    [
+      "nan",
+      "NaN",
+      "None",
+      "NaT"
+    ]
+  ],
+  "unless": [
+    "dropna"
+  ],
+  "condition": "An arithmetic operation or alignment between a Series with a MultiIndex and a Series with a flat Index on a shared level raises \"ValueError: Length of values does not match length of index\" when the shared level of the MultiIndex contains NaN, because _join_level drops the NaN codes.",
+  "workaround": "Drop the MultiIndex rows that have NaN in the shared level before the operation (e.g. s1.iloc[1:] - s2), or recode those NaN values to a real level value.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

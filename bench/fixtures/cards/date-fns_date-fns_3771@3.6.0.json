@@ -1,0 +1,12 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [],
+  "requires": [],
+  "condition": "Webpack module federation prints a shared-module warning for date-fns-tz; this is a build or configuration problem, not a library defect.",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

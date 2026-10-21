@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "locale"
+  ],
+  "requires": [
+    [
+      "dayjs/locale/ku",
+      "dayjs/locale/ku.js"
+    ]
+  ],
+  "condition": "The built locale/ku.js exports a wrapper object ({default, englishToArabicNumbersMap}) rather than the locale, so require/ESM default import gives an object with no name and dayjs.locale(ku) silently does nothing.",
+  "workaround": "Use require('dayjs/locale/ku').default (or ku.default ?? ku) when passing the locale, or import for side effect and call dayjs.locale('ku') by name.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

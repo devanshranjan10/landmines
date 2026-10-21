@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "model_validator"
+  ],
+  "requires": [
+    [
+      "wrap",
+      "after",
+      "before"
+    ]
+  ],
+  "condition": "When model validators are defined on both a base class and a subclass, the subclass validators run before the parent's, and a subclass 'after' validator runs outside the base class's 'wrap' validator. This is the reverse of V1, where parent validators ran first.",
+  "workaround": "Don't rely on parent validators running first. Put any ordering-dependent logic in one validator, or have the subclass call the parent's logic explicitly.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

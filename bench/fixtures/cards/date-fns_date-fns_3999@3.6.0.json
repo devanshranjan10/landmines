@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "min"
+  ],
+  "requires": [
+    [
+      "null"
+    ]
+  ],
+  "condition": "In v4, min() called with an array containing null returns the epoch (1970-01-01) instead of Invalid Date.",
+  "workaround": "Filter out null values before calling min.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

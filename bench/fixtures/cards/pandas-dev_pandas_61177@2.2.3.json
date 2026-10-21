@@ -1,0 +1,30 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "astype"
+  ],
+  "requires": [
+    [
+      "to_period",
+      "PeriodIndex",
+      "period_range"
+    ],
+    [
+      "datetime64[ns]",
+      "datetime64"
+    ]
+  ],
+  "unless": [
+    "end_time",
+    "to_timestamp"
+  ],
+  "condition": "Calling astype(\"datetime64[ns]\") on a weekly PeriodIndex gives each period's start date (Monday), while asfreq('D') gives its end date (Sunday), so the two conversions don't agree.",
+  "workaround": "To get the period end, convert explicitly with period_index.asfreq('D').astype(\"datetime64[ns]\") or use .end_time.floor(\"D\").",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61177#issuecomment-2760323381",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

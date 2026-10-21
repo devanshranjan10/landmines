@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "timezone"
+    ]
+  ],
+  "condition": "In a Capacitor WebView, dayjs(...).tz throws \"tz is not a function\", probably because the timezone plugin was not registered through extend or bundling went wrong.",
+  "workaround": "Make sure dayjs.extend(utc) and dayjs.extend(timezone) run before .tz is used, in the same bundle.",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "colorbar",
+    "tickvals"
+  ],
+  "requires": [
+    [
+      "Heatmap",
+      "imshow",
+      "density_heatmap"
+    ]
+  ],
+  "unless": [
+    "zmax",
+    "cmax",
+    "range_color"
+  ],
+  "condition": "A heatmap colorbar drops the last tick (e.g. 1 / 100%) when the data maximum falls just short of it, even if that tick is listed explicitly in tickvals or produced by tickmode='linear'.",
+  "workaround": "Set the color range explicitly, e.g. zmin=0 and zmax=1 on the heatmap trace, so the last tick value falls inside the colorbar range.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

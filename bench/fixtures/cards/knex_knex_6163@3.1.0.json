@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "raw"
+  ],
+  "requires": [],
+  "condition": "knex.raw with an object of named bindings (:name) still treats any literal '?' in the SQL as a positional placeholder, substituting a named value there and leaving the actual named binding unfilled.",
+  "workaround": "Escape literal question marks in raw SQL as \\\\? (or pass the literal text as a binding) so knex does not treat them as placeholders.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6163#issuecomment-2578254312",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

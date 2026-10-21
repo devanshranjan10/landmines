@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "renameTable",
+    "dropTableIfExists",
+    "dropTable"
+  ],
+  "requires": [
+    [
+      "wrapIdentifier"
+    ],
+    [
+      "oracledb",
+      "oracle"
+    ]
+  ],
+  "condition": "With the Oracle dialect and a custom wrapIdentifier, renameTable doesn't apply wrapIdentifier to the table name, and dropTable/dropTableIfExists build the auto-increment sequence/trigger names inconsistently with how they were created, so the migration fails with \"object does not exist\" errors.",
+  "workaround": "Don't rely on wrapIdentifier for Oracle rename/drop operations. Pass the already-formatted (e.g. UPPER_SNAKE_CASE) names directly, or use raw SQL for rename/drop until PR #6058 lands.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

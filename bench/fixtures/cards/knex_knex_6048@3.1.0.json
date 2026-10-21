@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [
+    [
+      "mssql",
+      "tedious"
+    ],
+    [
+      "connection"
+    ]
+  ],
+  "condition": "With the MSSQL dialect, setting connection to a function (connection provider) leaves this.connectionSettings undefined, so binding queries (e.g. migrate:latest) crash in _typeForBinding with \"Cannot read properties of undefined (reading 'options')\".",
+  "workaround": "Pass a static connection object to the config instead of a function/async connection provider.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6048#issuecomment-2656275041",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

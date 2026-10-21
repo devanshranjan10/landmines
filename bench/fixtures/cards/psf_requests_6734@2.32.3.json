@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "put",
+    "post",
+    "request"
+  ],
+  "requires": [],
+  "condition": "With urllib3 1.26.x, passing a str body containing non-ASCII characters makes requests set a UTF-8-based Content-Length, but urllib3 sends the body as Latin-1, so the request hangs or the server rejects it.",
+  "workaround": "Encode the body yourself before sending it (data=body.encode('utf-8')), or upgrade to urllib3>=2.",
+  "workaroundUrl": "https://github.com/psf/requests/issues/6734#issuecomment-2150250705",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

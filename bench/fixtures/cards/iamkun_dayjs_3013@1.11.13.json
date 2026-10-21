@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "utc"
+  ],
+  "requires": [
+    [
+      "customParseFormat"
+    ]
+  ],
+  "condition": "dayjs.utc(date, [formats...]) with an array of formats under customParseFormat parses the date in local time instead of UTC.",
+  "workaround": "Pass a single format string to dayjs.utc, or try each format yourself with dayjs.utc(date, fmt, true) and keep the first valid result.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

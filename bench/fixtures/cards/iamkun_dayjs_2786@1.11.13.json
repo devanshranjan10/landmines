@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "fromNow",
+    "toNow",
+    "to"
+  ],
+  "requires": [
+    [
+      "dayjs/locale/ka",
+      "'ka'",
+      "\"ka\""
+    ],
+    [
+      "relativeTime"
+    ]
+  ],
+  "condition": "With the Georgian (ka) locale, the relativeTime past form uses the wrong grammatical case: it gives \"3 წუთი წინ\" when it should give \"3 წუთის წინ\".",
+  "workaround": "Use dayjs.updateLocale('ka', { relativeTime: {...} }) to override the relativeTime strings with the correct genitive forms.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

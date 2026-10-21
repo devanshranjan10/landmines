@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_datetime"
+  ],
+  "requires": [],
+  "condition": "to_datetime with no format on strings like 'UTC+0300' or 'GMT+03:00' guesses a '%z' format and returns +03:00, while Timestamp and format='mixed' return -03:00, so the result is off by twice the offset.",
+  "workaround": "Pass format='mixed' or parse with pd.Timestamp so the parsing matches dateutil, or remove the 'UTC'/'GMT' prefix before the numeric offset so the sign is unambiguous.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

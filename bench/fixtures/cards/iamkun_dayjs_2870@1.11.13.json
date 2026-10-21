@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "month",
+    "date"
+  ],
+  "requires": [
+    [
+      "year"
+    ]
+  ],
+  "condition": "Chaining year().month(0).date(23) reportedly yields 2025-02-22 instead of 2025-01-23, likely due to environment/plugin rather than core dayjs.",
+  "workaround": "Construct the date directly, e.g. dayjs('2025-01-23') or dayjs(new Date(2025, 0, 23)).",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

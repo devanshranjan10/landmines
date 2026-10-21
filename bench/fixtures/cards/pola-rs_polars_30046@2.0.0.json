@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_parquet",
+    "sink_parquet",
+    "PartitionBy"
+  ],
+  "requires": [
+    [
+      "partition_by",
+      "PartitionBy",
+      "key"
+    ]
+  ],
+  "condition": "Hive-partitioning on a Time column casts keys to String without fractional seconds, so keys differing below one second share one directory and overwrite each other, silently losing rows.",
+  "workaround": "Before partitioning, convert the Time key to a string column with dt.to_string() (which keeps fractional seconds), or partition on an integer representation of the time.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "to_table"
+  ],
+  "requires": [
+    [
+      "Thread",
+      "run_in_threadpool",
+      "to_thread",
+      "ThreadPoolExecutor"
+    ]
+  ],
+  "unless": [
+    "ARROW_DEFAULT_MEMORY_POOL"
+  ],
+  "condition": "If pyarrow is first imported and first allocates on a short-lived thread that exits, later allocations on new threads segfault in bundled mimalloc's mi_thread_init.",
+  "workaround": "Upgrade to 25.0.1, or import pyarrow and do one allocation on the main thread at startup, or set ARROW_DEFAULT_MEMORY_POOL=system before import.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/50908#issuecomment-5338449767",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

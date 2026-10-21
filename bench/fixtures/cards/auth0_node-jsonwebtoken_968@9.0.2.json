@@ -1,0 +1,18 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "sign"
+  ],
+  "requires": [
+    [
+      "HS256"
+    ]
+  ],
+  "condition": "Reporter claims jwt.sign with algorithm HS256 and a secret produces an RS256 token; no repro given, so it is likely a usage error.",
+  "confidence": 0.15,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

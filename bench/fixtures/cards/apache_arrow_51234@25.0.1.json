@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "run_query"
+  ],
+  "requires": [
+    [
+      "extension_urns",
+      "extension_urn_reference"
+    ]
+  ],
+  "condition": "Substrait plans that use modern extension_urns/extension_urn_reference have their URN ignored, so Acero picks an Arrow function by name alone. This can silently run the wrong function, for example decimal divide with the wrong precision and scale.",
+  "workaround": "Use the legacy extension_uris/extension_uri_reference fields with registered URIs. Then unsupported extensions are rejected instead of resolved by name.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

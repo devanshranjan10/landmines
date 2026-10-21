@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "unknown",
+  "apis": [
+    "remez"
+  ],
+  "requires": [
+    [
+      "differentiator"
+    ]
+  ],
+  "condition": "remez with type='differentiator' and a very narrow pass band (e.g. bands [0, 0.01]) crashes the Python interpreter instead of raising an error.",
+  "workaround": "Check the band edges before calling, and don't call remez with type='differentiator' when the pass band is extremely narrow.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "isDate"
+  ],
+  "requires": [],
+  "unless": [
+    "isValid"
+  ],
+  "condition": "isDate returns false for ISO timestamp strings because it only checks whether the value is a Date instance, which is the intended behaviour.",
+  "workaround": "Parse the string with new Date(value) or parseISO, then use isValid to check whether it parsed.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3967#issuecomment-2567056866",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

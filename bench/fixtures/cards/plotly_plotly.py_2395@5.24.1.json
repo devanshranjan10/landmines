@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tickvals",
+    "ticktext"
+  ],
+  "requires": [
+    [
+      "multicategory",
+      "update_layout",
+      "update_xaxes",
+      "xaxis"
+    ]
+  ],
+  "condition": "Setting tickvals and ticktext on a multi-category (nested list x) axis results in no tick labels or an empty, unrendered figure.",
+  "workaround": "No workaround in the thread. showticklabels=False hides all labels, including the parent category level.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

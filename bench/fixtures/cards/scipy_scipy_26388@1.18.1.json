@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cholesky"
+  ],
+  "requires": [
+    [
+      "lower"
+    ]
+  ],
+  "condition": "With SciPy 1.18.x linked against Apple Accelerate, scipy.linalg.cholesky(A, lower=True) on matrices with n >= 33 leaves garbage in the strict upper triangle, so the result is not lower-triangular and L @ L.T != A.",
+  "workaround": "Apply np.tril() to the result. Alternatives are numpy.linalg.cholesky, scipy.linalg.lapack.dpotrf(A, lower=1), or calling cholesky(lower=False) and transposing.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "RootModel"
+  ],
+  "requires": [
+    [
+      "__eq__",
+      "=="
+    ]
+  ],
+  "condition": "RootModel's __eq__ is visible to type checkers, so mypy does not flag a non-overlapping equality check like RootModel instance == \"a\", which is always False at runtime.",
+  "workaround": "Compare against the .root attribute instead of the model instance, e.g. B(\"a\").root == \"a\".",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

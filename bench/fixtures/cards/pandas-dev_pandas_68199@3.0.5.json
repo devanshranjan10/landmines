@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "replace"
+  ],
+  "requires": [],
+  "condition": "Series/DataFrame.replace with a callable as value silently stores the function object in the result instead of applying it or raising.",
+  "workaround": "Use Series.str.replace for callable replacements, or pass a plain string or scalar as value.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

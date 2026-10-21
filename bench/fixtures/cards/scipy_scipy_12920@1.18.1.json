@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "legendre",
+    "chebyt",
+    "chebyu",
+    "hermite"
+  ],
+  "requires": [],
+  "unless": [
+    "numpy.polynomial",
+    "basis"
+  ],
+  "condition": "The poly1d coefficients from legendre/chebyt/chebyu/hermite contain tiny nonzero roundoff values (about 1e-16) in positions that should be exactly zero, for degree 4 and higher.",
+  "workaround": "Use numpy.polynomial instead, e.g. Hermite.basis(n).convert(kind=Polynomial).coef, which gives exact zeros. You can also zero out the coefficients that are known to be zero yourself.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/12920#issuecomment-703634081",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_datetime"
+  ],
+  "requires": [
+    [
+      "unit"
+    ]
+  ],
+  "unless": [
+    "as_unit"
+  ],
+  "condition": "When the input is already datetime64 (or non-numeric), pd.to_datetime silently ignores unit= and keeps the input's resolution, for example datetime64[ms], instead of converting to the requested unit.",
+  "workaround": "To change the resolution of existing datetimes, use .astype(\"datetime64[ns]\") or .dt.as_unit(\"ns\").",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60371#issuecomment-2489749034",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

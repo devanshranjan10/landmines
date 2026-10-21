@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [],
+  "condition": "With the customParseFormat plugin, calling dayjs(input, format) where input is a Dayjs object, Date or number instead of a string doesn't parse correctly and gives an invalid or wrong date.",
+  "workaround": "Only pass a format string when the input is a string; call dayjs(value) without a format for Date, number or Dayjs inputs.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

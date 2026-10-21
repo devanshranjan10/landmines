@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ParquetFile",
+    "read",
+    "read_row_group",
+    "iter_batches"
+  ],
+  "requires": [
+    [
+      "columns"
+    ]
+  ],
+  "condition": "ParquetFile.read(columns=[\"a.b\"]) also returns the struct column \"a\" when a top-level column named with a dot (\"a.b\") has the same name as a nested path (a -> b).",
+  "workaround": "Use pq.read_table(..., columns=[...]), which returns only the exact column, or drop the extra columns from the result.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

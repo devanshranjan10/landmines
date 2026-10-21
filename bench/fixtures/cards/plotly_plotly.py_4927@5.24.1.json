@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "express"
+  ],
+  "requires": [],
+  "condition": "plotly ships no py.typed marker, so mypy reports import-not-found for plotly modules.",
+  "workaround": "Install the third-party plotly-stubs package, or add an empty py.typed file to the installed plotly package.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/4927#issuecomment-2666423817",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

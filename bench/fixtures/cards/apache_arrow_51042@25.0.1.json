@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ParquetReadOptions",
+    "from_tensor",
+    "serialize_schema",
+    "from_sequence"
+  ],
+  "requires": [],
+  "condition": "Passing an argument that isn't the expected Arrow wrapper type crashes the interpreter with a segfault instead of raising TypeError. Affected calls: ParquetReadOptions(binary_type=...), SparseCOOTensor.from_tensor, substrait.serialize_schema / serialize_expressions, IndexOptions(...).serialize and a",
+  "workaround": "Pass only the documented types: a pa.DataType or None for binary_type, a pa.Tensor, a pa.Schema, a pa.Scalar for IndexOptions, and Declaration objects for from_sequence. Check the type with isinstance before calling.",
+  "confidence": 0.35,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

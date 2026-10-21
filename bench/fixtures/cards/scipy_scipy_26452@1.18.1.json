@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "lqn"
+  ],
+  "requires": [
+    [
+      "j",
+      "complex",
+      "1j"
+    ]
+  ],
+  "condition": "scipy.special.lqn with a complex argument z near or off the real axis (e.g. 1.01j) returns -inf/nan, or values from the wrong branch (type 2 vs type 3).",
+  "workaround": "Use mpmath.legenq with an explicit type for complex arguments.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

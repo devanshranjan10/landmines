@@ -1,0 +1,18 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "valueOf"
+  ],
+  "requires": [],
+  "unless": [
+    "utc"
+  ],
+  "condition": "dayjs('2019-01-25') parses the date as local midnight, so valueOf() returns a timestamp that depends on the local timezone. This is expected behaviour, and the example value in the docs comes from a different timezone.",
+  "workaround": "To get UTC midnight, use the utc plugin: dayjs.utc('2019-01-25').valueOf().",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz",
+    "add"
+  ],
+  "requires": [
+    [
+      "day",
+      "days",
+      "d",
+      "week",
+      "month",
+      "year",
+      "w",
+      "M"
+    ]
+  ],
+  "condition": "Calling add() with day units on a dayjs object converted with tz() across a DST transition keeps the old UTC offset, so the resulting instant is off by an hour.",
+  "workaround": "Re-apply the timezone after adding, e.g. dayjs.tz(d.tz(zone).add(30,'day').format('YYYY-MM-DDTHH:mm:ss'), zone), or do the arithmetic in UTC and convert with tz() afterward.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

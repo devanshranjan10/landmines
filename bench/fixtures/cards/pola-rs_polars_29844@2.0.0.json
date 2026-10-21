@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "sink_iceberg"
+  ],
+  "requires": [
+    [
+      "BucketTransform",
+      "bucket"
+    ]
+  ],
+  "condition": "sink_iceberg raises NotImplementedError when the target Iceberg table is partitioned with a bucket transform, a limitation the docs already list.",
+  "workaround": "Write to bucket-partitioned tables with PyIceberg's table.append (for example, using collect().to_arrow()) instead of sink_iceberg.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

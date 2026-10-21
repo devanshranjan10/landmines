@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "relplot",
+    "lineplot"
+  ],
+  "requires": [
+    [
+      "units"
+    ]
+  ],
+  "condition": "With pandas>=2.2, line plots that use units= on a categorical column call groupby without observed= and emit a pandas FutureWarning about the default of observed=False.",
+  "workaround": "Convert the units column to a non-categorical dtype (e.g. df['units'].astype(str)) or suppress the FutureWarning with warnings.filterwarnings.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

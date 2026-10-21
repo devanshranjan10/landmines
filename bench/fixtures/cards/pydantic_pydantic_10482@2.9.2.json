@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "discriminator",
+    "Discriminator"
+  ],
+  "requires": [
+    [
+      "Annotated"
+    ],
+    [
+      "Field",
+      "Discriminator"
+    ]
+  ],
+  "condition": "Applying discriminator= to individual union members (Annotated[A1, Field(discriminator='tag')] | Annotated[A2, ...]) is silently ignored for the outer union, so the value is validated as a plain union rather than a discriminated one.",
+  "workaround": "Put the discriminator on the whole union instead: Annotated[A1 | A2, Field(discriminator='tag')].",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

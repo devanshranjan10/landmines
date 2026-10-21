@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "parse"
+  ],
+  "requires": [],
+  "condition": "When date-fns 3.2+ is bundled with Parcel (especially in production builds), parse throws \"TypeError: Cannot read properties of undefined (reading 'y')\" because of duplicate exports.",
+  "workaround": "Downgrade date-fns to 3.1.0 or earlier.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3843#issuecomment-2221065578",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

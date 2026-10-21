@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "apply"
+  ],
+  "requires": [
+    [
+      "groupby"
+    ]
+  ],
+  "condition": "Calling groupby().apply() so that it operates on the grouping columns triggers a DeprecationWarning, because pandas 3.0 will leave the grouping columns out of the data passed to the function.",
+  "workaround": "Select all columns explicitly after groupby, e.g. df.groupby(\"group\")[df.columns].apply(func), or pass include_groups=False and get the group keys back from the result's index.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61406#issuecomment-2863420094",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

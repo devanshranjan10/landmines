@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_ipc",
+    "scan_ipc",
+    "read_ipc_stream"
+  ],
+  "requires": [],
+  "unless": [
+    "use_pyarrow"
+  ],
+  "condition": "Reading a compressed Arrow IPC file or stream that has a Decimal128 buffer stored uncompressed (length prefix -1, e.g. from ClickHouse or Arrow min_space_savings) panics with cast_slice TargetAlignmentGreaterAndInputNotAligned.",
+  "workaround": "Pass use_pyarrow=True to read_ipc, or read the file with pyarrow and convert it to Polars.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "create"
+  ],
+  "requires": [
+    [
+      "auth"
+    ],
+    [
+      "Authorization"
+    ]
+  ],
+  "condition": "When an axios instance is created with `auth`, any per-request `Authorization` header (e.g. a Bearer token) gets silently replaced by the instance's Basic auth header.",
+  "workaround": "Leave `auth` out of the instance config. Either set the Basic `Authorization` header yourself at the instance level, or pass `auth` on each request, so the per-request Authorization header can override it.",
+  "workaroundUrl": "https://github.com/axios/axios/issues/6587#issuecomment-2394965946",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

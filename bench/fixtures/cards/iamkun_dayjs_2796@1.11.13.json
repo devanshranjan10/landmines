@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "meridiem"
+  ],
+  "requires": [
+    [
+      "localeData"
+    ]
+  ],
+  "condition": "Calling dayjs().localeData().meridiem() throws \"meridiem is not a function\" because the object that localeData returns has no meridiem method (at least with the default locale).",
+  "workaround": "Don't call localeData().meridiem(). Format with the 'A' or 'a' token instead (e.g. dayjs().format('A')), or check that dayjs.Ls[locale].meridiem exists before calling it.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

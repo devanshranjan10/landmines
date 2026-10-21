@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "afterCreate"
+  ],
+  "requires": [
+    [
+      "Promise",
+      "then"
+    ]
+  ],
+  "condition": "An async or Promise-returning pool afterCreate gets wrapped in util.promisify anyway, so Node 22+ prints a DEP0174 deprecation warning for every connection, and the callback-style done is still expected.",
+  "workaround": "Write afterCreate in callback style, (conn, done) => {...}, and call done(err, conn) instead of returning a promise.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

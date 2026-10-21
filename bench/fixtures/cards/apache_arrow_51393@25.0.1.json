@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "arange"
+  ],
+  "requires": [],
+  "condition": "pyarrow.arange with an int64 range whose length overflows (e.g. arange(-(1<<63), 0)) segfaults the process instead of raising an exception.",
+  "workaround": "Check that stop - start fits in a signed int64 and is a sane size before calling pa.arange.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

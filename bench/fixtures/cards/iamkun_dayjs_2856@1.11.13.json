@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "calendar"
+  ],
+  "requires": [
+    [
+      "jalali"
+    ]
+  ],
+  "condition": "Converting a Jalali date (e.g. 1404/01/16) to Gregorian gives the previous day (2025/04/04 instead of 2025/04/05).",
+  "workaround": "Use moment (with a jalali plugin) for the conversion for now.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2856#issuecomment-2786336207",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

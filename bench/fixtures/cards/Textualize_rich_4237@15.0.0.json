@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Text",
+    "from_markup",
+    "__getitem__"
+  ],
+  "requires": [],
+  "condition": "Indexing a styled rich Text with a negative integer (text[-1]) returns the right character but drops all span styles, because the negative offset is compared with non-negative span bounds.",
+  "workaround": "Normalize the index before indexing, e.g. text[len(text) - 1] or text[i % len(text)], or use a slice like text[-1:] which keeps spans.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "send"
+  ],
+  "requires": [
+    [
+      "proxies"
+    ],
+    [
+      "prepare",
+      "PreparedRequest"
+    ]
+  ],
+  "condition": "When a PreparedRequest whose url was set by hand to keep dot segments (e.g. /../x) is sent through a proxy, urllib3's parse_url normalizes the URL anyway, so the raw path is not preserved.",
+  "workaround": "There's no fix in requests. The bug is in urllib3's proxy branch, and the upstream fix is urllib3 PR #4966, which uses urlsplit/urlunsplit. Until that lands, send without a proxy or patch urllib3 yourself.",
+  "workaroundUrl": "https://github.com/psf/requests/issues/6830#issuecomment-4270794482",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

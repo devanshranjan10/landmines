@@ -1,0 +1,29 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "group_by",
+    "unique",
+    "join"
+  ],
+  "requires": [
+    [
+      "collect"
+    ],
+    [
+      "slice",
+      "head",
+      "limit"
+    ]
+  ],
+  "unless": [
+    "maintain_order"
+  ],
+  "condition": "Collecting separate slices of a LazyFrame whose row order is undefined (group_by, unique or join without maintain_order) gives inconsistent rows between executions, so some rows are duplicated and others are missing.",
+  "workaround": "Pass maintain_order=True to group_by, unique and sort, and maintain_order='left' to join. Alternatively, collect the whole result once and then slice it.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tf2sos"
+  ],
+  "requires": [],
+  "condition": "tf2sos drops pure delays when the numerator has leading zeros, e.g. b=[0,0,1]. It returns an identity section, so sosfilt gives undelayed output that doesn't match lfilter.",
+  "workaround": "Apply the delay separately, for example by shifting the signal or using lfilter for the leading-zero delay part. Pass only the trimmed numerator to tf2sos.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

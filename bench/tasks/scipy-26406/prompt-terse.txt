@@ -1,0 +1,5 @@
+We want to run the same low-pass filter on the live vibration feed, not just on finished recordings.
+
+Please implement `StreamFilter` in `app/filters.py`. The socket reader calls `process(chunk)` with each chunk as it arrives (a 1-D float array of any length) and `process` returns the filtered samples for that chunk. Chunking must not change the result: concatenating everything `process` returned must equal `filter_recording(full_signal)` with the same cutoff/fs (to floating-point precision), however the stream happens to be split. When a poll times out the reader passes an empty array.
+
+Keep the existing exports working and don't change dependencies.

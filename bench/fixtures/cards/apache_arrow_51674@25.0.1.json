@@ -1,0 +1,17 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "ParquetFile",
+    "to_batches"
+  ],
+  "requires": [],
+  "condition": "Reading large Parquet files stored on a BeeGFS filesystem fails with OSError Errno 14 'Bad address' on the first read, and a retry succeeds.",
+  "workaround": "Copy the file to a local filesystem such as /tmp before reading it, or catch the error and call ParquetFile a second time.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/51674#issuecomment-5934766544",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

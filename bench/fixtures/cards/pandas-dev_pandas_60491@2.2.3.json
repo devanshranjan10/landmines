@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_parquet",
+    "to_parquet"
+  ],
+  "requires": [
+    [
+      "category",
+      "Categorical",
+      "CategoricalDtype"
+    ]
+  ],
+  "condition": "With the default pyarrow engine, a categorical column with numeric categories written by to_parquet comes back from read_parquet as a plain int64 column, so the categorical dtype is lost.",
+  "workaround": "Read the file with engine='fastparquet', or convert the categories to strings before writing (astype('str').astype('category')).",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60491#issuecomment-2518873267",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

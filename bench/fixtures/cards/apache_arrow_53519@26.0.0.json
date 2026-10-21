@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_buffers"
+  ],
+  "requires": [
+    [
+      "StringArray",
+      "LargeStringArray"
+    ]
+  ],
+  "condition": "StringArray.from_buffers / LargeStringArray.from_buffers raise OverflowError when length, null_count or offset exceed INT32_MAX because they are declared as C int.",
+  "workaround": "Use pa.Array.from_buffers(pa.large_string(), length, [None, offsets, data], null_count=..., offset=...) instead.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

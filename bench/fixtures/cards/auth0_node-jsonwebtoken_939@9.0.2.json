@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sign",
+    "verify"
+  ],
+  "requires": [],
+  "condition": "In runtimes whose crypto module has no KeyObject (older Bun, or browser/client bundles such as webpack or Next.js client code), jwt.sign/jwt.verify in 9.x throw \"Right hand side of instanceof is not an object\".",
+  "workaround": "Run it on server-side Node or upgrade Bun to a build that has crypto.KeyObject (e.g. the canary). Otherwise, downgrade to jsonwebtoken 8.5.1 or switch to the jose library.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/939#issuecomment-1753165130",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

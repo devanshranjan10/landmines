@@ -1,0 +1,33 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "min",
+    "max"
+  ],
+  "requires": [
+    [
+      "axis"
+    ],
+    [
+      "uint8",
+      "uint16",
+      "uint32",
+      "uint64",
+      "uint"
+    ],
+    [
+      "masked_array",
+      "MaskedArray",
+      "masked_where",
+      "array"
+    ]
+  ],
+  "condition": "Calling min/max with an axis on a masked array with an unsigned integer dtype and a nonzero mask raises a TypeError, because the int64 fill_value can't be cast to the uint dtype.",
+  "workaround": "Cast to a signed or larger dtype before reducing, or fill the masked values yourself and reduce the plain ndarray, then reapply the mask.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

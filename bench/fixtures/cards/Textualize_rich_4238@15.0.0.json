@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "print_exception",
+    "from_exception",
+    "extract",
+    "RichHandler"
+  ],
+  "requires": [],
+  "condition": "Traceback.extract loops forever and grows memory without bound when an exception chain forms a cycle through __cause__ and __context__, e.g. when an exception is re-raised inside the handler of another exception that was raised from it.",
+  "workaround": "Avoid re-raising the original exception inside the handler of an exception chained from it (for example, use bare `raise` or `raise ... from None`), or break the cycle by clearing __context__/__cause__ before passing the exception to rich.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

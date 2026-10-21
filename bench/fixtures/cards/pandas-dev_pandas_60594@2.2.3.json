@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "groupby"
+  ],
+  "requires": [
+    [
+      "ArrowDtype",
+      "struct",
+      "StructArray"
+    ]
+  ],
+  "condition": "Grouping by a column with a pyarrow struct ArrowDtype raises ArrowNotImplementedError, because dictionary_encode has no kernel for struct types.",
+  "workaround": "Group by the struct's individual fields (e.g. split them into separate columns with Series.struct.explode()) or convert the key to hashable tuples or an object dtype before grouping.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

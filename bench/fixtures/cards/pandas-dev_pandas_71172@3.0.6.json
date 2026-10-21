@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "unique",
+    "squeeze"
+  ],
+  "requires": [
+    [
+      "squeeze"
+    ]
+  ],
+  "unless": [
+    "to_numpy"
+  ],
+  "condition": "In pandas 3, Series.unique() on string data returns an ArrowStringArray rather than an ndarray, so calling .squeeze() on the result raises AttributeError.",
+  "workaround": "Convert to a numpy array first, e.g. np.asarray(s.unique()).squeeze() or s.unique().to_numpy().squeeze(), or read the value with s.unique()[0].",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

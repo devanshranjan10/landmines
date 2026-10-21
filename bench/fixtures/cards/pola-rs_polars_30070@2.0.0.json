@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "SQLContext",
+    "execute"
+  ],
+  "requires": [
+    [
+      "read_parquet",
+      "read_csv",
+      "read_json",
+      "read_ipc",
+      "UNNEST",
+      "generate_series",
+      "range"
+    ]
+  ],
+  "condition": "In SQLContext.execute, a table function or UNNEST in FROM with an alias matching a registered table name replaces that table in the context for all later queries; derived-table aliases also persist in the context.",
+  "workaround": "Use FROM aliases that don't match any registered table name, or run each query in a fresh SQLContext.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

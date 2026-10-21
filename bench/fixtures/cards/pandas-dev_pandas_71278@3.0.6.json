@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "select"
+  ],
+  "requires": [
+    [
+      "where"
+    ],
+    [
+      "start",
+      "stop"
+    ],
+    [
+      "chunksize",
+      "iterator"
+    ]
+  ],
+  "condition": "HDFStore.select with where plus start/stop and chunksize or iterator=True applies the start/stop window to the list of matching rows instead of the table rows, so it returns the wrong rows.",
+  "workaround": "Don't combine start/stop with chunksize/iterator. Either call select without chunking, or get the coordinates with select_as_coordinates(key, where, start=, stop=) and read them in chunks by passing those coordinates as the where argument.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

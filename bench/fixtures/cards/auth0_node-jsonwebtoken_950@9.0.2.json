@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "verify"
+  ],
+  "requires": [],
+  "condition": "When jsonwebtoken v9 is bundled into browser/client code (Next.js client, Vue), verify throws \"TypeError: invalid 'instanceof' operand KeyObject\" because Node's crypto KeyObject is unavailable.",
+  "workaround": "Run verify on the server (Node), or use a browser-compatible JWT library such as jose on the client.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/950#issuecomment-2009326639",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

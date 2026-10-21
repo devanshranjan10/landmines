@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "qcut"
+  ],
+  "requires": [
+    [
+      "inf",
+      "np.inf",
+      "float('inf')"
+    ]
+  ],
+  "condition": "pd.qcut on data containing infinite values computes NaN quantile edges and raises a \"missing values must be missing in the same location\" ValueError, or assigns values to the wrong bins.",
+  "workaround": "Before calling qcut, replace infinite values with NaN or with finite values (e.g. s.replace([np.inf, -np.inf], np.nan)), then put them back in the outer bins yourself.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

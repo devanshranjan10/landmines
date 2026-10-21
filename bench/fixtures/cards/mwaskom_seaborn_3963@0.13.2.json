@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "FacetGrid",
+    "map_dataframe"
+  ],
+  "requires": [
+    [
+      "savefig",
+      "show"
+    ]
+  ],
+  "condition": "Rendering a FacetGrid with many facets whose data has large values (e.g. ~5e6) raises ValueError: cannot convert float NaN to integer in matplotlib tick space computation on savefig/show.",
+  "workaround": "Scale the data down (e.g. divide x/y by 10) so the tick labels are shorter.",
+  "confidence": 0.35,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

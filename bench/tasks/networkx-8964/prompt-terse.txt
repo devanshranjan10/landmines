@@ -1,0 +1,5 @@
+Release pushes currently go from the origin straight to every site, which is the most expensive way to do it. We want to let sites relay the release to each other.
+
+Please implement `relay_plan(links, origin)` in `app/relay.py` (the link format is described in the module docstring). Every site that appears in `links`, other than the origin, must receive the release exactly once, either from the origin or from another site, and only over a listed link; the sum of the costs of the links used must be as small as possible. Return a dict mapping each site to the site (or origin) it receives the release from. For example, with links `origin->hub 5`, `origin->edge 9`, `hub->edge 2` the plan is `{"hub": "origin", "edge": "hub"}` (cost 7). If some sites can't be reached at all, raise `ValueError` listing them (`unreachable()` already finds them).
+
+Keep the existing exports working and don't change dependencies.

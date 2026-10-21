@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "duration"
+  ],
+  "requires": [
+    [
+      "diff",
+      "toISOString",
+      "months",
+      "days"
+    ]
+  ],
+  "condition": "dayjs.duration(milliseconds) of more than a month splits the time into months using a 30.4166-day month, so the months, days and hours (and toISOString) come out wrong, e.g. 'P2M9DT5H' instead of 'P2M10D'.",
+  "workaround": "Don't break a millisecond duration down into months and days. Use asDays()/asHours(), or work out the months and days yourself with dayjs diff in 'month' and 'day' units.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

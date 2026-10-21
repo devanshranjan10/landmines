@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "is_in",
+    "scan_parquet"
+  ],
+  "requires": [],
+  "condition": "When is_in on a scan_parquet column gets more than 100 values, row-group pruning only uses the min/max range of the values, so row groups that fall between the values are still read (results stay correct, but the scan is slow).",
+  "workaround": "Split the value list into chunks of 100 or fewer and combine the is_in predicates with | so each one is still pruned exactly.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

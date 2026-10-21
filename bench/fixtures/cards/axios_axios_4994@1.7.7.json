@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "interceptors"
+  ],
+  "requires": [
+    [
+      "response"
+    ],
+    [
+      "config"
+    ]
+  ],
+  "unless": [
+    "JSON.parse"
+  ],
+  "condition": "Inside a response interceptor, response.config.data is the JSON string that was sent, not the object set in the request interceptor or passed as data.",
+  "workaround": "Run JSON.parse on response.config.data inside the response interceptor, or keep the original object in a custom config property.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

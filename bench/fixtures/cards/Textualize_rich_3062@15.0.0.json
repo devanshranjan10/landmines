@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Confirm.ask",
+    "ask"
+  ],
+  "requires": [
+    [
+      "choices"
+    ]
+  ],
+  "condition": "When Confirm.ask is given custom choices, invalid input still shows the hardcoded error \"Please enter Y or N\", which doesn't match the choices.",
+  "workaround": "Subclass Confirm and set validate_error_message to a message that matches your choices, or set Confirm.validate_error_message directly.",
+  "workaroundUrl": "https://github.com/Textualize/rich/issues/3062#issuecomment-1656960176",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__pydantic_extra__",
+    "__get_pydantic_core_schema__"
+  ],
+  "requires": [
+    [
+      "extra"
+    ],
+    [
+      "serialization",
+      "plain_serializer_function_ser_schema"
+    ]
+  ],
+  "condition": "When a custom type with a serialization schema from __get_pydantic_core_schema__ is used as the value type in __pydantic_extra__, extra-field values are serialized by inference, so the custom serializer is ignored and model_dump_json fails with \"Unable to serialize unknown type\".",
+  "workaround": "Also set a class attribute __pydantic_serializer__ = SchemaSerializer(...) on the value's class, using the same serialization schema.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10654#issuecomment-2423475533",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

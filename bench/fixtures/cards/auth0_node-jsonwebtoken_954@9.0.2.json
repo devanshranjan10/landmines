@@ -1,0 +1,24 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "decode"
+  ],
+  "requires": [
+    [
+      "vite",
+      "svelte"
+    ]
+  ],
+  "unless": [
+    "jwtDecode"
+  ],
+  "condition": "When jsonwebtoken is bundled for the browser (e.g. with Vite), loading it throws \"Cannot read properties of undefined (reading 'from')\" from safe-buffer because Node's Buffer isn't available there.",
+  "workaround": "Only use jsonwebtoken on the Node.js server. In browser code, use the jwt-decode library to decode tokens.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/954#issuecomment-1896222411",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

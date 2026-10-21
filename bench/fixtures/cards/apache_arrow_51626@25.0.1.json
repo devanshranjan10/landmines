@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_table"
+  ],
+  "requires": [
+    [
+      "dictionary",
+      "DictionaryArray",
+      "Categorical",
+      "category"
+    ]
+  ],
+  "unless": [
+    "use_dictionary"
+  ],
+  "condition": "Writing dictionary-encoded string columns to Parquet can produce wrong statistics: null_count misses nulls under null struct rows, and unused dictionary values can become the exact min/max when the batch contains nulls.",
+  "workaround": "Write with use_dictionary=False, or cast the dictionary column to plain string before writing.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

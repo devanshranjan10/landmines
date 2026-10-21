@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Hist"
+  ],
+  "requires": [
+    [
+      "density"
+    ]
+  ],
+  "condition": "so.Hist(stat=\"density\") normalizes each group separately and ignores common_norm=True, so the result differs from sns.histplot.",
+  "workaround": "Use sns.histplot with stat=\"density\" and common_norm=True, or use stat=\"probability\"/\"proportion\" and scale by bin width yourself.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

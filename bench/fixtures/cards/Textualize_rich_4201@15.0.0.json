@@ -1,0 +1,12 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [],
+  "condition": "Importing rich raises PermissionError when os.getcwd() fails with EPERM/EACCES (e.g. macOS cwd in a protected directory), because only FileNotFoundError is caught at import time.",
+  "workaround": "Change the process cwd to an accessible directory (os.chdir) before importing rich, or patch rich/__init__.py to catch OSError instead of FileNotFoundError.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

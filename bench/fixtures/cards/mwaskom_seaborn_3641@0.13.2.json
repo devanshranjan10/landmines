@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scatterplot"
+  ],
+  "requires": [
+    [
+      "s"
+    ],
+    [
+      "hue"
+    ]
+  ],
+  "condition": "Calling scatterplot with both hue and an array passed as the matplotlib s= keyword raises TypeError while building the legend, because the array s is forwarded to the legend's Line2D artist.",
+  "workaround": "Use seaborn's size= parameter instead of s=, or pass legend=False.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3641#issuecomment-1969290366",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

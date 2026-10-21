@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "maxConnectionLifetimeMillis",
+    "maxConnectionLifetimeJitterMillis"
+  ],
+  "requires": [
+    [
+      "pool"
+    ]
+  ],
+  "condition": "Knex 3.1.0 does not support the pool options maxConnectionLifetimeMillis and maxConnectionLifetimeJitterMillis, even though the docs site lists them, so using them throws an unknown-option error.",
+  "workaround": "Don't use these options on 3.1.0. Wait for a newer knex release that includes them.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

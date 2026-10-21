@@ -1,0 +1,28 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "plot"
+  ],
+  "requires": [
+    [
+      "ax",
+      "sharex"
+    ],
+    [
+      "asfreq",
+      "resample",
+      "freq"
+    ]
+  ],
+  "unless": [
+    "x_compat"
+  ],
+  "condition": "Plotting time series with different frequencies (or one with freq and one without) on the same or shared axes gives misaligned x positions, because pandas' period-based date conversion is applied inconsistently.",
+  "workaround": "Pass x_compat=True to each .plot() call, or plot with matplotlib's ax.plot(series.index, series.values), so that ordinary datetime conversion is used.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

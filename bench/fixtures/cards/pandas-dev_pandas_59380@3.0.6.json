@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "DataFrame"
+  ],
+  "requires": [
+    [
+      "IntEnum"
+    ],
+    [
+      "object"
+    ]
+  ],
+  "condition": "pd.DataFrame built from a list of IntEnum members with dtype=object turns the members into plain ints, while pd.Series keeps the enum members.",
+  "workaround": "Build the frame from a dict of columns instead, e.g. pd.DataFrame({\"color\": colors}, dtype=object).",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/59380#issuecomment-2266862898",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

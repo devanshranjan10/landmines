@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "renameColumn"
+  ],
+  "requires": [
+    [
+      "knexStringcase",
+      "knex-stringcase"
+    ]
+  ],
+  "condition": "On MySQL, table.renameColumn inside alterTable throws \"Cannot read properties of undefined (reading 'database')\" from getFKRefs when knex is wrapped with knex-stringcase, because the runner context gets lost.",
+  "workaround": "Rename the column with a raw query instead: knex.raw('ALTER TABLE ?? RENAME COLUMN ?? TO ??', [table, from, to]).",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6146#issuecomment-2449367207",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

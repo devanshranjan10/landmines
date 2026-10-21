@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "add_vline",
+    "add_hline",
+    "add_vrect",
+    "add_hrect"
+  ],
+  "requires": [
+    [
+      "row",
+      "col"
+    ]
+  ],
+  "condition": "On figures with subplots and many traces, add_vline (and similar) calls with row/col are very slow because each call scans all existing traces/shapes, so the cost grows roughly quadratically.",
+  "workaround": "Add the vlines first, while the figure is still nearly empty, and add traces afterwards. Another option is to build the shape dicts yourself and set layout.shapes in one go.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/4965#issuecomment-5481258484",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "DataFrame",
+    "Series"
+  ],
+  "requires": [
+    [
+      "dtype"
+    ]
+  ],
+  "condition": "A DataFrame/Series built from a NumPy structured array column (compound np.dtype) gets created without error, but later operations break: .loc setitem raises AssertionError, print/repr raises a TypeError from isnan, and multi-column selection fails.",
+  "workaround": "Store the structured data as fixed-width bytes, e.g. arr.astype(f'S{dtype.itemsize}') or .view(...), or let the column use object dtype.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60108#issuecomment-2447459800",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

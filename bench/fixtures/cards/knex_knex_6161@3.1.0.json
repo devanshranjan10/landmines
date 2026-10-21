@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "where"
+  ],
+  "requires": [
+    [
+      "better-sqlite3",
+      "sqlite3"
+    ]
+  ],
+  "condition": "Passing an object with an array value to .where() (e.g. where({ id: [5, 6] })) produces `id = ?` with the array as one binding instead of an IN clause. On better-sqlite3 this throws a bind error, and on sqlite3 it silently returns no rows.",
+  "workaround": "Use .whereIn('id', [5, 6]) or .where('id', 'in', [5, 6]) for array values.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6161#issuecomment-3366364885",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

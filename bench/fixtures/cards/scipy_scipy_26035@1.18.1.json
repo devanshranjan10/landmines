@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "make_splrep"
+  ],
+  "requires": [
+    [
+      "s"
+    ]
+  ],
+  "condition": "With a small smoothing factor s (for example k=4, s=0.01), make_splrep can add knots until the least-squares solve overflows to inf, and then fpknot raises \"RuntimeError: Internal error\" where the usual \"s too small\" warning was expected.",
+  "workaround": "Wrap make_splrep in try/except RuntimeError and retry with a larger s or a different k (k=3 or k=5 work for this data), or fall back to the legacy splrep.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

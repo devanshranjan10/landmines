@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scan_iceberg"
+  ],
+  "requires": [
+    [
+      "add_files",
+      "migrate",
+      "snapshot"
+    ]
+  ],
+  "condition": "The native scan_iceberg reader ignores schema.name-mapping.default and raises SchemaFieldNotFoundError on data files that lack Parquet field IDs, such as files registered with add_files.",
+  "workaround": "Pass reader_override=\"pyiceberg\" to scan_iceberg.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

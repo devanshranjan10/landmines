@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "stream"
+  ],
+  "requires": [
+    [
+      "postProcessResponse"
+    ]
+  ],
+  "condition": "When postProcessResponse throws during a .stream() query, the error is raised as an uncaught exception instead of being emitted to the stream's 'error' handler, crashing the process.",
+  "workaround": "Wrap the postProcessResponse body in try/catch so it never throws synchronously (handle errors yourself), or patch the runner's Transform to call callback(err) on exceptions.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6032#issuecomment-3393982946",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

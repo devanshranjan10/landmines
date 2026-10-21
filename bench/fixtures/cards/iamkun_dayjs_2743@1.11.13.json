@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [
+    [
+      "MMMM",
+      "MMM"
+    ],
+    [
+      "ru"
+    ],
+    [
+      "customParseFormat"
+    ]
+  ],
+  "condition": "With customParseFormat and the 'ru' locale, parsing a genitive month name such as \"01 декабря 2024\" with \"DD MMMM YYYY\" gives a date one year too late (2025).",
+  "workaround": "Before parsing, replace the Russian month name with its month number and parse with a numeric format such as \"DD MM YYYY\".",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

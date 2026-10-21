@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "duration"
+  ],
+  "requires": [
+    [
+      "diff"
+    ]
+  ],
+  "condition": "dayjs.duration(ms) built from a diff spanning months/years splits the milliseconds using fixed average month/year lengths, so years/months/days come out inconsistent with the calendar (e.g. 2023 full year gives 0 years 12 months 4 days).",
+  "workaround": "Get calendar parts directly with end.diff(start, 'year'/'month'/'day') instead of turning a millisecond diff into a duration and reading its years()/months()/days().",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

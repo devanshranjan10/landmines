@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scatter"
+  ],
+  "requires": [
+    [
+      "animation_frame"
+    ]
+  ],
+  "unless": [
+    "range_x",
+    "range_y"
+  ],
+  "condition": "With px animation_frame, moving the slider does not rescale the x/y axes or the colorbar to the current frame's data range.",
+  "workaround": "Pass explicit range_x/range_y (and range_color) that cover all frames.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

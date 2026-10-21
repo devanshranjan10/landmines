@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_period"
+  ],
+  "requires": [
+    [
+      "MonthBegin"
+    ]
+  ],
+  "condition": "Timestamp.to_period(pd.offsets.MonthBegin()) raises ValueError \"<MonthBegin> is not supported as period frequency\", even though DatetimeIndex.to_period accepts it on 2.2.x.",
+  "workaround": "Pass the period alias 'M' instead of the MonthBegin offset, e.g. ts.to_period('M').",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60671#issuecomment-2625612042",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

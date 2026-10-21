@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "format"
+  ],
+  "requires": [],
+  "condition": "When date-fns is bundled with Parcel (before 2.14.2), format throws \"formatters is undefined\" in dev mode, or the production build fails with \"does not export 'format'\", because of a Parcel tree-shaking bug.",
+  "workaround": "Upgrade Parcel to v2.14.2 or later, clear .parcel-cache, or downgrade date-fns to 3.1.0.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3744#issuecomment-2746507782",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

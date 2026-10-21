@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "mannwhitneyu"
+  ],
+  "requires": [
+    [
+      "axis"
+    ]
+  ],
+  "condition": "With batched (multidimensional) input and method='auto', if any one slice contains ties and a sample size is 8 or less, mannwhitneyu uses the asymptotic method for every slice. Untied slices then get different p-values than they would from separate calls.",
+  "workaround": "Call mannwhitneyu separately for each slice, or pass method='exact' or method='asymptotic' explicitly so the method doesn't change between slices.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

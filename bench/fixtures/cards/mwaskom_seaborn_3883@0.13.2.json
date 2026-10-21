@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "kdeplot"
+  ],
+  "requires": [],
+  "unless": [
+    "scipy"
+  ],
+  "condition": "When scipy is not installed, a bivariate kdeplot (x and y) falls back to seaborn's bundled KDE and draws an incorrect density plot.",
+  "workaround": "Install scipy (e.g. 1.16.3) so that seaborn uses scipy.stats.gaussian_kde.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "isValid"
+  ],
+  "requires": [],
+  "condition": "dayjs() parses an ISO-like string with an out-of-range month or day (e.g. '2025-13-36T14:19:39') leniently and rolls it over, so isValid() returns true.",
+  "workaround": "Use the customParseFormat plugin and parse in strict mode with an explicit format: dayjs(str, 'YYYY-MM-DDTHH:mm:ss', true).isValid().",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2871#issuecomment-3268650314",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

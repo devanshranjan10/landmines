@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "privilege"
+  ],
+  "requires": [
+    [
+      "oracledb"
+    ]
+  ],
+  "condition": "The knex oracledb dialect ignores the driver's privilege option (for example SYSDBA) in the connection config, so the connection is opened without that privilege.",
+  "workaround": "None in knex. The reporter wrote a large custom workaround outside knex, for example opening privileged connections directly with node-oracledb.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6117#issuecomment-3369279783",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

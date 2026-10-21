@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "unknown",
+  "apis": [
+    "parse"
+  ],
+  "requires": [
+    [
+      "delimiter",
+      "record_delimiter"
+    ],
+    [
+      "pipe",
+      "Readable"
+    ]
+  ],
+  "condition": "When streaming input, multi-character delimiters or record delimiters that span chunk boundaries are reportedly left in field values, which causes column count mismatches at random rows.",
+  "workaround": "Buffer the entire input and parse it in one call, or use single-character delimiters.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

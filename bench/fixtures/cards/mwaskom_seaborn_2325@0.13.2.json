@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "histplot",
+    "pairplot",
+    "displot"
+  ],
+  "requires": [],
+  "unless": [
+    "binwidth",
+    "diag_kind"
+  ],
+  "condition": "With the default bins=\"auto\", data with a narrow spread plus a few extreme outliers makes numpy choose tens of millions of bins, so histplot/pairplot hangs or runs out of memory.",
+  "workaround": "Pass an explicit bin count or rule, e.g. bins=\"sqrt\" (or diag_kws={\"bins\": \"sqrt\"} for pairplot), or cap the count with min(bins, MAX_BINS). For pairplot you can also use diag_kind=\"kde\".",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/2325#issuecomment-712249812",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

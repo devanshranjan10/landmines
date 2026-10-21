@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "timedelta64",
+    "Timedelta"
+  ],
+  "requires": [
+    [
+      "tz",
+      "tz_localize",
+      "tz_convert",
+      "Europe",
+      "America",
+      "Asia",
+      "DatetimeTZDtype"
+    ]
+  ],
+  "condition": "Adding a very large Timedelta (e.g. one that goes past year 2262) to a DatetimeArray with a non-UTC timezone returns None instead of the shifted array.",
+  "workaround": "Convert to UTC or tz-naive first, add the timedelta, then convert back to the original timezone.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "isValid"
+  ],
+  "requires": [
+    [
+      "strict",
+      "true"
+    ]
+  ],
+  "condition": "dayjs(value, format, true).isValid() returns true when value is a number, because numbers are treated as epoch milliseconds and the format check is skipped, even in strict mode.",
+  "workaround": "Before calling dayjs, check that the input is a string, for example with typeof or a regex, and only then call isValid.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2782#issuecomment-2694487285",
+  "confidence": 0.35,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "StackingRegressor",
+    "StackingClassifier"
+  ],
+  "requires": [
+    [
+      "TimeSeriesSplit"
+    ]
+  ],
+  "condition": "Passing a TimeSeriesSplit as cv to StackingRegressor/StackingClassifier raises \"ValueError: cross_val_predict only works for partitions\" on fit, because the splitter does not put every sample in a test set.",
+  "workaround": "Use a CV strategy that puts every sample in exactly one test fold (for example KFold), or build the stacking by hand with time-ordered out-of-fold predictions.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

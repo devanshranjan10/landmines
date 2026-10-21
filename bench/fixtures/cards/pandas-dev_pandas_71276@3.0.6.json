@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "remove"
+  ],
+  "requires": [
+    [
+      "where"
+    ],
+    [
+      "HDFStore"
+    ]
+  ],
+  "unless": [
+    "sorted",
+    "sort"
+  ],
+  "condition": "HDFStore.remove with where given as an unsorted coordinate list, array or Index deletes the wrong rows: it removes the whole range between the coordinates, but the count it returns still looks correct.",
+  "workaround": "Sort the coordinates before passing them, e.g. store.remove(key, where=sorted(coords)) or np.sort(coords).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

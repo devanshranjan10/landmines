@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sign"
+  ],
+  "requires": [
+    [
+      "valueOf",
+      "toString",
+      "__proto__",
+      "constructor",
+      "hasOwnProperty"
+    ]
+  ],
+  "condition": "jwt.sign throws \"validator.isValid is not a function\" when the payload object has a key matching an Object.prototype property such as valueOf, toString or __proto__.",
+  "workaround": "Remove or rename keys named after Object.prototype properties before signing. Alternatively, patch validate to check with hasOwnProperty.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/945#issuecomment-1791740128",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

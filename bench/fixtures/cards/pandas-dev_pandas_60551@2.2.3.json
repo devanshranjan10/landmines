@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "transform",
+    "cumcount"
+  ],
+  "requires": [
+    [
+      "cumcount"
+    ],
+    [
+      "groupby"
+    ]
+  ],
+  "condition": "On a DataFrame groupby, transform(\"cumcount\") / cumcount() returns a Series, not a DataFrame like the other cumulative ops. It also counts NA values and starts counting at 0.",
+  "workaround": "Expect a Series from cumcount. If you need it per column, assign it explicitly, e.g. df[\"n\"] = df.groupby(keys).cumcount(). To skip NAs, use groupby(keys)[col].transform(lambda s: s.notna().cumsum()).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

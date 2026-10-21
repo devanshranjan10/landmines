@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "key",
+    "value"
+  ],
+  "requires": [
+    [
+      "KeyValueMetadata",
+      "metadata"
+    ]
+  ],
+  "condition": "Calling KeyValueMetadata.key(i) or .value(i) with an out-of-range or negative index segfaults instead of raising IndexError.",
+  "workaround": "Check that 0 <= i < len(metadata) before calling key(i)/value(i), or iterate with keys()/values()/items() instead.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

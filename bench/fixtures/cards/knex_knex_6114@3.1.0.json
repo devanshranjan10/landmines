@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "alter",
+    "notNullable"
+  ],
+  "requires": [
+    [
+      "oracledb",
+      "oracle"
+    ]
+  ],
+  "condition": "On Oracle, column .alter() with .notNullable() on a column that is already NOT NULL emits 'modify ... not null', and Oracle rejects it with ORA-01442.",
+  "workaround": "On Oracle, use a raw ALTER TABLE ... MODIFY statement that leaves out the NOT NULL clause when the column already has the wanted nullability.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

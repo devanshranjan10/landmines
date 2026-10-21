@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "at"
+  ],
+  "requires": [],
+  "condition": "Using df.at[row, col] = list to put a list into a single cell raises \"ValueError: Must have equal len keys and value when setting with an iterable\" when the column doesn't exist yet or isn't object dtype.",
+  "workaround": "Create the column first or cast it to object dtype before assigning, e.g. df[\"C\"] = pd.Series() or df[\"A\"] = df[\"A\"].astype(object), then use df.at.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61223#issuecomment-2778411924",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "collect",
+    "sink_parquet"
+  ],
+  "requires": [
+    [
+      "streaming"
+    ]
+  ],
+  "unless": [
+    "POLARS_OVERRIDE_TOTAL_MEMORY_MB"
+  ],
+  "condition": "Under a nested cgroup memory limit (SLURM, systemd), polars reads only the root cgroup limit and sizes the streaming engine's memory budget from host RAM, so it doesn't spill to disk before the OOM killer stops the job.",
+  "workaround": "Set the POLARS_OVERRIDE_TOTAL_MEMORY_MB environment variable to the cgroup limit before importing polars.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "Hmm",
+      "hmm",
+      "Hmmss",
+      "hmmss"
+    ]
+  ],
+  "unless": [
+    "HHmm"
+  ],
+  "condition": "With customParseFormat, parsing an unseparated string like '600' with the 'Hmm' format reads the single-digit hour greedily as '60', so the time comes out wrong (12:00 PM instead of 6:00 AM).",
+  "workaround": "Zero-pad the input to four digits and parse it with 'HHmm' instead, e.g. dayjs('0600', 'HHmm').",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

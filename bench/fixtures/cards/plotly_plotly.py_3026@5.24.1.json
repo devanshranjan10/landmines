@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "fillcolor"
+  ],
+  "requires": [],
+  "condition": "This is a feature request: fillcolor only accepts a single solid colour, so gradient area fills aren't supported.",
+  "workaround": "Write an SVG linearGradient into the HTML output, then use CSS to point the .js-fill element's fill at url(#id).",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/3026#issuecomment-1516480097",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

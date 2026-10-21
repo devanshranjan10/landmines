@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get_indexer",
+    "reindex",
+    "intersection",
+    "equals"
+  ],
+  "requires": [
+    [
+      "float64",
+      "float"
+    ]
+  ],
+  "condition": "When an int64 Index is matched against a float64 Index, pandas casts both to float64. Distinct integer labels above 2**53 then round to the float label and falsely match in get_indexer, reindex, equals, set operations and alignment.",
+  "workaround": "Before matching or aligning large integer keys, make both indexes the same dtype, for example int64 on both sides, or convert the keys to strings.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

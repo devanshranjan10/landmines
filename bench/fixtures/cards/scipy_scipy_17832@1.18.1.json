@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "studentized_range"
+  ],
+  "requires": [
+    [
+      "sf",
+      "cdf",
+      "logsf"
+    ]
+  ],
+  "condition": "studentized_range.sf/cdf at large q (e.g. q=10000, k=2, df=2) returns 0.0/1.0 because the quadrature-based CDF saturates and there is no specialized sf, losing the representable upper tail.",
+  "workaround": "For k=2, compute sf as 2*scipy.special.stdtr(df, -q/np.sqrt(2)) (equivalently 2*t.sf(q/sqrt(2), df)) and cdf as 1 - sf.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/17832#issuecomment-5808461939",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

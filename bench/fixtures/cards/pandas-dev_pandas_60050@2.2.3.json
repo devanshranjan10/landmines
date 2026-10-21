@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Series"
+  ],
+  "requires": [
+    [
+      "masked_array",
+      "MaskedArray"
+    ],
+    [
+      "UInt64",
+      "Int64",
+      "UInt32",
+      "Int32"
+    ]
+  ],
+  "condition": "Passing a numpy masked array that has masked values to Series with a nullable integer dtype converts it to float64 first, which raises a RuntimeWarning and can lose precision for large uint64/int64 values.",
+  "workaround": "Build the extension array directly, e.g. pd.arrays.IntegerArray(arr.data, arr.mask), instead of passing the masked array to Series.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

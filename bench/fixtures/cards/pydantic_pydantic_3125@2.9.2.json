@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "BaseModel"
+  ],
+  "requires": [
+    [
+      "kwargs"
+    ]
+  ],
+  "unless": [
+    "forbid"
+  ],
+  "condition": "With the pydantic mypy plugin enabled, a model field named \"kwargs\" makes mypy report 'Name \"kwargs\" already defined', because the generated __init__ already has a **kwargs parameter.",
+  "workaround": "Set the model config to extra=\"forbid\" so the synthesized __init__ has no **kwargs, or rename the field and use an alias.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/3125#issuecomment-903335393",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

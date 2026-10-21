@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "true"
+    ],
+    [
+      "ZZ",
+      "Z",
+      "Z\""
+    ]
+  ],
+  "condition": "Strict parsing with customParseFormat (strict=true) of a format containing a timezone offset token Z/ZZ gives an invalid date, and toISOString then throws RangeError, whenever the offset in the input differs from the local zone.",
+  "workaround": "Parse in non-strict mode (drop the `true` argument) when the format contains Z/ZZ, and check the input format separately.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

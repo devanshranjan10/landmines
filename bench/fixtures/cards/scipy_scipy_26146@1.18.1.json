@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "f_oneway"
+  ],
+  "requires": [
+    [
+      "equal_var"
+    ]
+  ],
+  "condition": "f_oneway(..., equal_var=False) overflows when summing the Welch weights for inputs with extremely small scale (e.g. 2**-511), so it returns a wrong F statistic and p-value.",
+  "workaround": "Rescale the inputs (for example, divide each group by its overall standard deviation) before calling f_oneway. Welch's ANOVA is scale-invariant, so the result stays the same.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -45,8 +45,11 @@ export function loadTasks(ids?: string[]): Task[] {
   return ids?.length ? all.filter((t) => ids.includes(t.id)) : all;
 }
 
-export function prompt(task: Task): string {
-  return readFileSync(join(task.dir, 'prompt.txt'), 'utf8').trim();
+/** `spec` states every requirement, edge cases included; `terse` is how a user would ask (fresh set only, D-40). */
+export function prompt(task: Task, style: 'spec' | 'terse' = 'spec'): string {
+  const file = join(task.dir, style === 'terse' ? 'prompt-terse.txt' : 'prompt.txt');
+  if (!existsSync(file)) throw new Error(`${task.id} has no ${style} prompt`);
+  return readFileSync(file, 'utf8').trim();
 }
 
 /** Copy the task's project into a fresh directory the agent may edit. */

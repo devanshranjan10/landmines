@@ -1,0 +1,21 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "createView",
+    "createViewOrReplace"
+  ],
+  "requires": [
+    [
+      "security_barrier",
+      "isSecure"
+    ]
+  ],
+  "condition": "Feature request: there is no way to set security_barrier for PostgreSQL views when using createView or createViewOrReplace.",
+  "workaround": "Create the view with raw SQL: CREATE VIEW ... WITH (security_barrier = true) AS ...",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

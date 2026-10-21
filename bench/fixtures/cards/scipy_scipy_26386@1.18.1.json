@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "line_search",
+    "line_search_wolfe2",
+    "scalar_search_wolfe2"
+  ],
+  "requires": [
+    [
+      "c1"
+    ]
+  ],
+  "condition": "On main (after PR #25022), line_search with a large c1 (e.g. 0.4) raises ValueError from math.sqrt in _cubicmin when the cubic interpolation has a negative radical. In 1.18.1 the cubic step was skipped and a quadratic step was used instead.",
+  "workaround": "Use a smaller c1 (for example the default 1e-4), or stay on SciPy 1.18.1 until _cubicmin is changed to return None when radical < 0.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/26386#issuecomment-6124589030",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

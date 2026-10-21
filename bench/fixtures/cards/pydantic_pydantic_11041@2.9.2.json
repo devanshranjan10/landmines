@@ -1,0 +1,18 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "validate_call"
+  ],
+  "requires": [
+    [
+      "validate_return"
+    ]
+  ],
+  "condition": "When validate_call(validate_return=True) rejects a return value, the error message says \"Input should be...\" and doesn't mention that the return value failed, which is misleading.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

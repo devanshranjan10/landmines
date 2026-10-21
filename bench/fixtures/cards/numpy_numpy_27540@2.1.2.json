@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "bitwise_or",
+    "IntEnum",
+    "IntFlag"
+  ],
+  "requires": [
+    [
+      "uint32",
+      "uint8",
+      "uint16",
+      "uint64",
+      "int8",
+      "int16",
+      "int32"
+    ]
+  ],
+  "condition": "Under NEP 50, an IntEnum or IntFlag member is treated as a strongly typed int64 rather than a weak Python int, so bitwise ops (including in-place |=) with smaller or unsigned integer arrays raise a UFuncTypeError casting error.",
+  "workaround": "Convert the enum member to a plain int before the operation, e.g. arr |= int(MyEnum.X) or arr |= MyEnum.X.value.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

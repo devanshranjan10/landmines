@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_parquet"
+  ],
+  "requires": [
+    [
+      "use_pyarrow"
+    ]
+  ],
+  "condition": "read_parquet(use_pyarrow=True) on a remote (fsspec/S3) directory raises FileNotFoundError, and on a list of remote paths it raises TypeError, because the source is opened as file objects instead of being passed as paths.",
+  "workaround": "Use the native reader (leave out use_pyarrow), or call pyarrow.parquet.read_table directly with filesystem=... and convert the result with pl.from_arrow.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

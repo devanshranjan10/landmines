@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_sql_table",
+    "has_table"
+  ],
+  "requires": [
+    [
+      "schema"
+    ],
+    [
+      "adbc_driver_sqlite",
+      "adbc_driver_postgresql",
+      "adbc_driver_manager",
+      "adbc_driver_snowflake",
+      "adbc"
+    ]
+  ],
+  "condition": "On an ADBC connection, read_sql_table and has_table silently ignore schema= and query the default schema instead.",
+  "workaround": "Use read_sql_query with a schema-qualified name, e.g. read_sql_query(\"SELECT * FROM aux.t\", con).",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

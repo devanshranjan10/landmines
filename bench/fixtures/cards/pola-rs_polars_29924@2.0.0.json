@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "with_columns",
+    "lit"
+  ],
+  "requires": [
+    [
+      "LazyFrame",
+      "lazy"
+    ],
+    [
+      "Series"
+    ]
+  ],
+  "condition": "With the streaming engine, adding a pl.lit(Series) column longer than a 1-row LazyFrame doesn't raise ShapeError. Instead, the single row is broadcast to the Series length.",
+  "workaround": "Collect with engine=\"in-memory\", or check that the Series length matches the frame height before adding the column.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

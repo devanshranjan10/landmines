@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "get_dummies"
+  ],
+  "requires": [
+    [
+      "str"
+    ]
+  ],
+  "condition": "Series.str.get_dummies() returns int64 columns by default, while pd.get_dummies() returns bool columns, so the output dtypes don't match.",
+  "workaround": "To get boolean output, pass dtype=bool explicitly to str.get_dummies, or call .astype(bool) on the result.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

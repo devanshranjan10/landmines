@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "XMLParser",
+    "parse"
+  ],
+  "requires": [],
+  "condition": "With default options, XMLParser.parse leaves numeric character references like &#65; and &#x42; undecoded in text and attribute values unless htmlEntities is true.",
+  "workaround": "Pass htmlEntities: true to the XMLParser constructor so numeric character references get decoded.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

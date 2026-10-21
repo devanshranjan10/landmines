@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "choropleth_map"
+  ],
+  "requires": [
+    [
+      "locationmode"
+    ]
+  ],
+  "condition": "The choropleth_map docstring says locations are interpreted according to locationmode, but the function has no locationmode parameter, so passing it raises a TypeError.",
+  "workaround": "Pass geojson together with featureidkey to match locations, or use px.choropleth if you need locationmode.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

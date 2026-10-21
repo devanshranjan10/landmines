@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "intersects"
+  ],
+  "requires": [
+    [
+      "*",
+      "<0.0.0",
+      "<0.0.0-0",
+      ">*",
+      "<*"
+    ]
+  ],
+  "condition": "intersects(range, '*') returns true when the range matches no version at all (e.g. '>*', '<0.0.0').",
+  "workaround": "Before calling intersects, check whether the range can match anything, for example with semver.minVersion(range) being null, and return false if it can't.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

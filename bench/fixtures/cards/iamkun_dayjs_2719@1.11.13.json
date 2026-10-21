@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "true"
+    ]
+  ],
+  "condition": "Chaining .tz(zone, true) with another .tz() call on a zero-offset zone (e.g. UTC) shifts the instant, so isSame/format return wrong results.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

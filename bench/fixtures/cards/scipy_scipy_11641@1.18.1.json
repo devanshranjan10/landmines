@@ -1,0 +1,24 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "tocsc"
+  ],
+  "requires": [
+    [
+      "eye",
+      "diags",
+      "dia_matrix",
+      "dia_array",
+      "spdiags"
+    ]
+  ],
+  "condition": "On Windows, DIA-to-CSC conversion gives an indices array with type code 'l' instead of 'i'. Both are int32, but buffer-format checks in external code fail.",
+  "workaround": "Check dtype equivalence instead of the buffer format character, or cast explicitly with indices.astype(np.intc) without copy=False.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/11641#issuecomment-600405469",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

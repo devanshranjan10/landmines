@@ -1,0 +1,12 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [],
+  "requires": [],
+  "condition": "Three Sphinx cross-references in the docs point to targets that don't exist; this is a docs-only problem and doesn't change how the code behaves at runtime.",
+  "confidence": 0.95,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

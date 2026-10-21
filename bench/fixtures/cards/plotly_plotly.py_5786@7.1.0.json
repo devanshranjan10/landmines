@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_image",
+    "to_image"
+  ],
+  "requires": [
+    [
+      "start_sync_server"
+    ]
+  ],
+  "unless": [
+    "filterwarnings",
+    "catch_warnings"
+  ],
+  "condition": "With a Kaleido sync server running (kaleido.start_sync_server()), every fig.write_image()/to_image() call emits a spurious \"kopts argument is ignored\" UserWarning, even when no kopts are passed.",
+  "workaround": "Wrap the call in warnings.catch_warnings() or add a warnings.filterwarnings rule that ignores this message.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

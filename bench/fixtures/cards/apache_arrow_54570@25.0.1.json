@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cast"
+  ],
+  "requires": [
+    [
+      "list_",
+      "large_list",
+      "list_view",
+      "large_list_view",
+      "fixed_size_list"
+    ]
+  ],
+  "condition": "Casting a list/large_list/list_view array to fixed_size_list segfaults when a null slot has the wrong length and the child values array is empty with no data buffer (e.g. an all-null list read from IPC/Flight or the C Data Interface).",
+  "workaround": "Before casting, check for chunks whose child values array is empty and build an all-null fixed_size_list array for them (e.g. pa.nulls(len(chunk), target_type)) instead of calling cast.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "CountVectorizer",
+    "TfidfVectorizer"
+  ],
+  "requires": [],
+  "unless": [
+    "token_pattern",
+    "tokenizer"
+  ],
+  "condition": "With the default token_pattern r\"(?u)\\b\\w\\w+\\b\", Indic text (Telugu, Hindi, etc.) is split into meaningless fragments, because combining marks (Unicode category Mn/Mc) are not treated as word characters.",
+  "workaround": "Pass your own token_pattern (for example r\"\\S\\S+\", which keeps punctuation) or your own tokenizer that splits on whitespace.",
+  "workaroundUrl": "https://github.com/scikit-learn/scikit-learn/issues/30935#issuecomment-2695229009",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

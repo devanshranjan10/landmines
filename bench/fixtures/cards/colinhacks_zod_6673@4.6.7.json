@@ -1,0 +1,23 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "toJSONSchema"
+  ],
+  "requires": [
+    [
+      "union"
+    ],
+    [
+      "nullable",
+      "union"
+    ]
+  ],
+  "condition": "toJSONSchema emits nested anyOf inside anyOf for a nullable or nested union of non-primitive schemas. The output is still valid, just not flattened.",
+  "workaround": "Post-process the output and splice an anyOf option whose only keyword is anyOf into the parent anyOf.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

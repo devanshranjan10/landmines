@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get",
+    "request",
+    "Session"
+  ],
+  "requires": [
+    [
+      "%25"
+    ]
+  ],
+  "condition": "Requesting a URL with a link-local IPv6 host and a percent-encoded zone id (e.g. http://[fe80::1%2553]) double-decodes %25 so the zone id becomes a garbage character, and the request raises a ValueError saying the address is not a valid IPv4 or IPv6 address.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

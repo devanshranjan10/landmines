@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "plot_marginals"
+  ],
+  "requires": [
+    [
+      "rugplot"
+    ]
+  ],
+  "condition": "Calling plot_marginals(sns.rugplot, ...) on a JointGrid/jointplot with histogram marginals changes the marginal axis limits, so short bars and the tops of tall bars are cut off.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "endOf",
+    "startOf"
+  ],
+  "requires": [
+    [
+      "tz"
+    ],
+    [
+      "toISOString",
+      "valueOf",
+      "toDate",
+      "unix"
+    ]
+  ],
+  "condition": "When startOf/endOf is called on a dayjs object converted with .tz(zone) and the range crosses a DST change, toISOString/valueOf use the original offset instead of the new one, so the instant is off by an hour.",
+  "workaround": "Call .tz() again after startOf/endOf (e.g. dayjs().tz(zone).endOf('month').tz()), or parse the result of .format() with new Date(...).",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/1262#issuecomment-2516128507",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

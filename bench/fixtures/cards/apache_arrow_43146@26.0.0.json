@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cast"
+  ],
+  "requires": [
+    [
+      "list_",
+      "large_list",
+      "list_view"
+    ],
+    [
+      "nullable"
+    ]
+  ],
+  "condition": "Casting a list column whose value field is nullable=False doesn't check for null elements, so the cast succeeds and returns invalid data with nulls inside a non-nullable child.",
+  "workaround": "Before casting to a non-nullable list element type, check the flattened list values for nulls yourself, e.g. pc.list_flatten(col).null_count == 0.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

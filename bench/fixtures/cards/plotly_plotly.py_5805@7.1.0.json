@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "sample_colorscale",
+    "n_colors"
+  ],
+  "requires": [],
+  "condition": "sample_colorscale(colorscale, 1) and n_colors(low, high, 1) raise ZeroDivisionError when asked for exactly one color, e.g. a palette sized to a single group.",
+  "workaround": "Handle the count==1 case separately, e.g. use the low color (or sample_colorscale(cs, [0.0])) when only one color is needed.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

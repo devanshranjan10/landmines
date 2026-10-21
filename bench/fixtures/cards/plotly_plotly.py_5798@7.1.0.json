@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "write_html"
+  ],
+  "requires": [
+    [
+      "open-street-map"
+    ]
+  ],
+  "condition": "A map figure using style \"open-street-map\" that is saved with write_html shows OSM \"403 Access blocked\" error tiles when the HTML file is opened, probably because the request is missing the referer or headers that OpenStreetMap's tile usage policy requires.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

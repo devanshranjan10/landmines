@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz_localize",
+    "Series",
+    "DatetimeIndex",
+    "to_datetime"
+  ],
+  "requires": [
+    [
+      "datetime64"
+    ]
+  ],
+  "condition": "Putting a tz-aware Timestamp whose year is outside 1-9999 into a Series, DatetimeIndex or to_datetime result silently changes its year to 1970 or 1972.",
+  "workaround": "Build the array from tz-naive values first, then localize the whole array (for example, pd.Series([ts.tz_localize(None)]).dt.tz_localize(\"UTC\")).",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

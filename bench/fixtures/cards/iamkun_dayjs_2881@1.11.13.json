@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "week"
+  ],
+  "requires": [
+    [
+      "tz"
+    ]
+  ],
+  "condition": "Calling week() on a dayjs object converted with .tz() to a UTC+0 zone (e.g. 'UTC', 'Portugal') when the local zone differs returns a wrong week number (e.g. 25 instead of 21).",
+  "workaround": "Upgrade to dayjs 1.11.20 or later, where this is reported fixed.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2881#issuecomment-4500946313",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

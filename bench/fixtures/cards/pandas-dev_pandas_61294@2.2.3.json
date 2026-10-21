@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "join"
+  ],
+  "requires": [
+    [
+      "on"
+    ],
+    [
+      "rsuffix",
+      "lsuffix"
+    ]
+  ],
+  "unless": [
+    "merge"
+  ],
+  "condition": "DataFrame.join(on=<integer column label>, rsuffix=...) on integer-labelled columns adds an unexpected key_0 column, because the empty default suffix renames the int column to a string, so it no longer matches the join key.",
+  "workaround": "Use string column labels, or call merge with left_on/right_index=True directly and drop any extra key column.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

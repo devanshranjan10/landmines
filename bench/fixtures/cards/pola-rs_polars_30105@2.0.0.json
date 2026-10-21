@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "extend",
+    "scatter"
+  ],
+  "requires": [
+    [
+      "slice",
+      "filter",
+      "tail"
+    ]
+  ],
+  "condition": "Calling extend or scatter on a uniquely owned Boolean or nullable Series/DataFrame that is an offset slice (for example from slice or filter) corrupts the existing values and null positions, because the bitmap offset is ignored.",
+  "workaround": "Before extending, give the target fresh buffers with t = t.select(pl.all().gather(pl.int_range(pl.len()))), or keep a reference to the parent alive.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [
+    [
+      "customParseFormat"
+    ],
+    [
+      "HH:mm a",
+      "hh:mm a",
+      "h:mm a",
+      "HH:mm A",
+      "h:mm A"
+    ]
+  ],
+  "condition": "Parsing time strings with a custom format like 'HH:mm a' is strict, so variants such as '4:26pm' or '16:26' return Invalid Date, where moment parses them leniently.",
+  "workaround": "Normalize the input first (for example, add a space before am/pm), or try several format strings by passing an array of formats.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

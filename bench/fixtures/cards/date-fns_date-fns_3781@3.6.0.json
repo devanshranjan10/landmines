@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "areIntervalsOverlapping"
+  ],
+  "requires": [],
+  "condition": "areIntervalsOverlapping returns true when a zero-length interval sits inside another interval, but false when it sits on that interval's edge (unless inclusive is set). This is the intended behaviour.",
+  "workaround": "To count intervals that only touch at an edge as overlapping, pass { inclusive: true }.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3781#issuecomment-2076812377",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

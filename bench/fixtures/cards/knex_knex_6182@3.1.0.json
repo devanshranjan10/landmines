@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "includeTriggerModifications"
+  ],
+  "requires": [],
+  "condition": "With MSSQL, using includeTriggerModifications on a table that has a timestamp/rowversion column fails with \"Cannot insert an explicit value into a timestamp column\", because the #out temp table copies the timestamp column.",
+  "workaround": "Pass an explicit returning column list that leaves out the timestamp/rowversion columns.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6182#issuecomment-3219299485",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

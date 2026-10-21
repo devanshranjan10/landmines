@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "violinplot"
+  ],
+  "requires": [
+    [
+      "inner"
+    ]
+  ],
+  "condition": "violinplot with inner='box' draws the box and whiskers with matplotlib's default projecting cap style, so the box and whiskers extend past the real quartiles and whisker ends by half the linewidth.",
+  "workaround": "Pass inner_kws={'solid_capstyle': 'butt'} to violinplot.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

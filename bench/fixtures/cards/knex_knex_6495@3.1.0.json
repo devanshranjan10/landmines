@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [
+    [
+      "sqlite3",
+      "better-sqlite3"
+    ],
+    [
+      "connection"
+    ]
+  ],
+  "condition": "With the sqlite3 client, passing `connection` as a sync or async function makes knex log a false \"Could not find `connection.filename`\" warning when it is constructed.",
+  "workaround": "Ignore the warning, or pass a static connection object with `filename` instead of a function.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

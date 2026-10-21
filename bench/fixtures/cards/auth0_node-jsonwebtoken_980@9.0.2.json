@@ -1,0 +1,26 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "verify",
+    "sign"
+  ],
+  "requires": [
+    [
+      "edge",
+      "runtime"
+    ]
+  ],
+  "unless": [
+    "jose",
+    "jwtVerify"
+  ],
+  "condition": "jsonwebtoken relies on Node's 'crypto' module, so it fails in non-Node runtimes such as the Next.js edge runtime and Cloudflare Workers.",
+  "workaround": "In edge or worker runtimes, switch to the 'jose' package, which uses Web Crypto.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/980#issuecomment-2464125081",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

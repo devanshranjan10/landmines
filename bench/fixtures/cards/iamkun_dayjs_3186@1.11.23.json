@@ -1,0 +1,29 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "diff"
+  ],
+  "requires": [
+    [
+      "month",
+      "year",
+      "M",
+      "months",
+      "years",
+      "quarter",
+      "Q"
+    ]
+  ],
+  "unless": [
+    "isValid"
+  ],
+  "condition": "When either operand is an Invalid Date, diff(other, 'month'|'year') returns 0 instead of NaN because monthDiff turns NaN into 0 with its final || 0.",
+  "workaround": "Call isValid() on both dates before diffing by month/year, or patch monthDiff to end with `+ 0` instead of `|| 0`.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/3186#issuecomment-5884075083",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

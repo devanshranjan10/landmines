@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "maximum",
+    "minimum",
+    "where"
+  ],
+  "requires": [
+    [
+      "where"
+    ]
+  ],
+  "unless": [
+    "to_numpy"
+  ],
+  "condition": "Calling a numpy ufunc on a pandas Series with where= set to a Series (numpy>=1.25) recurses forever in __array_ufunc__ and segfaults.",
+  "workaround": "Pass numpy arrays instead of Series, e.g. np.maximum(x.values, 0, where=(x > 2).values).",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60611#issuecomment-2564566095",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

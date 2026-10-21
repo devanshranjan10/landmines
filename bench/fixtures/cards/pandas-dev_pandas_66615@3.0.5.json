@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "read_json"
+  ],
+  "requires": [
+    [
+      "to_json"
+    ]
+  ],
+  "unless": [
+    "date_unit",
+    "date_format"
+  ],
+  "condition": "If you write datetimes with to_json's default epoch-ms format and read them back with read_json without setting date_unit, read_json has to guess the unit, so some dates (e.g. 1970-02-01 or 2300-01-01) come back as the wrong datetime.",
+  "workaround": "Pass date_unit=\"ms\" to read_json, set date_format=\"iso\" on both sides, or convert afterwards with pd.to_datetime(col, unit=\"ms\").",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/66615#issuecomment-5177334500",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

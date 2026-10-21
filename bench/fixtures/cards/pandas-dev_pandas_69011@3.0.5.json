@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "astype"
+  ],
+  "requires": [
+    [
+      "str",
+      "string"
+    ],
+    [
+      "datetime64",
+      "to_datetime",
+      "Timestamp",
+      "date_range"
+    ]
+  ],
+  "condition": "Casting a datetime Series to str with astype(str) uses value-dependent formatting, so it drops fractional seconds when every value is a whole second, instead of formatting based on the dtype's unit.",
+  "workaround": "Use s.dt.strftime with an explicit format (e.g. \"%Y-%m-%d %H:%M:%S.%f\", then .str.slice(stop=-3) for milliseconds) to get the same output for every value.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/69011#issuecomment-5735218017",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

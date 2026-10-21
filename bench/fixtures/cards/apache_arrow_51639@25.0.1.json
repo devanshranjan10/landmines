@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cast"
+  ],
+  "requires": [
+    [
+      "null"
+    ],
+    [
+      "struct"
+    ]
+  ],
+  "condition": "Casting an array containing a struct with a null-typed field to its own type, when the struct is sliced or nested in a list with more structs than rows, returns an invalid array whose null child has the wrong length (RecordBatch.cast raises ArrowInvalid).",
+  "workaround": "Skip the cast when the array or batch already has the target type, or read the whole table with read_table before casting so nothing is sliced.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

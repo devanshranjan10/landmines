@@ -1,0 +1,21 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "Template",
+    "updatemenus",
+    "annotations"
+  ],
+  "requires": [
+    [
+      "template"
+    ]
+  ],
+  "condition": "updatemenus and annotations defined in a layout Template do not show up in the Python fig.layout.updatemenus or fig.layout.annotations lists. Those lists stay empty because plotly.js applies template array items when it renders the figure.",
+  "workaround": "After setting the template, copy the items onto the figure explicitly with fig.update_layout(updatemenus=tpl.layout.updatemenus, annotations=tpl.layout.annotations).",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

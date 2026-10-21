@@ -1,0 +1,22 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "week"
+  ],
+  "requires": [
+    [
+      "locale"
+    ]
+  ],
+  "unless": [
+    "weekYear"
+  ],
+  "condition": "week() returns 1 for late-December dates like 2024-12-31, because that date belongs to week 1 of the next week-year. This is intended behaviour.",
+  "workaround": "Pair week() with weekYear() (from the weekYear plugin) instead of year() when building week labels.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [],
+  "requires": [
+    [
+      "DD/MM/YYYY",
+      "MM/DD/YYYY",
+      "DD.MM.YYYY",
+      "DD-MM-YYYY",
+      "YYYY MMMM DD",
+      "MMMM"
+    ]
+  ],
+  "unless": [
+    "customParseFormat",
+    "CustomParseFormat"
+  ],
+  "condition": "If the CustomParseFormat plugin isn't loaded, dayjs(string, format) quietly ignores the format argument, so non-ISO strings like \"18/10/2024\" with \"DD/MM/YYYY\" come back as Invalid Date or the wrong date.",
+  "workaround": "Load the plugin first with dayjs.extend(customParseFormat), importing it from 'dayjs/plugin/customParseFormat', before parsing with a format string.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

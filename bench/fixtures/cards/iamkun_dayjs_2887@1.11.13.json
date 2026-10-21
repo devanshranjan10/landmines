@@ -1,0 +1,22 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "extend",
+    "setDefault"
+  ],
+  "requires": [
+    [
+      "tz",
+      "locale"
+    ]
+  ],
+  "condition": "In the Next.js app router, calling dayjs.extend and dayjs.tz.setDefault in a module imported only from layout.tsx doesn't carry over to client components that import 'dayjs' directly, because they are built into separate bundles.",
+  "workaround": "Don't import 'dayjs' directly in components. Import your own configured module (e.g. '@/src/common/utils/dayjs') that calls extend/locale/setDefault and re-exports dayjs.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/2887#issuecomment-3693999974",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

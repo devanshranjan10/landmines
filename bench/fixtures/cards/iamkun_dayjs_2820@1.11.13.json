@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [],
+  "requires": [],
+  "unless": [
+    "isDayjs"
+  ],
+  "condition": "The TypeScript definitions declare a Dayjs class, but the runtime module doesn't export it, so dayjs.Dayjs (or an imported Dayjs) is undefined at runtime and `instanceof Dayjs` or `new Dayjs` throws.",
+  "workaround": "Use Dayjs only as a type (`import type { Dayjs }`), and use dayjs.isDayjs(x) for runtime checks instead of instanceof.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

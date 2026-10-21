@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "timezone"
+    ]
+  ],
+  "condition": "Since 1.11.22, calling .tz() on an instance throws \"formatToParts is not a function\" or returns an absurd offset in environments where Intl.DateTimeFormat.prototype.formatToParts is missing or unreliable, such as React Native Hermes on iOS.",
+  "workaround": "Pin dayjs to 1.11.21, or polyfill Intl.DateTimeFormat (for example with @formatjs/intl-datetimeformat) so that formatToParts works.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

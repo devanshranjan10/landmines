@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "simple_cycles",
+    "_bounded_cycle_search"
+  ],
+  "requires": [
+    [
+      "length_bound"
+    ]
+  ],
+  "condition": "On some sparse directed graphs (for example, diamond chains), simple_cycles with a length_bound takes exponential time even when it finds no cycles or only a few, because _bounded_cycle_search prunes too loosely.",
+  "workaround": "Use a bounded DFS that drops successors failing a reverse-BFS reachability test (SimpleSearch, or BS-DFS from the thread), or upgrade once PR #8942 is merged.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

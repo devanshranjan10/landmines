@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_dataframe"
+  ],
+  "requires": [
+    [
+      ">i4",
+      ">i8",
+      ">f8",
+      ">f4",
+      ">i2",
+      "byteswap",
+      "newbyteorder",
+      ">u4",
+      ">u8"
+    ]
+  ],
+  "condition": "pyarrow.interchange.from_dataframe treats buffers from columns with non-native (big-endian) byte order as native-endian, so it silently returns corrupted values.",
+  "workaround": "Before calling from_dataframe, convert columns to native byte order, e.g. with df.astype with a native dtype or arr.byteswap().view(arr.dtype.newbyteorder()).",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

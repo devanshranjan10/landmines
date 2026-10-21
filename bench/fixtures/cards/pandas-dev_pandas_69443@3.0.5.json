@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "loc"
+  ],
+  "requires": [
+    [
+      "pyarrow",
+      "ArrowDtype"
+    ]
+  ],
+  "condition": "On a 1-row DataFrame, df.loc[:, col] = a NumPy-backed Series/array into a PyArrow-backed column raises TypeError \"Invalid value\" because the length-1 array is unwrapped to a 0-d ndarray that pa.scalar can't convert.",
+  "workaround": "Assign values that already have the Arrow dtype (e.g. keep the RHS as the pyarrow dtype instead of astype(float)), or assign the column directly with df[\"A\"] = ... instead of loc[:, \"A\"].",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

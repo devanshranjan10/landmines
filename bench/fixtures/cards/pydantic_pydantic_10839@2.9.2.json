@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "AliasChoices"
+  ],
+  "requires": [
+    [
+      "validation_alias"
+    ]
+  ],
+  "condition": "When a field uses validation_alias=AliasChoices(...), the location in validation errors shows only the first alias choice, not the field name. This is confusing when several fields share an alias.",
+  "workaround": "Set model_config = ConfigDict(loc_by_alias=False) so error locations use the field names.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10839#issuecomment-2483385611",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

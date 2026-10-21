@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "curve_fit"
+  ],
+  "requires": [
+    [
+      "absolute_sigma"
+    ]
+  ],
+  "condition": "curve_fit with absolute_sigma=True but no sigma silently treats all errors as 1, so pcov is unscaled and the parameter uncertainties it reports are wrong.",
+  "workaround": "Pass the real measurement errors with sigma=..., or leave absolute_sigma=False when you don't have sigma.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

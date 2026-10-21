@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "humanize"
+  ],
+  "requires": [],
+  "condition": "humanize picks odd granularity thresholds, e.g. 16 days ahead (crossing a month boundary) renders as \"in a month\" and just under 14 days as \"a week\".",
+  "workaround": "Pass granularity explicitly (e.g. granularity=\"week\" or \"day\") or compute the description yourself for intervals of weeks.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

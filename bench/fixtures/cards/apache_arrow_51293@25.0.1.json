@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get_partition_keys",
+    "_get_partition_keys"
+  ],
+  "requires": [
+    [
+      "None",
+      "partition_expression"
+    ]
+  ],
+  "condition": "Calling get_partition_keys with None as the expression (for example, a fragment's partition_expression that is None) dereferences a null pointer and crashes the interpreter instead of raising a TypeError.",
+  "workaround": "Check that the expression is not None before you call get_partition_keys.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "get",
+    "parse",
+    "TzinfoParser"
+  ],
+  "requires": [
+    [
+      "tzinfo",
+      "ZZ",
+      "Z",
+      "tz"
+    ]
+  ],
+  "condition": "Arrow's timezone parsing accepts malformed offsets with trailing junk, such as \"+03:00.34\", when it should reject them.",
+  "workaround": "Before passing a timezone string to arrow, check it yourself with a strict regex such as ^[+-]\\d{2}:?\\d{2}$.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_numeric"
+  ],
+  "requires": [
+    [
+      "coerce"
+    ],
+    [
+      "pyarrow",
+      "ArrowDtype"
+    ]
+  ],
+  "condition": "pd.to_numeric(errors=\"coerce\") on an ArrowDtype string column (e.g. from convert_dtypes(dtype_backend=\"pyarrow\")) turns unparseable values into float nan instead of NA, so isna()/ffill() don't treat them as missing.",
+  "workaround": "Cast the column to pd.StringDtype(\"pyarrow\") before calling to_numeric, or pass dtype_backend=\"pyarrow\" to to_numeric.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/67949#issuecomment-5531302813",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

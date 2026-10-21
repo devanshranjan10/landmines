@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "Console"
+  ],
+  "requires": [],
+  "condition": "Some tests in Rich's own test suite are shadowed or never assert anything. The library behaves as intended, so user code is not affected.",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

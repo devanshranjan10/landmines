@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_numeric"
+  ],
+  "requires": [
+    [
+      "decimal128",
+      "decimal256"
+    ]
+  ],
+  "condition": "pd.to_numeric on a Series with a pyarrow decimal ArrowDtype that contains NA values drops the nulls and raises ValueError \"Length of values does not match length of index\".",
+  "workaround": "Skip to_numeric for series that already have a numeric ArrowDtype, or cast first (e.g. series.astype(\"float64[pyarrow]\")) before calling it.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

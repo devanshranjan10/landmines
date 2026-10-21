@@ -1,0 +1,5 @@
+Bar and line charts should use the brand ramp for their categories instead of Plotly's default colors.
+
+Please implement `category_colors(categories)` in `app/palette.py`. It gets the list of distinct category names in display order and returns a dict mapping each category to a color string in Plotly's `rgb(r, g, b)` form, sampled evenly along `BRAND_SCALE`: the first category gets the start color of the ramp, the last category gets the end color, and the ones in between are evenly spaced (three categories → start, middle, end). Filtered views often leave just one category. An empty list gives an empty dict. `bar_chart()` already uses it.
+
+Keep the existing exports working and don't change dependencies.

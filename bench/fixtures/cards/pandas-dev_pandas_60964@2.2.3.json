@@ -1,0 +1,28 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "astype"
+  ],
+  "requires": [
+    [
+      "datetime64[ns]",
+      "datetime64",
+      "datetime64[s]",
+      "datetime64[ms]",
+      "datetime64[us]"
+    ]
+  ],
+  "unless": [
+    "to_datetime",
+    "dayfirst"
+  ],
+  "condition": "Calling astype('datetime64[ns]') on non-ISO date strings parses each row on its own, so a single column can end up with some rows read month-first and others day-first.",
+  "workaround": "Use pd.to_datetime with an explicit format= or dayfirst= argument instead of astype.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60964#issuecomment-2671177993",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

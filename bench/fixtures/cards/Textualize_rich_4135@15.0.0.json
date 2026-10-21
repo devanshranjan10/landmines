@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ask",
+    "input"
+  ],
+  "requires": [
+    [
+      "readline"
+    ]
+  ],
+  "condition": "On Linux with readline imported, Prompt.ask/Confirm.ask/Console.input put the cursor in the wrong place when you move left with the arrow keys, and typing then overwrites the prompt text.",
+  "workaround": "Print the prompt yourself, then pass a non-empty string such as \" \\b\" as the prompt to the built-in input(), so readline knows the prompt length (the approach of PR #4137).",
+  "workaroundUrl": "https://github.com/Textualize/rich/issues/4135#issuecomment-4511959890",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

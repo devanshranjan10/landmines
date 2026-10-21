@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "loc"
+  ],
+  "requires": [
+    [
+      "pyarrow"
+    ]
+  ],
+  "condition": "On a 1-row DataFrame, df.loc[:, col] = numpy-backed Series/ndarray into a pyarrow-backed column unwraps the value to a 0-d array and raises TypeError \"Invalid value\" in pandas 3.x (2.x only warns and recasts the column to float64).",
+  "workaround": "Assign a value with the matching Arrow dtype (e.g. .astype(\"double[pyarrow]\")) or assign the whole column with df[\"A\"] = ... instead of df.loc[:, \"A\"] = ....",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

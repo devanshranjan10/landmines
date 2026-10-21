@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "write_parquet"
+  ],
+  "requires": [
+    [
+      "attr",
+      "attributes"
+    ]
+  ],
+  "condition": "In R arrow, write_parquet() writes R metadata with ASCII serialization, so double-valued attributes such as POSIXct timestamps lose precision when read back with read_parquet(), and no warning is given.",
+  "workaround": "Store high-precision double attributes some other way, for example as a string you format yourself, or patch arrow to use serialize(..., ascii = NA).",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

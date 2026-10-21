@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "stream"
+  ],
+  "requires": [],
+  "condition": "Once a knex stream() query errors, later concurrent streams can end up reading on a connection that has already gone back to the pool, so the pool loses track of a connection that is still in use.",
+  "workaround": "Don't use stream(). Use keyset pagination with regular queries instead.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/6288#issuecomment-3548172528",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

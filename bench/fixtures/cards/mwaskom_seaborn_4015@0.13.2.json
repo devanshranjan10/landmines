@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Hist"
+  ],
+  "requires": [
+    [
+      "density"
+    ]
+  ],
+  "condition": "so.Hist(stat=\"density\") normalizes each group on its own, so the common_norm=True default is ignored and groups of very different sizes get the same density.",
+  "workaround": "Use stat=\"proportion\" or stat=\"percent\", which do respect common_norm. You can also use sns.histplot(stat=\"density\", common_norm=True) or so.KDE.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

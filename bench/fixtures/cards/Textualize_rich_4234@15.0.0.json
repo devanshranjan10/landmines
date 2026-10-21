@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "wrap",
+    "chop_cells",
+    "divide_line"
+  ],
+  "requires": [],
+  "condition": "Text.wrap / chop_cells with width 0 (or negative) on single-cell text raises ValueError: range() arg 3 must not be zero.",
+  "workaround": "Make sure the width is at least 1 before you wrap, e.g. wrap(console, max(1, width)), or skip wrapping when width <= 0.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

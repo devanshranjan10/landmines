@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "cg"
+  ],
+  "requires": [
+    [
+      "x0"
+    ]
+  ],
+  "condition": "With a large initial guess x0 on an ill-conditioned system, cg's recursively updated residual drifts away from the true residual, so cg returns info=0 even though the true residual b - A@x misses the tolerance by a huge factor.",
+  "workaround": "After cg returns, check the true residual norm(b - A@x) against the tolerance yourself. If it fails, restart cg with the returned x as x0, or use a small or zero initial guess.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

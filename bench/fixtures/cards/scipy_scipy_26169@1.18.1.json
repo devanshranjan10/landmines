@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ttest_ind"
+  ],
+  "requires": [
+    [
+      "equal_var"
+    ]
+  ],
+  "condition": "ttest_ind with equal_var=False returns df=1 and a wrong p-value when the data have extremely small or large magnitudes, because squaring the variance terms underflows or overflows to NaN, and NaN is then replaced with 1.",
+  "workaround": "Rescale both samples to a moderate magnitude (for example, divide by their standard deviation or a common power of two) before calling ttest_ind. The t-statistic and df don't change under a common scale.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

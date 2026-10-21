@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "union",
+    "difference",
+    "get_indexer"
+  ],
+  "requires": [
+    [
+      "groupby",
+      "verify_integrity"
+    ],
+    [
+      "dropna"
+    ]
+  ],
+  "condition": "MultiIndex set operations and get_indexer treat NaN levels as different when one index stores NaN with code -1 and the other uses a nonnegative code (e.g. an index from groupby(dropna=False)). This yields duplicate rows, a non-empty difference, and misaligned arithmetic.",
+  "workaround": "Rebuild the index so its NaN codes are consistent, e.g. pd.MultiIndex(ix.levels, ix.codes, names=ix.names) with integrity verification turned on, before calling union, difference or arithmetic. Better still, keep NaN out of index keys.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60642#issuecomment-2641463014",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

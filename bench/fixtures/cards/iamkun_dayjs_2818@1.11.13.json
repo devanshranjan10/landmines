@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "MMM.",
+      ".MMM"
+    ]
+  ],
+  "condition": "With customParseFormat, a format like 'DD.MMM.YY' where the month name is separated by dots (e.g. '29.Jul.21') returns Invalid Date, apparently because the dot gets included in the month-name match.",
+  "workaround": "Before parsing, replace the dots with another separator such as a space or '-', in both the input string and the format (e.g. 'DD-MMM-YY').",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

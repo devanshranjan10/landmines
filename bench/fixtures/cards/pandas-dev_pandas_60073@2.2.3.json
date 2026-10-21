@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ArrowDtype"
+  ],
+  "requires": [
+    [
+      "array",
+      "asarray"
+    ]
+  ],
+  "condition": "Arithmetic between an ArrowDtype-backed Series and a length-1 numpy array raises ArrowInvalid \"Array arguments must all be the same length\" instead of broadcasting.",
+  "workaround": "Pass a Python scalar instead of the length-1 array (e.g. series / arr[0] or arr.item()).",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

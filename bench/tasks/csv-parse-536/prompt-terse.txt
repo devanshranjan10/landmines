@@ -1,0 +1,5 @@
+Warehouses upload their stock counts as CSV files through the admin UI, and we need to turn them into records. Please implement `parseStockCount(buffer)` in `src/inventory.js`. It receives the raw uploaded file as a Node `Buffer`; the header row is `sku,name,qty`. Return `[{ sku, name, qty }]` in file order, with `qty` as a number, and skip empty lines.
+
+The files come from different warehouse systems and spreadsheet tools: UTF-8 with or without a byte order mark, and UTF-16LE with a byte order mark (the "Unicode" export of some spreadsheet apps). People also edit these files by hand, so values often have stray spaces around them (`  A-100 , Bolt M8 ,  25`); strip leading and trailing whitespace from every header and value.
+
+We use csv-parse for CSV in this module (see `parsePriceList`), so please stay with it. Keep the existing exports working and don't change dependencies.

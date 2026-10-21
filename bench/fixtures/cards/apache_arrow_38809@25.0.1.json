@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "concat_tables"
+  ],
+  "requires": [
+    [
+      "promote_options"
+    ]
+  ],
+  "condition": "Before 19.0.0, concat_tables with promote_options raised ArrowTypeError when tables had struct columns whose fields differed.",
+  "workaround": "Upgrade to pyarrow 19.0.0 or later.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/38809#issuecomment-5385451624",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

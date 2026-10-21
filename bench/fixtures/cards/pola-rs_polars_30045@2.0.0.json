@@ -1,0 +1,29 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scan_parquet",
+    "read_parquet",
+    "read_csv"
+  ],
+  "requires": [
+    [
+      "Categorical",
+      "Enum"
+    ],
+    [
+      "hive_partitioning",
+      "hive_schema",
+      "empty_string_is_null",
+      "partition_by",
+      "PartitionBy"
+    ]
+  ],
+  "condition": "An empty hive partition value (`k=`) of a Categorical or Enum key is read back as null instead of \"\". The same thing happens to empty Categorical fields in read_csv with empty_string_is_null=False.",
+  "workaround": "Use a String key for the partition and hive schema, then cast to Categorical/Enum after reading. For CSV, read the column as String and cast it afterwards.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "iloc",
+    "loc"
+  ],
+  "requires": [
+    [
+      "array"
+    ]
+  ],
+  "unless": [
+    "item_from_zerodim"
+  ],
+  "condition": "Assigning through df.iloc/df.loc with a 0-d numpy array key (e.g. np.array(1)) raises TypeError/ValueError/InvalidIndexError on mixed-dtype or extension-dtype frames instead of acting like the scalar key.",
+  "workaround": "Turn the 0-d array key into a scalar before indexing, e.g. df.iloc[int(key)] = 9 or key.item().",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

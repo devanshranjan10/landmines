@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv"
+  ],
+  "requires": [
+    [
+      "index_col"
+    ],
+    [
+      "dtype"
+    ]
+  ],
+  "unless": [
+    "dtype_backend"
+  ],
+  "condition": "read_csv with index_col and a dtype applies that dtype to the index for most dtypes (e.g. 'string[pyarrow]', float) but not for str/object, and read_excel never applies it, so the index dtype changes depending on which dtype you pass.",
+  "workaround": "After reading, set the index dtype explicitly (e.g. df.index = df.index.astype(...)). Or use dtype_backend=\"pyarrow\" so the index and the columns both get Arrow dtypes.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61145#issuecomment-2746182038",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

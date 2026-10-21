@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_pandas"
+  ],
+  "requires": [
+    [
+      "iloc",
+      "loc",
+      "iat",
+      "at"
+    ]
+  ],
+  "unless": [
+    "copy"
+  ],
+  "condition": "Table.from_pandas() shares the numpy buffer of non-null numeric columns without copying it, so a later in-place cell mutation through df.iloc/df.loc also silently changes the Arrow Table, even with pandas 3.0 Copy-on-Write.",
+  "workaround": "Use pyarrow-backed dtypes (e.g. dtype=\"int64[pyarrow]\") in the DataFrame, or pass df.copy() to from_pandas before mutating the DataFrame.",
+  "workaroundUrl": "https://github.com/apache/arrow/issues/51162#issuecomment-5557844786",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

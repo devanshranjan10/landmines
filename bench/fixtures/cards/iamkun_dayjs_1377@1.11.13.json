@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "tz"
+  ],
+  "requires": [
+    [
+      "timezone"
+    ]
+  ],
+  "condition": "In React Native on Hermes (or with the formatjs Intl polyfill), the dayjs timezone plugin's .tz() throws a RangeError or returns null, because it depends on Intl time-zone support and on toLocaleString('en-US', { timeZone }).",
+  "workaround": "Add the formatjs Intl polyfills, then patch Date.prototype.toLocaleString so that it uses Intl.DateTimeFormat with explicit 2-digit fields and hour12: false whenever only a timeZone option is passed. Another option is the Intl variant of JSC on Android.",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/1377#issuecomment-775991702",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

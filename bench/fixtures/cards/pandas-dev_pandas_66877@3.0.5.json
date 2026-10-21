@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "rollforward",
+    "rollback"
+  ],
+  "requires": [
+    [
+      "date"
+    ]
+  ],
+  "condition": "Static type checkers reject datetime.date passed to offset rollforward/rollback even though runtime accepts it.",
+  "workaround": "Wrap the argument in pd.Timestamp(...) or pass a datetime instead of a date.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

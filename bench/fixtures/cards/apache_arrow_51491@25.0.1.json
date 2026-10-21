@@ -1,0 +1,32 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_table",
+    "to_table",
+    "dataset",
+    "ParquetDataset"
+  ],
+  "requires": [
+    [
+      "filters",
+      "filter"
+    ],
+    [
+      "!=",
+      "not_equal",
+      "~",
+      "invert",
+      "isin",
+      "is_nan",
+      "nan_is_null"
+    ]
+  ],
+  "condition": "When a Parquet file is filtered on a float column with !=, a negated comparison, isin([nan]) or is_nan, row groups are skipped based on min/max statistics that leave out NaN, so rows containing NaN are silently dropped.",
+  "workaround": "Write the files with write_statistics=False, or read without the filter and apply it in memory with pc.filter.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

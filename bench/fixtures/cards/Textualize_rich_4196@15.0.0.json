@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "print"
+  ],
+  "requires": [
+    [
+      "\\xa0"
+    ]
+  ],
+  "unless": [
+    "no_wrap"
+  ],
+  "condition": "When Rich wraps text, it treats a non-breaking space (U+00A0) as a normal word separator, so lines can break in the middle of text that was joined with NBSPs.",
+  "workaround": "Patch rich._wrap.re_word to re.compile(r\"[^\\S ]*[\\S ]+[^\\S ]*\"), or pass no_wrap=True for that text.",
+  "workaroundUrl": "https://github.com/Textualize/rich/issues/4196#issuecomment-5118191998",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

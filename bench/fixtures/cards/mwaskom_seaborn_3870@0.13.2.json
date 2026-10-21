@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "relplot"
+  ],
+  "requires": [
+    [
+      "style"
+    ]
+  ],
+  "unless": [
+    "style_order"
+  ],
+  "condition": "relplot with a style argument raises TypeError 'NoneType' object is not iterable when the DataFrame is empty.",
+  "workaround": "Skip the plot when the data is empty, or pass style_order explicitly.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

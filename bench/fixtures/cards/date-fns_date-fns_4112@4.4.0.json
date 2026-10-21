@@ -1,0 +1,23 @@
+{
+  "isBug": false,
+  "affectsPinned": "likely",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "locale"
+    ],
+    [
+      "require"
+    ]
+  ],
+  "condition": "format() throws \"Cannot read properties of undefined (reading 'preprocessor')\" when the locale passed in is a module namespace (e.g. require(\"date-fns/locale/de\")) instead of the locale object, so locale.localize is undefined.",
+  "workaround": "Import the locale object by name, e.g. `import { de } from \"date-fns/locale\"`, rather than passing the whole required module.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/4112#issuecomment-5637046397",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

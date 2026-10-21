@@ -1,0 +1,6 @@
+Customer success wants NPS-style bands on the satisfaction survey. Please implement in `app/scores.py`, for frames returned by `load_scores`:
+
+- `score_bands(df)`: a Series with the same index as `df` that labels each response by its `score`: `"detractor"` for a score of 60 or below (0 included), `"passive"` for above 60 up to and including 80, `"promoter"` for above 80 (scores go up to 100). Responses where the customer skipped the score get no band (a missing value).
+- `band_counts(df)`: `{"detractor": n, "passive": n, "promoter": n}` with the number of responses in each band (all three keys always present, ints).
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "choose_colorbrewer_palette",
+    "choose_cubehelix_palette",
+    "choose_light_palette",
+    "choose_dark_palette"
+  ],
+  "requires": [],
+  "condition": "When ipywidgets is not installed, calling seaborn's interactive palette chooser widgets fails with a misleading NameError (e.g. 'FloatSlider' is not defined) instead of the intended ImportError telling you to install ipywidgets.",
+  "workaround": "Install ipywidgets (pip install ipywidgets) before using the seaborn choose_*_palette widgets.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

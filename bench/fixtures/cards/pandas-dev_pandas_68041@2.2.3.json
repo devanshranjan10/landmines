@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv"
+  ],
+  "requires": [
+    [
+      "pyarrow"
+    ],
+    [
+      "index_col"
+    ],
+    [
+      "dtype"
+    ]
+  ],
+  "condition": "read_csv with engine='pyarrow', index_col and dtype that is either a scalar or a dict without the index column raises AttributeError or IndexError while finalizing the index.",
+  "workaround": "Pass dtype as a dict that includes the index column, e.g. {'col1': ..., 'col2': ...}. You can also drop engine='pyarrow', or call set_index after reading.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

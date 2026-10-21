@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__getitem__",
+    "loc"
+  ],
+  "requires": [
+    [
+      "True",
+      "False"
+    ]
+  ],
+  "condition": "Selecting columns with a list of boolean column labels like df[[True]] is treated as a boolean mask and raises \"Item wrong length\" instead of selecting the column labelled True.",
+  "workaround": "Select the single bool-labelled column with df[True], or rename the column to a string label before selecting.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/61980#issuecomment-3180235513",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

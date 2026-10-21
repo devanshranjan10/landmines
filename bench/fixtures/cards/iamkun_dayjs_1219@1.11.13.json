@@ -1,0 +1,17 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "tz",
+    "locale"
+  ],
+  "requires": [],
+  "condition": "Calling .locale() after .tz() for a zone whose offset is 0 (e.g. Europe/London) drops the timezone conversion, so format() prints the time in the local offset instead of the target zone.",
+  "workaround": "Convert with tz() and format to a string first, then parse that string again and apply locale() before the final format (or set the locale globally with dayjs.locale instead of chaining it).",
+  "workaroundUrl": "https://github.com/iamkun/dayjs/issues/1219#issuecomment-731331223",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "jointplot"
+  ],
+  "requires": [
+    [
+      "hex"
+    ]
+  ],
+  "unless": [
+    "gridsize"
+  ],
+  "condition": "jointplot(kind=\"hex\") raises a TypeError in _freedman_diaconis_bins when x or y holds datetime64 values.",
+  "workaround": "Convert the datetime values to numbers (e.g. matplotlib date numbers) before plotting, or pass joint_kws={\"gridsize\": ...} so seaborn doesn't compute the bin count itself.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

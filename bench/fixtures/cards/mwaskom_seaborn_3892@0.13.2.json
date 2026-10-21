@@ -1,0 +1,20 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "kdeplot"
+  ],
+  "requires": [
+    [
+      "weights"
+    ]
+  ],
+  "condition": "Seaborn's own test suite fails with NumPy 2.x because the tests use np.VisibleDeprecationWarning and check matplotlib tick label keys; ordinary user code doesn't appear to be affected.",
+  "workaround": "Use the seaborn development branch (the fix from #3685) or skip the affected tests when packaging.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3892#issuecomment-3678080414",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

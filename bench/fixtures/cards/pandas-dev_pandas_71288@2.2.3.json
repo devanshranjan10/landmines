@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "interval_range"
+  ],
+  "requires": [
+    [
+      "freq"
+    ]
+  ],
+  "condition": "interval_range with integer start/end around or above 2**53 and a numeric freq computes breaks through float arithmetic, producing collapsed empty intervals and the wrong count.",
+  "workaround": "For large integer endpoints, build the breaks with integer arithmetic (e.g. np.arange(start, end + 1, freq, dtype='int64')) and use IntervalIndex.from_breaks instead.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

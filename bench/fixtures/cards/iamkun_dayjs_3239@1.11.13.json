@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "utc"
+  ],
+  "requires": [
+    [
+      "ww",
+      "w"
+    ],
+    [
+      "customParseFormat"
+    ]
+  ],
+  "condition": "With customParseFormat, dayjs.utc(input, format) ignores a parsed week token (w/ww), so the result falls in week 1 of the year.",
+  "workaround": "Parse without the week token in UTC mode, then apply the week yourself, e.g. dayjs.utc(year-only string).week(weekNumber), or parse in local mode and convert with .utc().",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

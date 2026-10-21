@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv",
+    "scan_csv"
+  ],
+  "requires": [
+    [
+      "http://",
+      "https://"
+    ]
+  ],
+  "unless": [
+    "urlopen",
+    "BytesIO",
+    "requests",
+    "httpx"
+  ],
+  "condition": "read_csv/scan_csv on an HTTP(S) URL whose server rejects HEAD or ignores Range requests raises FileNotFoundError in polars 2.0 even though the URL returns 200 on GET.",
+  "workaround": "Download the content yourself (e.g. with urllib/requests) and pass the bytes via io.BytesIO to read_csv.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

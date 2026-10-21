@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "dayjsLocalizer",
+    "startOf"
+  ],
+  "requires": [
+    [
+      "timezone"
+    ]
+  ],
+  "condition": "With the timezone plugin extended, startOf('week'/'day') across a DST transition gives a time one hour off, e.g. Sat 23:00 instead of Sun 00:00. This breaks react-big-calendar's dayjsLocalizer visibleDays for months like April.",
+  "workaround": "Don't extend dayjs with the timezone plugin on the dayjs instance you pass to dayjsLocalizer.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,18 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "jsonExtract"
+  ],
+  "requires": [],
+  "unless": [
+    "jsonb_path_query_first"
+  ],
+  "condition": "On PostgreSQL, jsonExtract generates jsonb_path_query even when singleValue is true, so rows where the JSON path is missing get dropped instead of returning null.",
+  "workaround": "Write the select by hand with knex.raw using jsonb_path_query_first(column, path).",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "logsumexp"
+  ],
+  "requires": [
+    [
+      "b"
+    ]
+  ],
+  "condition": "logsumexp with signed weights b returns NaN when the equal largest terms cancel exactly with large-magnitude inputs, even though the true result is finite.",
+  "workaround": "Shift the inputs by a smaller offset yourself (e.g. subtract a constant from a, then add it back to the result), or combine the cancelling terms before calling logsumexp.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

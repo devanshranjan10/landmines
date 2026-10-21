@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "json_normalize"
+  ],
+  "requires": [
+    [
+      "record_path"
+    ],
+    [
+      "meta"
+    ]
+  ],
+  "condition": "json_normalize raises a KeyError when a nested meta path (a list such as [\"meta1\", \"meta_sub1\"]) doesn't follow the record_path prefix, i.e. the metadata isn't stored next to the records.",
+  "workaround": "Pull the nested metadata yourself, e.g. normalize with meta=[\"meta1\"] and then expand that dict column, or add the value as a constant column after normalizing.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

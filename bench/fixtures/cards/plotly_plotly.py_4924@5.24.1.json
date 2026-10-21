@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "labelalias"
+  ],
+  "requires": [],
+  "condition": "labelalias keys for negative tick values written with an ASCII hyphen (e.g. -10) never match, because the rendered labels use the Unicode minus sign U+2212, so the aliases are silently ignored.",
+  "workaround": "Use string keys with the Unicode minus sign (e.g. \"−10\"), or use tickvals with ticktext instead of labelalias.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/4924#issuecomment-2797299823",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

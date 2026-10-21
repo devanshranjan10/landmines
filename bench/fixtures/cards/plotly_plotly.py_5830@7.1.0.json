@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Scatter",
+    "update_xaxes"
+  ],
+  "requires": [
+    [
+      "fill"
+    ],
+    [
+      "rangeslider_visible",
+      "rangeslider"
+    ]
+  ],
+  "condition": "When a filled go.Scatter trace (e.g. fill=\"toself\") is plotted with the x-axis rangeslider visible, the fill hover area is computed from the rangeslider's mini-plot. Only a thin strip of the fill responds to hover, and zooming does not fix it.",
+  "workaround": "Don't enable the rangeslider on figures that rely on hover over filled areas. Another option is to patch the bundled plotly.js so it skips the _fillElement/_polygons assignments when plotinfo.isRangePlot is set.",
+  "workaroundUrl": "https://github.com/plotly/plotly.py/issues/5830#issuecomment-6298192643",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

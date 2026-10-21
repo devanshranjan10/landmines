@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "dddo"
+    ]
+  ],
+  "condition": "format() throws a RangeError about an unescaped 'o' when a day token is directly followed by an ordinal token, as in 'dddo', because the tokenizer reads 'ddd' as one token.",
+  "workaround": "Put a separator between the tokens, e.g. 'dd do', then remove it with .replace(\" \", \"\") if needed.",
+  "workaroundUrl": "https://github.com/date-fns/date-fns/issues/3765#issuecomment-2056806307",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

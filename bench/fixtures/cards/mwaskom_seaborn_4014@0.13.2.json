@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "Stack"
+  ],
+  "requires": [
+    [
+      "baseline"
+    ]
+  ],
+  "condition": "so.Stack combined with a mark that has a non-zero baseline (e.g. so.Bar(baseline=10)) doesn't add the baseline back to the stacked values, so stacked bar heights come out wrong and the first bar can disappear.",
+  "workaround": "Subtract the baseline from the data yourself and use the default baseline of 0 with so.Stack. Or patch Stack._stack so it sets df[other] = df[\"baseline\"] + stacked_lengths.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

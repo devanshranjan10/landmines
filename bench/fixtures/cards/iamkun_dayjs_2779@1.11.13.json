@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "MMM.",
+      "MMMM."
+    ]
+  ],
+  "condition": "With customParseFormat, a format where a month-name token is directly followed by a dot (e.g. 'MMM. YYYY' on 'Nov. 2024') does not parse, because the month-name pattern also consumes the dot, so the result is wrong or Invalid Date.",
+  "workaround": "Remove the dot from the input string before parsing (e.g. input.replace('.', '')) and use a format without it, such as 'MMM YYYY'.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

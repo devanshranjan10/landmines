@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "formatRFC3339"
+  ],
+  "requires": [],
+  "condition": "formatRFC3339 doesn't zero-pad years below 1000, so year 24 comes out as \"24-01-22T...\" instead of \"0024-01-22T...\".",
+  "workaround": "Use format(date, \"yyyy-MM-dd'T'HH:mm:ssXXX\"), which zero-pads the year to four digits.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

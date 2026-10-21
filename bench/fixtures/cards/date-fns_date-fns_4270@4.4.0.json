@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "parse"
+  ],
+  "requires": [
+    [
+      "zhCN"
+    ],
+    [
+      "QQQ",
+      "QQQQ",
+      "QQQQQ"
+    ]
+  ],
+  "condition": "In the zhCN locale, parse with a QQQ or QQQQ quarter token returns Invalid Date for the 第三季 or 第三季度 strings that format produces, because the parser only accepts the 刻 forms.",
+  "workaround": "Before parsing, change 季度/季 in the input to 刻钟/刻, or parse quarters with numeric Q/QQ tokens.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

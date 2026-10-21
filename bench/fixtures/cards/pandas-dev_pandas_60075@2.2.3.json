@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "assign"
+  ],
+  "requires": [],
+  "condition": "DataFrame.assign with many kwargs inserts the columns one at a time, which leaves a fragmented frame that raises a PerformanceWarning and makes later operations slower.",
+  "workaround": "Build the new columns separately and join them with pd.concat(axis=1), or call .copy() on the result to defragment it.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/60075#issuecomment-2426071161",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

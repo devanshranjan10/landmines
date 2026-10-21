@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [],
+  "requires": [
+    [
+      "diff"
+    ]
+  ],
+  "unless": [
+    "customParseFormat"
+  ],
+  "condition": "Parsing a non-ISO 'DD-MMM-YY' string like '31-DEC-50' without a format string falls back to native Date parsing, so two-digit years 50 and above become 19xx (1950 instead of 2050) and diff results are wrong.",
+  "workaround": "Load the customParseFormat plugin and pass the format explicitly, e.g. dayjs('31-DEC-50', 'DD-MMM-YY'). That plugin maps two-digit years up to 68 to 20xx. Or use four-digit years.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2
+}

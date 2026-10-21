@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "verify",
+    "sign"
+  ],
+  "requires": [],
+  "unless": [
+    "createPublicKey",
+    "createPrivateKey",
+    "createSecretKey"
+  ],
+  "condition": "On Node 17 and later, jwt.verify and jwt.sign get much slower when given a string or Buffer key, because they call crypto.createPublicKey or createPrivateKey on every call.",
+  "workaround": "Create a KeyObject once with crypto.createPublicKey, createPrivateKey or createSecretKey, then pass it to verify or sign instead of a string key.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

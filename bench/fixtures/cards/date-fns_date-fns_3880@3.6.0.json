@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "startOfWeek"
+  ],
+  "requires": [],
+  "condition": "In a WeChat miniprogram build, requiring date-fns fails to resolve the relative module './startOfWeek.js'. This is a bundler/environment resolution problem, not a defect in date-fns.",
+  "confidence": 0.2,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,16 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "testMaxWrongDim"
+  ],
+  "requires": [],
+  "condition": "The SWIG test testMaxWrongDim passes negative ints to the unsigned-type Max wrappers. Under NumPy 2, converting those values raises OverflowError instead of the expected TypeError, so the test fails.",
+  "workaround": "Change the test so it uses only non-negative values, e.g. [0, 1, 2, 3].",
+  "workaroundUrl": "https://github.com/numpy/numpy/issues/27577#issuecomment-2427504901",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "customParseFormat"
+  ],
+  "requires": [
+    [
+      "true"
+    ],
+    [
+      "Z",
+      "ZZ"
+    ]
+  ],
+  "condition": "Strict-mode parsing with customParseFormat and a Z/ZZ offset token gives an Invalid Date when the input's offset (e.g. -01:00) differs from the local timezone, because the strict check compares the re-formatted local time with the input string.",
+  "workaround": "Parse in non-strict mode, or check the format yourself before parsing an input that carries an offset.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

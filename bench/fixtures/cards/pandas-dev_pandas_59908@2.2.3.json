@@ -1,0 +1,30 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "apply"
+  ],
+  "requires": [
+    [
+      "axis"
+    ],
+    [
+      "MultiIndex",
+      "from_frame",
+      "from_tuples",
+      "from_arrays",
+      "set_index"
+    ],
+    [
+      "name"
+    ]
+  ],
+  "condition": "With a MultiIndex, DataFrame.apply(func, axis=1) gives each row a row.name tuple of plain Python scalars instead of NumPy scalars, so code that calls NumPy scalar methods such as .item() fails.",
+  "workaround": "Write the function so it accepts both Python and NumPy scalars, e.g. int(row.name[1]) instead of row.name[1].item().",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/59908#issuecomment-3454135265",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

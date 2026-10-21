@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scatterplot"
+  ],
+  "requires": [
+    [
+      "size"
+    ]
+  ],
+  "unless": [
+    "size_order"
+  ],
+  "condition": "When the size column has only the values 0 and 1, scatterplot treats it as categorical and maps sizes by order of appearance, so 0 can get the largest marker.",
+  "workaround": "Pass size_order (e.g. [1, 0]) or a sizes dict that maps each value explicitly, or reorder the data so the value you want drawn largest comes first.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3834#issuecomment-2888705113",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

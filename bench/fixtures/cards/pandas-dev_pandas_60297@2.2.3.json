@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "apply"
+  ],
+  "requires": [
+    [
+      "numba"
+    ],
+    [
+      "raw"
+    ]
+  ],
+  "condition": "On a single-column DataFrame, calling apply(f, raw=True, engine='numba') with a function that doesn't reduce (returns an array) raises a \"Length of values does not match length of index\" ValueError.",
+  "workaround": "Use engine='python' or raw=False for single-column DataFrames when the function doesn't reduce.",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

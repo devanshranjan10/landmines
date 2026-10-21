@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "likely",
+  "apis": [
+    "tz",
+    "set"
+  ],
+  "requires": [
+    [
+      "hour",
+      "minute",
+      "date",
+      "month"
+    ]
+  ],
+  "condition": "If you call .set() on a dayjs.tz() object, the underlying timestamp ends up one hour off, so a.unix() converts back to a different local time than the one shown.",
+  "workaround": "Build the date in a single step, e.g. dayjs.tz('2024-09-27 03:01:04', 'America/New_York'), instead of chaining .set() calls on a tz object.",
+  "confidence": 0.55,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "join"
+  ],
+  "requires": [
+    [
+      "right"
+    ],
+    [
+      "streaming"
+    ]
+  ],
+  "condition": "With engine=\"streaming\", a lazy right join raises DuplicateError when the left frame already has a column ending in the default \"_right\" suffix (for example a left_on key named c0_right). The eager and in-memory engines return a result without error.",
+  "workaround": "Pass a non-default `suffix=` to join, rename the clashing left column before joining, or collect with engine=\"in-memory\".",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "join"
+  ],
+  "requires": [
+    [
+      "sort",
+      "set_sorted"
+    ]
+  ],
+  "condition": "An inner or left join on a float key whose left frame is flagged sorted ascending uses the sorted-merge fast path, which compares keys with IEEE ==, so NaN keys fail to match NaN rows on the other side.",
+  "workaround": "Drop the sorted flag before joining, e.g. by joining in a lazy query where the sort happens (left.lazy().sort(...).join(...)) or by using the streaming engine. You can also replace NaN keys with a sentinel value before the join.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

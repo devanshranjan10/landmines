@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_json"
+  ],
+  "requires": [],
+  "condition": "DataFrame.to_json truncates floats to double_precision digits (default 10, max 15), so reading the JSON back with read_json gives different float values.",
+  "workaround": "Before saving, convert the floats to strings at full precision (e.g. format(value, '.17g')), or save to a format that keeps exact float values.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/62072#issuecomment-3171904673",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "PolyFit",
+    "pair"
+  ],
+  "requires": [
+    [
+      "Line"
+    ]
+  ],
+  "unless": [
+    "orient",
+    "Path"
+  ],
+  "condition": "When so.Plot.pair is combined with so.Line and so.PolyFit, orientation is detected wrongly, so the fitted line's points are sorted along the wrong axis and drawn connected in the wrong order.",
+  "workaround": "Use so.Path instead of so.Line, or pass orient=\"x\" in the .add() layer that holds the fit.",
+  "workaroundUrl": "https://github.com/mwaskom/seaborn/issues/3758#issuecomment-2413847745",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

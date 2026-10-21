@@ -1,0 +1,16 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "ansari"
+  ],
+  "requires": [],
+  "condition": "With tied data where a tie spans the middle rank, stats.ansari's asymptotic p-value uses the untied null mean and a wrong tie-corrected variance, so the p-value is inaccurate.",
+  "workaround": "Pass method=stats.PermutationMethod() to get an accurate null distribution when there are ties.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/26264#issuecomment-5829067766",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

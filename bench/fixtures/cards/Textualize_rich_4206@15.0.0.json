@@ -1,0 +1,13 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [],
+  "requires": [],
+  "condition": "The README says Rich needs Python 3.8+, but version 15.0.0 actually needs Python 3.9+ (a documentation mistake only).",
+  "workaround": "Use Python 3.9 or later.",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

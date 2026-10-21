@@ -1,0 +1,27 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "tz_localize",
+    "Series",
+    "DatetimeIndex",
+    "to_datetime"
+  ],
+  "requires": [
+    [
+      "datetime64"
+    ],
+    [
+      "tz_localize",
+      "tz",
+      "tz_convert"
+    ]
+  ],
+  "condition": "Putting a tz-aware Timestamp whose year is outside 1-9999 into a Series, DatetimeIndex, to_datetime or other datetime64 storage silently changes its year to 1970 or 1972.",
+  "workaround": "Put the timestamps into the container as tz-naive values (UTC wall time), then call .dt.tz_localize(\"UTC\") on the Series or Index.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

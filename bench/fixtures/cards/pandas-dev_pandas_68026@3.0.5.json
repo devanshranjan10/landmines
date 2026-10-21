@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "to_xml"
+  ],
+  "requires": [
+    [
+      "True",
+      "False",
+      "bool",
+      "boolean"
+    ]
+  ],
+  "condition": "DataFrame.to_xml writes bool values as capitalized \"True\"/\"False\", which are not valid xs:boolean values.",
+  "workaround": "Before exporting, map the bool columns to lowercase strings, e.g. df[col].map({True: \"true\", False: \"false\"}).",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

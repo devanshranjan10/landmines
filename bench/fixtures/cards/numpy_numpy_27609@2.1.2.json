@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "unwrap"
+  ],
+  "requires": [],
+  "condition": "np.unwrap applies the corrections with a floating-point cumsum, so rounding errors build up and values near the end of large arrays, or of float32 arrays, end up with large phase errors.",
+  "workaround": "Normalize to units of the period so the corrections are integers: np.unwrap(x / tau, period=1.0) * tau. Alternatively, compute integer period counts, run cumsum on those, and subtract counts * period.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

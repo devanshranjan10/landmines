@@ -1,0 +1,28 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "DataFrame",
+    "Index"
+  ],
+  "requires": [
+    [
+      "Enum",
+      "IntEnum",
+      "StrEnum",
+      "Flag",
+      "IntFlag"
+    ],
+    [
+      "columns",
+      "index"
+    ]
+  ],
+  "condition": "Passing an Enum class directly as columns/index (e.g. DataFrame(columns=MyEnum)) raises TypeError \"Index(...) must be called with a collection of some kind\" because is_list_like rejects classes.",
+  "workaround": "Convert the enum class to a list first, e.g. DataFrame(columns=list(MyEnum)).",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

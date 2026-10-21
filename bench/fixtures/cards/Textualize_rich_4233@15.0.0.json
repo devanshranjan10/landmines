@@ -1,0 +1,15 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_ansi"
+  ],
+  "requires": [],
+  "condition": "When the input to Text.from_ansi has a NUL byte between ESC and \"[\", the regex doesn't match it, so the raw escape sequence stays in the Text and the terminal runs it, for example clearing the screen.",
+  "workaround": "Remove NUL bytes from untrusted input (for example with s.replace('\\x00', '')) before passing it to Text.from_ansi.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

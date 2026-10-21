@@ -1,0 +1,30 @@
+{
+  "isBug": false,
+  "affectsPinned": "likely",
+  "apis": [
+    "get_indexer"
+  ],
+  "requires": [
+    [
+      "IntervalIndex",
+      "from_arrays",
+      "from_tuples",
+      "from_breaks",
+      "interval_range"
+    ],
+    [
+      "bfill",
+      "backfill",
+      "ffill",
+      "pad",
+      "nearest"
+    ]
+  ],
+  "condition": "Calling IntervalIndex.get_indexer with a fill method such as method=\"bfill\" raises NotImplementedError because fill methods are not implemented for IntervalIndex.",
+  "workaround": "Use searchsorted on intervals.left or intervals.right yourself to find the next interval, instead of passing method= to get_indexer.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

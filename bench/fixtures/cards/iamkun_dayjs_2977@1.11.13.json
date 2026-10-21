@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "format"
+  ],
+  "requires": [
+    [
+      "ar"
+    ],
+    [
+      "L",
+      "l"
+    ]
+  ],
+  "condition": "With the Arabic (ar) locale, format('L') puts invisible U+200F right-to-left marks into the output, so the day, month and year can show up in the wrong order in HTML.",
+  "workaround": "Use an explicit format string such as format('D/M/YYYY') instead of 'L', or remove ‏ from the output.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

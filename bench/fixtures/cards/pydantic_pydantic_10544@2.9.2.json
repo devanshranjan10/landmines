@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "RootModel"
+  ],
+  "requires": [
+    [
+      "type"
+    ]
+  ],
+  "condition": "Comparing RootModel instances with == returns False when they are parametrized with different but equivalent types (e.g. str vs a `type` alias of str), because equality requires identical classes.",
+  "workaround": "Compare the `.root` values directly, or use the same parametrization for both models.",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

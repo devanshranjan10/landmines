@@ -1,0 +1,18 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "from_product",
+    "safe_sort",
+    "set_index"
+  ],
+  "requires": [],
+  "condition": "On Windows with Python 3.15 and a NumPy 2.4.6 built from source with MinGW (an experimental build), safe_sort crashes with an access violation inside argsort, which MultiIndex.from_product and set_index both reach.",
+  "workaround": "Install a NumPy wheel that supports Python 3.15 (NumPy 2.5.2 or later) instead of building NumPy 2.4.6 from source with MinGW.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/71254#issuecomment-6221212946",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

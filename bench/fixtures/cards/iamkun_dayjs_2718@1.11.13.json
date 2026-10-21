@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "duration"
+  ],
+  "requires": [
+    [
+      "require"
+    ]
+  ],
+  "condition": "TypeScript reports \"Property 'duration' does not exist on type 'typeof dayjs'\" when the duration plugin's types are not loaded through an ES import (for example, loaded with require) or when the d.ts files have been patched.",
+  "workaround": "Load the plugin with an ES import (import duration from 'dayjs/plugin/duration') so its type augmentation applies, and don't patch the plugin .d.ts files.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

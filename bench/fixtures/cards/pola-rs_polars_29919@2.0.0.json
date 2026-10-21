@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scan_delta"
+  ],
+  "requires": [
+    [
+      "filter"
+    ],
+    [
+      "struct"
+    ]
+  ],
+  "unless": [
+    "map_batches"
+  ],
+  "condition": "If you call scan_delta and then filter on a struct column whose Delta file stats cover only some of its fields (for example, a struct that crosses the 32-indexed-column limit), it raises InvalidOperationError because the struct cast fails.",
+  "workaround": "Stop predicate pushdown by wrapping the predicate in map_batches. Another option is to put the struct column within the first 32 leaf columns, or to raise delta.dataSkippingNumIndexedCols.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

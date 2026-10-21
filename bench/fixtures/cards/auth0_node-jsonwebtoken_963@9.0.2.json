@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "verify",
+    "sign",
+    "JsonWebTokenError",
+    "TokenExpiredError"
+  ],
+  "requires": [],
+  "unless": [
+    "require"
+  ],
+  "condition": "In native ESM, a named import such as `import { verify } from 'jsonwebtoken'` throws SyntaxError at runtime because the package is CommonJS-only, even though the TypeScript types accept it.",
+  "workaround": "Import the default export and destructure it: `import jwt from 'jsonwebtoken'; const { sign, verify } = jwt;`.",
+  "workaroundUrl": "https://github.com/auth0/node-jsonwebtoken/issues/963#issuecomment-2092535590",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

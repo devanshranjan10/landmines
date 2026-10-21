@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "csv_parse_options"
+  ],
+  "requires": [],
+  "condition": "The R bindings don't expose the new ignore_extra_columns and pad_short_rows CSV parse options. This is a feature request and doesn't affect pyarrow.",
+  "confidence": 0.9,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

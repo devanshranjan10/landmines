@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "__getitem__",
+    "Categorical",
+    "PeriodArray"
+  ],
+  "requires": [
+    [
+      "Ellipsis",
+      "..."
+    ]
+  ],
+  "condition": "Indexing a Categorical or PeriodArray with (int, Ellipsis) returns an invalid 0-d ExtensionArray instead of a scalar or raising, which is inconsistent with arrow-backed arrays.",
+  "workaround": "Index with a plain integer (arr[0]) rather than arr[0, ...] to get a scalar.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

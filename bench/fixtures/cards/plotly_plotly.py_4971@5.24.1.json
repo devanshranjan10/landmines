@@ -1,0 +1,23 @@
+{
+  "isBug": false,
+  "affectsPinned": "yes",
+  "apis": [
+    "add_shape",
+    "Shape"
+  ],
+  "requires": [
+    [
+      "padding"
+    ],
+    [
+      "label"
+    ]
+  ],
+  "condition": "Shape label padding can't be negative, so a label can't be pushed farther away from the outside of the shape; positive padding only moves the label toward the shape's center.",
+  "workaround": "Use a separate annotation to place the text at the distance you want from the shape.",
+  "confidence": 0.4,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

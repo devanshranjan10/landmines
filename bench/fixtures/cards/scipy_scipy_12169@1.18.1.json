@@ -1,0 +1,17 @@
+{
+  "isBug": false,
+  "affectsPinned": "no",
+  "apis": [
+    "dice",
+    "jaccard"
+  ],
+  "requires": [],
+  "condition": "scipy.spatial.distance.dice and jaccard return dissimilarities, not similarity coefficients, so comparing them to the similarity formulas gives values that don't match.",
+  "workaround": "Use 1 - distance.dice(u, v) (or 1 - distance.jaccard(u, v)) to get the similarity coefficient.",
+  "workaroundUrl": "https://github.com/scipy/scipy/issues/12169#issuecomment-631157395",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

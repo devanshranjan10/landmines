@@ -1,0 +1,24 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "make_subplots"
+  ],
+  "requires": [
+    [
+      "row_titles",
+      "column_titles"
+    ],
+    [
+      "colspan",
+      "rowspan"
+    ]
+  ],
+  "condition": "make_subplots with row_titles/column_titles and specs where an edge cell is spanned (colspan/rowspan) places titles on the wrong row/column, centers them across spans, and drops the last title.",
+  "workaround": "Add the row/column titles manually with fig.add_annotation at the right positions instead of passing row_titles/column_titles.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "no-repro"
+}

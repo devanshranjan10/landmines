@@ -1,0 +1,21 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "from_dicts",
+    "DataFrame",
+    "Series"
+  ],
+  "requires": [
+    [
+      "array"
+    ]
+  ],
+  "condition": "Building a polars frame or series from values that are 0-dim numpy arrays (e.g. np.array(1)) inside dicts or lists fails with TypeError: len() of unsized object.",
+  "workaround": "Turn 0-dim arrays into scalars first (for example with arr.item() or np.int64), or pass an explicit schema to DataFrame/from_records.",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

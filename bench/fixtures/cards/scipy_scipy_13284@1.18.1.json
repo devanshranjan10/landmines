@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "no",
+  "apis": [
+    "solve_bvp"
+  ],
+  "requires": [
+    [
+      "p"
+    ]
+  ],
+  "condition": "solve_bvp raises a broadcast ValueError in stacked_matmul when the system has more than 50 equations and unknown parameters (k>0, k != n).",
+  "workaround": "Upgrade scipy. On older versions, patch stacked_matmul so it allocates out with shape (a.shape[0], a.shape[1], b.shape[2]).",
+  "confidence": 0.5,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

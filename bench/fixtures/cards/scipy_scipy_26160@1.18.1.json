@@ -1,0 +1,20 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "maximum_bipartite_matching",
+    "structural_rank",
+    "min_weight_full_bipartite_matching"
+  ],
+  "requires": [],
+  "unless": [
+    "sum_duplicates"
+  ],
+  "condition": "A sparse CSR input with duplicate stored entries (non-canonical format) overflows the DFS stack in _hopcroft_karp, so the process segfaults, hangs, aborts, or returns an invalid matching.",
+  "workaround": "Call A.sum_duplicates() (or pass a copy in canonical format) before calling the matching functions.",
+  "confidence": 0.7,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

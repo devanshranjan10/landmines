@@ -1,0 +1,23 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "read_csv"
+  ],
+  "requires": [
+    [
+      "pyarrow"
+    ],
+    [
+      "names"
+    ]
+  ],
+  "condition": "read_csv(engine=\"pyarrow\", names=...) takes the column count from the file's first row instead of from names, so if the first row is shorter than names, it raises a ParserError, or with on_bad_lines=\"skip\" it drops the real data rows and then fails with a length mismatch.",
+  "workaround": "Use engine='c' or engine='python' to read files whose rows have different numbers of fields.",
+  "workaroundUrl": "https://github.com/pandas-dev/pandas/issues/71034#issuecomment-6110192912",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

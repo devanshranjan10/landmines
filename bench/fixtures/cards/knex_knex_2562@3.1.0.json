@@ -1,0 +1,22 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "stream"
+  ],
+  "requires": [
+    [
+      "pg",
+      "postgres",
+      "postgresql"
+    ]
+  ],
+  "condition": "With the pg client, calling query.stream() when the pg-query-stream package isn't installed hangs silently and never raises an error.",
+  "workaround": "Install pg-query-stream as a dependency whenever you use knex streaming with PostgreSQL.",
+  "workaroundUrl": "https://github.com/knex/knex/issues/2562#issuecomment-380879936",
+  "confidence": 0.75,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

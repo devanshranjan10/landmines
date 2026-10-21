@@ -1,0 +1,19 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "differenceInHours"
+  ],
+  "requires": [
+    [
+      "toZonedTime"
+    ]
+  ],
+  "condition": "differenceInHours on toZonedTime-shifted dates is computed in the system timezone, so it misses the DST change of the target zone. This is user error, not a library bug.",
+  "workaround": "Run differenceInHours on the real UTC instants returned by fromZonedTime, not on the dates shifted by toZonedTime.",
+  "confidence": 0.6,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

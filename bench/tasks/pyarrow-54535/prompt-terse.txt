@@ -1,0 +1,8 @@
+Finance wants the nightly metric extracts as plain CSV files instead of Parquet so they can open them in a spreadsheet. Please implement `save_extract(table, path)` and `load_extract(path, name)` in `app/extracts.py`.
+
+- `save_extract` writes a pyarrow Table to `path` as CSV with a header row.
+- `load_extract` reads such a file back as a pyarrow Table with exactly the schema registered for `name` in `EXTRACT_SCHEMAS`.
+
+Extracts use the column types listed in `EXTRACT_SCHEMAS`; some have several columns and some have just one. Missing metrics are null.
+
+Keep the existing exports working and don't change dependencies.

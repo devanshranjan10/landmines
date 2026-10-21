@@ -1,0 +1,9 @@
+The dependency-policy report needs to say *why* an installed version is not allowed, so that the upgrade bot knows whether to bump or pin down. Please implement `classify(version, range)` in `src/policy.js`; `report()` already calls it with the ranges from `POLICIES`.
+
+It gets a plain release version (no prerelease tags) and a policy range, and returns:
+- `'ok'` if the version satisfies the range;
+- `'too-old'` if the version is lower than every version the range allows;
+- `'too-new'` if the version is higher than every version the range allows;
+- `'excluded'` otherwise, i.e. it falls in a gap inside the range, like 19.x for `^18.0.0 || ^20.0.0`.
+
+Policies can combine a caret/tilde range with an extra floor or cap (see `POLICIES`), and can be `||` unions. We already use the `semver` package here, so please stay with it. Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,14 @@
+{
+  "isBug": false,
+  "affectsPinned": "unknown",
+  "apis": [
+    "parseISO"
+  ],
+  "requires": [],
+  "condition": "Dates before 1924 show a seconds-level offset when displayed in Tbilisi time because that zone used Local Mean Time (+02:59:11) back then; the parsed instant itself is correct, and native Date parsing gives the same result.",
+  "confidence": 0.3,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

@@ -1,0 +1,26 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "set_tooltips"
+  ],
+  "requires": [
+    [
+      "as_title_attribute"
+    ],
+    [
+      "hide",
+      "max_rows",
+      "max_elements",
+      "styler.render.max_rows",
+      "styler.render.max_elements"
+    ]
+  ],
+  "condition": "If you call Styler.set_tooltips(..., as_title_attribute=True) when rows are hidden or the table is trimmed, tooltips land on the wrong cells or rendering raises IndexError.",
+  "workaround": "Use the default span tooltips (as_title_attribute=False), or drop the hidden/trimmed rows from the data before styling.",
+  "confidence": 0.85,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}

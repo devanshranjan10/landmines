@@ -1,0 +1,25 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "model_dump",
+    "model_dump_json"
+  ],
+  "requires": [
+    [
+      "Union",
+      "|"
+    ]
+  ],
+  "unless": [
+    "SerializeAsAny"
+  ],
+  "condition": "When a field's type is a union that lists a parent model before its subclass, and the subclass has an int default on a float field, model_dump serializes the subclass instance as the parent model and silently drops the subclass's fields.",
+  "workaround": "List the subclass first in the union (ChildClass | ParentClass), or annotate the field with SerializeAsAny.",
+  "workaroundUrl": "https://github.com/pydantic/pydantic/issues/10694#issuecomment-2435500873",
+  "confidence": 0.45,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "fail"
+}

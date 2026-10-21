@@ -1,0 +1,19 @@
+{
+  "isBug": true,
+  "affectsPinned": "yes",
+  "apis": [
+    "scatterplot"
+  ],
+  "requires": [
+    [
+      "hue_order"
+    ]
+  ],
+  "condition": "When scatterplot gets a hue_order that leaves out some hue levels, the points for those levels are still drawn with an empty fill but visible edges, so they show up as stray outlines.",
+  "workaround": "Filter the data down to the levels you want (e.g. df[df.locid == 'loc1']) instead of relying on hue_order to hide levels.",
+  "confidence": 0.8,
+  "provider": "claude-cli",
+  "model": "opus",
+  "promptVersion": 2,
+  "selfCheck": "pass"
+}
