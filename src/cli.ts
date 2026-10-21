@@ -151,7 +151,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
 
   program
     .command('hook')
-    .description('Hook entry point: reads the harness payload on stdin, blocks an edit once per known bug (always exits 0)')
+    .description('Hook entry point: reads the harness payload on stdin, blocks an edit once per known bug (exits 0, except exit code 2 in the exit2 format)')
     .option('--mode <mode>', 'block (deny once, then allow the retry) or warn (add context, never block)', modeArg, 'block')
     .option('--harness <name>', `force the payload format (${HARNESSES.join(', ')}); default: detect`, harnessArg)
     .option('--heads-up', 'in block mode, also pass weaker (uncorroborated) matches to the agent as non-blocking context')
