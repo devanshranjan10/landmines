@@ -8,7 +8,7 @@ import { findProjectRoot } from './lockfiles/index.js';
 import { HARNESSES, type Harness } from './hook/payload.js';
 import type { HookMode } from './hook/respond.js';
 import { runHook } from './hook/run.js';
-import { hookCommand, install, uninstall } from './install.js';
+import { hookCommand, install, installMcp, mcpCommand, uninstall } from './install.js';
 import { checkFile } from './match.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
@@ -153,7 +153,8 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('--mode <mode>', 'block (interrupt once on a strong match) or warn (never block; pass every match as context)', modeArg, 'block')
     .option('--heads-up', 'block mode: also pass weaker matches to the agent as non-blocking context')
     .option('--command <cmd>', 'exact command the harness should run (default: this landmine install)')
-    .action((opts: { root?: string; harness: Harness | 'all'; mode: HookMode; headsUp?: boolean; command?: string }) => {
+    .option('--mcp', 'also add the landmine MCP server to .mcp.json (Claude Code project scope)')
+    .action((opts: { root?: string; harness: Harness | 'all'; mode: HookMode; headsUp?: boolean; command?: string; mcp?: boolean }) => {
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
       const script = process.argv[1] ? realpathSync(process.argv[1]) : '';
       const command =
@@ -166,6 +167,11 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         for (const n of r.notes) process.stdout.write(`  ${n}\n`);
       }
       process.stdout.write(`  Command: ${command}\n`);
+      if (opts.mcp) {
+        const r = installMcp(root, mcpCommand({ execPath: process.execPath, script, version: VERSION, ...(env.PATH ? { pathEnv: env.PATH } : {}) }));
+        process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: MCP server in ${relative(process.cwd(), r.file) || r.file}\n`);
+        for (const n of r.notes) process.stdout.write(`  ${n}\n`);
+      }
       if (!readIndex(root)) process.stdout.write('  No index yet. Run `landmine scan` so the hook has something to match.\n');
     });
 
@@ -181,6 +187,15 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         const r = uninstall(root, h);
         if (r.changed) process.stdout.write(`Removed: ${h} hook from ${relative(process.cwd(), r.file) || r.file}\n`);
       }
+    });
+
+  program
+    .command('mcp')
+    .description('Run an MCP server (stdio) with landmine_check, landmine_search and landmine_list over the index')
+    .option('-r, --root <dir>', 'project with .landmine/index.json (default: working directory)')
+    .action(async (opts: { root?: string }) => {
+      const { serveStdio } = await import('./mcp.js');
+      await serveStdio({ ...(opts.root ? { root: resolve(opts.root) } : {}), cwd: process.cwd() });
     });
 
   program

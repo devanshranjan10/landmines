@@ -117,6 +117,27 @@ The real payloads from both sessions are test fixtures in `test/fixtures/payload
 `apply_patch` is still denied. The Codex session itself was not re-run live after
 the D-27 to D-29 changes.
 
+## 5. Live MCP session (Claude Code)
+
+```sh
+claude -p "Comparing two pydantic RootModel instances with == gives inconsistent results in this project. Before changing anything, check whether this is a known open bug in the exact pydantic version this project pins. Answer in two sentences with the issue link if there is one." \
+  --mcp-config <file with {"mcpServers":{"landmine":{"type":"stdio","command":"node","args":["…/dist/cli.js","mcp"]}}}> --strict-mcp-config \
+  --allowedTools "mcp__landmine__landmine_search,mcp__landmine__landmine_check,mcp__landmine__landmine_list"
+```
+
+The session is in `claude-mcp-session.jsonl`.
+
+1. Claude read `requirements.txt`.
+2. It called `landmine_search` with `{"query":"RootModel equality == comparison","package":"pydantic"}`.
+3. It answered that pydantic#10544 ("`RootModel` `==` doesn't work with type aliases /
+   is inconsistent") was reported against the pinned 2.9.2, and that the index lists
+   no workaround yet.
+
+The run took 5 turns and $0.18.
+
+Separately, the `.mcp.json` written by `landmine install --mcp` was loaded with
+`claude -p --mcp-config .mcp.json`. It connected and exposed all three tools.
+
 ## Not run live
 
 - **Cursor.** `cursor-agent` is installed but not logged in on this machine.

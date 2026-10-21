@@ -188,3 +188,14 @@ matches don't use up the issue's one showing. Two ways to see more:
 
 The scan report and `landmine list/check` still show every match.
 
+**D-30 — The MCP server is on-demand.** It uses SDK v2 (`@modelcontextprotocol/server`
+2.3.1) with zod 4, loaded lazily. Since D-29 the hook stays silent on weak matches.
+`landmine mcp` covers the case where the agent is already looking for an answer, for
+example a confusing error: `landmine_search` finds indexed issues by error text or API
+name, `landmine_check` checks a file or snippet, and `landmine_list` lists issues.
+The SDK and zod are imported lazily inside the `mcp` command. Without that, tsup
+would hoist them into every CLI start, including the hook; hook latency stayed at
+0.09 s. Verified live: Claude Code connected through `--mcp-config` (the same JSON
+shape `install --mcp` writes to `.mcp.json`), called `landmine_search`, and answered
+with pydantic#10544.
+

@@ -294,3 +294,19 @@ describe('captured Codex CLI payloads (live codex exec session, docs/e2e)', () =
     expect(runHook(load('codex-apply-patch-allowed.json', root), { stateDir: dir })).toMatchObject({ decision: 'none', stdout: '' });
   });
 });
+
+describe('install --mcp', () => {
+  it('merges a landmine server into .mcp.json and keeps other servers', async () => {
+    const { installMcp, mcpCommand } = await import('../src/install.js');
+    const dir = mkdtempSync(join(tmpdir(), 'lm-mcpjson-'));
+    writeFileSync(join(dir, '.mcp.json'), JSON.stringify({ mcpServers: { other: { type: 'stdio', command: 'x' } } }));
+    const cmd = mcpCommand({ execPath: '/nonexistent/node', script: '/opt/landmine/dist/cli.js', version: '0.1.0', pathEnv: '' });
+    expect(cmd).toEqual({ command: '/nonexistent/node', args: ['/opt/landmine/dist/cli.js', 'mcp'] });
+    expect(installMcp(dir, cmd).changed).toBe(true);
+    expect(installMcp(dir, cmd).changed).toBe(false);
+    expect(JSON.parse(readFileSync(join(dir, '.mcp.json'), 'utf8'))).toEqual({
+      mcpServers: { other: { type: 'stdio', command: 'x' }, landmine: { type: 'stdio', command: '/nonexistent/node', args: ['/opt/landmine/dist/cli.js', 'mcp'] } },
+    });
+    expect(mcpCommand({ execPath: 'n', script: '/u/.npm/_npx/1/node_modules/landmines/dist/cli.js', version: '0.1.0' })).toEqual({ command: 'npx', args: ['-y', 'landmines@0.1.0', 'mcp'] });
+  });
+});

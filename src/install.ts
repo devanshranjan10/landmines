@@ -125,6 +125,26 @@ export function uninstall(root: string, harness: Harness): InstallResult {
   return { file: layout.file, changed, notes: [] };
 }
 
+/** The MCP server command, as `.mcp.json` / `claude mcp add` want it (no shell quoting). */
+export function mcpCommand(opts: { execPath: string; script: string; version: string; pathEnv?: string }): { command: string; args: string[] } {
+  if (/[\\/]_npx[\\/]/.test(opts.script)) return { command: 'npx', args: ['-y', `landmines@${opts.version}`, 'mcp'] };
+  const node = preferredNode(opts.execPath, opts.pathEnv);
+  return { command: node === 'node' ? 'node' : opts.execPath, args: [opts.script, 'mcp'] };
+}
+
+/** Add landmine to the project's `.mcp.json` (Claude Code project-scope MCP servers). Other servers are kept. */
+export function installMcp(root: string, server: { command: string; args: string[] }): InstallResult {
+  const file = join(root, '.mcp.json');
+  const config = readJson(file);
+  const before = JSON.stringify(config);
+  const servers = typeof config.mcpServers === 'object' && config.mcpServers !== null && !Array.isArray(config.mcpServers) ? (config.mcpServers as Json) : {};
+  servers.landmine = { type: 'stdio', command: server.command, args: server.args };
+  const next = { ...config, mcpServers: servers };
+  const changed = JSON.stringify(next) !== before;
+  if (changed) writeFileSync(file, `${JSON.stringify(next, null, 2)}\n`);
+  return { file, changed, notes: ['MCP tools: landmine_check, landmine_search, landmine_list. For Codex: codex mcp add landmine -- ' + [server.command, ...server.args].join(' ')] };
+}
+
 /**
  * `node` when the `node` on PATH is this same binary (survives `brew upgrade`, nvm switches the user
  * expects), otherwise the absolute path of the running Node.

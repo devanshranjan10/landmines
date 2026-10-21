@@ -8,3 +8,4 @@ examples/demo/.claude/
 examples/demo/.codex/
 examples/demo/node_modules/
 landmines-*.tgz
+examples/demo/.mcp.json

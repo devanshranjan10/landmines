@@ -62,6 +62,13 @@ function hitSection(h: Hit, budget: number): string[] {
   return lines;
 }
 
+/** Full plain-text description of one landmine (for MCP tool results). */
+export function landmineDetail(l: Landmine, hit?: Pick<Hit, 'symbol' | 'corroboratedBy'>, budget = 700): string {
+  const lines = hitSection({ landmine: l, symbol: hit?.symbol ?? armedSymbols(l)[0] ?? '', score: 0, rank: 0, ...(hit?.corroboratedBy ? { corroboratedBy: hit.corroboratedBy } : {}) }, budget);
+  const head = `${l.package}@${l.version}${hit?.symbol ? ` · touches \`${hit.symbol}\`` : ''}${l.nonBug ? ' · (feature request / docs / install issue, not a bug report)' : ''}`;
+  return [head, ...lines].join('\n');
+}
+
 /**
  * Text the coding agent sees (plain text, ≤ 4,000 chars).
  * `block`: corroborated hits, edit paused once. `warn`: --mode warn. `heads-up`: block mode, but nothing in the
