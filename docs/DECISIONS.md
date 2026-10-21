@@ -454,3 +454,8 @@ added two accounts (acct2, acct3). About $40 of the ~$100 budget is left.
 
 *Error handling:* any run that errors (a rate limit, or zero cost) is rerun, not
 scored as a fail.
+- **Outcome.** Every session in both runs reached the model: no retries, no errors.
+  - Run I (Opus): rules 41/42 vs none 39/42, 2–0, p = 0.5. Same direction, not
+    significant.
+  - Run J (Haiku, exec): rules 41/42 vs none 37/42, 5–1, p = 0.22.
+  - The real-repo cards were finished: 128, 208 and 34 carded issues.

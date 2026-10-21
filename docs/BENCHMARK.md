@@ -117,6 +117,8 @@ data) and run F (seeds 3–4, a confirmatory run pre-registered in D-42 before i
 | B | Sonnet | edit-only | terse | 16/21 | 20/21 | 18/21 | 19/21 | 18/21 |
 | C | Sonnet | exec | spec | 19/21 | 21/21 | 19/21 | 20/21 | 20/21 |
 | D | Haiku | edit-only | terse | 31/42 | 37/42 | 33/42 | 31/42 | 37/42 |
+| J (D-46) | Haiku | exec | terse | 37/42 | 41/42 | 37/42 | 38/42 | 38/42 |
+| I (D-46) | Opus | exec | terse | 39/42 | 41/42 | n/a | n/a | n/a |
 | E: 2024 set (contaminated control) | Sonnet | exec | spec | 17/18 | 17/18 | 17/18 | 17/18 | n/a |
 
 Paired over the planned fresh runs A–D (126 pairs per comparison):
@@ -133,6 +135,18 @@ Paired over the planned fresh runs A–D (126 pairs per comparison):
 
 On the contaminated 2024 set, every arm scores 17/18: the model already knows those
 bugs.
+
+**Runs I and J** (D-46) were recorded before running, on two more Claude accounts.
+Every session reached the model: no retries, no errors.
+- **Opus 5.5 (run I):** rules 41/42 against 39/42, 2–0, p = 0.5. Same direction, not
+  significant. Opus fails few of these tasks unaided, and both rules wins came on
+  date-fns-4384, the most borderline task.
+- **Haiku 5.5 with shell access (run J):** rules 41/42 against 37/42, 5–1, p = 0.22.
+  Rules came first again; every hook arm was within one task of none.
+- **All 252 fresh-test pairs pooled** (runs A, B, C, D, F, I, J; three models; both
+  conditions; both prompt styles): rules beat none **33–4**, exact McNemar
+  p ≈ 1 × 10⁻⁶. The pairs share tasks, so this p-value overstates independence. The
+  per-run results and the pre-registered run F are the cleaner evidence.
 
 ### What this means
 

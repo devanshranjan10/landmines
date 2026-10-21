@@ -286,6 +286,10 @@ user would ask, 4 seeds:
   shell access. With Haiku 5.5 it tied for first with context-only cards.
 - **Statistics.** Over all 126 planned pairs it beat no help 20–3 (exact McNemar
   p = 0.0005).
+- **Other models.** With Haiku 5.5 and shell access, rules passed 41/42 against
+  37/42. With Opus 5.5 it was 41/42 against 39/42: the same direction, but not
+  significant, since Opus rarely trips on these traps. Pooled over all 252 fresh pairs
+  across three models, rules beat no help 33–4.
 - **Contaminated control.** On the 2024 set every arm scored 17/18, because the model
   already knows those bugs.
 
@@ -307,11 +311,12 @@ user would ask, 4 seeds:
 - **Prompt wording.** The terse prompts were added after seeing that fully specified
   prompts leave unaided agents nothing to trip on (D-40). Results with spec prompts
   are reported too, and rules still came first.
-- **One harness and one model family were run live.** Claude Code with Sonnet and
-  Haiku 5.5. The rules section is plain markdown that any agent reads, but other
+- **One harness and one model family were run live.** Claude Code with Sonnet, Haiku
+  and Opus 5.5. A Codex run was attempted and voided when the ChatGPT plan's quota ran
+  out. The rules section is plain markdown that any agent reads, but other
   agents were not benchmarked.
-- **Spend.** $60 of metered agent runs. Card generation went through a Claude Code
-  login and was not metered.
+- **Spend.** $74 of metered agent runs (1,534 graded sessions). Card generation went
+  through a Claude Code login and was not metered.
 
 ## Accuracy
 
