@@ -3,7 +3,7 @@
 //          [--agent claude|codex] [--concurrency 3] [--run-id name] [--dry]
 import { spawn } from 'node:child_process';
 import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { tmpdir } from 'node:os';
+import { homedir, tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { BENCH, type Task, loadTasks, materialize, prompt, runHidden, triggerPresent, splitIds } from './lib.js';
@@ -31,6 +31,8 @@ const { values } = parseArgs({
   },
 });
 
+// Codex defaults to the model in the user's Codex config (gpt-5.6-terra); `--model` overrides it.
+const MODEL = values.agent === 'codex' && values.model === 'sonnet' ? 'gpt-5.6-terra' : values.model;
 const runId = values['run-id'] ?? `${new Date().toISOString().slice(0, 16).replace(/[:T-]/g, '')}-${values.agent}-${values.model}`;
 const WORK = join(BENCH, '.work', runId);
 // Agents work outside the repo, so nothing above their directory (hidden tests, references, git) is visible.
@@ -49,6 +51,8 @@ interface AgentOutcome {
   resultText?: string;
   transcript: string;
   timedOut: boolean;
+  /** Codex: total input + output tokens. */
+  tokens?: number;
 }
 
 function runClaude(task: Task, dir: string, arm: Arm, transcript: string, hookLog: string): Promise<AgentOutcome> {
@@ -113,6 +117,76 @@ function runClaude(task: Task, dir: string, arm: Arm, transcript: string, hookLo
   });
 }
 
+/**
+ * Codex CLI (`codex exec`), logged in with ChatGPT, so there is no per-run dollar cost; tokens are recorded instead.
+ * workspace-write sandbox: commands run, network is off. User config and the user's own skills are kept out. Codex reads AGENTS.md, so the rules arm writes there (prepare.ts).
+ */
+function runCodex(task: Task, dir: string, transcript: string, hookLog: string): Promise<AgentOutcome> {
+  const args = [
+    'exec',
+    '--json',
+    '-C',
+    dir,
+    '--skip-git-repo-check',
+    '-s',
+    'workspace-write',
+    '--ephemeral',
+    '--ignore-user-config',
+    '--dangerously-bypass-hook-trust',
+    '-m',
+    MODEL,
+    '-c',
+    'model_reasoning_effort="medium"',
+    prompt(task, values.prompt === 'terse' ? 'terse' : 'spec'),
+  ];
+  // An empty HOME keeps the user's own skills (~/.agents/skills) out of the run; CODEX_HOME still points at the real
+  // ~/.codex, so the login is used in place and never copied.
+  const home = join(SANDBOX, '.home');
+  mkdirSync(home, { recursive: true });
+  const env: NodeJS.ProcessEnv = { ...process.env, LANDMINE_DEBUG_LOG: hookLog, HOME: home, CODEX_HOME: process.env.CODEX_HOME ?? join(homedir(), '.codex') };
+  return new Promise((resolve) => {
+    const started = Date.now();
+    const child = spawn('codex', args, { cwd: dir, env, stdio: ['ignore', 'pipe', 'pipe'] });
+    let out = '';
+    let err = '';
+    child.stdout.on('data', (d: Buffer) => (out += d.toString()));
+    child.stderr.on('data', (d: Buffer) => (err += d.toString()));
+    let timedOut = false;
+    const timer = setTimeout(() => {
+      timedOut = true;
+      child.kill('SIGTERM');
+    }, 20 * 60_000);
+    child.on('close', (code) => {
+      clearTimeout(timer);
+      writeFileSync(transcript, out + (err ? `\n#stderr\n${err}` : ''));
+      let steps = 0;
+      let tokens = 0;
+      let failed = false;
+      let lastMessage: string | undefined;
+      for (const line of out.split('\n')) {
+        try {
+          const ev = JSON.parse(line) as { type?: string; item?: { type?: string; text?: string }; usage?: { input_tokens?: number; output_tokens?: number } };
+          if (ev.type === 'item.completed' && ev.item?.type !== 'agent_message' && ev.item?.type !== 'reasoning') steps++;
+          if (ev.type === 'item.completed' && ev.item?.type === 'agent_message') lastMessage = ev.item.text;
+          if (ev.type === 'turn.completed') tokens += (ev.usage?.input_tokens ?? 0) + (ev.usage?.output_tokens ?? 0);
+          if (ev.type === 'turn.failed' || ev.type === 'error') failed = true;
+        } catch {
+          // not JSON
+        }
+      }
+      resolve({
+        exitCode: failed && code === 0 ? 1 : code,
+        turns: steps,
+        durationMs: Date.now() - started,
+        ...(lastMessage ? { resultText: lastMessage } : {}),
+        transcript: out,
+        timedOut,
+        tokens,
+      });
+    });
+  });
+}
+
 function hookEvents(path: string): Array<{ decision: string; hits: Array<{ id: string }> }> {
   if (!existsSync(path)) return [];
   return readFileSync(path, 'utf8')
@@ -130,10 +204,10 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
   rmSync(sandbox, { recursive: true, force: true });
   mkdirSync(sandbox, { recursive: true });
   const dir = materialize(task, sandbox);
-  prepareArm(task, dir, arm);
+  prepareArm(task, dir, arm, values.agent === 'codex' ? 'AGENTS.md' : 'CLAUDE.md');
   const hookLog = join(base, 'hook.jsonl');
   const transcript = join(base, 'transcript.jsonl');
-  const outcome = await runClaude(task, dir, arm, transcript, hookLog);
+  const outcome = values.agent === 'codex' ? await runCodex(task, dir, transcript, hookLog) : await runClaude(task, dir, arm, transcript, hookLog);
   const hidden = runHidden(task, dir);
   const events = hookEvents(hookLog);
   const issueNo = task.issue.split('#')[1] ?? '';
@@ -145,7 +219,7 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     arm,
     seed,
     agent: values.agent,
-    model: values.model,
+    model: MODEL,
     condition: values.condition,
     prompt: values.prompt,
     pass: hidden.pass,
@@ -156,6 +230,7 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     hookIds: [...new Set(fired.flatMap((e) => e.hits.map((h) => h.id)))],
     agentMentionedIssue: new RegExp(`#${issueNo}\\b|issues/${issueNo}\\b`).test(outcome.transcript),
     costUsd: outcome.costUsd,
+    ...(outcome.tokens !== undefined ? { tokens: outcome.tokens } : {}),
     turns: outcome.turns,
     durationMs: outcome.durationMs,
     agentExit: outcome.exitCode,

@@ -408,3 +408,28 @@ changed.
 - **Hook defaults.** The hook's block-once policy and card threshold are unchanged. No
   evidence favoured another policy for Sonnet. For Haiku, context-only cards (37/42)
   beat blocking cards (31/42), which is worth revisiting with more data.
+
+**D-45: A second agent, recorded before any Codex data.** The rules result was
+measured on Claude Code only.
+
+*Setup:*
+- **Agent:** Codex CLI 0.159.0 (`codex exec`), ChatGPT login, model `gpt-5.6-terra`,
+  reasoning effort medium.
+- **Sandbox:** workspace-write, with commands allowed and no network.
+- **Prompts and data:** the same tasks, terse prompts, frozen index and cards.
+
+*Arms and design:*
+- **Arms:** `none` and `rules`. For Codex the rules section goes into AGENTS.md, which
+  is what Codex reads.
+- **No hook arms.** Codex often edits files through shell commands, which no edit hook
+  sees.
+- **Hypothesis:** rules > none on fresh-test, seeds 1–2.
+- **Analysis:** paired, exact McNemar.
+
+The dev pipeline check (one task) is not part of the result.
+- **Isolation, fixed during the dev pipeline check.** The first smoke run picked up the
+  user's personal skills from `~/.agents/skills`. One of them, a "brainstorming" skill,
+  made Codex stop after planning. Codex runs now use an empty `HOME`, with `CODEX_HOME`
+  left pointing at the real `~/.codex`, so the login is used in place and never
+  copied. Only Codex's built-in skills load. The smoke runs are not part of the
+  result.

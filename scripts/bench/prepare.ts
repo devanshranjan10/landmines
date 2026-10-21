@@ -27,7 +27,7 @@ export function cli(args: string[], cwd: string): string {
 }
 
 /** Give the working copy what the arm adds: an index (rebuilt offline from frozen raw data), then a rules section, hook, cards or MCP server. */
-export function prepareArm(task: Task, dir: string, arm: Arm): void {
+export function prepareArm(task: Task, dir: string, arm: Arm, rulesFile = 'CLAUDE.md'): void {
   if (arm === 'none') return;
   const file = `${encodeURIComponent(task.package)}@${encodeURIComponent(task.version)}.json`;
   const cacheDir = join(dir, '.landmine', 'cache', task.ecosystem);
@@ -37,10 +37,10 @@ export function prepareArm(task: Task, dir: string, arm: Arm): void {
   // The rules arm gets the cards too, so rules vs hook compares delivery, not information.
   if (arm === 'cards' || arm === 'cards-warn' || arm === 'rules' || arm === 'rules+cards' || arm.startsWith('rules-noisy')) cli(['cards', '--from', join(BENCH, 'fixtures', 'cards'), '-r', dir], dir);
   rmSync(join(dir, '.landmine', 'cache'), { recursive: true, force: true });
-  if (arm === 'rules' || arm === 'rules+cards') cli(['rules', '--write', 'CLAUDE.md', '-r', dir], dir);
+  if (arm === 'rules' || arm === 'rules+cards') cli(['rules', '--write', rulesFile, '-r', dir], dir);
   if (arm.startsWith('rules-noisy')) {
     addNoise(task, dir);
-    cli(['rules', '--write', 'CLAUDE.md', '--rank', arm === 'rules-noisy' ? 'usage' : 'confidence', '-r', dir], dir);
+    cli(['rules', '--write', rulesFile, '--rank', arm === 'rules-noisy' ? 'usage' : 'confidence', '-r', dir], dir);
   }
   if (arm === 'hook' || arm === 'cards' || arm === 'rules+cards') cli(['install', '--harness', 'claude', '-r', dir], dir);
   // Every card match as non-blocking context: the agent learns about the bug without losing a turn.
