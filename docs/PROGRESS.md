@@ -94,6 +94,9 @@ posted.
 - **Prompt wording.** The "terse" prompts were added after seeing dev baselines (D-40).
   The tool's win holds with the fully specified prompts too, but the effect is smaller
   there: 21/21 against 19/21.
+- **The Codex benchmark is void.** It was attempted (D-45), but the ChatGPT plan's
+  Codex quota ran out a few runs in; it resets on 2026-11-20. The Codex runner works and
+  is ready to rerun.
 - **Only Claude Code was benchmarked.** The other 19 agents are built from their docs
   and source and tested with payloads in their shapes.
   - OpenCode: a live run failed on the user's GMI Cloud provider ("Insufficient
@@ -125,7 +128,10 @@ posted.
    - `bench/realcode/*.json`: public file paths and SHAs plus model labels;
    - `bench/fixtures/cache`: public issue text;
    - `bench/fixtures/noise-fresh-a.json`.
-5. **More benchmark spend.** About $60 of the ~$100 is used. Options for the rest:
+5. **Codex quota.** Rerunning the Codex arm (`run.ts --agent codex --arm none,rules
+   --split fresh-test --prompt terse --seeds 2`) needs a plan with more Codex usage, or
+   waiting until 2026-11-20.
+6. **More benchmark spend.** About $60 of the ~$100 is used. Options for the rest:
    - more seeds;
    - a second agent (Codex) on the rules arm;
    - a fresh-task set built from issues landmine did *not* pick, for recall.

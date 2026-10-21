@@ -433,3 +433,8 @@ The dev pipeline check (one task) is not part of the result.
   left pointing at the real `~/.codex`, so the login is used in place and never
   copied. Only Codex's built-in skills load. The smoke runs are not part of the
   result.
+- **Outcome: void.** The ChatGPT plan behind the Codex login hit its usage limit
+  early in the run ("try again at Nov 20th, 2026"). Most runs never reached the model,
+  and the grader scored those as fails. The data is kept in `bench/results/void/` and is
+  not reported as a result. Running it again needs more Codex quota, which is the
+  user's decision. The runner is ready: `run.ts --agent codex`.
