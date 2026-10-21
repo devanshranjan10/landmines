@@ -3,7 +3,7 @@
 //          [--agent claude|codex] [--concurrency 3] [--run-id name] [--dry]
 import { spawn } from 'node:child_process';
 import { appendFileSync, cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
-import { homedir } from 'node:os';
+import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { parseArgs } from 'node:util';
 import { BENCH, type Task, loadTasks, materialize, prompt, runHidden, triggerPresent } from './lib.js';
@@ -21,13 +21,19 @@ const { values } = parseArgs({
     concurrency: { type: 'string', default: '3' },
     'max-turns': { type: 'string', default: '40' },
     'run-id': { type: 'string' },
-    'config-dir': { type: 'string', default: join(homedir(), '.claude') },
+    // Empty: unset CLAUDE_CONFIG_DIR so the CLI uses its default login (keeps bench runs off this session's account).
+    'config-dir': { type: 'string', default: '' },
     dry: { type: 'boolean', default: false },
+    // exec: the agent may run shell commands (default). edit-only: Read/Edit/Write/Glob/Grep only, no Bash.
+    condition: { type: 'string', default: 'exec' },
   },
 });
 
 const runId = values['run-id'] ?? `${new Date().toISOString().slice(0, 16).replace(/[:T-]/g, '')}-${values.agent}-${values.model}`;
 const WORK = join(BENCH, '.work', runId);
+// Agents work outside the repo, so nothing above their directory (hidden tests, references, git) is visible.
+const SANDBOX = join(tmpdir(), 'lmb-runs', runId);
+mkdirSync(SANDBOX, { recursive: true });
 const RESULTS = join(BENCH, 'results', `${runId}.jsonl`);
 mkdirSync(WORK, { recursive: true });
 mkdirSync(join(BENCH, 'results'), { recursive: true });
@@ -66,13 +72,15 @@ function runClaude(task: Task, dir: string, arm: Arm, transcript: string, hookLo
     '--strict-mcp-config',
     '--disable-slash-commands',
     '--disallowedTools',
-    'WebSearch,WebFetch',
+    values.condition === 'edit-only' ? 'WebSearch,WebFetch,Bash,BashOutput,KillShell,Task' : 'WebSearch,WebFetch',
     '--max-turns',
     values['max-turns'],
     '--no-session-persistence',
   ];
   if (arm === 'mcp') args.push('--mcp-config', join(dir, '.mcp.json'));
-  const env = { ...process.env, CLAUDE_CONFIG_DIR: values['config-dir'], LANDMINE_DEBUG_LOG: hookLog };
+  const env: NodeJS.ProcessEnv = { ...process.env, LANDMINE_DEBUG_LOG: hookLog };
+  if (values['config-dir']) env.CLAUDE_CONFIG_DIR = values['config-dir'];
+  else delete env.CLAUDE_CONFIG_DIR;
   return new Promise((resolve) => {
     const started = Date.now();
     const child = spawn('claude', args, { cwd: dir, env, stdio: ['ignore', 'pipe', 'pipe'] });
@@ -123,7 +131,10 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
   const base = join(WORK, key);
   rmSync(base, { recursive: true, force: true });
   mkdirSync(base, { recursive: true });
-  const dir = materialize(task, base);
+  const sandbox = join(SANDBOX, key);
+  rmSync(sandbox, { recursive: true, force: true });
+  mkdirSync(sandbox, { recursive: true });
+  const dir = materialize(task, sandbox);
   prepareArm(task, dir, arm);
   const hookLog = join(base, 'hook.jsonl');
   const transcript = join(base, 'transcript.jsonl');
@@ -140,6 +151,7 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     seed,
     agent: values.agent,
     model: values.model,
+    condition: values.condition,
     pass: hidden.pass,
     triggerInFinal: triggerPresent(task, dir),
     hookFired: fired.length,
@@ -155,12 +167,12 @@ async function runOne(task: Task, arm: Arm, seed: number): Promise<Record<string
     hiddenOutput: hidden.pass ? undefined : hidden.output.slice(-800),
     finishedAt: new Date().toISOString(),
   };
-  // Keep the agent's final code for inspection; drop installed dependencies.
+  // Keep the agent's final code for inspection, then drop the sandbox.
   for (const f of task.entry) {
     const p = join(dir, f);
     if (existsSync(p)) cpSync(p, join(base, 'final', f));
   }
-  rmSync(join(dir, 'node_modules'), { recursive: true, force: true });
+  rmSync(sandbox, { recursive: true, force: true });
   appendFileSync(RESULTS, `${JSON.stringify(record)}\n`);
   return record;
 }

@@ -161,7 +161,7 @@ describe('runHook', () => {
       { stateDir: state() },
     );
     expect(JSON.parse(gemini.stdout)).toMatchObject({ decision: 'deny' });
-    expect(respond('gemini', 'warn', 'x')).toBeUndefined();
+    expect(respond('deny', 'warn', 'x')).toBeUndefined();
     expect(respond('cursor', 'warn', 'x')).toBeUndefined();
   });
 
@@ -218,7 +218,7 @@ describe('install / uninstall', () => {
     install(dir, 'claude', 'node /y/cli.js hook'); // custom command without "landmine" in it: still idempotent
     const cfg = JSON.parse(readFileSync(join(dir, '.claude', 'settings.json'), 'utf8')) as { permissions: unknown; hooks: { PreToolUse: unknown[] } };
     expect(cfg.permissions).toEqual({ allow: ['Bash(ls)'] });
-    expect(cfg.hooks.PreToolUse).toEqual([foreign, { matcher: 'Edit|Write|MultiEdit', hooks: [{ type: 'command', command: 'node /y/cli.js hook', timeout: 10, statusMessage: 'landmine: checking for known open bugs' }] }]);
+    expect(cfg.hooks.PreToolUse).toEqual([foreign, { matcher: 'Edit|Write|MultiEdit|edit|write|apply_patch', hooks: [{ type: 'command', command: 'node /y/cli.js hook', timeout: 10, statusMessage: 'landmine: checking for known open bugs' }] }]);
     uninstall(dir, 'claude');
     expect((JSON.parse(readFileSync(join(dir, '.claude', 'settings.json'), 'utf8')) as { hooks: { PreToolUse: unknown[] } }).hooks.PreToolUse).toEqual([foreign]);
   });
@@ -229,11 +229,14 @@ describe('install / uninstall', () => {
     install(dir, 'cursor', 'landmine hook');
     install(dir, 'gemini', 'landmine hook');
     expect(JSON.parse(readFileSync(join(dir, '.codex', 'hooks.json'), 'utf8'))).toEqual({
-      hooks: { PreToolUse: [{ matcher: '^apply_patch$', hooks: [{ type: 'command', command: 'landmine hook', timeout: 10 }] }] },
+      hooks: { PreToolUse: [{ matcher: '^apply_patch$', hooks: [{ type: 'command', command: 'landmine hook --harness codex', timeout: 10 }] }] },
     });
-    expect(JSON.parse(readFileSync(join(dir, '.cursor', 'hooks.json'), 'utf8'))).toEqual({ version: 1, hooks: { preToolUse: [{ command: 'landmine hook', matcher: 'Write', timeout: 10 }] } });
+    expect(JSON.parse(readFileSync(join(dir, '.cursor', 'hooks.json'), 'utf8'))).toEqual({
+      version: 1,
+      hooks: { preToolUse: [{ command: 'landmine hook --harness cursor', matcher: 'Write', timeout: 10 }] },
+    });
     expect(JSON.parse(readFileSync(join(dir, '.gemini', 'settings.json'), 'utf8'))).toEqual({
-      hooks: { BeforeTool: [{ matcher: 'write_file|replace', hooks: [{ name: 'landmine', type: 'command', command: 'landmine hook', timeout: 10000 }] }] },
+      hooks: { BeforeTool: [{ matcher: 'write_file|replace', hooks: [{ name: 'landmine', type: 'command', command: 'landmine hook --harness gemini', timeout: 10000 }] }] },
     });
   });
 

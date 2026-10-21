@@ -7,7 +7,7 @@ import { touches } from '../source/touches.js';
 import { findIndexRoot, readIndex } from '../store.js';
 import type { LandmineIndex } from '../types.js';
 import { type Harness, type ReadFile, detectHarness, extractEdits, isPreToolEvent, readFileOrUndefined, sessionKey, workDir } from './payload.js';
-import { type HookMode, respond } from './respond.js';
+import { FORMAT_FOR, type Format, type HookMode, respond } from './respond.js';
 import { ShownState } from './state.js';
 
 export interface HookOptions {
@@ -15,6 +15,8 @@ export interface HookOptions {
   /** In block mode, also pass uncorroborated matches to the model as non-blocking context. Off by default (D-29). */
   headsUp?: boolean;
   harness?: Harness;
+  /** Output format; default: the harness's own (FORMAT_FOR). */
+  format?: Format;
   env?: NodeJS.ProcessEnv;
   now?: () => Date;
   stateDir?: string;
@@ -23,6 +25,10 @@ export interface HookOptions {
 
 export interface HookResult {
   stdout: string;
+  /** Printed on stderr (the `exit2` format puts the reason here). */
+  stderr?: string;
+  /** Process exit code; 0 unless the `exit2` format blocks. */
+  exitCode?: number;
   harness?: Harness;
   decision: 'none' | 'deny' | 'context';
   hits: Array<{ id: string; symbol: string; file: string }>;
@@ -99,7 +105,8 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
     // Cursor and Gemini CLI have no non-blocking pre-edit channel: a heads-up there prints nothing, so it must
     // not use up the issue's one showing either.
     const outputMode = blocking ? 'block' : 'warn';
-    if (respond(harness, outputMode, 'probe') === undefined) {
+    const format = opts.format ?? FORMAT_FOR[harness];
+    if (respond(format, outputMode, 'probe') === undefined) {
       return { stdout: '', harness, decision: 'none', hits: summary, reason: 'heads-up only, and this harness has no way to pass context without blocking' };
     }
     // Claim only what is shown (at most MAX_HITS), so anything beyond it can still be shown on a later edit.
@@ -112,11 +119,15 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
     if (fresh.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };
 
     const messageMode = blocking ? 'block' : mode === 'warn' ? 'warn' : 'heads-up';
-    const stdout = respond(harness, outputMode, modelMessage(fresh, messageMode)) ?? '';
+    const out = respond(format, outputMode, modelMessage(fresh, messageMode));
+    // Cline's file hooks can only add context, so a "block" there is reported as context.
+    const denies = blocking && format !== 'cline';
     return {
-      stdout,
+      stdout: out?.stdout ?? '',
+      ...(out?.stderr ? { stderr: out.stderr } : {}),
+      ...(out?.exitCode ? { exitCode: out.exitCode } : {}),
       harness,
-      decision: stdout ? (blocking ? 'deny' : 'context') : 'none',
+      decision: out ? (denies ? 'deny' : 'context') : 'none',
       hits: fresh.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file })),
     };
   } catch (err) {

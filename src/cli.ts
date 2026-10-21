@@ -1,19 +1,20 @@
-import { existsSync, realpathSync } from 'node:fs';
-import { dirname, relative, resolve } from 'node:path';
+import { existsSync, readFileSync, realpathSync, rmSync, writeFileSync } from 'node:fs';
+import { dirname, join, relative, resolve } from 'node:path';
 import { Command, InvalidArgumentError } from 'commander';
 import { GitHubClient } from './github/client.js';
 import { findToken } from './github/token.js';
 import { type Http, liveHttp, recordingHttp, replayHttp } from './http.js';
 import { findProjectRoot } from './lockfiles/index.js';
 import { HARNESSES, type Harness } from './hook/payload.js';
-import type { HookMode } from './hook/respond.js';
+import { FORMATS, type Format, type HookMode } from './hook/respond.js';
 import { runHook } from './hook/run.js';
-import { hookCommand, install, installMcp, mcpCommand, preflight, uninstall } from './install.js';
+import { MCP_TARGETS, type McpTarget, hookCommand, install, installMcp, mcpCommand, preflight, uninstall } from './install.js';
+import { defaultRulesFiles, detectAgents } from './agents.js';
 import { checkFile } from './match.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
 import { renderScanSummary, wantsColor } from './render.js';
-import { DEFAULT_MAX_RULES, RULES_TARGETS, renderRules, writeRules } from './rules.js';
+import { DEFAULT_MAX_RULES, RULES_TARGETS, renderRules, stripRules, writeRules } from './rules.js';
 import { scan } from './scan.js';
 import { findIndexRoot, readIndex } from './store.js';
 import type { LandmineIndex } from './types.js';
@@ -131,16 +132,19 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('--mode <mode>', 'block (deny once, then allow the retry) or warn (add context, never block)', modeArg, 'block')
     .option('--harness <name>', `force the payload format (${HARNESSES.join(', ')}); default: detect`, harnessArg)
     .option('--heads-up', 'in block mode, also pass weaker (uncorroborated) matches to the agent as non-blocking context')
-    .action(async (opts: { mode: HookMode; harness?: Harness | 'all'; headsUp?: boolean }) => {
+    .option('--format <format>', `override the output format (${FORMATS.join(', ')}); exit2 works with most Claude-style hook systems`, formatArg)
+    .action(async (opts: { mode: HookMode; harness?: Harness | 'all'; headsUp?: boolean; format?: Format }) => {
       if (process.stdin.isTTY) {
-        process.stderr.write('landmine hook reads a hook payload on stdin; it is meant to be run by Claude Code, Codex, Cursor or Gemini CLI. See `landmine install`.\n');
+        process.stderr.write('landmine hook reads a coding agent\'s pre-tool hook payload on stdin. See `landmine install`.\n');
         return;
       }
       try {
         const input = await readStdin();
         const harness = opts.harness === 'all' ? undefined : opts.harness;
-        const result = runHook(input, { mode: opts.mode, env, ...(harness ? { harness } : {}), ...(opts.headsUp ? { headsUp: true } : {}) });
+        const result = runHook(input, { mode: opts.mode, env, ...(harness ? { harness } : {}), ...(opts.format ? { format: opts.format } : {}), ...(opts.headsUp ? { headsUp: true } : {}) });
         if (result.stdout) process.stdout.write(`${result.stdout}\n`);
+        if (result.stderr) process.stderr.write(`${result.stderr}\n`);
+        if (result.exitCode) process.exitCode = result.exitCode;
         if (env.LANDMINE_DEBUG === '1') process.stderr.write(`landmine: ${result.decision}${result.reason ? ` (${result.reason})` : ''}\n`);
       } catch {
         // Never get in the agent's way.
@@ -149,21 +153,22 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
 
   program
     .command('install')
-    .description('Wire the hook into this project (default: Claude Code, which Cursor also reads)')
+    .description('Wire landmine into your coding agents (default: Claude Code plus every agent already configured in this project)')
     .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
-    .option('--harness <name>', `${HARNESSES.join(', ')} or all`, harnessArg, 'claude')
+    .option('--harness <names>', `comma-separated: ${HARNESSES.join(', ')}; or auto, all`, harnessList, 'auto')
     .option('--mode <mode>', 'block (interrupt once on a strong match) or warn (never block; pass every match as context)', modeArg, 'block')
     .option('--heads-up', 'block mode: also pass weaker matches to the agent as non-blocking context')
-    .option('--command <cmd>', 'exact command the harness should run (default: this landmine install)')
-    .option('--mcp', 'also add the landmine MCP server to .mcp.json (Claude Code project scope)')
-    .action((opts: { root?: string; harness: Harness | 'all'; mode: HookMode; headsUp?: boolean; command?: string; mcp?: boolean }) => {
+    .option('--command <cmd>', 'exact command the agents should run (default: this landmine install)')
+    .option('--mcp [agents]', `also register the landmine MCP server (comma-separated: ${Object.keys(MCP_TARGETS).join(', ')}; default claude)`)
+    .option('--rules [files]', `also write the known-bugs section into agent instruction files (default: ${RULES_TARGETS.join(', ')} that exist, else AGENTS.md)`)
+    .action((opts: { root?: string; harness: Harness[] | 'auto' | 'all'; mode: HookMode; headsUp?: boolean; command?: string; mcp?: boolean | string; rules?: boolean | string }) => {
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
       const script = process.argv[1] ? realpathSync(process.argv[1]) : '';
       const command =
         opts.command ??
         hookCommand({ execPath: process.execPath, script, version: VERSION, mode: opts.mode, headsUp: Boolean(opts.headsUp), ...(env.PATH ? { pathEnv: env.PATH } : {}) });
-      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : [opts.harness];
-      // Check every target first, so `--harness all` never leaves a partial install behind.
+      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : opts.harness === 'auto' ? detectAgents(root) : opts.harness;
+      // Check every target first, so a multi-agent install never leaves a partial install behind.
       for (const h of targets) {
         try {
           preflight(root, h);
@@ -173,16 +178,53 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       }
       for (const h of targets) {
         const r = install(root, h, command);
-        process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: ${h} hook in ${relative(process.cwd(), r.file) || r.file}\n`);
+        process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: ${h} hook in ${r.file.split(', ').map((f) => relative(process.cwd(), f) || f).join(', ')}\n`);
         for (const n of r.notes) process.stdout.write(`  ${n}\n`);
       }
       process.stdout.write(`  Command: ${command}\n`);
       if (opts.mcp) {
-        const r = installMcp(root, mcpCommand({ execPath: process.execPath, script, version: VERSION, ...(env.PATH ? { pathEnv: env.PATH } : {}) }));
-        process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: MCP server in ${relative(process.cwd(), r.file) || r.file}\n`);
-        for (const n of r.notes) process.stdout.write(`  ${n}\n`);
+        const server = mcpCommand({ execPath: process.execPath, script, version: VERSION, ...(env.PATH ? { pathEnv: env.PATH } : {}) });
+        const mcpTargets = opts.mcp === true ? ['claude'] : opts.mcp.split(',').map((x) => x.trim()).filter(Boolean);
+        for (const t of mcpTargets) {
+          if (!(t in MCP_TARGETS)) throw new CliError(`Unknown MCP target ${t}; expected one of ${Object.keys(MCP_TARGETS).join(', ')}`);
+          const r = installMcp(root, server, t as McpTarget);
+          process.stdout.write(`${r.changed ? 'Installed' : 'Already installed'}: ${t} MCP server in ${relative(process.cwd(), r.file) || r.file}\n`);
+        }
       }
-      if (!readIndex(root)) process.stdout.write('  No index yet. Run `landmine scan` so the hook has something to match.\n');
+      const index = readIndex(root);
+      if (opts.rules) {
+        if (!index) throw new CliError('No .landmine/index.json yet: run `landmine scan` before `install --rules`.');
+        const files = opts.rules === true ? defaultRulesFiles(root) : opts.rules.split(',').map((x) => x.trim()).filter(Boolean);
+        const section = renderRules(index);
+        for (const f of files) process.stdout.write(`Rules ${writeRules(resolve(root, f), section)}: ${f}\n`);
+      }
+      if (!index) process.stdout.write('  No index yet. Run `landmine scan` so the hook has something to match.\n');
+    });
+
+  program
+    .command('uninstall')
+    .description("Remove landmine's hooks, plugins and rules sections (other hooks are left alone)")
+    .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
+    .option('--harness <names>', `comma-separated: ${HARNESSES.join(', ')}; or all`, harnessList, 'all')
+    .action((opts: { root?: string; harness: Harness[] | 'auto' | 'all' }) => {
+      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : opts.harness === 'auto' ? detectAgents(root) : opts.harness;
+      for (const h of targets) {
+        const r = uninstall(root, h);
+        if (r.changed) process.stdout.write(`Removed: ${h} hook from ${r.file.split(', ').map((f) => relative(process.cwd(), f) || f).join(', ')}\n`);
+      }
+      if (opts.harness === 'all') {
+        for (const f of RULES_TARGETS) {
+          const path = join(root, f);
+          if (!existsSync(path)) continue;
+          const before = readFileSync(path, 'utf8');
+          const after = stripRules(before);
+          if (after === before) continue;
+          if (after === undefined) rmSync(path);
+          else writeFileSync(path, after);
+          process.stdout.write(`Removed: rules section from ${f}\n`);
+        }
+      }
     });
 
   program
@@ -201,20 +243,6 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       for (const f of opts.write) {
         const path = resolve(root, f);
         process.stdout.write(`${writeRules(path, section)}: ${relative(process.cwd(), path) || path}\n`);
-      }
-    });
-
-  program
-    .command('uninstall')
-    .description("Remove landmine's hook entries (other hooks are left alone)")
-    .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
-    .option('--harness <name>', `${HARNESSES.join(', ')} or all`, harnessArg, 'all')
-    .action((opts: { root?: string; harness: Harness | 'all' }) => {
-      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
-      const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : [opts.harness];
-      for (const h of targets) {
-        const r = uninstall(root, h);
-        if (r.changed) process.stdout.write(`Removed: ${h} hook from ${relative(process.cwd(), r.file) || r.file}\n`);
       }
     });
 
@@ -254,9 +282,21 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
   return program;
 }
 
+function harnessList(value: string): Harness[] | 'auto' | 'all' {
+  if (value === 'auto' || value === 'all') return value;
+  const names = value.split(',').map((v) => v.trim()).filter(Boolean);
+  for (const n of names) if (!(HARNESSES as readonly string[]).includes(n)) throw new InvalidArgumentError(`unknown agent ${n}; expected ${HARNESSES.join(', ')}, auto or all`);
+  return names as Harness[];
+}
+
 function harnessArg(value: string): Harness | 'all' {
   if (value === 'all' || (HARNESSES as readonly string[]).includes(value)) return value as Harness | 'all';
   throw new InvalidArgumentError(`expected one of ${HARNESSES.join(', ')}, all`);
+}
+
+function formatArg(value: string): Format {
+  if ((FORMATS as readonly string[]).includes(value)) return value as Format;
+  throw new InvalidArgumentError(`expected one of ${FORMATS.join(', ')}`);
 }
 
 function modeArg(value: string): HookMode {

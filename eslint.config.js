@@ -2,7 +2,7 @@ import js from '@eslint/js';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'node_modules/**', 'examples/**', 'test/fixtures/**', 'coverage/**', 'docs/**', 'bench/tasks/**', 'bench/.venv/**', 'bench/.work/**'] },
+  { ignores: ['dist/**', 'node_modules/**', 'examples/**', 'test/fixtures/**', 'coverage/**', 'docs/**', 'bench/tasks/**', 'bench/.venv*/**', 'eval/**', 'bench/.work/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {

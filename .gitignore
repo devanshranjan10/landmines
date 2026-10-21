@@ -12,3 +12,4 @@ examples/demo/.mcp.json
 bench/.venv/
 bench/.work/
 __pycache__/
+bench/.venv-*/

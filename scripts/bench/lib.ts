@@ -8,7 +8,11 @@ export const ROOT = resolve(import.meta.dirname, '../..');
 export const BENCH = join(ROOT, 'bench');
 export const TASKS = join(BENCH, 'tasks');
 export const VENV = join(BENCH, '.venv');
-export const PYTHON = join(VENV, 'bin', 'python');
+
+/** The pinned Python environment a task runs in: bench/.venv (2024 set) or bench/.venv-<name>. */
+export function venvFor(task: Pick<Task, 'venv'>): string {
+  return join(BENCH, task.venv ?? '.venv');
+}
 
 export interface Task {
   id: string;
@@ -26,6 +30,10 @@ export interface Task {
   /** Static check of the final code: does it still call the buggy API in the triggering way? */
   trigger: { regex: string; about: string };
   summary: string;
+  /** `2024`: pins from October 2024 (bugs a 2026 model may know). `fresh`: issues filed after 2026-07-01. */
+  set?: '2024' | 'fresh';
+  /** Python env directory under bench/ (default `.venv`). */
+  venv?: string;
   dir: string;
 }
 
@@ -49,7 +57,7 @@ export function materialize(task: Task, base = tmpdir()): string {
     const r = spawnSync('npm', ['ci', '--no-audit', '--no-fund', '--loglevel=error'], { cwd: dir, encoding: 'utf8' });
     if (r.status !== 0) throw new Error(`npm ci failed for ${task.id}: ${r.stderr}`);
   }
-  if (task.ecosystem === 'pypi') symlinkSync(VENV, join(dir, '.venv'));
+  if (task.ecosystem === 'pypi') symlinkSync(venvFor(task), join(dir, '.venv'));
   return dir;
 }
 
@@ -70,7 +78,7 @@ export function runHidden(task: Task, dir: string): HiddenResult {
   const hidden = join(dir, 'hidden');
   rmSync(hidden, { recursive: true, force: true });
   cpSync(join(task.dir, 'hidden'), hidden, { recursive: true });
-  const argv = task.test.map((a) => a.replace('{python}', PYTHON).replace('{node}', process.execPath));
+  const argv = task.test.map((a) => a.replace('{python}', join(venvFor(task), 'bin', 'python')).replace('{node}', process.execPath));
   const started = Date.now();
   const r = spawnSync(argv[0] ?? 'false', argv.slice(1), {
     cwd: dir,
