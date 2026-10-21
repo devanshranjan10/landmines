@@ -1,5 +1,14 @@
 [
   {
+    "id": "arrow-1341",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
     "id": "axios-6587",
     "seedFails": true,
     "naivePass": false,
@@ -9,7 +18,25 @@
     "ok": true
   },
   {
+    "id": "csv-parse-536",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
     "id": "date-fns-3873",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "date-fns-4384",
     "seedFails": true,
     "naivePass": false,
     "naiveTrigger": true,
@@ -81,6 +108,24 @@
     "ok": true
   },
   {
+    "id": "dayjs-3279",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "fast-xml-parser-892",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
     "id": "jsonwebtoken-1000",
     "seedFails": true,
     "naivePass": false,
@@ -118,6 +163,15 @@
   },
   {
     "id": "networkx-7758",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "networkx-8964",
     "seedFails": true,
     "naivePass": false,
     "naiveTrigger": true,
@@ -207,7 +261,160 @@
     "ok": true
   },
   {
+    "id": "pandas-67949",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pandas-68026",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pandas-70811",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pandas-71280",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pandas-71282",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "papaparse-1174",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
     "id": "plotly-4957",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "plotly-5792",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "plotly-5805",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "plotly-5827",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "polars-30043",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "polars-30081",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "polars-30105",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pyarrow-51162",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pyarrow-51368",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pyarrow-51491",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pyarrow-54534",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "pyarrow-54535",
     "seedFails": true,
     "naivePass": false,
     "naiveTrigger": true,
@@ -270,6 +477,24 @@
     "ok": true
   },
   {
+    "id": "rich-4214",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "rich-4216",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
     "id": "scikit-learn-30332",
     "seedFails": true,
     "naivePass": false,
@@ -297,6 +522,33 @@
     "ok": true
   },
   {
+    "id": "scipy-26188",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "scipy-26406",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "scipy-26409",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
     "id": "seaborn-3641",
     "seedFails": true,
     "naivePass": false,
@@ -307,6 +559,33 @@
   },
   {
     "id": "seaborn-3825",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "semver-904",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "yaml-733",
+    "seedFails": true,
+    "naivePass": false,
+    "naiveTrigger": true,
+    "fixedPass": true,
+    "fixedTrigger": false,
+    "ok": true
+  },
+  {
+    "id": "zod-6666",
     "seedFails": true,
     "naivePass": false,
     "naiveTrigger": true,
