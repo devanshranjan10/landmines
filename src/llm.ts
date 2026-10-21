@@ -1,5 +1,10 @@
 import { spawn } from 'node:child_process';
+import type * as AnthropicModuleNs from '@anthropic-ai/sdk';
+import type * as ZodHelpersNs from '@anthropic-ai/sdk/helpers/zod';
 import type { z } from 'zod';
+
+type AnthropicModule = typeof AnthropicModuleNs;
+type ZodHelpers = typeof ZodHelpersNs;
 import type { Http } from './http.js';
 
 /**
@@ -30,9 +35,16 @@ export interface ProviderOptions {
   exec?: (args: string[], input: string) => Promise<string>;
 }
 
-/** Anthropic Messages API through the official SDK, with structured outputs. ANTHROPIC_API_KEY (or an `ant` profile). */
+/** Anthropic Messages API through the official SDK (an optional peer dependency), with structured outputs. ANTHROPIC_API_KEY (or an `ant` profile). */
 async function anthropic(opts: ProviderOptions): Promise<LlmProvider> {
-  const [{ default: Anthropic }, { zodOutputFormat }] = await Promise.all([import('@anthropic-ai/sdk'), import('@anthropic-ai/sdk/helpers/zod')]);
+  // The SDK is an optional peer dependency, so `npx landmines` stays small for everyone who never uses this provider.
+  let sdk: [AnthropicModule, ZodHelpers];
+  try {
+    sdk = await Promise.all([import('@anthropic-ai/sdk'), import('@anthropic-ai/sdk/helpers/zod')]);
+  } catch {
+    throw new Error('the anthropic provider needs the Anthropic SDK: run `npm i -D @anthropic-ai/sdk` (or use --provider claude-cli with a Claude Code login)');
+  }
+  const [{ default: Anthropic }, { zodOutputFormat }] = sdk;
   const http = opts.http;
   const client = new Anthropic({
     ...(opts.env?.ANTHROPIC_API_KEY ? { apiKey: opts.env.ANTHROPIC_API_KEY } : {}),

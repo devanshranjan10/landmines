@@ -101,13 +101,13 @@ To try it the way `npx` would run it, pack it first:
 
 ```sh
 npm pack
-npx --package=/path/to/landmine/landmines-0.1.0.tgz landmines scan
+npx --package=/path/to/landmine/landmines-0.2.0.tgz landmines scan
 ```
 
 This was tested from an empty directory.
 
 **Hook command when run through npx.** In that case `landmine install` writes the hook
-command as `npx -y landmines@0.1.0 hook`, which only works once the package is on
+command as `npx -y landmines@0.2.0 hook`, which only works once the package is on
 npm. Until then, run `install` from the built checkout (it writes
 `node "/abs/path/dist/cli.js" hook`) or pass `--command`.
 

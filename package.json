@@ -1,7 +1,7 @@
 {
   "name": "landmines",
-  "version": "0.1.0",
-  "description": "Warns your coding agent before it edits code that touches a known open bug in your exact pinned dependency versions, and quotes the workaround from the issue thread.",
+  "version": "0.2.0",
+  "description": "Known open bugs in your exact dependency versions, put where your coding agent reads them: AGENTS.md/CLAUDE.md, a pre-edit hook for 20 agents, and an MCP server. Measured: Claude Sonnet 5.5 86% -> 99% on post-cutoff bug traps.",
   "type": "module",
   "license": "MIT",
   "bin": {
@@ -21,11 +21,23 @@
     "claude-code",
     "codex",
     "cursor",
+    "gemini-cli",
+    "opencode",
+    "kilo-code",
+    "cline",
+    "windsurf",
+    "copilot",
+    "antigravity",
+    "agents-md",
+    "mcp",
     "hooks",
+    "coding-agent",
+    "ai-agents",
+    "known-bugs",
     "github-issues",
     "dependencies",
     "lockfile",
-    "agent"
+    "workarounds"
   ],
   "scripts": {
     "build": "tsup",
@@ -35,14 +47,22 @@
     "check": "npm run typecheck && npm run lint && npm run test"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.137.0",
     "@modelcontextprotocol/server": "^2.3.1",
     "commander": "^15.0.0",
     "js-yaml": "^5.5.0",
     "smol-toml": "^1.9.1",
     "zod": "^4.6.7"
   },
+  "peerDependencies": {
+    "@anthropic-ai/sdk": "^0.137.0"
+  },
+  "peerDependenciesMeta": {
+    "@anthropic-ai/sdk": {
+      "optional": true
+    }
+  },
   "devDependencies": {
+    "@anthropic-ai/sdk": "^0.137.0",
     "@eslint/js": "^10.0.1",
     "@modelcontextprotocol/client": "^2.3.1",
     "@types/node": "^22.20.5",
