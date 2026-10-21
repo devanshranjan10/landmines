@@ -25,7 +25,9 @@ export const GENERIC = new Set(
   import export return async await promise resolve reject string int float bool dict tuple str none true false null undefined
   min max sum avg is has on off emit with as to of in out api http https www com org github issue issues bug fix version
   float16 float32 float64 bfloat16 int8 int16 int32 int64 uint8 uint16 uint32 uint64 complex64 complex128 bool_ object_ dtype dtypes
-  cuda cpu gpu mps device tensor tensors edges edge graph`
+  cuda cpu gpu mps device tensor tensors edges edge graph show figure fig axis axes plot plots subplot subplots zeros ones empty full
+  arange linspace sign encode decode secret token payload callback cb options props mode weight weights bias grad params parameters
+  input inputs output outputs`
     .split(/\s+/)
     .filter(Boolean),
 );
@@ -162,15 +164,19 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
 
   const roots = new Set([...ctx.importNames, ...ctx.packageAliases].map((r) => r.toLowerCase()));
   const namespaces = new Set<string>();
+  // `requests.put`, `requests.get`: a short verb written qualified by the package is that package's API.
+  const qualified = new Set<string>();
   const addChains = (chains: string[][], source: SymbolSource, weight?: number): void => {
     for (const chain of chains) {
       if (isFileName(chain)) continue;
       // In `torch.cuda.memory.change_current_allocator`, `cuda` and `memory` are namespaces of the package:
       // touching them says nothing about which API is buggy.
       const head = chain[0] ?? '';
-      if (chain.length > 2 && (roots.has(head.toLowerCase()) || CONVENTIONAL_ALIASES.has(head))) {
+      const rootedChain = roots.has(head.toLowerCase()) || CONVENTIONAL_ALIASES.has(head);
+      if (chain.length > 2 && rootedChain) {
         for (const seg of chain.slice(1, -1)) if (/^_?[a-z][a-z0-9_]*$/.test(seg)) namespaces.add(seg);
       }
+      if (chain.length === 2 && rootedChain && (chain[1]?.length ?? 0) <= 3) qualified.add(chain[1] ?? '');
       for (const seg of chain) if (isCandidate(seg, ctx)) scores.add(seg, source, weight);
       for (let k = 1; k < chain.length; k++) {
         const a = chain[k - 1];
@@ -237,9 +243,12 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
     }
   }
 
-  // Deep import paths anywhere in the author's text.
-  for (const spec of deepImports(issue.title, ctx)) scores.add(spec, 'title');
-  for (const spec of deepImports(spans.join(' '), ctx)) scores.add(spec, 'span');
+  // Deep import paths in the author's text. In Python, `torch.bfloat16` looks like a module path but is an
+  // attribute; only modules the issue actually imports count.
+  const importedPy = new Set([...`${issue.title}\n${issue.body}`.matchAll(/\b(?:from|import)\s+([A-Za-z_]\w*(?:\.[A-Za-z_]\w*)+)/g)].map((m) => m[1] ?? ''));
+  const keepDeep = (spec: string): boolean => ctx.lang !== 'py' || importedPy.has(spec);
+  for (const spec of deepImports(issue.title, ctx).filter(keepDeep)) scores.add(spec, 'title');
+  for (const spec of deepImports(spans.join(' '), ctx).filter(keepDeep)) scores.add(spec, 'span');
 
   // Plain title words confirmed as code elsewhere in the body.
   for (const w of titleWords) {
@@ -255,7 +264,8 @@ export function issueSymbols(issue: Pick<RawIssue, 'title' | 'body'>, ctx: Symbo
     const pyModulePath = ctx.lang === 'py' && pyModules.has(name);
     const isNamespace =
       pyModulePath || namespaces.has(name) || name.split('.').every((p) => namespaces.has(p) || roots.has(p.toLowerCase()) || CONVENTIONAL_ALIASES.has(p));
-    const score = Math.round(raw * (isNamespace ? 0.35 : specificity(name)) * 100) / 100;
+    const spec = isNamespace ? 0.35 : qualified.has(name) ? 1 : specificity(name);
+    const score = Math.round(raw * spec * 100) / 100;
     out.push({ name, score, sources: [...sources.keys()] });
   }
   return out.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name));

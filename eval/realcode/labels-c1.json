@@ -1,0 +1,233 @@
+{
+  "set": "C1: 60 files, 3 per package, GitHub code search page 1",
+  "code": "commit 794a992 (before corroboration)",
+  "mode": "whole-file check (worst case)",
+  "files": 60,
+  "filesWithHits": 17,
+  "hits": [
+    {
+      "pkg": "dayjs",
+      "file": "HuolalaTech__page-spy-web__src__init.ts",
+      "id": "iamkun/dayjs#2718",
+      "symbol": "duration",
+      "title": "Property 'duration' does not exist on type 'typeof dayjs'. ",
+      "label": "relevant"
+    },
+    {
+      "pkg": "dayjs",
+      "file": "HuolalaTech__page-spy-web__src__init.ts",
+      "id": "iamkun/dayjs#2750",
+      "symbol": "duration",
+      "title": "dayjs().add(dayjs.duration()) inconsistency",
+      "label": "noise"
+    },
+    {
+      "pkg": "dayjs",
+      "file": "HuolalaTech__page-spy-web__src__init.ts",
+      "id": "iamkun/dayjs#2479",
+      "symbol": "duration",
+      "title": "Adding weeks in duration plugin is broken",
+      "label": "noise"
+    },
+    {
+      "pkg": "dayjs",
+      "file": "Mayandev__notion-avatar__src__utils.ts",
+      "id": "iamkun/dayjs#2743",
+      "symbol": "year",
+      "title": "The year is not parsed correctly in Russian localization with CustomParseFormat",
+      "label": "noise"
+    },
+    {
+      "pkg": "dayjs",
+      "file": "Mayandev__notion-avatar__src__utils.ts",
+      "id": "iamkun/dayjs#2810",
+      "symbol": "year",
+      "title": "When using .add(1,'month') month becomes correct but year becomes previous year. 2023-01-01 -> +1 month -> 2022-02-01",
+      "label": "noise"
+    },
+    {
+      "pkg": "dayjs",
+      "file": "ineo6__hosts__src__hosts.ts",
+      "id": "iamkun/dayjs#2891",
+      "symbol": "dayjs.tz",
+      "title": "Unstable timezone parsing with dayjs.tz()",
+      "label": "noise"
+    },
+    {
+      "pkg": "dayjs",
+      "file": "ineo6__hosts__src__hosts.ts",
+      "id": "iamkun/dayjs#2735",
+      "symbol": "timezone",
+      "title": "Incorrect localizer behaviour when extending dayjs with timezone",
+      "label": "partial"
+    },
+    {
+      "pkg": "jsonwebtoken",
+      "file": "gitranks__gitranks-ui__codegen.ts",
+      "id": "auth0/node-jsonwebtoken#939",
+      "symbol": "jwt.sign",
+      "title": "TypeError: Right hand side of instanceof is not an object",
+      "label": "noise"
+    },
+    {
+      "pkg": "jsonwebtoken",
+      "file": "gitranks__gitranks-ui__codegen.ts",
+      "id": "auth0/node-jsonwebtoken#1000",
+      "symbol": "jwt.sign",
+      "title": "`jwt.sign()` callback is executed twice for \"The payload already has an \"...\" property\" errors",
+      "label": "noise"
+    },
+    {
+      "pkg": "jsonwebtoken",
+      "file": "neo9__n9-node-micro__src__jwt.ts",
+      "id": "auth0/node-jsonwebtoken#1031",
+      "symbol": "verify",
+      "title": "ReDoS in verify() when audience option is a RegExp: attacker-controlled aud claim → catastrophic backtracking",
+      "label": "noise"
+    },
+    {
+      "pkg": "jsonwebtoken",
+      "file": "zwave-js__zwave-js-ui__api__app.ts",
+      "id": "auth0/node-jsonwebtoken#939",
+      "symbol": "jwt.sign",
+      "title": "TypeError: Right hand side of instanceof is not an object",
+      "label": "noise"
+    },
+    {
+      "pkg": "jsonwebtoken",
+      "file": "zwave-js__zwave-js-ui__api__app.ts",
+      "id": "auth0/node-jsonwebtoken#1000",
+      "symbol": "jwt.sign",
+      "title": "`jwt.sign()` callback is executed twice for \"The payload already has an \"...\" property\" errors",
+      "label": "noise"
+    },
+    {
+      "pkg": "jsonwebtoken",
+      "file": "zwave-js__zwave-js-ui__api__app.ts",
+      "id": "auth0/node-jsonwebtoken#1031",
+      "symbol": "jwt.verify",
+      "title": "ReDoS in verify() when audience option is a RegExp: attacker-controlled aud claim → catastrophic backtracking",
+      "label": "noise"
+    },
+    {
+      "pkg": "knex",
+      "file": "balena-os__balena-supervisor__src__db.ts",
+      "id": "knex/knex#6065",
+      "symbol": "transaction",
+      "title": "Transaction method resolves if the provided callback rejects with `undefined`.",
+      "label": "relevant"
+    },
+    {
+      "pkg": "knex",
+      "file": "balena-os__balena-supervisor__src__db.ts",
+      "id": "knex/knex#6141",
+      "symbol": "transaction",
+      "title": "transaction commit does not throw errors when constraints are deferred",
+      "label": "noise"
+    },
+    {
+      "pkg": "plotly",
+      "file": "RoboticsData__score_lerobot_episodes__ui.py",
+      "id": "plotly/plotly.py#4603",
+      "symbol": "make_subplots",
+      "title": "Hoversubplots=axis not working with make_subplots",
+      "label": "noise"
+    },
+    {
+      "pkg": "plotly",
+      "file": "RoboticsData__score_lerobot_episodes__ui.py",
+      "id": "plotly/plotly.py#4801",
+      "symbol": "scatter",
+      "title": "Hover data not showing correctly for px.scatter inside go.FigureWidget",
+      "label": "noise"
+    },
+    {
+      "pkg": "polars",
+      "file": "MarcoGorelli__polars-plugins-tutorial__run.py",
+      "id": "pola-rs/polars#28503",
+      "symbol": "Series",
+      "title": "write_database(engine=\"adbc\") corrupts low-cardinality String column values after an adbc read round-trip",
+      "label": "noise"
+    },
+    {
+      "pkg": "polars",
+      "file": "Zaczero__CBBI__utils.py",
+      "id": "pola-rs/polars#28503",
+      "symbol": "Series",
+      "title": "write_database(engine=\"adbc\") corrupts low-cardinality String column values after an adbc read round-trip",
+      "label": "noise"
+    },
+    {
+      "pkg": "pyyaml",
+      "file": "PrAYtele__Stable-Texturify__dp.py",
+      "id": "yaml/pyyaml#868",
+      "symbol": "safe_load",
+      "title": "ValueError: invalid literal for int() with base 2: '' in safe_load()",
+      "label": "noise"
+    },
+    {
+      "pkg": "scikit-learn",
+      "file": "ahmedbesbes__Neural-Network-from-scratch__nn.py",
+      "id": "scikit-learn/scikit-learn#32614",
+      "symbol": "sklearn.model_selection",
+      "title": "StackingRegressor is incompatible with TimeSeriesSplit as cv parameter, raising \"ValueError: cross_val_predict only works for partitions\"",
+      "label": "noise"
+    },
+    {
+      "pkg": "scikit-learn",
+      "file": "r9y9__nlp100__78.py",
+      "id": "scikit-learn/scikit-learn#32614",
+      "symbol": "KFold",
+      "title": "StackingRegressor is incompatible with TimeSeriesSplit as cv parameter, raising \"ValueError: cross_val_predict only works for partitions\"",
+      "label": "noise"
+    },
+    {
+      "pkg": "scipy",
+      "file": "jilljenn__ktm__lr.py",
+      "id": "scikit-learn/scikit-learn#32614",
+      "symbol": "sklearn.linear_model",
+      "title": "StackingRegressor is incompatible with TimeSeriesSplit as cv parameter, raising \"ValueError: cross_val_predict only works for partitions\"",
+      "label": "noise"
+    },
+    {
+      "pkg": "seaborn",
+      "file": "APPIAN-PET__APPIAN__QC.py",
+      "id": "mwaskom/seaborn#3963",
+      "symbol": "FacetGrid",
+      "title": "FacetGrid with large values causes `cannot convert float NaN to integer",
+      "label": "noise"
+    },
+    {
+      "pkg": "seaborn",
+      "file": "APPIAN-PET__APPIAN__QC.py",
+      "id": "mwaskom/seaborn#3973",
+      "symbol": "FacetGrid",
+      "title": "lmplot with refline produces unexpected markers on both ends of the lines",
+      "label": "noise"
+    },
+    {
+      "pkg": "seaborn",
+      "file": "APPIAN-PET__APPIAN__QC.py",
+      "id": "mwaskom/seaborn#4017",
+      "symbol": "FacetGrid",
+      "title": "catplot crashes on empty DataFrame with defined x/y due to has_xy_data property misconception`",
+      "label": "noise"
+    },
+    {
+      "pkg": "torch",
+      "file": "FourthBrain__FastAPI-for-Machine-Learning-Live-Demo__ml.py",
+      "id": "python-pillow/Pillow#7935",
+      "symbol": "PIL.Image",
+      "title": "Memory of copied PIL Images is not released",
+      "label": "noise"
+    },
+    {
+      "pkg": "torch",
+      "file": "meta-pytorch__gpt-fast__tp.py",
+      "id": "pytorch/pytorch#190626",
+      "symbol": "distributed",
+      "title": "[FSDP2] MixedPrecisionPolicy reduce_dtype is not applied to the TP-mesh Partial -> Replicate gradient all-reduce",
+      "label": "noise"
+    }
+  ]
+}

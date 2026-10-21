@@ -1,5 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { fileDialects } from './analyze/dialect.js';
+import { fileDialects, isDialectWord } from './analyze/dialect.js';
 import { GENERIC } from './analyze/issueSymbols.js';
 import { bindings } from './source/bindings.js';
 import { langForPath } from './source/lang.js';
@@ -39,30 +39,64 @@ export interface MatchContext {
   /** Raw file text and its identifier tokens, for corroboration. */
   fileText?: string;
   tokens?: Set<string>;
+  /** Import names of PyPI packages (`sklearn`), so they are never "novel" corroborators. */
+  packageRoots?: string[];
+  /** Everything the whole file uses from each package (not just the edit). */
+  fileTouches?: Touch[];
+  /** The file-wide touch for the package being matched (set per match). */
+  fileTouch?: Touch;
 }
 
 /** What the whole edited file tells us beyond the touched symbols. */
 export function fileContext(fileText: string, lang: Lang): MatchContext {
   const specs = bindings(fileText, lang).map((b) => b.specifier);
   const tokens = new Set(fileText.match(/[A-Za-z_$][\w$]*/g) ?? []);
-  return { dialects: fileDialects(specs, fileText), fileText, tokens };
+  return { dialects: fileDialects(specs, fileText), fileText, tokens, fileTouches: touches({ fileText, changedText: fileText, lang }) };
+}
+
+function escapeRe(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+/**
+ * Does the file use this issue symbol *as the package's API*? A deep import path anywhere; a member or pair
+ * used on one of the package's bindings; or an option / keyword argument (`{ audience: … }`, `log_scale=True`).
+ * A variable that merely shares a name with the issue's repro (`jwtSecret`, `attention_norm`) does not count.
+ */
+function usesAsApi(name: string, ctx: MatchContext): boolean {
+  const text = ctx.fileText ?? '';
+  if (name.includes('/')) return text.includes(name);
+  const t = ctx.fileTouch;
+  if (name.includes('.')) return Boolean(t?.pairs.includes(name) || t?.specifiers.includes(name));
+  if (t?.symbols.includes(name)) return true;
+  return new RegExp(`[({,]\\s*['"]?${escapeRe(name)}['"]?\\s*[:=](?!=)`).test(text);
 }
 
 /** The first issue symbol, other than the matched one, that the file also contains and that says something specific. */
 export function corroboration(l: Landmine, primary: string, ctx: MatchContext): string | undefined {
   if (!ctx.tokens || ctx.fileText === undefined) return undefined;
   const primaryParts = new Set(primary.split(/[./]/));
+  // The title says what the issue is about: unless a driver path corroborates, the matched symbol or the
+  // corroborator must be named there (`Series` + `DataFrame` shown in an adbc bug's repro does not qualify).
+  const primaryInTitle = l.symbols.some((s) => s.name === primary && s.sources.includes('title'));
+  const roots = new Set([l.package, l.package.split('/').at(-1) ?? '', ...(ctx.packageRoots ?? [])].map((r) => r.toLowerCase()));
   for (const s of l.symbols) {
-    if (s.name === primary || s.score < 0.2) continue;
+    if (s.name === primary) continue;
     const parts = s.name.split(/[./]/).filter(Boolean);
     const isPath = s.name.includes('/');
-    // Bare import bindings (`drizzle`, `useQuery`) appear in every file that uses the package.
-    if (!isPath && s.sources.every((src) => src === 'import')) continue;
-    // Must add something beyond the primary symbol, and not just a generic word or short variable name.
-    const novel = parts.filter((p) => !primaryParts.has(p) && p.length >= 4 && !GENERIC.has(p.toLowerCase()));
+    // An import path corroborates only when it picks a variant (a driver: `drizzle-orm/node-postgres`); a plugin
+    // path (`dayjs/plugin/timezone`) is just what you need to use the matched API at all.
+    if (isPath && !parts.slice(1).some((p) => isDialectWord(p))) continue;
+    // Anything else must be a symbol the issue is specifically about, not a penalized entry point (`DataFrame`).
+    if (!isPath && s.score < 0.5) continue;
+    // Driver/module import paths count wherever they were seen; any other corroborator must be something the
+    // author named in prose (title or inline code). Repro-only names are often their own variables (`jwtSecret`).
+    if (!isPath && !s.sources.some((src) => src === 'title' || src === 'span')) continue;
+    // Must add something beyond the primary symbol: not the package's own name, a generic word or a short name.
+    const novel = parts.filter((p) => !primaryParts.has(p) && !roots.has(p.toLowerCase()) && p.length >= 4 && !GENERIC.has(p.toLowerCase()));
     if (novel.length === 0) continue;
-    const present = isPath ? ctx.fileText.includes(s.name) : parts.every((p) => ctx.tokens?.has(p));
-    if (present) return s.name;
+    if (!isPath && !primaryInTitle && !s.sources.includes('title')) continue;
+    if (usesAsApi(s.name, ctx)) return s.name;
   }
   return undefined;
 }
@@ -89,7 +123,9 @@ export function matchTouches(found: Touch[], index: LandmineIndex, lang: Lang, c
         if (s.score >= SYMBOL_THRESHOLD && segments.has(s.name.toLowerCase()) && (!hit || s.score > hit.score)) hit = { symbol: s.name, score: s.score };
       }
       if (!hit) continue;
-      const corroboratedBy = corroboration(l, hit.symbol, ctx);
+      const pkg = index.packages.find((p) => p.ecosystem === l.ecosystem && p.name === l.package && p.version === l.version);
+      const fileTouch = ctx.fileTouches?.find((t) => t.package === touch.package);
+      const corroboratedBy = corroboration(l, hit.symbol, { ...ctx, packageRoots: pkg?.importNames ?? [], ...(fileTouch ? { fileTouch } : {}) });
       const rank = hit.score * STRENGTH_WEIGHT[l.evidence.strength] * (1 + Math.log10(1 + l.issue.reactions)) * (corroboratedBy ? 2 : 1);
       const prev = best.get(l.id);
       if (!prev || rank > prev.rank) best.set(l.id, { landmine: l, symbol: hit.symbol, score: hit.score, rank, ...(corroboratedBy ? { corroboratedBy } : {}) });

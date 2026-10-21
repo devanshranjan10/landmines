@@ -174,10 +174,8 @@ describe('runHook', () => {
     const ctx = JSON.parse(bare.stdout) as { hookSpecificOutput: Record<string, string> };
     expect(ctx.hookSpecificOutput.permissionDecision).toBeUndefined();
     expect(ctx.hookSpecificOutput.additionalContext).toMatch(/^landmine \(heads-up, not blocking\)/);
-    // the same call in a file that also uses urllib3, which the issue names, is corroborated and blocks
-    const corroborated = runHook(edit('import requests\nimport urllib3\n\nrequests.put(url, data=payload)\n'), { stateDir: state() });
-    expect(corroborated.decision).toBe('deny');
-    expect(JSON.parse(corroborated.stdout)).toMatchObject({ hookSpecificOutput: { permissionDecision: 'deny' } });
+    // importing urllib3 (another package the issue names) is not using requests' API in the buggy way: still a heads-up
+    expect(runHook(edit('import requests\nimport urllib3\n\nrequests.put(url, data=payload)\n'), { stateDir: state() }).decision).toBe('context');
   });
 
   it('a heads-up stays silent on harnesses with no non-blocking context channel', () => {

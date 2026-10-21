@@ -1,0 +1,422 @@
+[
+  {
+    "pkg": "pandas",
+    "repo": "ReonaFujinami8/Streamlit_SandBox",
+    "path": "1.py",
+    "sha": "23f98bc5667cbddddfa73489ee58eff75a5f43ce",
+    "url": "https://github.com/ReonaFujinami8/Streamlit_SandBox/blob/602b30f68ab1e96c0f0e15f4aed99b6365753893/1.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "loyalzc/PythonStudy",
+    "path": "1.py",
+    "sha": "386860acbd65ea24799e4562b14d1dc18790acb0",
+    "url": "https://github.com/loyalzc/PythonStudy/blob/7634357b02dc6490c8cd99d7d76bf6819fcfbb6c/1.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "spaske00/compression-eval",
+    "path": "corr",
+    "sha": "b9880ee4c4804aceab7dab4e0ab2c37983ff2890",
+    "url": "https://github.com/spaske00/compression-eval/blob/27840c8eacd87063407b2c455967b64e21938a3b/corr"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "zhangsong1213/Mamba-UIE",
+    "path": "A.py",
+    "sha": "bddeb9e08d6b372d98a71ba002e8ffbc971845c8",
+    "url": "https://github.com/zhangsong1213/Mamba-UIE/blob/5f430be8e59e62c7130fd965e0cb99111b9a6788/A.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "zeinabmostafavi/Advanced-Image-Manipulation-Toolkit",
+    "path": "6.py",
+    "sha": "b8425f37e26a70acb1afe761e61ec0f5420081de",
+    "url": "https://github.com/zeinabmostafavi/Advanced-Image-Manipulation-Toolkit/blob/1aee277c35b81c2a2ed06dc5fbaf1df44495b011/6.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "EulerProject/e3",
+    "path": "e3",
+    "sha": "2d37975decbb9bbd2f506a9b3f92886e42eb5272",
+    "url": "https://github.com/EulerProject/e3/blob/24121fa9bd61a7590f4107f150220756e5d04ffa/e3"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "study1ng/rinkou",
+    "path": ".py",
+    "sha": "49d3c06a232ce56dc48d7fef34e0bdbd9d74abec",
+    "url": "https://github.com/study1ng/rinkou/blob/b1558bccbe6afaacd1cbc3c1a2641626eb6cb98e/.py"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "himanshuleel5113/Crop-Disease-Prediction",
+    "path": "s.py",
+    "sha": "17b4adf34de15add62ce55e4142bd0c405528f5f",
+    "url": "https://github.com/himanshuleel5113/Crop-Disease-Prediction/blob/c548d9d1f27f1865c7b09b6f8134ffbd489fdab1/s.py"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "rishilahoti/Image2Sketch",
+    "path": "t.py",
+    "sha": "ee7d597d553c88d7bc691f6902eba6c6a48d44a0",
+    "url": "https://github.com/rishilahoti/Image2Sketch/blob/849ec8554bd313e282ab5372034d82d930e787a9/t.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "LeCodeMinister/polars-phonetics",
+    "path": "run.py",
+    "sha": "c6cb695278cd9d8c49d700c2db2dd91626371935",
+    "url": "https://github.com/LeCodeMinister/polars-phonetics/blob/44fa9539a1142b02cc93fdfb1fbc3d0bb8f3d7b1/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "DrHB/icecube-2nd-place",
+    "path": "train.py",
+    "sha": "09ed736ae388eb09b497d9c4308fc5cfcb391e65",
+    "url": "https://github.com/DrHB/icecube-2nd-place/blob/484cdcfed01af5255dce148122b095a7427ec1cb/train.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "nemegrod/graph_RAG_structured",
+    "path": "main.py",
+    "sha": "ed14e758a60b2e0ae86b3c84d2b18b0ec80091c4",
+    "url": "https://github.com/nemegrod/graph_RAG_structured/blob/76952637e4025b71ab1298f7c72eb494d8a2f634/main.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "YangUper/video2xhsnote",
+    "path": "main.py",
+    "sha": "c0fc54fdbdd7675a84c1eef3f3bea78bd491acaf",
+    "url": "https://github.com/YangUper/video2xhsnote/blob/53923f54cc5f3860ef82d1e86587b35f720d6fb2/main.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "kondra/latent_ssvm",
+    "path": "tasks.py",
+    "sha": "db272d5b55108ffa210caccc35aa908a3a67e353",
+    "url": "https://github.com/kondra/latent_ssvm/blob/372edf9176c18a3da8c879ab7930ce84ea591c9f/tasks.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "fghcdp/dydxbot",
+    "path": "tasks.py",
+    "sha": "ecda7b686bd574522f32b75cb8a6fda471bf14c9",
+    "url": "https://github.com/fghcdp/dydxbot/blob/7889c4276ec25dba2f8e51c9eec91b4bcc33041c/tasks.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "nonevx/auto_api_test",
+    "path": "app.py",
+    "sha": "6829d67b8d2fdecef50e485100f151315fbff2a1",
+    "url": "https://github.com/nonevx/auto_api_test/blob/cb0f474394ef776d4b7710821b74065307a551b2/app.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "ucsd-ets/datahub-docker-stack",
+    "path": "dodo.py",
+    "sha": "bed2a36586ff141593761b68ad43b1dbffc6b813",
+    "url": "https://github.com/ucsd-ets/datahub-docker-stack/blob/600468d47b99bf6c9e984af928697e87051b28c6/dodo.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "Sub-IoT/Sub-IoT-testsuite",
+    "path": "run.py",
+    "sha": "6333451c613d27af1f95860185679c34c10292b4",
+    "url": "https://github.com/Sub-IoT/Sub-IoT-testsuite/blob/0aa5a27d3e5b14a24761cf507b11d847eafe489f/run.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "amaze18/speeKAR",
+    "path": "qa.py",
+    "sha": "d419ea8c9ccda8031388b2537b36b7abe64422b8",
+    "url": "https://github.com/amaze18/speeKAR/blob/0d12f1e408a3483df092656d615203b1128b8848/qa.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "nethesis/satellite",
+    "path": "ai.py",
+    "sha": "7d1d4a68f8424476cffdaa3cfc367f171d9a39ff",
+    "url": "https://github.com/nethesis/satellite/blob/9c1f737e8a96e5f04728e554045e84255b256766/ai.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "heise199/RAG-Based-Programming-Knowledge-Q-A-Assistant-C-Example-",
+    "path": "qa.py",
+    "sha": "6cfe428d058b95d24bc520f6ce0d4612fa75e105",
+    "url": "https://github.com/heise199/RAG-Based-Programming-Knowledge-Q-A-Assistant-C-Example-/blob/4c2358f927d208b1d23b4332916ab9daa4b04ef9/qa.py"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "ahonn/logseq-plugin-todo",
+    "path": "src/api.ts",
+    "sha": "bcbe75391cbf0dd3eb4d140d1d04b0568b75f519",
+    "url": "https://github.com/ahonn/logseq-plugin-todo/blob/ee2ca3444cc317723843e356abe74c688c05c7c7/src/api.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "aakashlpin/kha-ching",
+    "path": "lib/queue.ts",
+    "sha": "c65ad9fad3adff44401c89337b7386e281c4190f",
+    "url": "https://github.com/aakashlpin/kha-ching/blob/14d32a256f1c96420fd92682e0a219f2b2e5fb12/lib/queue.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "BoBoooooo/BoBo-Vue-Admin",
+    "path": "src/main.ts",
+    "sha": "5c7b930c1b05d776dc9314ed8430be6955a8400b",
+    "url": "https://github.com/BoBoooooo/BoBo-Vue-Admin/blob/bc1cea1ad9ae4bd5fe2264837f9a73ddf6921442/src/main.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "raphaelalmeidamartins/trybesmith",
+    "path": "src/msc.ts",
+    "sha": "56c10d92aac2dc048c48454aff77c780f75ba504",
+    "url": "https://github.com/raphaelalmeidamartins/trybesmith/blob/a4d92402b431c61f347e4a0178b28d751ed24665/src/msc.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "bshelling/user_authentication_pattern",
+    "path": "src/fn.ts",
+    "sha": "59f7e25477afbf9667b39b65bd0c8ab1540a8cf0",
+    "url": "https://github.com/bshelling/user_authentication_pattern/blob/a5cbba222a6f2f6a7cf06b99aa9331ad76c03b89/src/fn.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "traPtitech/vite-plugin-trap-auth",
+    "path": "src/key.ts",
+    "sha": "718b7a90c8caf22fffa323125e8b4549389c12f6",
+    "url": "https://github.com/traPtitech/vite-plugin-trap-auth/blob/3393ab3aa06b21fe7db5d41437b2624d09afb326/src/key.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "xwedx00/Exo",
+    "path": "server.ts",
+    "sha": "7f38fb494475f0fe38419e633ca49475bc188d10",
+    "url": "https://github.com/xwedx00/Exo/blob/371d6679d782ad62888e1ded56539d6ec4232ce8/server.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "webhacking/WebRTC-Example-With-Typescript",
+    "path": "serve.ts",
+    "sha": "8f54f122e134e1acb26d216860dad5df7c7d7e7b",
+    "url": "https://github.com/webhacking/WebRTC-Example-With-Typescript/blob/aa5b76c054db9e099e24d4787cd01320de6ae916/serve.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "ParasParashar/thread-x",
+    "path": "types.ts",
+    "sha": "8162192d432df3d456f824ef49c30ab20491f976",
+    "url": "https://github.com/ParasParashar/thread-x/blob/c04aa63e4b46961d8cd9ca94e202ba95f838c242/types.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "ktsn/vuex-local",
+    "path": "src/vue.ts",
+    "sha": "f7fabed16f91ba5b645e9e81e0158f71e9948d19",
+    "url": "https://github.com/ktsn/vuex-local/blob/c494b2a8a12d26e0ac190539487c5a4adb34bcfd/src/vue.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "w3champions/launcher",
+    "path": "src/main.ts",
+    "sha": "8f6aefaabe8bb9f1545ef448ca0c1510f6a2cf31",
+    "url": "https://github.com/w3champions/launcher/blob/86a24f579679f84b58e0b542d76fba1c3feed5a9/src/main.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "esmnext/vue-class-setup",
+    "path": "src/vue.ts",
+    "sha": "7157c281dc4fe8491e6e760a9b054f5eb91d9def",
+    "url": "https://github.com/esmnext/vue-class-setup/blob/846b2e8106086ef951ec07e699cfb14a81d5fe1b/src/vue.ts"
+  },
+  {
+    "pkg": "torch",
+    "repo": "kyunghyuncho/rl-pong",
+    "path": "ff.py",
+    "sha": "5c130d65cd211600f952051d1c154bb1ae0373e7",
+    "url": "https://github.com/kyunghyuncho/rl-pong/blob/88110b653b6a8372a689176096f7ea53bada8781/ff.py"
+  },
+  {
+    "pkg": "torch",
+    "repo": "naklecha/llm-inference-optimizations-explained",
+    "path": "2.py",
+    "sha": "50a5d94983e0bc5ec8e2b2340a2079f454d4006c",
+    "url": "https://github.com/naklecha/llm-inference-optimizations-explained/blob/a8f04a411a0ac45958e6dec6522dcbc574cf57d5/2.py"
+  },
+  {
+    "pkg": "torch",
+    "repo": "hyf015/egocentric-gaze-prediction",
+    "path": "AT.py",
+    "sha": "d09e170548c71fe11eec254bdbb550b697eff6d2",
+    "url": "https://github.com/hyf015/egocentric-gaze-prediction/blob/4c8ba58ff7cd5fcf5cf2811e9a8b8ba88bc94533/AT.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "GabrielJung0727/Samjeong-Software",
+    "path": "2.py",
+    "sha": "f347c16783b0eefd2aecb7f10a5eb87a892be98f",
+    "url": "https://github.com/GabrielJung0727/Samjeong-Software/blob/c5ea62e17cd87bb78a825207950f11af7cda7144/2.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "Jeandaniell/Credit-scoring",
+    "path": "main",
+    "sha": "9aed9bb22a8006683f7158ae62f2284daf3e380c",
+    "url": "https://github.com/Jeandaniell/Credit-scoring/blob/419e7b2212ca6c92b48b6ee1225d2c9c423f7f3d/main"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "shettyvarshaa/ML-LAB",
+    "path": "p4.py",
+    "sha": "26f28250becd71087befd26bdc07243479ccba49",
+    "url": "https://github.com/shettyvarshaa/ML-LAB/blob/b734c8e54c7762bc57f14f72e2486a0a4030361b/p4.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "Super-hacker-JetLearner/Jetlearn-Projects",
+    "path": "14.py",
+    "sha": "8f51806f3f676c8d1f92c2ebe5d8dd07650775cc",
+    "url": "https://github.com/Super-hacker-JetLearner/Jetlearn-Projects/blob/2edf1a0893bc70b719e623e6d380cf04a9b5a105/14.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "LuisNoronha1/Projeto_De_Ciencia_De_Dados",
+    "path": "ss.py",
+    "sha": "3bb0e6c9d6a13fdfa3ebc58afb6d34ccbc50019b",
+    "url": "https://github.com/LuisNoronha1/Projeto_De_Ciencia_De_Dados/blob/8ae3027b2fdbbdf879f2a3bc26a2ce9e01881c83/ss.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "RigoDropEmOff/LaredoHealthDashboard",
+    "path": "wo.py",
+    "sha": "e246f7dccbf1bade9a201a2f604736b710d6023a",
+    "url": "https://github.com/RigoDropEmOff/LaredoHealthDashboard/blob/5dc0df5cb39d2b5a04acb9eb3c1f89cd915640bb/wo.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "fakahil/Phase-Diversity-Reconstruction-code-for-IDL-users",
+    "path": "PD.py",
+    "sha": "89582ba10b7f4e3167f129665448a8c4b065de4f",
+    "url": "https://github.com/fakahil/Phase-Diversity-Reconstruction-code-for-IDL-users/blob/65ba0ddf0c9f84f8103467879913c639dda8e526/PD.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "KEAML-JLU/GIFT",
+    "path": "CL.py",
+    "sha": "4f7a998a2bf0e3aa958513fcda34b5f5ee7d8f1e",
+    "url": "https://github.com/KEAML-JLU/GIFT/blob/debd17ebe437fa92a163178e479d2dc1eb8d0039/CL.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "UW-ERSL/TOuNN",
+    "path": "FE.py",
+    "sha": "acd3603a6eaaacd6756f3bb27cfd47d7b5d9e8bd",
+    "url": "https://github.com/UW-ERSL/TOuNN/blob/d40291830c4610fc6ea45edf3cf58135a8991acd/FE.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "nishio/linear",
+    "path": "t.py",
+    "sha": "14970b1332871f17f4cd4b039828a3cac0ca708d",
+    "url": "https://github.com/nishio/linear/blob/64dff8f715a585fcaff856488351ce8c2cad5e34/t.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "jklapacz/412project",
+    "path": "1.py",
+    "sha": "6c17504212190aded213411376d7aacde58b55dc",
+    "url": "https://github.com/jklapacz/412project/blob/5934ec36aaaa469fb0f58fa09a33863064a7a18c/1.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "drugparadigm/CrossPPI",
+    "path": "t.py",
+    "sha": "ffc1fb7e95511d2cdc66d3b48186a6b1551a0c86",
+    "url": "https://github.com/drugparadigm/CrossPPI/blob/3283e781246e7ced07fdd158eadb704d028346fd/t.py"
+  },
+  {
+    "pkg": "click",
+    "repo": "opendns/TrafficCop",
+    "path": "tcop",
+    "sha": "7618701ee758a07b373b980a1ee5b0967dbd2b7d",
+    "url": "https://github.com/opendns/TrafficCop/blob/2cc3ccaf4642c2b278e40d204491dedb17525a4e/tcop"
+  },
+  {
+    "pkg": "click",
+    "repo": "DIYer22/discrete_distribution_networks",
+    "path": "fid.py",
+    "sha": "6e4e38bcbb9e9920683647c315b628b93095d9e3",
+    "url": "https://github.com/DIYer22/discrete_distribution_networks/blob/623024b693169587f4aa43161eca357628b0b8ac/fid.py"
+  },
+  {
+    "pkg": "click",
+    "repo": "cloneofsimo/scaling-guide",
+    "path": "run.py",
+    "sha": "c7ae7d61d2ad49714b0ca12ee49080b8e47e0372",
+    "url": "https://github.com/cloneofsimo/scaling-guide/blob/1ec0bc67aeb11013109e2395bc1808a841b4761c/run.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "opendatalab/LOKI",
+    "path": "run.py",
+    "sha": "5bb9bf56f679c0587e6e68dcac2d7efd5364f20e",
+    "url": "https://github.com/opendatalab/LOKI/blob/9b2dac636e660aa5fd158be7888abaf3dd268140/run.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "matrix-org/antiscam",
+    "path": "bot.py",
+    "sha": "2aeef3e62e25995eafd9a89a2a203badf08a2305",
+    "url": "https://github.com/matrix-org/antiscam/blob/6502d029fc5e6e13802bb53bf49270b13af6b459/bot.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "mikekaminsky/compare-warehouse-distributions",
+    "path": "db.py",
+    "sha": "1a638b213082f375c86baa8f0affcccf4890ccbd",
+    "url": "https://github.com/mikekaminsky/compare-warehouse-distributions/blob/e066612cfd4f62cedccb950e484141e307ed7997/db.py"
+  },
+  {
+    "pkg": "knex",
+    "repo": "u12206050/directus-rbac-sync",
+    "path": "src/types.ts",
+    "sha": "fb473755d564abcf4fb73d7afac3194bddee41e9",
+    "url": "https://github.com/u12206050/directus-rbac-sync/blob/fa8a2eade4ba5be730ce39ad3857fc88b6c06486/src/types.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "spinamp/web3-music-pipeline",
+    "path": "src/db/db.ts",
+    "sha": "d37dbfe6ebdd6cf28fa441a9d1337f2d5d0353c4",
+    "url": "https://github.com/spinamp/web3-music-pipeline/blob/208745216ab9777c6c77026b9784ae508bbd3ff4/src/db/db.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "vaimee/zion",
+    "path": "knexfile.ts",
+    "sha": "20bdfb80b8eec10570e8ffc9840ca52037f9f78b",
+    "url": "https://github.com/vaimee/zion/blob/a98e8a5731a6d8b37e98e48bb9cad395e6d92a50/knexfile.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "dtm-labs/dtmcli-node",
+    "path": "src/barrier.ts",
+    "sha": "e8b1e6d4332d17656e18c2ee00c3c295b936f4a8",
+    "url": "https://github.com/dtm-labs/dtmcli-node/blob/b6025cf349492c13cc59b5c4861ccf9b3b074441/src/barrier.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "ahmerb/typescript-sequelize-example",
+    "path": "src/app.ts",
+    "sha": "64d199cbd2e83c3f2a3df0f76413da53f5bbefdd",
+    "url": "https://github.com/ahmerb/typescript-sequelize-example/blob/efcbb66b102511f2d1b5c5539cc2aaa7dc247f4e/src/app.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "uniai-lab/uniai-maas",
+    "path": "app.ts",
+    "sha": "bf1d77ac38a17eb55d04e8e180ddf8e4bdf482bd",
+    "url": "https://github.com/uniai-lab/uniai-maas/blob/1d69894478240de999c75c40eb6703d0b4d7ff45/app.ts"
+  }
+]

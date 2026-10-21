@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { promisify } from 'node:util';
 import { beforeAll, describe, expect, it } from 'vitest';
+import { issueSymbols as issueSymbolsRaw } from '../src/analyze/issueSymbols.js';
 import { GitHubClient } from '../src/github/client.js';
 import { replayHttp } from '../src/http.js';
 import { checkFile, matchTouches } from '../src/match.js';
@@ -188,7 +189,8 @@ describe('corroboration: only issue-specific context makes a hit block', () => {
     const l = jwtIndex().landmines[0] as Landmine;
     const ctx = (text: string): Parameters<typeof corroboration>[2] => ({ fileText: text, tokens: new Set(text.match(/[A-Za-z_$][\w$]*/g) ?? []) });
     expect(corroboration(l, 'verify', ctx('jwt.verify(token)'))).toBeUndefined();
-    expect(corroboration(l, 'verify', ctx('const audience = 1'))).toBe('audience');
+    expect(corroboration(l, 'verify', ctx('const audience = 1'))).toBeUndefined(); // a variable, not the option
+    expect(corroboration(l, 'verify', ctx('jwt.verify(token, key, { audience: /x/ })'))).toBe('audience');
   });
 
   it('a driver import path named in the issue corroborates (drizzle-orm/node-postgres)', () => {
@@ -196,3 +198,39 @@ describe('corroboration: only issue-specific context makes a hit block', () => {
     expect(hits.find((h) => h.landmine.id === 'drizzle-team/drizzle-orm#3402')?.corroboratedBy).toBe('drizzle-orm/node-postgres');
   });
 });
+
+describe('corroboration excludes weak signals (real-code set C2)', () => {
+  it('repro variable names, the package name and generic words do not corroborate', async () => {
+    const { corroboration } = await import('../src/match.js');
+    const base: Landmine = {
+      id: 'o/r#1',
+      ecosystem: 'pypi',
+      package: 'seaborn',
+      version: '0.13.2',
+      issue: { number: 1, title: 't', url: 'u', createdAt: '', updatedAt: '', author: 'a', labels: [], reactions: 0, comments: 0 },
+      evidence: { strength: 'strong', where: 'body', kind: 'adjacent', quote: '' },
+      symbols: [
+        { name: 'histplot', score: 1, sources: ['title'] },
+        { name: 'seaborn', score: 0.7, sources: ['span'] },
+        { name: 'jwtSecret', score: 0.5, sources: ['code'] },
+        { name: 'figure', score: 0.35, sources: ['span'] },
+        { name: 'log_scale', score: 0.7, sources: ['span'] },
+      ],
+    };
+    const ctx = (text: string): Parameters<typeof corroboration>[2] => ({ fileText: text, tokens: new Set(text.match(/[A-Za-z_$][\w$]*/g) ?? []) });
+    expect(corroboration(base, 'histplot', ctx('import seaborn\nfig = figure()\njwtSecret = 1\nseaborn.histplot(x)'))).toBeUndefined();
+    expect(corroboration(base, 'histplot', ctx('seaborn.histplot(x, log_scale=True)'))).toBe('log_scale');
+  });
+
+  it('torch.bfloat16 written in prose is not a trigger symbol; requests.put is', () => {
+    const torch = issueSymbolsFor('[FSDP2] reduce_dtype not applied', 'Using `torch.bfloat16` with `MixedPrecisionPolicy`', 'torch');
+    expect(torch['torch.bfloat16'] ?? 0).toBeLessThan(0.6);
+    expect(torch.bfloat16 ?? 0).toBeLessThan(0.6);
+    const requests = issueSymbolsFor('issue with unicode put', 'Calling `requests.put` with a unicode header', 'requests');
+    expect(requests.put).toBeGreaterThanOrEqual(0.6);
+  });
+});
+
+function issueSymbolsFor(title: string, body: string, pkg: string): Record<string, number> {
+  return Object.fromEntries(issueSymbolsRaw({ title, body }, { packageName: pkg, packageAliases: [pkg], importNames: [pkg], lang: 'py' }).map((s) => [s.name, s.score]));
+}

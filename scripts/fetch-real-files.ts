@@ -2,13 +2,16 @@
  * Fetch real source files that import given packages from public GitHub repos (code search),
  * for the hook-level accuracy check. Writes files under <out>/<package>/ and a manifest.
  *
- *   npx tsx scripts/fetch-real-files.ts /tmp/lm-realcode eval/realcode/manifest.json
+ *   npx tsx scripts/fetch-real-files.ts /tmp/lm-realcode eval/realcode/manifest.json [page] [exclude-manifest.json]
  */
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
-const [out = '/tmp/lm-realcode', manifestPath = 'eval/realcode/manifest.json'] = process.argv.slice(2);
+const [out = '/tmp/lm-realcode', manifestPath = 'eval/realcode/manifest.json', pageArg = '1', excludePath] = process.argv.slice(2);
+const excluded = new Set<string>(
+  excludePath && existsSync(excludePath) ? (JSON.parse(readFileSync(excludePath, 'utf8')) as Array<{ repo: string }>).map((m) => m.repo) : [],
+);
 const PER_PACKAGE = 3;
 const targets: Array<{ pkg: string; query: string; ext: string }> = [
   // held-out A
@@ -40,12 +43,24 @@ const sleep = (ms: number): void => {
 };
 const manifest: Array<{ pkg: string; repo: string; path: string; sha: string; url: string; file: string }> = [];
 for (const t of targets) {
-  const raw = execFileSync('gh', ['api', '-X', 'GET', 'search/code', '-f', `q=${t.query}`, '-f', 'per_page=15'], { encoding: 'utf8' });
+  let raw = '';
+  for (let attempt = 0; attempt < 4 && !raw; attempt++) {
+    try {
+      raw = execFileSync('gh', ['api', '-X', 'GET', 'search/code', '-f', `q=${t.query}`, '-f', 'per_page=30', '-f', `page=${pageArg}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    } catch {
+      sleep(15000); // code search returns transient 503s ("all shards failed")
+    }
+  }
+  if (!raw) {
+    console.error(`${t.pkg}: search failed, skipped`);
+    continue;
+  }
   const items = (JSON.parse(raw) as { items: Array<{ path: string; sha: string; html_url: string; repository: { full_name: string; fork: boolean } }> }).items;
   const seenRepos = new Set<string>();
   let got = 0;
   for (const it of items) {
-    if (got >= PER_PACKAGE || it.repository.fork || seenRepos.has(it.repository.full_name) || /test|example|tutorial|demo/i.test(it.path)) continue;
+    if (got >= PER_PACKAGE || it.repository.fork || seenRepos.has(it.repository.full_name) || excluded.has(it.repository.full_name)) continue;
+    if (/test|example|tutorial|demo/i.test(it.path)) continue;
     seenRepos.add(it.repository.full_name);
     const blob = JSON.parse(execFileSync('gh', ['api', `repos/${it.repository.full_name}/git/blobs/${it.sha}`], { encoding: 'utf8' })) as { content: string; size: number };
     if (blob.size > 200_000) continue;
