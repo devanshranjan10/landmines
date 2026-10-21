@@ -459,3 +459,22 @@ scored as a fail.
     significant.
   - Run J (Haiku, exec): rules 41/42 vs none 37/42, 5–1, p = 0.22.
   - The real-repo cards were finished: 128, 208 and 34 carded issues.
+
+**D-47: Competitor baselines, recorded before running.** "Best" so far meant best
+among landmine's own arms. Two alternatives a user would actually reach for:
+- **`web`.** The agent may use WebSearch and WebFetch, so it can look up the library's
+  GitHub issues itself. Every other arm has them off. This is the "just let the agent
+  google it" baseline, and it covers GitHub issue search.
+- **`context7`.** The Context7 docs MCP server (`@upstash/context7-mcp@4.4.4`), the most
+  popular "up-to-date docs for your agent" tool.
+
+*Design:*
+- **Run K.** Fresh-test, Sonnet 5.5, exec, terse prompts, seeds 1–2, on acct3, with
+  arms `none, rules, web, context7`.
+- **Same batch.** `none` and `rules` run again in the same batch, so all four arms
+  share CLI version and time.
+- **Hypotheses:** rules > web, and rules > context7. Paired, exact McNemar.
+
+*Setup note:* Claude Code 2.1.306 loads four bundled plugins (`cc-plugin-*`) in every
+session, on every account and in every arm, including all earlier runs. They are part
+of the CLI build, the same for every arm, and cannot bias an arm comparison.

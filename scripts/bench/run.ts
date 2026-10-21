@@ -70,13 +70,14 @@ function runClaude(task: Task, dir: string, arm: Arm, transcript: string, hookLo
     'project',
     '--strict-mcp-config',
     '--disable-slash-commands',
-    '--disallowedTools',
-    values.condition === 'edit-only' ? 'WebSearch,WebFetch,Bash,BashOutput,KillShell,Task' : 'WebSearch,WebFetch',
     '--max-turns',
     values['max-turns'],
     '--no-session-persistence',
   ];
-  if (arm === 'mcp') args.push('--mcp-config', join(dir, '.mcp.json'));
+  // The `web` arm is the "let the agent look it up" baseline: web search and fetch stay on. Every other arm has them off.
+  const blocked = [...(arm === 'web' ? [] : ['WebSearch', 'WebFetch']), ...(values.condition === 'edit-only' ? ['Bash', 'BashOutput', 'KillShell', 'Task'] : [])];
+  if (blocked.length) args.push('--disallowedTools', blocked.join(','));
+  if (arm === 'mcp' || arm === 'context7') args.push('--mcp-config', join(dir, '.mcp.json'));
   const env: NodeJS.ProcessEnv = { ...process.env, LANDMINE_DEBUG_LOG: hookLog };
   if (values['config-dir']) env.CLAUDE_CONFIG_DIR = values['config-dir'];
   else delete env.CLAUDE_CONFIG_DIR;

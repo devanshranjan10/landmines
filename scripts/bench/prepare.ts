@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import type { LandmineIndex } from '../../src/types.js';
 import { BENCH, ROOT, type Task } from './lib.js';
 
-export const ARMS = ['none', 'rules', 'hook', 'cards', 'cards-warn', 'rules+cards', 'rules-noisy', 'rules-noisy-conf', 'mcp'] as const;
+export const ARMS = ['none', 'rules', 'hook', 'cards', 'cards-warn', 'rules+cards', 'rules-noisy', 'rules-noisy-conf', 'mcp', 'web', 'context7'] as const;
 /** A real project's carded index (46 dependencies) mixed into the task's, for the noisy rules arms (D-43). */
 const NOISE = join(BENCH, 'fixtures', 'noise-fresh-a.json');
 
@@ -28,7 +28,13 @@ export function cli(args: string[], cwd: string): string {
 
 /** Give the working copy what the arm adds: an index (rebuilt offline from frozen raw data), then a rules section, hook, cards or MCP server. */
 export function prepareArm(task: Task, dir: string, arm: Arm, rulesFile = 'CLAUDE.md'): void {
-  if (arm === 'none') return;
+  // Competitor baselines (D-47): no landmine at all. `web` gets web search and fetch in run.ts; `context7` gets the
+  // Context7 docs MCP server.
+  if (arm === 'none' || arm === 'web') return;
+  if (arm === 'context7') {
+    writeFileSync(join(dir, '.mcp.json'), `${JSON.stringify({ mcpServers: { context7: { command: 'npx', args: ['-y', '@upstash/context7-mcp@4.4.4'] } } }, null, 2)}\n`);
+    return;
+  }
   const file = `${encodeURIComponent(task.package)}@${encodeURIComponent(task.version)}.json`;
   const cacheDir = join(dir, '.landmine', 'cache', task.ecosystem);
   mkdirSync(cacheDir, { recursive: true });
