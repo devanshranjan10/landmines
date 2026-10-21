@@ -262,8 +262,13 @@ Codex, Windsurf and Cline keep MCP servers in user-level config. For Codex, run
 
 ## Benchmark
 
-landmine-bench v0 is built for this one question. The full method, task list and all
-results are in [`docs/BENCHMARK.md`](docs/BENCHMARK.md).
+**landmine-bench** is, to our knowledge, the first public benchmark for this question.
+Version-aware benchmarks such as GitChameleon and VersiCode measure API changes between
+versions, and DepBench measures upgrade repair; none tests whether an agent avoids an
+open bug in the version you pin. It is agent-agnostic: any CLI agent or context tool can
+be run on it and submitted to [`bench/LEADERBOARD.md`](bench/LEADERBOARD.md). Benchmark
+card: [`bench/README.md`](bench/README.md). Method and all results:
+[`docs/BENCHMARK.md`](docs/BENCHMARK.md).
 - **Tasks.** 31 tasks built from open issues filed on or after 2026-07-01 against
   current releases, so the model can't already know the bugs. 35 more from 2024 serve
   as a contaminated control.

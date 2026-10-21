@@ -16,6 +16,17 @@ don't drop the caveat lines: the honesty is part of the pitch.
 - **Post your own.** `npx landmines share` prints "landmine found N open GitHub issues
   filed against the exact versions this project pins…" plus a README badge.
 
+## Second launch asset: the benchmark
+
+"The first public benchmark for whether coding agents avoid known open bugs in pinned
+dependency versions." It has 66 validated tasks, is agent-agnostic, includes a
+leaderboard, Docker and a canary, and its results are already in. It gets its own Show HN
+or post, aimed at the evals and agents crowd, about a week after the tool launch, with an
+invitation to submit agents (Cursor, Aider, OpenHands, Codex users).
+
+Say "to our knowledge, the first" and cite the related work in `bench/README.md`. Never
+say "the only" or "SOTA".
+
 ## Before launch (needs you)
 
 1. **Create the GitHub repo** (public, MIT). Then:
@@ -122,7 +133,8 @@ don't drop the caveat lines: the honesty is part of the pitch.
 
 ## Claims to never make
 
-- "SOTA on <public benchmark>": no public benchmark measures this.
+- "SOTA on <public benchmark>": no other public benchmark measures this. Say "best
+  measured on landmine-bench", and "to our knowledge the first public benchmark for it".
 - "Prevents bugs": it informs the agent, and it works when the issue is indexed and
   names your exact version.
 - "Benchmarked on Codex / Cursor / …": only Claude Code was benchmarked. The Codex run

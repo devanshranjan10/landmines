@@ -366,5 +366,9 @@ env -u CLAUDE_CONFIG_DIR npx tsx scripts/bench/run.ts --arm none,rules,cards --s
 python3 scripts/bench/summarize.py bench/results/<run>.jsonl
 ```
 
-Python tasks need the pinned environments from `bench/env/requirements*.txt`
-(`bench/.venv`, `bench/.venv-fresh-a`, `bench/.venv-fresh-b`).
+Environments: `bench/setup.sh` builds the three pinned Python environments
+(`bench/env/requirements-*.txt`, exact freezes) and every npm task's `node_modules`.
+`bench/Dockerfile` does the same on Linux and validates all 66 tasks at build time. The
+public benchmark card (task format, running any agent, scoring, submissions, canary,
+license) is [`bench/README.md`](../bench/README.md), and the generated leaderboard is
+[`bench/LEADERBOARD.md`](../bench/LEADERBOARD.md).
