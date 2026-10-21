@@ -173,7 +173,7 @@ Every confirmed defect was fixed with a regression test (CHANGELOG 0.2.0 "Fixed"
 1. **Create the public GitHub repo.** Then:
    - add `repository`, `homepage` and `bugs` to package.json (npm provenance needs a
      matching `repository`);
-   - replace `YOUR_GITHUB` and `<owner>` placeholders;
+   - replace `devanshranjan10` and `<owner>` placeholders;
    - add the `NPM_TOKEN` secret, or set up npm trusted publishing.
 2. **Publish `landmines` to npm soon.** The name is free today, and every
    npx-installed hook runs `npx -y landmines@<version>`, so a squatter could take it.

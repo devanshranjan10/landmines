@@ -31,7 +31,7 @@ say "the only" or "SOTA".
 
 1. **Create the GitHub repo** (public, MIT). Then:
    - add `repository`, `homepage` and `bugs` to `package.json`;
-   - replace `YOUR_GITHUB` in `site/index.html`.
+   - replace `devanshranjan10` in `site/index.html`.
 2. **Review what goes public:**
    - `bench/results/*.jsonl`: run metadata, no transcripts;
    - `bench/realcode/*.json`: public file paths and SHAs, plus model labels;
