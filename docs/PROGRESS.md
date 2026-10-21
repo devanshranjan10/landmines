@@ -142,6 +142,20 @@ posted.
    - a second agent (Codex) on the rules arm;
    - a fresh-task set built from issues landmine did *not* pick, for recall.
 
+## Launch readiness (not launched)
+
+- **npm.** `landmines@0.2.0`:
+  - `npm publish --dry-run` passes (89 kB tarball);
+  - the install is 18 MB, since the Anthropic SDK is now an optional peer;
+  - the tarball was tested end to end in an empty directory: live scan,
+    `install --rules`, the hook denying once and then allowing, `uninstall`.
+  - This machine is not logged in to npm. Publishing waits for your go.
+- **Landing page.** `site/index.html`: self-contained, measured numbers only.
+- **Shareable result.** `landmine share`: one line plus a README badge.
+- **Launch drafts.** `docs/launch/LAUNCH.md` has the HN, X and Reddit drafts, a 48-hour
+  plan and a pre-launch checklist. `docs/launch/demo.tape` records the GIF with VHS.
+  Nothing has been posted.
+
 ## Next (if continuing)
 
 - Benchmark another agent: Codex, and OpenCode once a provider has balance.

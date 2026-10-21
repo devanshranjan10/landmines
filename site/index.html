@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>landmine: your coding agent doesn't know about the bug in your exact version</title>
+<meta name="description" content="landmine finds open GitHub issues filed against the exact dependency versions you pin and puts them where your coding agent reads them. Claude Sonnet 5.5: 86% to 99% on post-cutoff bug traps.">
+<meta property="og:title" content="landmine: your coding agent doesn't know about the bug in your exact version">
+<meta property="og:description" content="Claude Sonnet 5.5 went from 86% to 99% on 21 held-out traps built from bugs filed after its training cutoff. Web search and Context7 didn't move it: the agent never thought to look.">
+<style>
+  :root {
+    color-scheme: dark;
+    --bg: #111110;
+    --surface-1: #1a1a19;
+    --surface-2: #232321;
+    --rule: #383835;
+    --text-primary: #f0efec;
+    --text-secondary: #c3c2b7;
+    --text-muted: #8f8e86;
+    --accent: #3987e5;      /* the one highlighted series: landmine */
+    --neutral-bar: #4a4945; /* everything else recedes */
+    --deny: #d95926;
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text-primary); font: 17px/1.55 var(--sans); }
+  main { max-width: 980px; margin: 0 auto; padding: 56px 24px 80px; }
+  a { color: var(--text-primary); text-decoration-color: var(--accent); text-underline-offset: 3px; }
+  h1 { font-size: clamp(34px, 5.4vw, 56px); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 18px; }
+  h2 { font-size: 26px; letter-spacing: -0.01em; margin: 64px 0 12px; }
+  p.lede { font-size: 20px; color: var(--text-secondary); max-width: 760px; margin: 0 0 28px; }
+  .eyebrow { font: 600 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 18px; }
+  .cmd { display: flex; align-items: center; gap: 12px; background: var(--surface-1); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; font: 16px var(--mono); max-width: 760px; }
+  .cmd code { flex: 1; overflow-x: auto; white-space: nowrap; }
+  .cmd button { font: 600 13px var(--sans); color: var(--text-primary); background: var(--surface-2); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; cursor: pointer; }
+  .note { font-size: 14px; color: var(--text-muted); margin-top: 10px; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 40px 0 0; }
+  .stat { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px; }
+  .stat .num { font: 700 40px/1.1 var(--sans); letter-spacing: -0.02em; }
+  .stat .num .from { color: var(--text-muted); font-weight: 600; }
+  .stat .lbl { color: var(--text-secondary); font-size: 15px; margin-top: 6px; }
+  /* chart */
+  .chart { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; padding: 22px 22px 14px; position: relative; }
+  .chart h3 { margin: 0 0 4px; font-size: 17px; }
+  .chart .sub { margin: 0 0 18px; color: var(--text-muted); font-size: 14px; }
+  .row { display: grid; grid-template-columns: 220px 1fr 64px; align-items: center; gap: 12px; padding: 7px 0; cursor: default; }
+  .row .name { color: var(--text-secondary); font-size: 15px; }
+  .row .name strong { color: var(--text-primary); }
+  .track { position: relative; height: 22px; }
+  .bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--neutral-bar); border-radius: 0 4px 4px 0; }
+  .row.hl .bar { background: var(--accent); }
+  .row .val { font: 600 15px var(--mono); color: var(--text-primary); text-align: right; }
+  .row:hover .bar, .row:focus .bar { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
+  .axis { display: grid; grid-template-columns: 220px 1fr 64px; gap: 12px; color: var(--text-muted); font: 12px var(--mono); margin-top: 4px; }
+  .axis .ticks { display: flex; justify-content: space-between; border-top: 1px solid var(--rule); padding-top: 4px; }
+  .tip { position: absolute; pointer-events: none; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; font-size: 13px; color: var(--text-primary); opacity: 0; transition: opacity .1s; max-width: 280px; }
+  details { margin-top: 12px; color: var(--text-secondary); font-size: 14px; }
+  table { border-collapse: collapse; margin-top: 8px; width: 100%; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); }
+  /* terminal */
+  .term { background: #0b0b0a; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
+  .term .bar3 { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--rule); color: var(--text-muted); font: 12px var(--mono); }
+  .term pre { margin: 0; padding: 16px 18px; font: 14px/1.5 var(--mono); color: var(--text-secondary); white-space: pre-wrap; overflow-x: auto; }
+  .term .p { color: var(--text-muted); }
+  .term .deny { color: var(--deny); font-weight: 600; }
+  .term .hi { color: var(--text-primary); }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .card { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px; }
+  .card h3 { margin: 0 0 6px; font-size: 17px; }
+  .card p { margin: 0; color: var(--text-secondary); font-size: 15px; }
+  .agents { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+  .agents span { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; font-size: 14px; color: var(--text-secondary); }
+  .fine { color: var(--text-secondary); font-size: 15px; }
+  .fine li { margin: 6px 0; }
+  footer { margin-top: 72px; color: var(--text-muted); font-size: 14px; border-top: 1px solid var(--rule); padding-top: 18px; }
+  @media (max-width: 640px) { .row, .axis { grid-template-columns: 120px 1fr 52px; } }
+</style>
+</head>
+<body>
+<main>
+  <div class="eyebrow">landmine · open source · MIT</div>
+  <h1>Your coding agent doesn't know about the bug in your exact version.</h1>
+  <p class="lede">landmine reads your lockfile, finds the open GitHub issues filed against the exact versions you pin, and puts them where your agent reads them, with the workaround from the thread. Before it writes the code that hits them.</p>
+
+  <div class="cmd" role="group" aria-label="Install command">
+    <code id="cmd">npx landmines scan &amp;&amp; npx landmines install --rules</code>
+    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('cmd').innerText)">Copy</button>
+  </div>
+  <div class="note">Writes a known-bugs section into AGENTS.md and CLAUDE.md, plus a pre-edit hook for the agents it finds. <code>npx landmines uninstall</code> removes all of it.</div>
+
+  <div class="stats">
+    <div class="stat"><div class="num"><span class="from">86%</span> → 99%</div><div class="lbl">Claude Sonnet 5.5 pass rate on 21 held-out traps built from bugs filed after its training cutoff (72/84 → 83/84)</div></div>
+    <div class="stat"><div class="num">6–0</div><div class="lbl">Wins without a loss in a confirmation run written down before it ran (p = 0.03)</div></div>
+    <div class="stat"><div class="num">0 of 84</div><div class="lbl">Sessions where the agent used web search or Context7 when it had them. It didn't think to look.</div></div>
+  </div>
+
+  <h2>Measured against what you'd use instead</h2>
+  <div class="chart" id="chart">
+    <h3>Traps passed, Claude Sonnet 5.5 (42 runs each)</h3>
+    <p class="sub">Same 21 held-out tasks, shell access, the request phrased the way a user would ask, all four setups run in one batch.</p>
+    <div id="rows"></div>
+    <div class="axis"><span></span><div class="ticks"><span>0</span><span>21</span><span>42</span></div><span></span></div>
+    <div class="tip" id="tip" role="status"></div>
+    <details><summary>Table view</summary>
+      <table><thead><tr><th>Setup</th><th>Passed</th><th>landmine vs this setup (paired)</th></tr></thead>
+      <tbody id="tbody"></tbody></table>
+    </details>
+  </div>
+
+  <h2>What your agent sees</h2>
+  <div class="term" aria-label="Terminal output from a real run">
+    <div class="bar3">examples/demo · drizzle-orm 0.36.0 pinned</div>
+<pre><span class="p">$</span> <span class="hi">npx landmines scan</span>
+landmine scanned 7 direct dependencies from package-lock.json, requirements.txt
+  date-fns@3.6.0      21 open issues · 13 tied to symbols · 4 workarounds
+  drizzle-orm@0.36.0  13 open issues · 9 tied to symbols · 6 workarounds
+  pydantic@2.9.2      16 open issues · 15 tied to symbols · 9 workarounds
+  …
+Found 71 open issues filed against your exact versions in 6 of 7 packages.
+
+<span class="p"># the agent's own first try at closing the pool:</span>
+<span class="hi">await db.$client.end();</span>
+
+<span class="deny">landmine: this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub
+issue filed against exactly that version describes a bug there.</span>
+drizzle-team/drizzle-orm#3402 · [BUG]: node-postgres client doesn't have end function
+Evidence: the issue template says "What version of `drizzle-orm` are you using? 0.36.0"
+Workaround from @cluah (1 reaction), quoted from a public GitHub comment …</pre>
+  </div>
+  <p class="note">Real output. In a live Claude Code session, the agent changed approach and told the user which issue it worked around.</p>
+
+  <h2>How it works</h2>
+  <div class="grid3">
+    <div class="card"><h3>1 · scan</h3><p>Lockfile → exact versions → the open GitHub issues that name them. Every hit is checked for the version, and the workaround is picked from the thread. Optional: a model reads each issue once and writes down exactly what triggers it.</p></div>
+    <div class="card"><h3>2 · tell the agent first</h3><p>A short known-bugs section in AGENTS.md / CLAUDE.md, ranked by the APIs your code actually uses. That's the part that measured as working.</p></div>
+    <div class="card"><h3>3 · backstop</h3><p>A pre-edit hook that pauses a matching edit once, an MCP server for "is this error a known bug?", and <code>check --staged</code> for pre-commit. All offline after the scan.</p></div>
+  </div>
+
+  <h2>Works with your agent</h2>
+  <div class="agents">
+    <span>Claude Code</span><span>Codex</span><span>Cursor</span><span>Gemini CLI</span><span>GitHub Copilot</span><span>Windsurf / Devin</span><span>OpenCode</span><span>Kilo Code</span><span>Cline</span><span>Antigravity</span><span>Amp</span><span>Factory Droid</span><span>Augment</span><span>Kiro</span><span>Qwen Code</span><span>Crush</span><span>Goose</span><span>OpenHands</span><span>Trae</span><span>Pi</span><span>Freebuff · Aider · Zed · Roo (rules + MCP)</span>
+  </div>
+  <p class="note">The rules section is plain markdown that any agent reads. The benchmark ran on Claude Code only. The other agents' hooks and plugins are built from their docs and tested against their payload shapes.</p>
+
+  <h2>Post your number</h2>
+  <div class="cmd"><code>npx landmines share</code></div>
+  <p class="note">Prints one line, such as "landmine found 71 open GitHub issues filed against the exact versions this project pins…", plus a README badge. It shares only counts and package names.</p>
+
+  <h2>The fine print</h2>
+  <ul class="fine">
+    <li><strong>Our benchmark, not a public one.</strong> No public benchmark measures this, so we built landmine-bench: 66 validated trap tasks, frozen dev/test splits, and confirmation runs written down before they ran. Method, every run, and every caveat: <a href="https://github.com/YOUR_GITHUB/landmine/blob/main/docs/BENCHMARK.md">BENCHMARK.md</a>.</li>
+    <li><strong>Selection.</strong> Every trap is a bug landmine had already indexed. The benchmark measures whether landmine helps once the bug is in its index, not how many bugs it finds. Only open issues that name your exact version are found.</li>
+    <li><strong>List length.</strong> A big project can have more known bugs than fit in the 15-item list, which is why it is ranked by the APIs your code uses.</li>
+    <li><strong>Prompt wording.</strong> With fully specified prompts the agent already avoids most traps (19/21 unaided against 21/21 with landmine). The gap shows up when the request reads like a real one.</li>
+    <li><strong>The hook alone didn&rsquo;t measurably help.</strong> Telling the agent up front did, which is why the command above writes the rules section.</li>
+  </ul>
+
+  <footer>landmine · <a href="https://www.npmjs.com/package/landmines">npm: landmines</a> · <a href="https://github.com/YOUR_GITHUB/landmine">GitHub</a> · MIT · Issue text is third-party: landmine frames every quote as untrusted.</footer>
+</main>
+<script>
+  // Run K (docs/BENCHMARK.md, D-47): 42 runs per setup, seeds 1–2, one batch.
+  const data = [
+    { name: 'landmine rules section', passed: 42, vs: 'n/a', hl: true },
+    { name: 'web search on', passed: 36, vs: 'landmine won 6, lost 0 (p = 0.03)' },
+    { name: 'Context7 docs MCP', passed: 35, vs: 'landmine won 7, lost 0 (p = 0.016)' },
+    { name: 'nothing', passed: 35, vs: 'landmine won 7, lost 0 (p = 0.016)' },
+  ];
+  const max = 42;
+  const rows = document.getElementById('rows');
+  const tbody = document.getElementById('tbody');
+  const tip = document.getElementById('tip');
+  const chart = document.getElementById('chart');
+  for (const d of data) {
+    const row = document.createElement('div');
+    row.className = 'row' + (d.hl ? ' hl' : '');
+    row.tabIndex = 0;
+    row.setAttribute('aria-label', `${d.name}: ${d.passed} of ${max} passed`);
+    row.innerHTML = `<div class="name">${d.hl ? '<strong>' + d.name + '</strong>' : d.name}</div><div class="track"><div class="bar" style="width:${(d.passed / max) * 100}%"></div></div><div class="val">${d.passed}/${max}</div>`;
+    const show = (x, y) => {
+      tip.innerHTML = `<strong>${d.name}</strong><br>${d.passed} of ${max} runs passed (${Math.round((d.passed / max) * 100)}%)${d.hl ? '' : '<br>' + d.vs}`;
+      tip.style.left = Math.min(x + 14, chart.clientWidth - 290) + 'px';
+      tip.style.top = y + 14 + 'px';
+      tip.style.opacity = 1;
+    };
+    row.addEventListener('mousemove', (e) => { const r = chart.getBoundingClientRect(); show(e.clientX - r.left, e.clientY - r.top); });
+    row.addEventListener('focus', () => show(row.offsetLeft + 230, row.offsetTop));
+    row.addEventListener('mouseleave', () => (tip.style.opacity = 0));
+    row.addEventListener('blur', () => (tip.style.opacity = 0));
+    rows.appendChild(row);
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${d.name}</td><td>${d.passed}/${max}</td><td>${d.vs}</td>`;
+    tbody.appendChild(tr);
+  }
+</script>
+</body>
+</html>
