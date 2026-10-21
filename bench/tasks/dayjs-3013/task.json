@@ -1,0 +1,14 @@
+{
+  "id": "dayjs-3013",
+  "issue": "iamkun/dayjs#3013",
+  "related": [],
+  "ecosystem": "npm",
+  "package": "dayjs",
+  "version": "1.11.13",
+  "tier": "A",
+  "entry": ["src/patients.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": { "TZ": "Europe/Paris" },
+  "trigger": { "regex": "\\.utc\\([^;\\n]*?,\\s*(?:\\[|[A-Z][A-Z0-9_]*\\b)", "about": "dayjs.utc(str, [formats]) with an array of formats (literal or UPPER_CASE constant)" },
+  "summary": "dayjs.utc(str, [formats]) silently parses in local time instead of UTC"
+}

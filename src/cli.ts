@@ -13,6 +13,7 @@ import { checkFile } from './match.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
 import { renderScanSummary, wantsColor } from './render.js';
+import { DEFAULT_MAX_RULES, RULES_TARGETS, renderRules, writeRules } from './rules.js';
 import { scan } from './scan.js';
 import { findIndexRoot, readIndex } from './store.js';
 import type { LandmineIndex } from './types.js';
@@ -63,13 +64,14 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
     .option('-m, --max-issues <n>', 'most issues to fetch per package version', positiveInt, 100)
     .option('--refresh', 'ignore cached results younger than 24h')
+    .option('--offline', 're-analyse cached data of any age; no network, no token needed')
     .option('--prod', 'skip dev/test dependencies')
     .option('--json', 'print the index as JSON instead of a summary')
     .option('-q, --quiet', 'no progress output')
-    .action(async (opts: { root?: string; maxIssues: number; refresh?: boolean; prod?: boolean; json?: boolean; quiet?: boolean }) => {
+    .action(async (opts: { root?: string; maxIssues: number; refresh?: boolean; offline?: boolean; prod?: boolean; json?: boolean; quiet?: boolean }) => {
       const root = requireRoot(opts.root);
       const { http, replay } = httpFromEnv(env);
-      const token = replay ? { token: 'replay', source: 'GITHUB_TOKEN' as const } : await findToken(env);
+      const token = replay || opts.offline ? { token: 'offline', source: 'GITHUB_TOKEN' as const } : await findToken(env);
       if (!token) {
         throw new CliError(
           'landmine scan needs a GitHub token (GitHub search and GraphQL require one). Set GITHUB_TOKEN or GH_TOKEN, or log in with `gh auth login`. A token with no scopes is enough for public repos.',
@@ -77,8 +79,8 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       }
       const log = opts.quiet || opts.json ? () => {} : (m: string) => process.stderr.write(`${m}\n`);
       const github = new GitHubClient({ http, token: token.token, log });
-      log(`Scanning ${relative(process.cwd(), root) || '.'} (token from ${token.source})`);
-      const result = await scan({ root, http, github, maxIssues: opts.maxIssues, refresh: Boolean(opts.refresh), prod: Boolean(opts.prod), log });
+      log(`Scanning ${relative(process.cwd(), root) || '.'} ${opts.offline ? '(offline, cached data only)' : `(token from ${token.source})`}`);
+      const result = await scan({ root, http, github, maxIssues: opts.maxIssues, refresh: Boolean(opts.refresh), offline: Boolean(opts.offline), prod: Boolean(opts.prod), log });
       if (opts.json) {
         process.stdout.write(`${JSON.stringify(result.index, null, 2)}\n`);
         return;
@@ -181,6 +183,25 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         for (const n of r.notes) process.stdout.write(`  ${n}\n`);
       }
       if (!readIndex(root)) process.stdout.write('  No index yet. Run `landmine scan` so the hook has something to match.\n');
+    });
+
+  program
+    .command('rules')
+    .description('Print (or write into AGENTS.md / CLAUDE.md / GEMINI.md) a short known-open-bugs section any agent reads')
+    .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest directory with a lockfile)')
+    .option('-w, --write <files...>', `markdown files to update between landmine markers (e.g. ${RULES_TARGETS.join(' ')})`)
+    .option('--max <n>', 'most issues to list', positiveInt, DEFAULT_MAX_RULES)
+    .action((opts: { root?: string; write?: string[]; max: number }) => {
+      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const section = renderRules(loadIndex(root), opts.max);
+      if (!opts.write?.length) {
+        process.stdout.write(`${section}\n`);
+        return;
+      }
+      for (const f of opts.write) {
+        const path = resolve(root, f);
+        process.stdout.write(`${writeRules(path, section)}: ${relative(process.cwd(), path) || path}\n`);
+      }
     });
 
   program

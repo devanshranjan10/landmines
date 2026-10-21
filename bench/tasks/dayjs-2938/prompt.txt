@@ -1,0 +1,3 @@
+`GET /orders` takes an optional `since` query parameter that limits the list to orders placed on or after that date. It's currently passed straight through to the query, so bad values produce confusing results instead of an error.
+
+Please implement `parseSince(raw)` in `src/orders.js`: if the parameter is missing or empty, return `null` (no filter); if it is a valid calendar date written as `YYYY-MM-DD`, return it as a `YYYY-MM-DD` string; for anything else throw `new HttpError(400, ...)` with a helpful message, which the handler already turns into a 400 response. We use dayjs for dates in this service, so please stay with it. Keep the existing exports working and don't change dependencies.

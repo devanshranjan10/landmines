@@ -1,0 +1,14 @@
+{
+  "id": "dayjs-2797",
+  "issue": "iamkun/dayjs#2797",
+  "related": ["iamkun/dayjs#2778", "iamkun/dayjs#2741"],
+  "ecosystem": "npm",
+  "package": "dayjs",
+  "version": "1.11.13",
+  "tier": "A",
+  "entry": ["src/bankImport.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": { "TZ": "Europe/Paris" },
+  "trigger": { "regex": "['\"`][^'\"`\\n]*(?:HH|hh|mm|ss)[^'\"`\\n]*Z{1,2}['\"`][\\s\\S]*?,\\s*true\\s*\\)", "about": "strict customParseFormat parse (third arg true) with a Z/ZZ offset token in the format" },
+  "summary": "dayjs(str, 'YYYYMMDD HHmmss ZZ', true) is always invalid when the offset differs from the host zone"
+}

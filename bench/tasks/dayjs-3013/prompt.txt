@@ -1,0 +1,3 @@
+Intake forms send a patient's birth date in one of the formats listed in `BIRTH_DATE_FORMATS` in `src/patients.js` (`2024-03-07` from the web form, `2024/3/7` from the kiosk).
+
+Please implement `normalizeBirthDate(raw)` in `src/patients.js`: it should return the birth date as midnight UTC in ISO-8601 (`toISOString()` form, e.g. `1995-05-01T00:00:00.000Z` for `1995-05-01` or `1995/5/1`), and `null` if the value isn't a valid date in one of the accepted formats. We use dayjs with the utc and customParseFormat plugins here, so please stay with dayjs. Keep the existing exports working and don't change dependencies.

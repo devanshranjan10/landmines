@@ -9,3 +9,6 @@ examples/demo/.codex/
 examples/demo/node_modules/
 landmines-*.tgz
 examples/demo/.mcp.json
+bench/.venv/
+bench/.work/
+__pycache__/

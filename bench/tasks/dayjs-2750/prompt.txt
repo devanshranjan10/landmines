@@ -1,0 +1,3 @@
+Subscription plans now carry their billing period as a duration object, e.g. `{ weeks: 2 }`, `{ months: 1 }` or `{ weeks: 1, days: 1 }` (see `PLANS` in `src/renewals.js`).
+
+Please implement `nextRenewal(startIso, period)` in `src/renewals.js`: it gets the subscription start as an ISO date string (UTC) and a plan period object, and returns the next renewal date as a `YYYY-MM-DD` string in UTC. We already use dayjs with the duration plugin for this module, so please stay with dayjs. Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,3 @@
+We've onboarded a second carrier, Nordfracht. Their shipping manifests write dates as day, English month abbreviation and two-digit year separated by dots, e.g. `29.Jul.21` or `03.Jan.24` (years are 20xx).
+
+Please implement `parseNordfrachtDate(raw)` in `src/manifest.js`: return the date as `YYYY-MM-DD`, or `null` if the value isn't a valid date in that format, like the existing `parseBaltLineDate` does for the other carrier. Please keep using dayjs (customParseFormat is already set up in this module). Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,25 @@
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc.js';
+import customParseFormat from 'dayjs/plugin/customParseFormat.js';
+
+dayjs.extend(utc);
+dayjs.extend(customParseFormat);
+
+/** Accepted birth-date formats: web form, then kiosk. */
+export const BIRTH_DATE_FORMATS = ['YYYY-MM-DD', 'YYYY/M/D'];
+
+export const BIRTH_DATE_HINT = `Use one of: ${BIRTH_DATE_FORMATS.join(', ')}`;
+
+/**
+ * Birth date from an intake form, in one of BIRTH_DATE_FORMATS.
+ * Returns midnight UTC as an ISO string (e.g. '1995-05-01T00:00:00.000Z'), or null if invalid.
+ */
+export function normalizeBirthDate(raw) {
+  const d = dayjs.utc(String(raw ?? '').trim(), BIRTH_DATE_FORMATS, true);
+  return d.isValid() ? d.toISOString() : null;
+}
+
+/** Age in whole years at `onIso` (UTC). */
+export function ageOn(birthIso, onIso) {
+  return dayjs.utc(onIso).diff(dayjs.utc(birthIso), 'year');
+}

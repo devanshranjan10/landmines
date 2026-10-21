@@ -95,6 +95,33 @@ export interface Landmine {
   nonBug?: true;
   workaround?: Workaround;
   fixHint?: FixHint;
+  /** LLM-written trigger card (`landmine cards`). When present it decides when the hook fires. */
+  card?: TriggerCard;
+}
+
+/**
+ * What an LLM read out of the issue thread, once, at scan time: the API the bug is in and the condition that makes it
+ * fire. The hook checks it offline (D-34). Strings are untrusted model output over untrusted issue text.
+ */
+export interface TriggerCard {
+  /** False for feature requests, questions, docs, intended behaviour and user error. */
+  isBug: boolean;
+  /** Does the bug affect the pinned version, per the thread? */
+  affectsPinned: 'yes' | 'likely' | 'no' | 'unknown';
+  /** Names the edit must touch: functions, methods, classes, options (`add`, `Duration.add`, `use_enum_values`). */
+  apis: string[];
+  /** AND of OR-groups of tokens the edited file must also contain (identifiers, option keys, string contents). */
+  requires: string[][];
+  /** One line: what goes wrong, and when. */
+  condition: string;
+  /** One or two lines: how to avoid it at this version. */
+  workaround?: string;
+  /** Comment the workaround comes from. */
+  workaroundUrl?: string;
+  confidence: number;
+  provider: string;
+  model: string;
+  promptVersion: number;
 }
 
 export interface PackageRecord {

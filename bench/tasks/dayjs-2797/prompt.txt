@@ -1,0 +1,3 @@
+The bank's CSV export has a booking timestamp column in the form `YYYYMMDD HHmmss ±HHMM`, e.g. `20241224 061500 +0600` (the branch's local time followed by its UTC offset).
+
+Please implement `parseBookingTime(raw)` in `src/bankImport.js`: return the instant as an ISO-8601 UTC string (the `toISOString()` format, e.g. `2024-12-24T00:15:00.000Z` for the example above), or `null` when the cell is not a valid timestamp in exactly that format (empty, different layout, or impossible values such as month 13), the same convention `parseValueDate` uses. We use dayjs with customParseFormat for the import parsing, so please stay with dayjs. Keep the existing exports working and don't change dependencies.

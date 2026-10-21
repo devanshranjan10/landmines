@@ -26,6 +26,8 @@ export interface ScanOptions {
   /** Packages processed at once (GitHub calls are separately limited by the client). */
   concurrency?: number;
   write?: boolean;
+  /** Use cached raw data of any age and never touch the network; packages without a cache are reported as errors. */
+  offline?: boolean;
 }
 
 export interface ScanResult {
@@ -78,9 +80,10 @@ export function cacheFile(root: string, dep: Pick<Dependency, 'ecosystem' | 'nam
   return join(root, INDEX_DIR, 'cache', dep.ecosystem, `${encodeURIComponent(dep.name)}@${encodeURIComponent(dep.version)}.json`);
 }
 
-function readCache(file: string, now: Date, maxIssues: number): Fetched | undefined {
+function readCache(file: string, now: Date, maxIssues: number, anyAge = false): Fetched | undefined {
   try {
     const f = JSON.parse(readFileSync(file, 'utf8')) as Fetched;
+    if (anyAge && Array.isArray(f.issues)) return f;
     const fresh = now.getTime() - Date.parse(f.fetchedAt) < CACHE_TTL_MS;
     const enough = f.maxIssues >= maxIssues || f.issues.length < f.maxIssues;
     return fresh && enough && Array.isArray(f.issues) ? f : undefined;
@@ -140,9 +143,14 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
     }
     try {
       const file = cacheFile(opts.root, dep);
-      let fetched = opts.refresh ? undefined : readCache(file, started, maxIssues);
+      let fetched = opts.refresh && !opts.offline ? undefined : readCache(file, started, maxIssues, opts.offline);
       if (fetched) reused++;
-      else {
+      else if (opts.offline) {
+        rec.status = 'error';
+        rec.detail = 'no cached data (offline)';
+        log(`  ${dep.name}@${dep.version}: no cached data (offline)`);
+        return;
+      } else {
         fetched = await fetchDep(dep, started);
         if (opts.write !== false) writeCache(opts.root, file, fetched);
       }

@@ -52,6 +52,25 @@ describe('scan (recorded GitHub, npm and PyPI responses)', () => {
     expect(again.index.landmines.length).toBeGreaterThan(20);
   });
 
+  it('--offline re-analyses a cache of any age and never touches the network', async () => {
+    const root = project();
+    const first = await scan({ root, ...clients(replayHttp(HTTP_DIR)), maxIssues: 30, now: () => NOW });
+    const offline: Http = { fetch: () => Promise.reject(new Error('network used')) };
+    const later = () => new Date(NOW.getTime() + 30 * 86_400_000);
+    const again = await scan({ root, ...clients(offline), maxIssues: 30, now: later, offline: true });
+    expect(again.reused).toBe(6);
+    expect(again.index.landmines.map((l) => l.id)).toEqual(first.index.landmines.map((l) => l.id));
+    // Without --offline the stale cache is refetched (and here the network is down).
+    const stale = await scan({ root, ...clients(offline), maxIssues: 30, now: later, write: false });
+    expect(stale.reused).toBe(0);
+  });
+
+  it('--offline reports packages with no cache as errors', async () => {
+    const offline: Http = { fetch: () => Promise.reject(new Error('network used')) };
+    const result = await scan({ root: project(), ...clients(offline), maxIssues: 30, now: () => NOW, offline: true, write: false });
+    expect(result.index.packages.every((p) => p.status === 'error' && p.detail === 'no cached data (offline)')).toBe(true);
+  });
+
   it('isolates per-package failures', async () => {
     const replay = replayHttp(HTTP_DIR);
     const flaky: Http = { fetch: (url, init) => (url.includes('left-pad') ? Promise.resolve(new Response('down', { status: 503 })) : replay.fetch(url, init)) };
