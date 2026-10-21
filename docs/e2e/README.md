@@ -63,6 +63,20 @@ The prompt does not mention landmine, bugs, or `$client`.
 The run took 5 turns, 32 s and $0.26. The resulting file is
 `claude-session-result.ts.txt`.
 
+### 3b. Re-run with the final build
+
+After the accuracy work (corroboration, and heads-ups off by default; DECISIONS D-27 to
+D-29), the same prompt was run again against the final `dist/`.
+
+- Files: `claude-session-final.jsonl` and `claude-hook-log-final.jsonl`. The model's
+  view of the deny is in `claude-deny-message-final.txt`.
+- The edit using `db.$client.end()` was again denied once, citing drizzle-orm#3402.
+  This time the deny says why it applies: "this file also uses
+  `drizzle-orm/node-postgres`, which the issue names".
+- Claude switched to an owned `pg.Pool` and told the user why, linking the issue.
+- It made 2 more edits, and the hook let both through.
+- The run took 7 turns and $0.28.
+
 ## 4. Live Codex CLI session
 
 **Setup.** codex-cli 0.159.0. The demo was copied to `/tmp/lm-codex-demo` with its own
@@ -93,8 +107,10 @@ LANDMINE_DEBUG_LOG=/tmp/lm-codex-hook.jsonl codex exec -C /tmp/lm-codex-demo -s 
 4. Its final message: "I used an explicit pool because this project's Drizzle version
    has a known issue with closing its implicit client."
 
-The real payloads from both sessions are test fixtures in `test/fixtures/payloads/`,
-and `test/hook.test.ts` replays them offline.
+The real payloads from both sessions are test fixtures in `test/fixtures/payloads/`.
+`test/hook.test.ts` replays them offline against the final code, and the Codex
+`apply_patch` is still denied. The Codex session itself was not re-run live after
+the D-27 to D-29 changes.
 
 ## Not run live
 
