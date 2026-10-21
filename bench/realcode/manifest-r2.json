@@ -1,0 +1,1052 @@
+[
+  {
+    "pkg": "arrow",
+    "repo": "jimfingal/astrologly",
+    "path": "aaas/app.py",
+    "sha": "aa2f12674962782c247d15d5594c7ac9c4e9cb62",
+    "url": "https://github.com/jimfingal/astrologly/blob/81dbf06fc960bd87b4ded6c4177fdcd5e8e2bea7/aaas/app.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "ChadevPython/beer-tracker",
+    "path": "manage.py",
+    "sha": "7d56b2d37d3f695e9f90c4256ff1f3c443e206a0",
+    "url": "https://github.com/ChadevPython/beer-tracker/blob/0e22e7ebfe6e8efd6ca160d5cccdfedf294e700f/manage.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "haikerapples/timetask",
+    "path": "Tool.py",
+    "sha": "4c0cdc83c97e9a6ac7415c71a3acee7304bcd1ec",
+    "url": "https://github.com/haikerapples/timetask/blob/1f60d1bab898753381f2156a97b643801f0a85b0/Tool.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "tnolle/binet",
+    "path": "april/fs.py",
+    "sha": "35825fe28ebed0c91af28d89c62aad6f24cf905c",
+    "url": "https://github.com/tnolle/binet/blob/53706255f16f704200b25253b0c4d49d84b5e24e/april/fs.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "lamter/washbar",
+    "path": "main.py",
+    "sha": "eee3f10a528dfadf0c41a047cbe3267cfb26374b",
+    "url": "https://github.com/lamter/washbar/blob/caa85fba6e5bdf12793de2a9586b6ed24953e7af/main.py"
+  },
+  {
+    "pkg": "arrow",
+    "repo": "reckonsys/opensteer",
+    "path": "tmp.py",
+    "sha": "2be33ad0f40e3203889e4e7a739fca2b59e15109",
+    "url": "https://github.com/reckonsys/opensteer/blob/3c47bcf0a8de8e363ce8cced02827fe21a0d406a/tmp.py"
+  },
+  {
+    "pkg": "axios",
+    "repo": "hyperonecom/h1-client-js",
+    "path": "base.ts",
+    "sha": "61f54f51820d083bac7eeff3f3275f5329697843",
+    "url": "https://github.com/hyperonecom/h1-client-js/blob/a169962b7761d420eab014643c5671df8c5d1b0b/base.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "EmirhanKrt/Crypto-Arbitrage-Scanner",
+    "path": "index.ts",
+    "sha": "934933c6618ce61836955309f8d7916f28b3792c",
+    "url": "https://github.com/EmirhanKrt/Crypto-Arbitrage-Scanner/blob/926347a638100f29b5a7b7e599a52ada23b22c6e/index.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "moonshine-software/telegram-mini-app",
+    "path": "main.ts",
+    "sha": "4a21baa2bb6f2629cf35f8f3d47e7d6e258d3ae2",
+    "url": "https://github.com/moonshine-software/telegram-mini-app/blob/26cae6b073a59867e2db2d30a18db77ea3785004/main.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "Z-Dux/Crused-Autocatcher",
+    "path": "index.ts",
+    "sha": "71a31f3c08004d49e97e0565ead1eb1df75bcef9",
+    "url": "https://github.com/Z-Dux/Crused-Autocatcher/blob/04677b1429b70ec895acc91f35f259fa62005abd/index.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "iconfont-cli/iconfont-parser",
+    "path": "index.ts",
+    "sha": "e685a2d057719175e13b6f155bbd87d985435a3b",
+    "url": "https://github.com/iconfont-cli/iconfont-parser/blob/641c00574e79fb95782fcf416b7d778a9022e1cc/index.ts"
+  },
+  {
+    "pkg": "axios",
+    "repo": "YZYLAB/vercel-firewall-bypass",
+    "path": "index.ts",
+    "sha": "c20938241e811fdb173a5c72e12840b4cf51c45f",
+    "url": "https://github.com/YZYLAB/vercel-firewall-bypass/blob/eaa1a0aab562ee329ccc6b941466d043496a2d86/index.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "quantu-app/quantu-app",
+    "path": "prisma/seed.ts",
+    "sha": "81fdac01231d0dc9ed8ab9fb972179b469cf5bee",
+    "url": "https://github.com/quantu-app/quantu-app/blob/c82c303398deaaeff31da6a2782ce55e86303ed2/prisma/seed.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "SaiUbc/Tranquilo",
+    "path": "utils/parseData.ts",
+    "sha": "b81b031c1de27c24390413e516a8cd7b1510d6c8",
+    "url": "https://github.com/SaiUbc/Tranquilo/blob/a7358d6290f2e86424ff5f07e60b9e7d443c754f/utils/parseData.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "Precision-Marks/airsoft_database",
+    "path": "src/parseCSV.ts",
+    "sha": "e722de47fefe5286d7171f8e8db0f60941fa2725",
+    "url": "https://github.com/Precision-Marks/airsoft_database/blob/22aaab5e0ee4764dc9f555f85b1809edbcc900af/src/parseCSV.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "nandenjin/twinkle-parser",
+    "path": "src/index.ts",
+    "sha": "88b7aea24a7cfafb76114e4aa6b042ab5475ae73",
+    "url": "https://github.com/nandenjin/twinkle-parser/blob/f40a4d228f8582447023d789a351b466e7537066/src/index.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "6529-Collections/allowlist-lib",
+    "path": "src/utils/csv.ts",
+    "sha": "14c60f21e2f56a54c29c5bc311027dd76ce1b2b3",
+    "url": "https://github.com/6529-Collections/allowlist-lib/blob/a2d41b4d3c7a2fe0051955395d6341573a1853dc/src/utils/csv.ts"
+  },
+  {
+    "pkg": "csv-parse",
+    "repo": "Protect-Democracy/openomb",
+    "path": "bin/csv-to-ts.ts",
+    "sha": "818d07c69897929ed45f07fda3486b7a694b34fd",
+    "url": "https://github.com/Protect-Democracy/openomb/blob/df56aaeb53ac8da993a53ed90762efc6cc14fcbb/bin/csv-to-ts.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "bepyan/bepyan.me",
+    "path": "libs/mdx.ts",
+    "sha": "e9f8fca90ef4728dfef597ddd4cd4b71b80976ff",
+    "url": "https://github.com/bepyan/bepyan.me/blob/ecae640787686184d100baff1e2cb49a3109104c/libs/mdx.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "TiagoJacinto/obsidian-object-oriented-thinking",
+    "path": "src/utils.ts",
+    "sha": "b464d41bca66c6de29e53abd5b0e178d50f84bc4",
+    "url": "https://github.com/TiagoJacinto/obsidian-object-oriented-thinking/blob/ac811889790931318afaf6f1eeba162d2415a0c4/src/utils.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "we-dance/v4",
+    "path": "utils.ts",
+    "sha": "2fbb0e1a0a8491a0ac2bfee7b22b79c9b9330f3c",
+    "url": "https://github.com/we-dance/v4/blob/affb43e76c405be0124ab14152b87169d07c6c32/utils.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "frptools/corelib",
+    "path": "src/date.ts",
+    "sha": "8727f1e6990b621b75520e4471cffeeeea5a4736",
+    "url": "https://github.com/frptools/corelib/blob/34bc1b41aea7e8724ddc0b9ecb78c5fe1bd132cf/src/date.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "codicelq/mytime",
+    "path": "src/Task.ts",
+    "sha": "8690faa6df0a36fe1f67e5e97e43d34df6e223da",
+    "url": "https://github.com/codicelq/mytime/blob/9cb33c51180819b02f045be7b2ad90d3adae1388/src/Task.ts"
+  },
+  {
+    "pkg": "date-fns",
+    "repo": "jackall3n/opacity",
+    "path": "index.ts",
+    "sha": "d576f5525b7e0ce699a1b7d045082f0f66cc4f68",
+    "url": "https://github.com/jackall3n/opacity/blob/2df0dfd174d28c48ce44fe91993f414e48d82f76/index.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "maotoumao/MusicFreePluginTemplate",
+    "path": "src/index.ts",
+    "sha": "9abbc08eb69abe9ed4cfb21b767bbfb125c72da4",
+    "url": "https://github.com/maotoumao/MusicFreePluginTemplate/blob/3286c0da520ca49379372dd05a597f2127440d9a/src/index.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "muffix/couleurbummel",
+    "path": "src/i18n.ts",
+    "sha": "f33dac6bffc1260bd6a37dd642612b5b486efc21",
+    "url": "https://github.com/muffix/couleurbummel/blob/594d52cb18f916f30b0a2b820e9c1b5d38d67a9e/src/i18n.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "Sanofi-IADC/glisten",
+    "path": "src/main.ts",
+    "sha": "c64a228dee54b7ca0494b217229bc52e724721f1",
+    "url": "https://github.com/Sanofi-IADC/glisten/blob/e91744522d7a66aea84717954d6b3bdf03574415/src/main.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "widget-js/hotspot",
+    "path": "src/main.ts",
+    "sha": "b4b94772e27c845ffe5b9be8b41c78cd0179372a",
+    "url": "https://github.com/widget-js/hotspot/blob/cff331e104d8f991e5cd7aa1be164d0fb8c93cc9/src/main.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "QwenStorm/xl-frontend",
+    "path": "src/main.ts",
+    "sha": "5cfbd485d2c1bedf545dfc016f2cd89b5d62ec5e",
+    "url": "https://github.com/QwenStorm/xl-frontend/blob/42461fac7e13f00b4ecdd2b25743510b308430a1/src/main.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "jkker/blog",
+    "path": "lib/dayjs.ts",
+    "sha": "2b935800fc1a400754a9d587de6e0ce7c8a289b9",
+    "url": "https://github.com/jkker/blog/blob/edbe6512e179a6d630893a3f44e3c3f1f903d45f/lib/dayjs.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "qbpsimulator/bimp-ui",
+    "path": "src/XMLParser.ts",
+    "sha": "ecc829c8f287498ff8f636a092cdc097e61c160e",
+    "url": "https://github.com/qbpsimulator/bimp-ui/blob/263932fb9742cabf1e0b0ca54685de0b9dc4ab83/src/XMLParser.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "4success/nfse-campinas",
+    "path": "src/utils/nfseXml.ts",
+    "sha": "74dfa5a0dc5febdd76314e6e3c6a264248fa6e8f",
+    "url": "https://github.com/4success/nfse-campinas/blob/e22e2b9f0c7b3ad7f4a05cacb436954f02ec5243/src/utils/nfseXml.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "lukajvnic/ttc-leaderboard",
+    "path": "api/ttc.ts",
+    "sha": "8599cc5be0f7f078822e4eb50b2d954c3987fe5c",
+    "url": "https://github.com/lukajvnic/ttc-leaderboard/blob/d9e1dc6a44711688f366e4e25122bc8d38fe0c15/api/ttc.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "clayrisser/ts-gir",
+    "path": "src/Gir.ts",
+    "sha": "c12cd401fd8073026bed618c372c1e7c353bcd55",
+    "url": "https://github.com/clayrisser/ts-gir/blob/9695659649a0d710855e18968eec49023da655c9/src/Gir.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "SaintJosephCatholicChurch/saint-joseph-catholic-church-site",
+    "path": "src/lib/rss.ts",
+    "sha": "050bd10bcc9389902c0e752e00146afa4e12b10e",
+    "url": "https://github.com/SaintJosephCatholicChurch/saint-joseph-catholic-church-site/blob/6d791717f1961b0abdc67a350bd29a7ea73e7612/src/lib/rss.ts"
+  },
+  {
+    "pkg": "fast-xml-parser",
+    "repo": "lorenzoc25/vite-plugin-xml-loader",
+    "path": "index.ts",
+    "sha": "c473c13807378352fec03730173b7f80fc2b3ed0",
+    "url": "https://github.com/lorenzoc25/vite-plugin-xml-loader/blob/087df0dee3b3a13cf3d9520c0a62d1ad26bb319c/index.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "Requenez-Diaz/Crud-conexion",
+    "path": "auth.ts",
+    "sha": "87188e8eea2805736d6bf7020a8bc7be7f8b3716",
+    "url": "https://github.com/Requenez-Diaz/Crud-conexion/blob/8051bb7286f10271337c074d375fee2278657c96/auth.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "mcebzkhumz-stack/EduPortal-",
+    "path": "auth.ts",
+    "sha": "784e4fd0c913d5cf240e485a4da5ab36fff7e85a",
+    "url": "https://github.com/mcebzkhumz-stack/EduPortal-/blob/558cb0a38757adaaf4aab0a09b36535f25ced693/auth.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "syousif94/aiprox",
+    "path": "auth.ts",
+    "sha": "0990c6fd2361f676ac729f9f054748870ca286ff",
+    "url": "https://github.com/syousif94/aiprox/blob/a1f617bf86e98aef153a0afb5715c600f108e9ab/auth.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "mkai-lab/COD-Battle-Management-System",
+    "path": "auth.ts",
+    "sha": "30abe9a56cf778f3a4a1a9e6c9f15a3a3ac68a38",
+    "url": "https://github.com/mkai-lab/COD-Battle-Management-System/blob/c6dae8ddb26e8ca5175f6e9343742c9a0db3a6ac/auth.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "sspringer82/nodeworkshop",
+    "path": "index.ts",
+    "sha": "01db1d2b630a4c44f5c4a32101828ceef47713d9",
+    "url": "https://github.com/sspringer82/nodeworkshop/blob/23b964735eca2b7dec0f8f8806d3af4bbe8c1b0b/index.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "berkerozer/dblesslogin",
+    "path": "index.ts",
+    "sha": "d112903c193bb609218d399b0dfc3a185605ed79",
+    "url": "https://github.com/berkerozer/dblesslogin/blob/1a0a792d323c561cdf5fb323de614820266c53da/index.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "IABTechLab/uid2-self-serve-portal",
+    "path": "knexfile.ts",
+    "sha": "0d83cb8e8ae3ecbe11cd62144496321c695a7df9",
+    "url": "https://github.com/IABTechLab/uid2-self-serve-portal/blob/8934e8ae11c7d205280346a0e4071dd36e5ab8b0/knexfile.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "ceramicnetwork/ceramic-anchor-service",
+    "path": "src/app.ts",
+    "sha": "108ebe17969e855e928796c0e04b607c770f647a",
+    "url": "https://github.com/ceramicnetwork/ceramic-anchor-service/blob/9c0929f0ca979fa9b9a124cba4232e41b5a5333e/src/app.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "stalniy/casl-persisted-permissions-example",
+    "path": "src/db.ts",
+    "sha": "b0ae101139fac45b55f642be24bb1b15da07ab1a",
+    "url": "https://github.com/stalniy/casl-persisted-permissions-example/blob/a017862c0dede9d35a1bde6fe638dc3d69b0dd40/src/db.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "guilima/financial-back",
+    "path": "db.ts",
+    "sha": "edcecc104d8a313c0d51780e48a7abcca1833ff2",
+    "url": "https://github.com/guilima/financial-back/blob/d6aa6493596d0be7832aba77918c4e02235dd839/db.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "squareboat/nestjs-objection",
+    "path": "lib/options.ts",
+    "sha": "6c274ada25a4e73cab495a1274179b25677c8710",
+    "url": "https://github.com/squareboat/nestjs-objection/blob/bce275f7165148fdfe06c7f3d898ad4f2b9e6846/lib/options.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "antonkalik/knex-postgres-boilerplate",
+    "path": "knexfile.ts",
+    "sha": "18386b538ae89775fc77328d0cf12dd784450118",
+    "url": "https://github.com/antonkalik/knex-postgres-boilerplate/blob/85da77c7a0203dd655afcb9d9374377efba6b2e3/knexfile.ts"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "anzhang314/ReScore",
+    "path": "BPR.py",
+    "sha": "6e4a345190364a2f8edfd1760619acfbf037668a",
+    "url": "https://github.com/anzhang314/ReScore/blob/7bb9bd8ffca6484ead12af1a7c0628ef6fb1a8fa/BPR.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "andrewalker/grafos",
+    "path": "DFS.py",
+    "sha": "18c83fef6a62b87b93828e2df6f99b8295af2f29",
+    "url": "https://github.com/andrewalker/grafos/blob/ba2c8271cdd40f46a436ef1b32b0393725691977/DFS.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "Zhengzi/maple",
+    "path": "f.py",
+    "sha": "a188612db1ad0749eb49d187bdbfc861c9af4094",
+    "url": "https://github.com/Zhengzi/maple/blob/13eeade2ead40fab3fc83edd9a3fbf971f95f0ee/f.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "01dkg/Graph-Theory-Modelling",
+    "path": "nx.py",
+    "sha": "e274e977dc3f567486d0cebd6b2de5190a6079b1",
+    "url": "https://github.com/01dkg/Graph-Theory-Modelling/blob/62b248453ef3fce51a9039a8e0c7bbf243aa8bc0/nx.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "yashy3nugu/Sort-By-Face",
+    "path": "CW.py",
+    "sha": "90b0a31860aa5f498c6f323f180410d32e960897",
+    "url": "https://github.com/yashy3nugu/Sort-By-Face/blob/d383767875803ed3d9f1f96d79178f783f20c3d2/CW.py"
+  },
+  {
+    "pkg": "networkx",
+    "repo": "IBM/kpa-hierarchy",
+    "path": "KPH.py",
+    "sha": "b7bcca9f0293679e73bf934e4b5cb8579570bf39",
+    "url": "https://github.com/IBM/kpa-hierarchy/blob/56fc144ab302cab19316a6d58b3e668e4a4f5be4/KPH.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "tkkcc/prior",
+    "path": "4.py",
+    "sha": "2d5fe31bb6d7ae690cb2c2fb835967fdccef16e3",
+    "url": "https://github.com/tkkcc/prior/blob/08789aeba411765ebf0be7558508640f118039bf/4.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "nishio/linear",
+    "path": "t.py",
+    "sha": "14970b1332871f17f4cd4b039828a3cac0ca708d",
+    "url": "https://github.com/nishio/linear/blob/64dff8f715a585fcaff856488351ce8c2cad5e34/t.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "tanmoysrt/OpenCV-Basics",
+    "path": "1.py",
+    "sha": "1a324e90b33f6601672bf9dfd684f022a10bc55a",
+    "url": "https://github.com/tanmoysrt/OpenCV-Basics/blob/acfaf7553c36184541e80ccb9a0730e5cca24584/1.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "zhangbo2008/wav2lip384_my2",
+    "path": "3.py",
+    "sha": "d4f83bcedbe77b95572512dff41654f1c7d031ef",
+    "url": "https://github.com/zhangbo2008/wav2lip384_my2/blob/4a53b6c78524b779e13bc5c52d9287723b5dd8b0/3.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "engmubarak48/Face-Recognition-System",
+    "path": "app",
+    "sha": "029504f4e88fae5222e5d0e8db0483abe1e8295c",
+    "url": "https://github.com/engmubarak48/Face-Recognition-System/blob/3b1b0993b126cbff788b5ab9acb3a5251cabfc61/app"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "ferdialaca/Carla_Detection_YOLOv5",
+    "path": "x.py",
+    "sha": "c8d289c3a1b2b781d15c62ce034b152817283ef1",
+    "url": "https://github.com/ferdialaca/Carla_Detection_YOLOv5/blob/22fe5cffb4981b52ceb02108c33f1b54b5c8b8e2/x.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "shreyashbandekar/ML-Lab",
+    "path": "7.py",
+    "sha": "c5a2daf9642bdf1afd014908452cdeb82796b0c1",
+    "url": "https://github.com/shreyashbandekar/ML-Lab/blob/03bbb48fb940507d70b2ba9f39c13be4b1413d81/7.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "zetongxue/rumor_control",
+    "path": "1.py",
+    "sha": "96a245099407c9221bfd7e0b5e26515ee46550fd",
+    "url": "https://github.com/zetongxue/rumor_control/blob/4c50c275a25a699b9ad9a0f9469b0576d25b99e2/1.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "Aryan1010iit/tds-data-analyst-agent",
+    "path": "t.py",
+    "sha": "1c26572fca03d5cbbbddb5c8be0027e51eacb471",
+    "url": "https://github.com/Aryan1010iit/tds-data-analyst-agent/blob/699af08b09c8963c53d8fa9b3cf0fc816be8e3d1/t.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "anirudhkaushik2003/INLP-Project-Team-38",
+    "path": "a.py",
+    "sha": "1d08529d5fa0be3f7a239359a8e99caba045c4a1",
+    "url": "https://github.com/anirudhkaushik2003/INLP-Project-Team-38/blob/bf992c76a856f524e56c1e93bb618afea1f03c75/a.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "VarshaShaheen/Find-MTF",
+    "path": "p.py",
+    "sha": "d2d10e6b3fed3bbb58727ab79844fef9660c6a25",
+    "url": "https://github.com/VarshaShaheen/Find-MTF/blob/1fdbf9e6a45fa19aa1a343580a637c7189ccde75/p.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "AbhishekPrasadUnnithan/travel-recommendation",
+    "path": "h.py",
+    "sha": "ca809af95ec6ded8a7e16a5628d247407ce8bd8c",
+    "url": "https://github.com/AbhishekPrasadUnnithan/travel-recommendation/blob/3a582eddb49d887a053cb3c837f63438bfd6e76c/h.py"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "ryantate13/js-cli",
+    "path": "csv.ts",
+    "sha": "1ca67a7356728a3d1149bd66ac0786315ed8e8e5",
+    "url": "https://github.com/ryantate13/js-cli/blob/ef2e532c84dde7440675c8bbb2250b0d7267692a/csv.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "mdakram28/lc-admin",
+    "path": "src/util/api.ts",
+    "sha": "649c6bc6e05968c81d0995e6fa0e6aa47a054dca",
+    "url": "https://github.com/mdakram28/lc-admin/blob/3b87830442a18f509b8a3558114c166e8f430d34/src/util/api.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "cronin101/DNB2YNAB-TypeScript",
+    "path": "source/app.ts",
+    "sha": "4d427a8dff2947e6fbf5b47672cc19f40fd5ad4b",
+    "url": "https://github.com/cronin101/DNB2YNAB-TypeScript/blob/f64ad5ad53ddd2354482d0d197c3da5ce0931339/source/app.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "KGeorgii/Publicat",
+    "path": "lib/loadCsv.ts",
+    "sha": "8247d05e34d1ac6756df13f5438c71dac8b906a8",
+    "url": "https://github.com/KGeorgii/Publicat/blob/32e35fd3d40b5f163a95b4f091b74cb352272548/lib/loadCsv.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "clvcooke/scimap",
+    "path": "src/lib/csv.ts",
+    "sha": "e2d8e6d74b28d7234804eaebe8cd0ffa9023f6e1",
+    "url": "https://github.com/clvcooke/scimap/blob/5fbb7c5555f8527b0938c568476a343a135a05a3/src/lib/csv.ts"
+  },
+  {
+    "pkg": "papaparse",
+    "repo": "term-structure/TS-Circom",
+    "path": "scripts/block.ts",
+    "sha": "f0c2fa0a9f4dec6540e720048f07ecc0c189c889",
+    "url": "https://github.com/term-structure/TS-Circom/blob/fdecf81dd95a67a98689015a251c0c3729f04dde/scripts/block.ts"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "EtienneMMichel/causalPlayground",
+    "path": "t.py",
+    "sha": "250f80714f7b87b83596c6d5fdae19590c5b0a0c",
+    "url": "https://github.com/EtienneMMichel/causalPlayground/blob/4493bb777a65c5eb6589e2248291a20161c4fc7d/t.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "zainabhodroj/Customer_Churn",
+    "path": "me.py",
+    "sha": "eb779629a0ded1c4984add45d3567afaccdf4638",
+    "url": "https://github.com/zainabhodroj/Customer_Churn/blob/85a690828629578bc88c3086b57a9555dafd9ab6/me.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "LeonardoVieiraGuimaraes/visualizacaoDados-doutorado",
+    "path": "AT.py",
+    "sha": "72ffd99807434d05fc7ca51bd02bbb726036d53f",
+    "url": "https://github.com/LeonardoVieiraGuimaraes/visualizacaoDados-doutorado/blob/71a961df1ec87c12fe5b6a0359577d9a3279e05d/AT.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "marianellass/Unicorn-Startup-EDA",
+    "path": "EA.py",
+    "sha": "7b0e52ff9bc243ac9a6aa799d46f9b06d9f6f966",
+    "url": "https://github.com/marianellass/Unicorn-Startup-EDA/blob/f10e0e49d0d0c22c88074a9f78aa054c7d609db0/EA.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "arfan64shah/Python_Programs",
+    "path": "q4.py",
+    "sha": "e216f95596767094281ca0b4efec278d3fdb4840",
+    "url": "https://github.com/arfan64shah/Python_Programs/blob/71c27d01d81b93fa271075a21745199f32488143/q4.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "eltgnd/qpi-wrapped",
+    "path": "ui.py",
+    "sha": "edfa0515386a47807123006a5e7ac9441a0d9425",
+    "url": "https://github.com/eltgnd/qpi-wrapped/blob/4e8ecc364439d52923cfee9bab6ac65701ed52cd/ui.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "Zaczero/osm-autolink",
+    "path": "db.py",
+    "sha": "0446d57a5b2d8e028ba44b56742bba2893af4c7f",
+    "url": "https://github.com/Zaczero/osm-autolink/blob/640c8c73676a316dd2f4ec0c4cc4f9fd427f94f2/db.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "tzeitim/rogtk",
+    "path": "run.py",
+    "sha": "b60ac3c0b40e486bd58c89c8ef8a198cf8cd31f9",
+    "url": "https://github.com/tzeitim/rogtk/blob/2458a34c5875c26acfba16e7deb32bcd17132f3c/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "curtpond/llm-rag",
+    "path": "eda.py",
+    "sha": "9f114b830b71478db1dbc0daeff886888e222be9",
+    "url": "https://github.com/curtpond/llm-rag/blob/7f67eeef57d4bc84ec3a2403825ec8b1e3b8d8b6/eda.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "benjamin-naderi-gh/polars-crs",
+    "path": "run.py",
+    "sha": "d945a082f915baf7e16dc6a18b5256f2429a3813",
+    "url": "https://github.com/benjamin-naderi-gh/polars-crs/blob/331f1e8e05011bdcbeec5ed2ac447495b8fd6652/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "chengcxi/MLAlgorithm",
+    "path": "pca.py",
+    "sha": "886f1c229956781d8f7a1586cce951912ef9ee56",
+    "url": "https://github.com/chengcxi/MLAlgorithm/blob/0793b04937c1fbea24ad913eb94db5f0d9137981/pca.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "ejgordoncode/algo-study",
+    "path": "app.py",
+    "sha": "0403bafc9168eda5313f5ae6340ff1eef1bcd967",
+    "url": "https://github.com/ejgordoncode/algo-study/blob/5f0131eee58fdca9d3ed4b7fefecb7a016b64bc4/app.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "gtfierro/mortar-parquet-support",
+    "path": "transform.py",
+    "sha": "4602bbf32b5898dd8ec70e1e5be6e3ebb89b0a6d",
+    "url": "https://github.com/gtfierro/mortar-parquet-support/blob/3a4990aa8cdd2c1cc175a051aa0bdbc385432bd0/transform.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "teratide/tidre-demo",
+    "path": "data-gen.py",
+    "sha": "e27bb9707acfc006090e12622628d083aeba7646",
+    "url": "https://github.com/teratide/tidre-demo/blob/aff56cd6dfbc84828e53db9304b279d655c9dc96/data-gen.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "jonashertner/opencaselaw",
+    "path": "pipeline.py",
+    "sha": "4bbbac00609a11996aa53022ea31928ed5b6462f",
+    "url": "https://github.com/jonashertner/opencaselaw/blob/f4135faf6f584ff939314a42885967d2d6d9575f/pipeline.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "alexkreidler/parquet2arrow",
+    "path": "read.py",
+    "sha": "0b671c927965de4f34c5c6f04412db0524a1dd77",
+    "url": "https://github.com/alexkreidler/parquet2arrow/blob/f8e97413154eaddd7eeef4ad927a9e2e4516293b/read.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "tradewartracker/how-restrictive-us-trade",
+    "path": "tri/load.py",
+    "sha": "0e4a1fd96d3f9010b36c504ca3cbb6f3d9721ca0",
+    "url": "https://github.com/tradewartracker/how-restrictive-us-trade/blob/a9063f358855d6df255053ed7f11f7a724eda9b0/tri/load.py"
+  },
+  {
+    "pkg": "pyarrow",
+    "repo": "ursa-labs/notebooks",
+    "path": "peak_use.py",
+    "sha": "8d0d7dfdd78bbc6ce79f9569ccf2569ee8c9838f",
+    "url": "https://github.com/ursa-labs/notebooks/blob/fef623e363546b76333a58d31dd58805248a596d/peak_use.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "Lakshitalearning/HireSync-AI",
+    "path": "app.py",
+    "sha": "18a28cd2474b1a0db0669db5a61f398887b5fc25",
+    "url": "https://github.com/Lakshitalearning/HireSync-AI/blob/6aec26a5684cae8ba8115f1d50f38a69d2f30f17/app.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "Akshay-hub-007/QuizzyBot",
+    "path": "app.py",
+    "sha": "d9275eb447744dde4495b7e955df1c9f59f9d629",
+    "url": "https://github.com/Akshay-hub-007/QuizzyBot/blob/434104cad661d6d3dc8588c2e107b8511281d510/app.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "kushagragupta-23/OpsGuardian",
+    "path": "api.py",
+    "sha": "cfcfba39ad36c395afa37abf2bddec45f419033e",
+    "url": "https://github.com/kushagragupta-23/OpsGuardian/blob/c21c2fef66b0fad9ec0de0c8143667f6f1bac131/api.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "Keshav0141/Codebase-QA-Agent",
+    "path": "api.py",
+    "sha": "35c2544a81415cb5a72bce85d2fd60e4c3a1a223",
+    "url": "https://github.com/Keshav0141/Codebase-QA-Agent/blob/f2bbc3be05738430a38095a393612b7ab8b9ef96/api.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "Rosa-Iwoh/HOUSE__PRICE__PREDICTION__API",
+    "path": "app.py",
+    "sha": "79460b8b3ed96454cc2c0899a98a6496f09587d8",
+    "url": "https://github.com/Rosa-Iwoh/HOUSE__PRICE__PREDICTION__API/blob/552f7165a4fcda2b9e126c445407b690c5650a7e/app.py"
+  },
+  {
+    "pkg": "pydantic",
+    "repo": "Hrudhay-H/PurairNew",
+    "path": "app.py",
+    "sha": "3d105eba709c33cf99a6883683d70668bec59f9f",
+    "url": "https://github.com/Hrudhay-H/PurairNew/blob/d4780632607f877e44eaf484b077f4b337cd9790/app.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "veebch/fob",
+    "path": "fob.py",
+    "sha": "f31dec5dacf605c7cc0e5648f33c72092fdc6a18",
+    "url": "https://github.com/veebch/fob/blob/f12d823405921bdc41b0855279dde5bd09c39e32/fob.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "microsoft/byoeb",
+    "path": "app.py",
+    "sha": "e412e62da5eb682f910a4d81ae9e8d8984860c59",
+    "url": "https://github.com/microsoft/byoeb/blob/0b1e219227068a9c5c40f647cdcd4687077f4590/app.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "monasca/monasca-docker",
+    "path": "ci.py",
+    "sha": "cd8f45fb32f2ef40c25e709d760a33debb83e14b",
+    "url": "https://github.com/monasca/monasca-docker/blob/1321b340c142e301599ff73ff55029d5e938b90c/ci.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "Jacoo-ai/HIC-Yolov5",
+    "path": "pl.py",
+    "sha": "636ae77369548fb38ac928e301e7408a6fd269fa",
+    "url": "https://github.com/Jacoo-ai/HIC-Yolov5/blob/a7e8b8196989abe8c4b74a027a4168b5869a4dce/pl.py"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "camptocamp/demo_geomapfish",
+    "path": "build",
+    "sha": "62c2dd2dfad0ea43403451f23aea8e565bb51b49",
+    "url": "https://github.com/camptocamp/demo_geomapfish/blob/adbce5a12aa23b0c5c62b596532ced347231cd9f/build"
+  },
+  {
+    "pkg": "PyYAML",
+    "repo": "ryuichiueda/opy",
+    "path": "opy",
+    "sha": "ef91f55b98d35be17a615be115202968f6ed38cb",
+    "url": "https://github.com/ryuichiueda/opy/blob/fa5c01d3efb8eaa4001c3ea671eac6373d38073e/opy"
+  },
+  {
+    "pkg": "requests",
+    "repo": "catalyst/pdns-cli",
+    "path": "pdns",
+    "sha": "fa935220d09838b90b047616c9dfb076b284e308",
+    "url": "https://github.com/catalyst/pdns-cli/blob/3102bba533055a29e7b180f5e875a1ff81c1a8de/pdns"
+  },
+  {
+    "pkg": "requests",
+    "repo": "joidegn/leo-cli",
+    "path": "leo",
+    "sha": "e705e129aa4e8b6cc787fffe036551d3668d2401",
+    "url": "https://github.com/joidegn/leo-cli/blob/7d3745f0d8cad61f59f75d18da20764e8154bb6e/leo"
+  },
+  {
+    "pkg": "requests",
+    "repo": "UrLab/HeUrLab",
+    "path": "stib",
+    "sha": "2ba904780c4f1dca5749b3bc8c8018abe238dda0",
+    "url": "https://github.com/UrLab/HeUrLab/blob/5cb48166c1cc96ed70d5b60ff030606042c0d97c/stib"
+  },
+  {
+    "pkg": "requests",
+    "repo": "HPCC-Cloud-Computing/python-api-example",
+    "path": "nova",
+    "sha": "b70de5c4b051efd7912567f6ca6f37c7aa2220e5",
+    "url": "https://github.com/HPCC-Cloud-Computing/python-api-example/blob/cef184ebdc8a67e056a495c9a32df5eb8db5491b/nova"
+  },
+  {
+    "pkg": "requests",
+    "repo": "RengeLK/python",
+    "path": "w.py",
+    "sha": "7f3ca7b26456040e2117078b14e8c4536baa94b8",
+    "url": "https://github.com/RengeLK/python/blob/4e0a5eea1e584eaa6207d5fc825522844cfd60ad/w.py"
+  },
+  {
+    "pkg": "requests",
+    "repo": "shalommmitz/simple-scan",
+    "path": "scan",
+    "sha": "f78e32b4699c33280584d19a0e7ad23c30739b5c",
+    "url": "https://github.com/shalommmitz/simple-scan/blob/6cde5ce45a8656d8c48a42664ffb1adc3ad41da7/scan"
+  },
+  {
+    "pkg": "rich",
+    "repo": "theahmadov/E0",
+    "path": "E0.py",
+    "sha": "c4cd0d6728db01149c2917ed5b776ed540eaaf57",
+    "url": "https://github.com/theahmadov/E0/blob/39b0a098fb2153f7ca9c96b03d5744b7d39386f4/E0.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "FrancescoSaverioZuppichini/glasses-2.0",
+    "path": "a.py",
+    "sha": "956b7c328d399175c60e70b65061c66808542f0a",
+    "url": "https://github.com/FrancescoSaverioZuppichini/glasses-2.0/blob/fcc4e131d9cd058a791aac0cd979b9f3200750c7/a.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "amfinethankyou/Insta_bruteforce",
+    "path": "bf.py",
+    "sha": "b1ccc8f38fe449045cbd40f9c676fc136bc1c572",
+    "url": "https://github.com/amfinethankyou/Insta_bruteforce/blob/cd4effa413a263b265afcc8784ac1d16551ee5b9/bf.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "Adityaadpandey/Nova-Readme-Maker",
+    "path": "ui.py",
+    "sha": "acb6c8584b6ad83f76300b0a1e4494a13e6dacc9",
+    "url": "https://github.com/Adityaadpandey/Nova-Readme-Maker/blob/fc99716d95d9d0d18bde8166f24effaabd8c52b0/ui.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "nlr-ai/aider",
+    "path": "io.py",
+    "sha": "793186094d306fd9285e35ea6a1903300a843512",
+    "url": "https://github.com/nlr-ai/aider/blob/61082ffd941ec0f26b735c50c42476c755d6be69/io.py"
+  },
+  {
+    "pkg": "rich",
+    "repo": "ascend-io/OttoShell",
+    "path": "dev.py",
+    "sha": "d8a6f863d4cb8708d59f9565ff5783435bdabab9",
+    "url": "https://github.com/ascend-io/OttoShell/blob/1355653a692bdfddceb831f67cae37e8f94b1dbb/dev.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "newtoallofthis123/ml_lab",
+    "path": "8.py",
+    "sha": "7ff8027b0647cc6a3bbda601159d7b932b294872",
+    "url": "https://github.com/newtoallofthis123/ml_lab/blob/236c206a254c4bc770e5a0252cd5cd04c4d587bd/8.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "Shreeyashj/SOcial-Media-Parseing",
+    "path": "l.py",
+    "sha": "975e11294559700a11c4f66acf5475f2c36c3372",
+    "url": "https://github.com/Shreeyashj/SOcial-Media-Parseing/blob/a676e72d89bda297b6e7eeab28d9a8c867ea4293/l.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "alirezanamavar/Design-of-Chebyshev-Type-I-Filter-Using-Deep-Neural-Networks",
+    "path": "5.py",
+    "sha": "63a964e2ceb20614b7aaa9b74a74b0f151a73a1c",
+    "url": "https://github.com/alirezanamavar/Design-of-Chebyshev-Type-I-Filter-Using-Deep-Neural-Networks/blob/3f849da5f7e01f02460ef8e1a28b59ff4242033d/5.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "Jovani-esj/algoritmo_senas_web",
+    "path": "B.py",
+    "sha": "ef931b31e836a07b29c31f459251834bd43eb3df",
+    "url": "https://github.com/Jovani-esj/algoritmo_senas_web/blob/b3dd93f2550b6c503c9eefc15f6f8c6c9b95fc44/B.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "nijunfeng234154/Mathematical-Contest-In-Modeling_2024",
+    "path": "6.py",
+    "sha": "925ba6aa8426ea5a6533533f09e5babff71fc2c4",
+    "url": "https://github.com/nijunfeng234154/Mathematical-Contest-In-Modeling_2024/blob/e80234a150f899899246ce8a471b56f74438fe19/6.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "zzFernando/knn-algorithm",
+    "path": "c.py",
+    "sha": "315879ebe754b9821b1f06a52e84249f9c879610",
+    "url": "https://github.com/zzFernando/knn-algorithm/blob/58f85d8d623baa85f6b38c5355c1aac8c4fcbe10/c.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "arnolda/padc",
+    "path": "pb.py",
+    "sha": "129d481f066de40c78c7240a267f885f26321f17",
+    "url": "https://github.com/arnolda/padc/blob/ca49f012d347fdd70eb2a7b3d007fa45350ad760/pb.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "mblondel/projection-losses",
+    "path": "ot.py",
+    "sha": "d2976703677b978321b567497b81861fd0e56218",
+    "url": "https://github.com/mblondel/projection-losses/blob/e33e50de13f4dd76337d50449a2d9afe47058268/ot.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "mandt-lab/RD-sandwich",
+    "path": "ba.py",
+    "sha": "1acb8512d31c6e5a821a0a5c20601ccdf4960354",
+    "url": "https://github.com/mandt-lab/RD-sandwich/blob/ed8f17a9ffdf87eefcec6ac8a8350f2bfef09c8c/ba.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "wudixiaozhu123/yolov5_zz",
+    "path": "zx.py",
+    "sha": "b2cef2926ada35d00a2a4e46f31c22d3df59234a",
+    "url": "https://github.com/wudixiaozhu123/yolov5_zz/blob/7e2d9f057aac9c14c58667a404801cc983b9b0e0/zx.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "liuxuan666/SubCDR",
+    "path": "MF.py",
+    "sha": "43680fc77a6b57bef275e632741402c7b01219e5",
+    "url": "https://github.com/liuxuan666/SubCDR/blob/35bf5b5cdf4175c37504e272f5abbd94807e4c9f/MF.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "jlubars/RL-MPC-LaneMerging",
+    "path": "st.py",
+    "sha": "509d8a8d1bb071ad5eed98dead4e3c4e8fbf782c",
+    "url": "https://github.com/jlubars/RL-MPC-LaneMerging/blob/d60087f511e7a551e27c4e9fdd87f87f8a84b406/st.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "HatterByte/NMR-Coffee-Classification",
+    "path": "ml.py",
+    "sha": "fc24b720721d2b85f7a280ff701cad6d5112158b",
+    "url": "https://github.com/HatterByte/NMR-Coffee-Classification/blob/511d4035d4eb5eaea9c7feed62a818bea602e166/ml.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "rezafaieghi/AER850-Fall23",
+    "path": "l3.py",
+    "sha": "bfeb488e3d75c8f62ea9b20ef40338e449adee1e",
+    "url": "https://github.com/rezafaieghi/AER850-Fall23/blob/1a6d3dfd7f2fdabd28b72663f829fe93bacccaa5/l3.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "nijunfeng234154/Mathematical-Contest-In-Modeling_2024",
+    "path": "6.py",
+    "sha": "925ba6aa8426ea5a6533533f09e5babff71fc2c4",
+    "url": "https://github.com/nijunfeng234154/Mathematical-Contest-In-Modeling_2024/blob/e80234a150f899899246ce8a471b56f74438fe19/6.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "KabirMalkani/ASUA-Crime-CLSTM",
+    "path": "t1.py",
+    "sha": "2d2c0e9ea0fe7bd4ce7210c79cc86d66178cb899",
+    "url": "https://github.com/KabirMalkani/ASUA-Crime-CLSTM/blob/038c147ee1cbc13d1a96999de441b094be9f6da4/t1.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "Talduardo/Modelo-Predicao",
+    "path": ".py",
+    "sha": "bab0564b6c85dbcde0576ebe89334578d9d8d887",
+    "url": "https://github.com/Talduardo/Modelo-Predicao/blob/36b24659b3aaec48e4302a6f6e25593fa26d2b72/.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "daltonnorrisdata/flow-rate-analysis",
+    "path": ".py",
+    "sha": "1063d6ce7029f6a6d3459fed1393afb2347fdef1",
+    "url": "https://github.com/daltonnorrisdata/flow-rate-analysis/blob/761c45d3c200cf3cf1d35f02045fcda048c502fa/.py"
+  },
+  {
+    "pkg": "semver",
+    "repo": "appium/node-simctl",
+    "path": "lib/helpers.ts",
+    "sha": "997ea0deb7310f190839c78964e40d7a7af61419",
+    "url": "https://github.com/appium/node-simctl/blob/6dffa8b32cb2489130b3093611c17a52b4e3c829/lib/helpers.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "plasticrake/homebridge-tplink-smarthome",
+    "path": "src/platform.ts",
+    "sha": "20f1a6822383bffae0c0f14e1e2130261c3c5d9e",
+    "url": "https://github.com/plasticrake/homebridge-tplink-smarthome/blob/e716f80cf6fd5db4ea7f56c14ee4a4b1c56779d1/src/platform.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "BililiveRecorder/BililiveRecorder-WebUI",
+    "path": "vite.config.ts",
+    "sha": "24f150a87a90007a636555460fd26d4b5cfb1d83",
+    "url": "https://github.com/BililiveRecorder/BililiveRecorder-WebUI/blob/1cfb0e1f1c15f444fa0a6e54859b57f58369247f/vite.config.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "typed-ember/ember-cli-typescript",
+    "path": "ts/addon.ts",
+    "sha": "445dfcb220f73d2294ab114405cc8f0d36553e68",
+    "url": "https://github.com/typed-ember/ember-cli-typescript/blob/27637e095bac8e3fadea8a142977cd0212b30701/ts/addon.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "GerkinDev/vuejs-datatable",
+    "path": "ci/run-ci.ts",
+    "sha": "ac33e812d528d24423fcd983be0c55b396635abb",
+    "url": "https://github.com/GerkinDev/vuejs-datatable/blob/a5af16604a7c59432f10ebe90d9c2dad53e729b8/ci/run-ci.ts"
+  },
+  {
+    "pkg": "semver",
+    "repo": "IndexXuan/vue-cli-plugin-vite",
+    "path": "config/index.ts",
+    "sha": "6d21364f54b2a2b72790cef9f87070c0e30e1d98",
+    "url": "https://github.com/IndexXuan/vue-cli-plugin-vite/blob/d22b5e3c027ff42e7d15c5f629fd9c4385ebba1c/config/index.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "dequelabs/axe-linter-action",
+    "path": "src/run.ts",
+    "sha": "0a8c56860bf744bb794fd7942dfb6fa22c739ff0",
+    "url": "https://github.com/dequelabs/axe-linter-action/blob/dd6e8ed7d82890aabac0c51bfe59430465cac5dd/src/run.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "eemeli/yaml-types",
+    "path": "src/regexp.ts",
+    "sha": "1a6fdad1a0cf772feaed09dd7fa15a14ce403f3f",
+    "url": "https://github.com/eemeli/yaml-types/blob/6e68239273b12ebbd1392a535a1db8c4e514ee48/src/regexp.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "nulone/claude-rules-doctor",
+    "path": "src/parser.ts",
+    "sha": "c2084cf7079c32393dd9600d8b6124619fd106db",
+    "url": "https://github.com/nulone/claude-rules-doctor/blob/ae47d140a8a0d5055c87fcdb91c02d8266590b4c/src/parser.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "csivitu/ctfup",
+    "path": "src/config.ts",
+    "sha": "ee8aa6d0ee7a3180dcb265f8ba4d317b993ae129",
+    "url": "https://github.com/csivitu/ctfup/blob/f7b864c914201a91831075a1b2e1022bdc098f71/src/config.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "phoinixi/resuml",
+    "path": "src/core.ts",
+    "sha": "cf12bac2b710fd0ba75438076469034ce12382e8",
+    "url": "https://github.com/phoinixi/resuml/blob/e214d088804b8fe8b0dacba9e03c89dcedb17e63/src/core.ts"
+  },
+  {
+    "pkg": "yaml",
+    "repo": "wevm/curl.md",
+    "path": "src/api.ts",
+    "sha": "99b6eab9061373cb99bb20a1bc437b7654a48c07",
+    "url": "https://github.com/wevm/curl.md/blob/72bab6a77fc0911caef36a86b52ca3d61b5580a8/src/api.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "pingSubhajit/letraz",
+    "path": "env.ts",
+    "sha": "7462d5ff9146723157d2a2ef772279d4acb5d156",
+    "url": "https://github.com/pingSubhajit/letraz/blob/b2d2ae8985cfba30b6b34dcaff40f7be3e5b2cb6/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "chrisbradleydev/chrisbradley.dev",
+    "path": "env.ts",
+    "sha": "ef890d01dcff9f8bd45c042e7393608c577be1d0",
+    "url": "https://github.com/chrisbradleydev/chrisbradley.dev/blob/bc60ae2f8fc0473e8d7c9a6c5f375ebbc5c27acc/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "complexdatacollective/Studio",
+    "path": "env.ts",
+    "sha": "d8a679718ced59ceb1c8f503ef7277c7d0ace7c2",
+    "url": "https://github.com/complexdatacollective/Studio/blob/a05eeb975ce2fde5424c59525aa9c2fb53a41ff0/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "inmorpher/ServeMate-service",
+    "path": "env.ts",
+    "sha": "eef2e43cc63be72b13852a9ce2056c88bf9e3dcb",
+    "url": "https://github.com/inmorpher/ServeMate-service/blob/36ba940107e43dc909c501a85ebf0a1216200630/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "RedDuckTeam/chainlink-hackathon-contracts",
+    "path": "env.ts",
+    "sha": "09a98c2dd3b86847a2849a76671ad725b91a0ae4",
+    "url": "https://github.com/RedDuckTeam/chainlink-hackathon-contracts/blob/2ae90db9d4530e6d463c62d6c92504cb72eaf9a0/env.ts"
+  },
+  {
+    "pkg": "zod",
+    "repo": "arkenrealms/node",
+    "path": "zod.ts",
+    "sha": "352ba90539992607fd351f77212bdec74fd71678",
+    "url": "https://github.com/arkenrealms/node/blob/f3cd5f68d61d0a476e0e9aefb1ed7b8d4db536f4/zod.ts"
+  }
+]

@@ -13,8 +13,13 @@ workaround, and then lets the retry through.
   - Checks every hit and works out which code symbols each issue is about.
   - Picks the most useful workaround from the comments.
   - Writes everything to `.landmine/index.json`.
-- **`landmine install`.** Adds a pre-edit hook for Claude Code. Codex CLI, Cursor and
-  Gemini CLI adapters are included too.
+- **`landmine install`.** Adds a pre-edit hook (or plugin) for the coding agents it finds
+  in the project: 20 agents, from Claude Code, Codex and Cursor to OpenCode, Kilo Code,
+  Cline, Windsurf, Copilot and Antigravity (see Supported). Agents without a pre-edit hook
+  get a rules section, an Agent Skill and the MCP server instead.
+- **`landmine cards`** (optional). A model reads each issue thread once and writes a
+  *trigger card*: the API, the extra conditions that make the bug fire, and the
+  workaround. The hook then checks cards offline. It never calls a model.
 - **`landmine mcp`.** An MCP server the agent can query on demand ("is this error a
   known bug in the version we pin?").
 - **The hook.** It runs before each edit, offline. It took 0.09 s per call on our test
@@ -102,12 +107,15 @@ enough for public repositories. The hook never touches the network.
 | Command | What it does |
 |---|---|
 | `landmine scan [--refresh] [--max-issues 100] [--prod] [--json]` | Reads lockfiles, queries npm/PyPI/GitHub, and writes `.landmine/index.json`. Raw responses are cached for 24 h in `.landmine/cache/`, which is git-ignored, so re-scans are fast. |
-| `landmine install [--harness claude\|codex\|cursor\|gemini\|all] [--mode block\|warn] [--heads-up] [--mcp]` | Adds the hook to the project's harness config and leaves your other hooks alone. Running it again is harmless. `--mcp` also adds the MCP server to `.mcp.json`. |
+| `landmine install [--harness auto\|all\|<names>] [--mode block\|warn] [--heads-up] [--mcp [agents]] [--rules [files]]` | Adds the hook or plugin for each agent (default `auto`: Claude Code plus every agent whose config directory exists) and leaves your other hooks alone. Running it again is harmless. `--mcp` registers the MCP server in each agent's config; `--rules` writes the known-bugs section into AGENTS.md / CLAUDE.md / GEMINI.md. |
+| `landmine rules [--write <files…>] [--skill] [--max 15]` | Prints, or writes between `<!-- landmine:start/end -->` markers, a short "known open bugs" section any agent reads. `--skill` writes the full list as an Agent Skill in `.agents/skills/landmine/SKILL.md`. |
+| `landmine cards [--provider anthropic\|claude-cli\|openai] [--model id] [--max n]` | Writes a trigger card per indexed issue (cached per issue, version and model). `claude-cli` uses an existing Claude Code login; `openai` takes any OpenAI-compatible endpoint (`OPENAI_BASE_URL`). Re-scans keep the cards of unchanged issues. |
 | `landmine mcp [--root]` | Runs an MCP server over stdio with three tools: `landmine_check` (a file or snippet), `landmine_search` (error text or API name) and `landmine_list`. |
 | `landmine list [package] [--all]` | Shows indexed issues. By default, only the ones the hook can act on. |
 | `landmine check <files…> [--exit-code]` | Treats whole files as just written and reports matches, marked `[blocks: …]` or `[heads-up only]`. |
-| `landmine uninstall [--harness …]` | Removes landmine's hook entries only. Installed commands are tracked in `.landmine/installed.json`. |
-| `landmine hook` | The hook entry point: harness payload on stdin, response on stdout. Always exits 0. |
+| `landmine check --staged [--exit-code]` | Checks only the lines staged for commit, for a pre-commit hook or CI. A backstop for agents with no pre-edit hook, not an interruption. |
+| `landmine uninstall [--harness …]` | Removes landmine's hook entries, plugin files, rules sections and skill only. Installed commands are tracked in `.landmine/installed.json`. |
+| `landmine hook [--harness name] [--format fmt]` | The hook entry point: harness payload on stdin, response on stdout. The payload's shape identifies the agent; `--harness` forces it. Exits 0, except in the `exit2` format, where a block is exit code 2 with the reason on stderr. |
 
 Re-run `scan` after you change dependencies. The hook only reads the index.
 
@@ -198,17 +206,43 @@ syntax.
 `.vue`, `.svelte` and `.astro` files, imports and script-block code are read, but
 template expressions can be missed.
 
-**Harnesses.**
+**Agents.** One normaliser reads every agent's payload shape (tool names, argument
+keys, patch formats). The response is written in each agent's own deny format.
 
-| Harness | Hook | Status |
-|---|---|---|
-| Claude Code | `PreToolUse` on `Edit\|Write\|MultiEdit` in `.claude/settings.json` | **Run live** (2.1.304): blocked once, agent changed approach. |
-| Codex CLI | `PreToolUse` on `apply_patch` in `.codex/hooks.json` | **Run live** (0.159.0) with `codex exec --dangerously-bypass-hook-trust`. Without trust the hook does not run (verified: a `codex exec` without the flag applied its patch and the hook never fired). Trust it with `/hooks` in an interactive Codex session. |
-| Cursor | `.cursor/hooks.json` `preToolUse`. Cursor's docs say it also imports Claude Code hooks by default. | **Not run live**: `cursor-agent` wasn't logged in. Built from Cursor's docs and the installed `cursor-agent` binary; tested with payloads in that shape. |
-| Gemini CLI | `BeforeTool` on `write_file\|replace` in `.gemini/settings.json` | **Not run live**: not installed. Built from Gemini CLI's docs only. |
+| Agent | What `install` writes | Blocks one edit? | Verified |
+|---|---|---|---|
+| Claude Code | `PreToolUse` hook, `.claude/settings.json` | yes | **live** (2.1.304): blocked once, agent changed approach |
+| Codex CLI | `PreToolUse` on `apply_patch`, `.codex/hooks.json` | yes | **live** (0.159.0) with `--dangerously-bypass-hook-trust`; otherwise trust it with `/hooks` |
+| Cursor | `preToolUse`, `.cursor/hooks.json` | yes | payloads from docs; `cursor-agent` not logged in here |
+| Gemini CLI | `BeforeTool`, `.gemini/settings.json` | yes | payloads from docs |
+| GitHub Copilot (VS Code, CLI) | `.github/hooks/landmine.json` | yes | payloads from docs |
+| Windsurf / Devin | `pre_write_code`, `.devin/hooks.json` (exit 2) | yes | payloads from docs |
+| Factory Droid | `.factory/hooks.json` | yes | payloads from docs |
+| Augment (Auggie) | `.augment/settings.json` | yes | payloads from docs |
+| Kiro | `.kiro/hooks/landmine.json` | yes | payloads from docs |
+| Qwen Code | `.qwen/settings.json` | yes | payloads from docs |
+| Crush | `crush.json` | yes | payloads from docs |
+| Goose | `.agents/plugins/landmine/` | yes | payloads from docs |
+| OpenHands | `.openhands/hooks.json` | yes | payloads from docs |
+| Trae | `.trae/hooks.json` | yes | payloads from docs |
+| Antigravity | `.agents/hooks.json` | yes | payloads from docs |
+| OpenCode | plugin, `.opencode/plugins/landmine.ts` | yes (throws) | plugin executed in tests against a stub host; a live run here failed on the model provider's balance, not on landmine |
+| Kilo Code | plugin, `.kilo/plugin/landmine.ts` | yes (throws) | as OpenCode |
+| Cline | plugin `.cline/plugins/landmine.ts` (skips the call) + `PreToolUse` file hook (context only) | plugin: yes | plugin executed in tests against a stub host |
+| Amp | plugin, `.amp/plugins/landmine.ts` | yes (`reject-and-continue`) | plugin executed in tests against a stub host |
+| Pi | extension, `.pi/extensions/landmine.ts` | yes | extension executed in tests against a stub host |
+| Freebuff, Aider, Zed, Roo, Continue, Warp… | no pre-edit hook: `rules --write AGENTS.md`, `rules --skill`, `install --mcp`, `check --staged` | no | rules, skill and MCP config tested |
 
-Cursor and Gemini CLI have no non-blocking pre-edit channel, so `--heads-up` and
-`--mode warn` show nothing there.
+"Payloads from docs" means the adapter was built from that agent's documentation (and
+source, where it is open), and each payload shape is covered by a test. It has not
+been run against the real agent. Every plugin fails open: an error or a timeout lets
+the edit through.
+
+`install --mcp <agents>` registers the MCP server in the project config of 16 agents:
+Claude Code, Cursor, Gemini CLI, Qwen, Copilot (`.vscode/mcp.json`), Droid, Kiro, Trae,
+Antigravity, Freebuff (`.agents/mcp.json`), Roo, Warp, Pi, OpenCode, Kilo and Crush.
+Codex, Windsurf and Cline keep MCP servers in user-level config. For Codex, run
+`codex mcp add landmine -- node /abs/path/dist/cli.js mcp`.
 
 ## Accuracy
 

@@ -11,9 +11,11 @@ import type { TriggerCard } from '../../src/types.js';
 import { BENCH } from './lib.js';
 
 const { values } = parseArgs({ options: { model: { type: 'string', default: 'opus' }, concurrency: { type: 'string', default: '6' } } });
-const OUT = join(BENCH, '.work', 'realcode');
-const data = JSON.parse(readFileSync(join(BENCH, 'realcode', 'blocks.json'), 'utf8')) as { blocks: Array<Record<string, string>> };
-const manifest = JSON.parse(readFileSync(join(BENCH, 'realcode', 'manifest.json'), 'utf8')) as Array<{ pkg: string; repo: string; path: string }>;
+const SET = process.env.REALCODE_SET ?? 'r1';
+const suffix = SET === 'r1' ? '' : `-${SET}`;
+const OUT = join(BENCH, '.work', `realcode${suffix}`);
+const data = JSON.parse(readFileSync(join(BENCH, 'realcode', `blocks${suffix}.json`), 'utf8')) as { blocks: Array<Record<string, string>> };
+const manifest = JSON.parse(readFileSync(join(BENCH, 'realcode', `manifest${suffix}.json`), 'utf8')) as Array<{ pkg: string; repo: string; path: string }>;
 
 const Verdict = z.object({
   verdict: z.enum(['meets', 'plausible', 'does-not-meet']).describe('meets: the code clearly hits the condition; plausible: it could, depending on runtime data; does-not-meet: it cannot or almost certainly does not'),
@@ -76,5 +78,5 @@ for (const r of rows) {
   s.blocks = (s.blocks ?? 0) + 1;
   s[String(r.verdict)] = (s[String(r.verdict)] ?? 0) + 1;
 }
-writeFileSync(join(BENCH, 'realcode', 'labels.json'), `${JSON.stringify({ judge: `${llm.name}:${llm.model}`, summary, rows }, null, 2)}\n`);
+writeFileSync(join(BENCH, 'realcode', `labels${suffix}.json`), `${JSON.stringify({ judge: `${llm.name}:${llm.model}`, summary, rows }, null, 2)}\n`);
 console.log(JSON.stringify(summary, null, 2));

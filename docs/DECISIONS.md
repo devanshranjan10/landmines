@@ -345,3 +345,19 @@ changed.
   - no block was judged to clearly meet the condition, in either arm.
 - **Status.** R1 was looked at while choosing policy, so it is a tuning set. A second
   set from different repos (R2) is the held-out number.
+
+**D-42: Pre-registered confirmatory run, written before running it.**
+- **What run A showed** (fresh-test; Sonnet, exec, terse prompts, seeds 1–2):
+  - rules 41/42, cards 38/42, none 36/42, hook 35/42, cards-warn 35/42;
+  - rules vs none: 5 discordant pairs, all for rules (exact McNemar p ≈ 0.06).
+- **Why rules helped.** It reaches the agent before it plans. On polars-30043 the hook
+  never fired, because the card lists the writer APIs and the agent only edited the
+  reader.
+- **Two hypotheses, fixed now, before any data:**
+  - **H1:** rules > none.
+  - **H2:** a combined arm `rules+cards` (rules section plus card hook, the
+    configuration `install --rules` gives) ≥ rules.
+- **Design.** Seeds 3–4 on the same 21 tasks and the same setup, all six arms. Seeds
+  1–2 are not pooled into the confirmatory test.
+- `rules+cards` was added after seeing run A, so any claim about it rests on seeds
+  3–4 only.

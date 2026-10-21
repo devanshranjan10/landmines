@@ -2,7 +2,7 @@
 // `fetch` pulls public files that import each package (GitHub code search; only paths and SHAs are committed).
 // `check` treats each whole file as newly written against every bench version of its package, with the heuristic
 // hook and with trigger cards, and lists every block for labelling.
-//   npx tsx scripts/bench/realcode.ts fetch [perPackage]
+//   [REALCODE_SET=r2] npx tsx scripts/bench/realcode.ts fetch [perPackage] [page]
 //   npx tsx scripts/bench/realcode.ts check
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -13,9 +13,20 @@ import { readIndex } from '../../src/store.js';
 import type { LandmineIndex } from '../../src/types.js';
 import { BENCH, loadTasks } from './lib.js';
 
-const OUT = join(BENCH, '.work', 'realcode');
-const MANIFEST = join(BENCH, 'realcode', 'manifest.json');
-const RESULTS = join(BENCH, 'realcode', 'blocks.json');
+// Set R1 (tuning) keeps the original file names; R2 (held out) and later sets get a suffix and their own directory.
+const SET = process.env.REALCODE_SET ?? 'r1';
+const suffix = SET === 'r1' ? '' : `-${SET}`;
+const OUT = join(BENCH, '.work', `realcode${suffix}`);
+const MANIFEST = join(BENCH, 'realcode', `manifest${suffix}.json`);
+const RESULTS = join(BENCH, 'realcode', `blocks${suffix}.json`);
+/** Repos already used by earlier sets, so a held-out set never repeats one. */
+function usedRepos(): Set<string> {
+  const used = new Set<string>();
+  for (const f of SET === 'r1' ? [] : ['manifest.json']) {
+    for (const e of JSON.parse(readFileSync(join(BENCH, 'realcode', f), 'utf8')) as Entry[]) used.add(e.repo);
+  }
+  return used;
+}
 
 const QUERIES: Record<string, { query: string; ext: string }> = {
   arrow: { query: '"import arrow" language:python', ext: 'py' },
@@ -62,13 +73,14 @@ function fileFor(e: Entry, ext: string): string {
   return join(OUT, e.pkg, /\.\w+$/.test(name) ? name : `${name}.${ext}`);
 }
 
-function fetch(perPackage: number): void {
+function fetch(perPackage: number, page: number): void {
   const manifest: Entry[] = [];
+  const used = usedRepos();
   for (const [pkg, q] of Object.entries(QUERIES)) {
     let raw = '';
     for (let attempt = 0; attempt < 4 && !raw; attempt++) {
       try {
-        raw = execFileSync('gh', ['api', '-X', 'GET', 'search/code', '-f', `q=${q.query}`, '-f', 'per_page=50'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+        raw = execFileSync('gh', ['api', '-X', 'GET', 'search/code', '-f', `q=${q.query}`, '-f', 'per_page=50', '-f', `page=${page}`], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
       } catch {
         sleep(15000); // code search returns transient 503s
       }
@@ -81,7 +93,7 @@ function fetch(perPackage: number): void {
     const repos = new Set<string>();
     let got = 0;
     for (const it of items) {
-      if (got >= perPackage || it.repository.fork || repos.has(it.repository.full_name)) continue;
+      if (got >= perPackage || it.repository.fork || repos.has(it.repository.full_name) || used.has(it.repository.full_name)) continue;
       if (/test|spec|example|tutorial|demo|\.d\.ts$/i.test(it.path)) continue;
       const blob = JSON.parse(execFileSync('gh', ['api', `repos/${it.repository.full_name}/git/blobs/${it.sha}`], { encoding: 'utf8' })) as { content: string; size: number };
       if (blob.size > 200_000) continue;
@@ -155,6 +167,6 @@ function check(): void {
 }
 
 const [cmd, arg] = process.argv.slice(2);
-if (cmd === 'fetch') fetch(Number(arg ?? 6));
+if (cmd === 'fetch') fetch(Number(arg ?? 6), Number(process.argv[4] ?? 1));
 else if (cmd === 'check') check();
 else console.error('usage: realcode.ts fetch [perPackage] | check');
