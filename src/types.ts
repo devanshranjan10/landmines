@@ -119,6 +119,8 @@ export interface TriggerCard {
   /** Comment the workaround comes from. */
   workaroundUrl?: string;
   confidence: number;
+  /** Does the issue's own repro code satisfy the card? `fail` disarms it (the model likely invented a token). */
+  selfCheck?: 'pass' | 'fail' | 'no-repro';
   provider: string;
   model: string;
   promptVersion: number;

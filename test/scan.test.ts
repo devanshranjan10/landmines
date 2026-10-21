@@ -10,7 +10,7 @@ import { isArmed } from '../src/policy.js';
 import { importNamesFor } from '../src/pypiNames.js';
 import { renderScanSummary } from '../src/render.js';
 import { scan } from '../src/scan.js';
-import { readIndex } from '../src/store.js';
+import { readIndex, writeIndex } from '../src/store.js';
 
 const run = promisify(execFile);
 const FIXTURE_PROJECT = new URL('./fixtures/projects/scan-demo/', import.meta.url).pathname;
@@ -63,6 +63,18 @@ describe('scan (recorded GitHub, npm and PyPI responses)', () => {
     // Without --offline the stale cache is refetched (and here the network is down).
     const stale = await scan({ root, ...clients(offline), maxIssues: 30, now: later, write: false });
     expect(stale.reused).toBe(0);
+  });
+
+  it('a re-scan keeps trigger cards on unchanged issues', async () => {
+    const root = project();
+    const first = await scan({ root, ...clients(replayHttp(HTTP_DIR)), maxIssues: 30, now: () => NOW });
+    const target = first.index.landmines[0]!;
+    target.card = { isBug: true, affectsPinned: 'yes', apis: ['x'], requires: [], condition: 'c', confidence: 1, provider: 'p', model: 'm', promptVersion: 1 };
+    writeIndex(root, first.index);
+    const offline: Http = { fetch: () => Promise.reject(new Error('network used')) };
+    const again = await scan({ root, ...clients(offline), maxIssues: 30, now: () => NOW, offline: true });
+    expect(again.index.landmines.find((l) => l.id === target.id && l.version === target.version)?.card?.condition).toBe('c');
+    expect(again.index.landmines.filter((l) => l.card)).toHaveLength(1);
   });
 
   it('--offline reports packages with no cache as errors', async () => {

@@ -55,7 +55,13 @@ function workaroundSection(l: Landmine, budget: number): string[] {
 function hitSection(h: Hit, budget: number): string[] {
   const l = h.landmine;
   const lines = [`${l.id} · ${l.issue.title}`, l.issue.url, evidenceLine(l)];
-  if (h.corroboratedBy) lines.push(`Why it applies here: this file also uses \`${h.corroboratedBy}\`, which the issue names.`);
+  const card = h.viaCard ? l.card : undefined;
+  if (card) {
+    lines.push(`The bug: ${card.condition}`);
+    const via = h.corroboratedBy && h.corroboratedBy !== h.symbol ? ` together with \`${h.corroboratedBy}\`` : '';
+    lines.push(`Why it applies here: this edit uses \`${h.symbol}\`${via}, which is how the issue's code hits it.`);
+    if (card.workaround) lines.push(`Suggested way around it (summarised from the thread${card.workaroundUrl ? `, ${card.workaroundUrl}` : ''}): ${card.workaround}`);
+  } else if (h.corroboratedBy) lines.push(`Why it applies here: this file also uses \`${h.corroboratedBy}\`, which the issue names.`);
   if (l.issue.labels.length) lines.push(`Labels: ${l.issue.labels.join(', ')}`);
   lines.push('', ...workaroundSection(l, budget));
   if (l.fixHint) lines.push('', `Maintainer note (@${l.fixHint.author}): ${l.fixHint.text} ${l.fixHint.url === l.issue.url ? '' : l.fixHint.url}`.trimEnd());

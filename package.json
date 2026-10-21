@@ -35,6 +35,7 @@
     "check": "npm run typecheck && npm run lint && npm run test"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.137.0",
     "@modelcontextprotocol/server": "^2.3.1",
     "commander": "^15.0.0",
     "js-yaml": "^5.5.0",

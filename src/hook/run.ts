@@ -81,7 +81,7 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
       const index = indexes.get(root);
       if (!index) continue;
       const found = touches({ fileText: edit.fileText, changedText: edit.changedText, lang });
-      for (const h of matchTouches(found, index, lang, fileContext(edit.fileText, lang))) {
+      for (const h of matchTouches(found, index, lang, fileContext(edit.fileText, lang, edit.changedText))) {
         if (!hits.some((x) => x.landmine.id === h.landmine.id)) hits.push({ ...h, file: edit.path, root });
       }
     }

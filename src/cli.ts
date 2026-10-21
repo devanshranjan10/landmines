@@ -11,12 +11,13 @@ import { runHook } from './hook/run.js';
 import { MCP_TARGETS, type McpTarget, hookCommand, install, installMcp, mcpCommand, preflight, uninstall } from './install.js';
 import { defaultRulesFiles, detectAgents } from './agents.js';
 import { checkFile } from './match.js';
+import { PROVIDERS, type ProviderName, provider } from './llm.js';
 import { humanLandmine } from './message.js';
 import { isArmed } from './policy.js';
 import { renderScanSummary, wantsColor } from './render.js';
 import { DEFAULT_MAX_RULES, RULES_TARGETS, renderRules, stripRules, writeRules } from './rules.js';
 import { scan } from './scan.js';
-import { findIndexRoot, readIndex } from './store.js';
+import { findIndexRoot, readIndex, writeIndex } from './store.js';
 import type { LandmineIndex } from './types.js';
 import { VERSION } from './version.js';
 
@@ -244,6 +245,42 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
         const path = resolve(root, f);
         process.stdout.write(`${writeRules(path, section)}: ${relative(process.cwd(), path) || path}\n`);
       }
+    });
+
+  program
+    .command('cards')
+    .description('Have a model write a trigger card for each indexed issue (once, cached), so the hook matches the code that actually hits each bug')
+    .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest directory with a lockfile)')
+    .option('--provider <name>', `${PROVIDERS.join(' | ')} (default: anthropic with ANTHROPIC_API_KEY, openai with OPENAI_API_KEY, else claude-cli)`)
+    .option('--model <id>', 'model id (default depends on the provider)')
+    .option('--max <n>', 'most issues to card', positiveInt)
+    .option('--concurrency <n>', 'parallel model calls', positiveInt, 4)
+    .option('--from <dir>', 'apply precomputed cards (<owner_repo_N>@<version>.json) instead of calling a model')
+    .option('--export <dir>', 'also copy every card into <dir> in the --from layout')
+    .option('-q, --quiet', 'no progress output')
+    .action(async (opts: { root?: string; provider?: string; model?: string; max?: number; concurrency: number; from?: string; export?: string; quiet?: boolean }) => {
+      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      const index = loadIndex(root);
+      const log = opts.quiet ? () => {} : (m: string) => process.stderr.write(`${m}\n`);
+      const { addCards, exportCards, loadCards } = await import('./cards.js');
+      if (opts.from) {
+        const n = loadCards(index, resolve(opts.from));
+        writeIndex(root, index);
+        process.stdout.write(`Applied ${n} card${n === 1 ? '' : 's'} from ${opts.from}\n`);
+      } else {
+        const name = (opts.provider ?? (env.ANTHROPIC_API_KEY ? 'anthropic' : env.OPENAI_API_KEY ? 'openai' : 'claude-cli')) as ProviderName;
+        if (!PROVIDERS.includes(name)) throw new CliError(`unknown provider ${name}; use one of ${PROVIDERS.join(', ')}`);
+        const llm = await provider(name, { env, ...(opts.model ? { model: opts.model } : {}) });
+        log(`Writing trigger cards with ${llm.name}:${llm.model}`);
+        const run = await addCards(root, index, llm, { ...(opts.max ? { max: opts.max } : {}), concurrency: opts.concurrency, log });
+        writeIndex(root, index);
+        const armed = index.landmines.filter((l) => l.card && isArmed(l)).length;
+        process.stdout.write(
+          `Cards: ${run.generated} written, ${run.cached} from cache, ${run.failed.length} failed, ${run.rejected.length} unusable · ${armed} issue${armed === 1 ? '' : 's'} armed by a card\n`,
+        );
+        if (run.failed.length) process.exitCode = 1;
+      }
+      if (opts.export) process.stdout.write(`Exported ${exportCards(index, resolve(opts.export))} cards to ${opts.export}\n`);
     });
 
   program

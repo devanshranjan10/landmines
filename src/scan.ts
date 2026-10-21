@@ -8,7 +8,7 @@ import type { Http } from './http.js';
 import { readDependencies } from './lockfiles/index.js';
 import { importNamesFor } from './pypiNames.js';
 import { resolveRepo } from './registry/resolve.js';
-import { INDEX_DIR, writeIndex } from './store.js';
+import { INDEX_DIR, readIndex, writeIndex } from './store.js';
 import type { Dependency, LandmineIndex, Landmine, PackageRecord, SkippedDependency } from './types.js';
 import { VERSION } from './version.js';
 
@@ -207,6 +207,15 @@ export async function scan(opts: ScanOptions): Promise<ScanResult> {
     packages: records,
     landmines,
   };
+  // Keep trigger cards from the previous index for issues that have not changed since (re-carding costs model calls).
+  const previous = readIndex(opts.root);
+  if (previous) {
+    const cards = new Map(previous.landmines.filter((l) => l.card).map((l) => [`${l.id}@${l.version}|${l.issue.updatedAt}`, l.card]));
+    for (const l of landmines) {
+      const card = cards.get(`${l.id}@${l.version}|${l.issue.updatedAt}`);
+      if (card) l.card = card;
+    }
+  }
   const result: ScanResult = { index, skipped, notes, reused };
   if (opts.write !== false) result.indexFile = writeIndex(opts.root, index);
   return result;

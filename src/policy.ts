@@ -10,7 +10,8 @@ export function armedSymbols(l: Landmine): string[] {
 
 /** A trigger card that rules the issue out (not a bug, or not in this version). */
 export function cardDisarms(l: Landmine): boolean {
-  return Boolean(l.card && (!l.card.isBug || l.card.affectsPinned === 'no' || l.card.apis.length === 0));
+  const c = l.card;
+  return Boolean(c && (!c.isBug || c.affectsPinned === 'no' || c.apis.length === 0 || c.selfCheck === 'fail'));
 }
 
 /**
