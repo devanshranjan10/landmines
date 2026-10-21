@@ -438,3 +438,19 @@ The dev pipeline check (one task) is not part of the result.
   and the grader scored those as fails. The data is kept in `bench/results/void/` and is
   not reported as a result. Running it again needs more Codex quota, which is the
   user's decision. The runner is ready: `run.ts --agent codex`.
+
+**D-46: More runs on two more Claude accounts, recorded before running.** The user
+added two accounts (acct2, acct3). About $40 of the ~$100 budget is left.
+
+*Planned runs:*
+- **I** (acct3): Opus 5.5 as the agent; `none` vs `rules`; fresh-test, exec, terse,
+  seeds 1–2. Hypothesis: rules > none. Opus is the strongest model, so the unaided pass
+  rate may leave little headroom. A null result is reported as such.
+- **J** (acct2): Haiku 5.5, exec, terse; `none, rules, hook, cards, cards-warn`;
+  fresh-test, seeds 1–2. This fills the one missing cell, Haiku with shell access.
+  Hypothesis: rules > none.
+- **Finishing the real-repo cards** (acct2). The three repos in `real-usage.ts` were
+  cut short by the first account's session limit.
+
+*Error handling:* any run that errors (a rate limit, or zero cost) is rerun, not
+scored as a fail.
