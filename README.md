@@ -15,6 +15,8 @@ workaround, and then lets the retry through.
   - Writes everything to `.landmine/index.json`.
 - **`landmine install`.** Adds a pre-edit hook for Claude Code. Codex CLI, Cursor and
   Gemini CLI adapters are included too.
+- **`landmine mcp`.** An MCP server the agent can query on demand ("is this error a
+  known bug in the version we pin?").
 - **The hook.** It runs before each edit, offline. It took 0.09 s per call on our test
   machine, including Node startup, with a 148 KB index. It pauses an edit
   only when two things are true:
@@ -100,7 +102,8 @@ enough for public repositories. The hook never touches the network.
 | Command | What it does |
 |---|---|
 | `landmine scan [--refresh] [--max-issues 100] [--prod] [--json]` | Reads lockfiles, queries npm/PyPI/GitHub, and writes `.landmine/index.json`. Raw responses are cached for 24 h in `.landmine/cache/`, which is git-ignored, so re-scans are fast. |
-| `landmine install [--harness claude\|codex\|cursor\|gemini\|all] [--mode block\|warn] [--heads-up]` | Adds the hook to the project's harness config and leaves your other hooks alone. Running it again is harmless. |
+| `landmine install [--harness claude\|codex\|cursor\|gemini\|all] [--mode block\|warn] [--heads-up] [--mcp]` | Adds the hook to the project's harness config and leaves your other hooks alone. Running it again is harmless. `--mcp` also adds the MCP server to `.mcp.json`. |
+| `landmine mcp [--root]` | Runs an MCP server over stdio with three tools: `landmine_check` (a file or snippet), `landmine_search` (error text or API name) and `landmine_list`. |
 | `landmine list [package] [--all]` | Shows indexed issues. By default, only the ones the hook can act on. |
 | `landmine check <files…> [--exit-code]` | Treats whole files as just written and reports matches, marked `[blocks: …]` or `[heads-up only]`. |
 | `landmine uninstall [--harness …]` | Removes landmine's hook entries only. |
@@ -119,6 +122,24 @@ Re-run `scan` after you change dependencies. The hook only reads the index.
   - `--mode warn` never blocks and passes every match as context.
 - It never prints "allow", so your own permission prompts still apply.
 - It fails open: any error, a missing index, or an unknown payload means no output.
+
+**MCP.** The hook stays quiet unless a match is strong. The MCP tools are for when the
+agent is already looking: a confusing error, or a behavior it can't explain.
+
+In a live Claude Code session ([`docs/e2e/README.md`](docs/e2e/README.md) §5), we
+asked: *"Comparing two pydantic RootModel instances with == gives inconsistent
+results… check whether this is a known open bug in the exact pydantic version this
+project pins."* Claude called `landmine_search` and answered with pydantic#10544,
+reported against the pinned 2.9.2.
+
+`landmine install --mcp` writes this to `.mcp.json`:
+
+```json
+{ "mcpServers": { "landmine": { "type": "stdio", "command": "node", "args": ["/abs/path/dist/cli.js", "mcp"] } } }
+```
+
+We verified that file with `claude -p --mcp-config .mcp.json`. For Codex, run
+`codex mcp add landmine -- node /abs/path/dist/cli.js mcp` (not run live).
 
 Example `scan` output from a live run of `examples/demo`
 ([`docs/e2e/scan.txt`](docs/e2e/scan.txt), 13 s):
