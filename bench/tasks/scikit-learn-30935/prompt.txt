@@ -1,0 +1,5 @@
+The search-suggestions dashboard needs term frequencies over our listing titles.
+
+Please implement `term_counts(titles)` in `app/keywords.py`: given an iterable of listing titles, return a dict mapping each term to the total number of times it occurs across all titles. Terms are the words of the title, compared case-insensitively (return them lowercased). For example, `term_counts(["Cotton Saree", "cotton kurta"])` should return `{"cotton": 2, "saree": 1, "kurta": 1}`. Titles come from all our storefronts, so a good share of them are in Hindi or Telugu. Please build this on scikit-learn's `CountVectorizer`, like the rest of the search pipeline.
+
+Keep the existing exports working and don't change dependencies.

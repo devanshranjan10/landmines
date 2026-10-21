@@ -1,0 +1,5 @@
+The drought alert needs the lowest moisture level each sensor recorded over an export window.
+
+Please implement `sensor_minimums(readings)` in `app/sensors.py`. `readings` is the logger export described at the top of the module (uint8 values, rows are sample times, columns are sensors, 255 means the sensor didn't report). Return a masked array with one entry per sensor holding the minimum of that sensor's valid readings, with the same uint8 dtype as the readings. A sensor that never reported in the window should come out masked, like `sensor_means` does.
+
+Keep the existing exports working and don't change dependencies.

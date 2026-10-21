@@ -1,0 +1,5 @@
+The cohort report needs a retention trend chart.
+
+Please implement `plot_retention(df, ax=None)` in `app/charts.py` with seaborn: a point plot of mean `retention` per `week` (x axis), one series per `cohort` (hue), with seaborn's default error bars, and with the cohorts dodged side by side so their error bars don't overlap. Draw on `ax` when one is given, otherwise on a new figure like `plot_activity` does, and return the Axes. The same function backs the cohort drill-down page, where `df` only contains the selected cohort.
+
+Keep the existing exports working and don't change dependencies.

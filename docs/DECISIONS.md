@@ -250,3 +250,24 @@ passive AGENTS.md index beat on-demand skills in their agent evals. A
 `KNOWN_ISSUES` section is also the only thing that works in *every* agent. So
 `landmine rules` ships, and the bench measures it as its own arm against the hook.
 If it wins, the README says so.
+
+**D-36: landmine-bench v0 tasks and frozen split.** There are 35 trap tasks, one per
+solid bug from the spike. Each one was validated fail→pass by
+`scripts/bench/validate.ts`:
+- the untouched seed fails;
+- the naive solution fails;
+- the workaround passes;
+- the trigger regex matches the naive solution only.
+
+The subagents that wrote the tasks noted fairness concerns for each one, kept in
+`docs/BENCHMARK.md`. The split is seeded (20261021) and assigns whole packages to one
+side, so tuning on dev never sees a test package. Packages go to dev until dev
+reaches a third of the tasks. dayjs's 7 tasks crossed that line, which gave 17 dev
+and 18 test. I kept that result instead of re-rolling, because re-rolling the split
+until it looks right is a quiet form of tuning. Test covers 8 packages:
+- npm: axios, date-fns, jsonwebtoken, knex
+- PyPI: numpy, pandas, pyyaml, seaborn
+
+**Selection bias, stated up front.** Every trap was picked *from* landmine's own
+index, so the bench measures conditional effectiveness: given that the bug is
+indexed, does the tool help the agent avoid it? It says nothing about recall.

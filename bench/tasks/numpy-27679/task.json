@@ -1,0 +1,14 @@
+{
+  "id": "numpy-27679",
+  "issue": "numpy/numpy#27679",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "numpy",
+  "version": "2.1.2",
+  "tier": "B",
+  "entry": ["app/detector.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": { "regex": "[+-]=\\s*(int\\()?[A-Za-z_]\\w*\\)?\\s*(#.*)?$", "about": "in-place += / -= of a Python int (not cast to the array dtype) on an unsigned-int masked array" },
+  "summary": "masked uint16 frame += <python int> raises UFuncTypeError (int64 -> uint16 same_kind), plain ndarrays work"
+}

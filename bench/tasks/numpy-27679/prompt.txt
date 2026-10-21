@@ -1,0 +1,5 @@
+The new readout firmware subtracts the pedestal on-chip, so the analysis side has to add it back before anything else runs.
+
+Please implement `add_pedestal(frame, pedestal)` in `app/detector.py`. `frame` is a masked frame as returned by `load_frame` (uint16 ADC counts, bad pixels masked) and `pedestal` is the integer from the run config (typically around 100). Add the pedestal to every pixel of the frame in place: frames are large and other parts of the pipeline hold references to them, so don't make a copy. Masked pixels must stay masked and the frame must keep its uint16 dtype. Pedestals are small, so overflow is not a concern.
+
+Keep the existing exports working and don't change dependencies.

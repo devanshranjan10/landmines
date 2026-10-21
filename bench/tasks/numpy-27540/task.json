@@ -1,0 +1,14 @@
+{
+  "id": "numpy-27540",
+  "issue": "numpy/numpy#27540",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "numpy",
+  "version": "2.1.2",
+  "tier": "A",
+  "entry": ["app/quality.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": { "regex": "\\|=\\s*(?!int\\(|np\\.|numpy\\.)[A-Za-z_][\\w.]*(?<!\\.value)\\s*(#.*)?$|bitwise_or\\([^)]*\\bout\\s*=", "about": "in-place ORs an IntEnum member into a uint32 array (dq[...] |= DQ.X / np.bitwise_or(..., out=dq))" },
+  "summary": "uint32_array |= IntEnum_member raises UFuncTypeError in numpy 2 (IntEnum is not treated as a weak Python int)"
+}

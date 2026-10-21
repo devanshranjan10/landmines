@@ -1,0 +1,5 @@
+The audit log is missing most of what happened: every line only has the event's `id` and `at`, e.g. a price change is logged without the SKU, the prices or the discount, and a stock adjustment without the SKU, delta and reason.
+
+Please fix `app/audit.py` so that `to_log_line` writes every field of the concrete event (`PriceChanged`, `StockAdjusted`), and implement `from_log_line(line)`, which reads a log line back into an `AuditEntry` whose `event` is an instance of the right event class with the same field values.
+
+Keep the existing exports working and don't change dependencies.

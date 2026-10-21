@@ -1,0 +1,9 @@
+{
+  "name": "session-store",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "knex": "3.1.0"
+  }
+}

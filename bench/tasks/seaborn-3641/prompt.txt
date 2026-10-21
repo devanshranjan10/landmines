@@ -1,0 +1,5 @@
+The attention study report needs the per-subject score chart.
+
+Please implement `plot_scores(df, ax=None)` in `app/plots.py` with seaborn: a scatter plot of `score` (y) against `subject` (x), with points colored by `attention` and a legend for the attention groups. Each marker's area must be exactly `AREA_PER_SOLUTION * solutions` points², so the chart matches the printed report. Draw on `ax` when one is given, otherwise on a new figure like `plot_score_hist` does, and return the Axes.
+
+Keep the existing exports working and don't change dependencies.

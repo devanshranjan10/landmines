@@ -1,0 +1,5 @@
+We're moving the contact sync from the nightly SFTP drop to the CRM's HTTP import API.
+
+Please implement `push_contacts(base_url, token, contacts)` in `app/contacts_sync.py`. It should upload the same CSV that `export_to_file` writes (the exact same bytes, UTF-8) as the raw request body of `POST {base_url}/v1/contacts/import`, with the headers `Authorization: Bearer <token>` and `Content-Type: text/csv; charset=utf-8`. The API answers `200` with JSON `{"imported": <n>}`; return `n`. Any non-2xx answer should raise.
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,5 @@
+The analytics service now pulls readings from us instead of us writing to its database, using the same JSON batch format the gateway already sends us (see the module docstring in `app/readings.py`).
+
+Please implement `export_batch(readings)` in `app/readings.py`: it takes a list of `Reading` objects and returns the batch as UTF-8 JSON bytes. Values must be published exactly as the model already defines them (rounded to 3 decimals, NaN/Infinity kept as the JSON constants), and `load_batch(export_batch(readings))` must give back the same readings, up to that rounding.
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,17 @@
+{
+  "id": "pydantic-10629",
+  "issue": "pydantic/pydantic#10629",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pydantic",
+  "version": "2.9.2",
+  "tier": "B",
+  "entry": ["app/display.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "(?<![\\s\\S])(?![\\s\\S]*(?:mode\\s*=\\s*[\"']before[\"']|BeforeValidator|PlainValidator|WrapValidator))[\\s\\S]*?validate_json\\(",
+    "about": "DisplaySettings (tuple-valued Resolution enum field) validated from JSON with validate_json and no before/plain/wrap validator to turn the JSON list back into a tuple"
+  },
+  "summary": "an Enum with tuple values dumps to JSON as a list, and model_validate_json then rejects that list, so the model cannot round-trip through JSON"
+}

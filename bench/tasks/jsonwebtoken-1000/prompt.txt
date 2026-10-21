@@ -1,0 +1,5 @@
+Internal services need short-lived tokens for calling our API. Please implement `issueServiceToken(claims, cb)` in `src/tokens.js`.
+
+`claims` is a plain object from the calling service (it always has `sub` and may carry custom claims such as `scope` or `tenant`). The function should sign an HS256 token with our secret that contains those claims, has `iss` `acme-auth` and `aud` `acme-api`, and expires 15 minutes after issue, i.e. what `SIGN_OPTIONS` describes. Callers are not allowed to choose `iss`, `aud` or `exp` themselves: if `claims` contains any of them, the call must fail with an error and no token is issued.
+
+Like the rest of this module, use the Node callback convention: `cb(err)` on failure, `cb(null, token)` on success. Tokens must be accepted by the existing `verifyToken`. Keep the existing exports working and don't change dependencies.

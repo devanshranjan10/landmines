@@ -1,0 +1,3 @@
+The pricing service is switching from reading our coefficients CSV to a JSON payload. Please implement `coefficients_payload(df)` in `app/export.py`: given the coefficients table (as returned by `load_coefficients`), return JSON text containing an array with one object per row, keyed by column name, e.g. `[{"feature": "age", "weight": 0.25, "bias": -1.5}, ...]`.
+
+The service re-scores orders with these coefficients and its results are reconciled against ours, so the numbers in the payload must be exactly the values in the DataFrame. Keep the existing exports working and don't change dependencies.

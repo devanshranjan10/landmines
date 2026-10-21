@@ -1,0 +1,5 @@
+Wholesale buyers can now have individual price tiers settled in a different currency than the one the tier is quoted in.
+
+Please add an optional `settlement_currency` to `PriceTier` in `app/catalog.py` (unset means the tier is settled in its own `currency`) and implement `effective_settlement_currency(tier)`, which returns the currency code the tier is actually settled in as a plain string, e.g. "EUR". The storefront feed produced by `listing_feed` must include the new field on every tier (null when it isn't set); everything else in the feed stays as it is today.
+
+Keep the existing exports working and don't change dependencies.

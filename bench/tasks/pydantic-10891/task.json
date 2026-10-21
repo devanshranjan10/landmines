@@ -1,0 +1,17 @@
+{
+  "id": "pydantic-10891",
+  "issue": "pydantic/pydantic#10891",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pydantic",
+  "version": "2.9.2",
+  "tier": "A",
+  "entry": ["app/readings.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "\\.dump_json\\(",
+    "about": "TypeAdapter(list[Reading]).dump_json(...) where Reading has ser_json_inf_nan='constants' and a PlainSerializer float field"
+  },
+  "summary": "TypeAdapter(list[Model]).dump_json writes NaN/Infinity as null when the model's float field has a custom (PlainSerializer) serializer, ignoring the model's ser_json_inf_nan='constants'"
+}

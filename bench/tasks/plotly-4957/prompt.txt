@@ -1,0 +1,5 @@
+Customers can now set their own series colors in a dashboard config (`palette: [...]`), and a typo there currently only shows up as a broken chart much later.
+
+Please implement `validate_palette(colors)` in `app/theme.py`. It gets the list of color strings from the config and returns it unchanged (same strings, same order) if every entry is a color Plotly can render: CSS color names like `red`, hex like `#1f77b4`, and `rgb()`/`rgba()`/`hsl()`/`hsla()` strings. If any entry is not a valid color, raise `ValueError` with the offending entry in the message. `palette_for()` already calls it.
+
+Keep the existing exports working and don't change dependencies.

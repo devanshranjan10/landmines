@@ -1,0 +1,3 @@
+The warehouse feed sometimes drops values (an empty price, quantity or location for a sku), which makes the stock value report show gaps. Please implement `fill_from_previous(today, previous)` in `app/inventory.py`: both arguments are snapshots as returned by `load_snapshot` (indexed by sku, same columns). Return today's snapshot with every missing value filled in from the previous snapshot's value for the same sku and column; anything that is missing in both stays missing. Don't modify the inputs. The result is passed to `stock_value()`, so price and qty need to stay numeric.
+
+Keep the existing exports working and don't change dependencies.

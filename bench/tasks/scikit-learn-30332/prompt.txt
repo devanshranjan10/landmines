@@ -1,0 +1,5 @@
+Fraud is only about one in ten transactions in our training data, and the detector misses too much of it.
+
+Please implement `train_detector(X, y, fraud_weight=10.0)` in `app/fraud.py`. It should fit and return a `NuSVC` with `nu=NU` (keep the default RBF kernel) in which misclassifying a fraud example (label 1) costs `fraud_weight` times as much as misclassifying a legit one (label 0). With `fraud_weight=1.0` it should be the same as the plain unweighted model. `flag()` is used on the returned model as-is.
+
+Keep the existing exports working and don't change dependencies.

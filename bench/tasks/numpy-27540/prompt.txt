@@ -1,0 +1,3 @@
+The reduction pipeline should mark bad pixels in each frame's data-quality plane. Please implement `flag_frame(image, dq, saturation)` in `app/quality.py`: set the `DQ.SATURATED` bit for every pixel whose value is at or above `saturation`, and the `DQ.DEAD` bit for every pixel that reads exactly 0. `dq` is the frame's uint32 DQ plane (same shape as `image`, see `new_dq_plane`); update it in place, keep any bits that are already set, and return it.
+
+Keep the existing exports working and don't change dependencies.

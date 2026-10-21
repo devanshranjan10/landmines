@@ -1,0 +1,3 @@
+The `sessions` table (Postgres) keeps growing because nothing removes expired rows. We want a cron job that purges them in small batches, so that a single run never holds locks on a huge number of rows.
+
+Please implement `purgeExpiredSessions(db, now, batchSize = 1000)` in `src/sessions.js`. It should delete at most `batchSize` sessions whose `expires_at` is before `now` (a `Date`); the job calls it repeatedly until a run deletes nothing. Like the other functions in this module, return the knex query without awaiting it (the caller awaits it and gets the deleted row count). Keep the existing exports working and don't change dependencies.

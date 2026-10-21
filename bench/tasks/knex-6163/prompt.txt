@@ -1,0 +1,3 @@
+Customer success wants to see which users of an organisation have a given feature flag turned on.
+
+Feature flags live in the `users.features` jsonb column as an object whose keys are the enabled flags, e.g. `{"beta": true, "new-billing": {"since": "2024-05-01"}}`. Please implement `usersWithFeature(db, { orgId, feature })` in `src/reports.js`: it should return the `id` and `email` of the users with `org_id = orgId` whose `features` object has the key `feature`, ordered by `id`. Write it like the other report queries in that file and return the query without awaiting it (the caller awaits it). Keep the existing exports working and don't change dependencies.

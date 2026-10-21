@@ -1,0 +1,9 @@
+The ticket page shows an absolute due date (`dueLabel` in `src/countdown.js`), and support wants a relative countdown next to it as well.
+
+Please implement `timeLeftLabel(now, deadline)` in `src/countdown.js`. Both arguments are `Date`s. It should return the time remaining until the deadline broken down into whole calendar months, then days, then hours, e.g. `"2 months, 3 days, 4 hours left"` or `"1 day, 1 hour left"`:
+- leave out units that are zero, and use the singular for 1 (`1 month`, `1 day`, `1 hour`);
+- drop leftover minutes (round down to the hour);
+- if less than an hour is left, return `"less than an hour left"`;
+- if the deadline is now or in the past, return `"overdue"`.
+
+Deadlines are always less than a year away, so there is no need for years. We already use date-fns in this module, please stay with it. Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,14 @@
+{
+  "id": "pandas-62072",
+  "issue": "pandas-dev/pandas#62072",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pandas",
+  "version": "2.2.3",
+  "tier": "A",
+  "entry": ["app/export.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": { "regex": "\\.to_json\\(", "about": "serializes floats with DataFrame.to_json (default double_precision=10, max 15 is still lossy)" },
+  "summary": "DataFrame.to_json() rounds floats (0.2617993877991494 -> 0.2617993878); even double_precision=15 does not round-trip"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "axios-6587",
+  "issue": "axios/axios#6587",
+  "related": [],
+  "ecosystem": "npm",
+  "package": "axios",
+  "version": "1.7.7",
+  "tier": "A",
+  "entry": ["src/partnerClient.js"],
+  "test": ["node", "hidden/test.mjs"],
+  "env": {},
+  "trigger": { "regex": "\\bauth\\s*:\\s*\\{[\\s\\S]*?\\bAuthorization['\"]?\\s*:[^\\n]*Bearer", "about": "instance created with `auth` plus a per-request Authorization: Bearer header" },
+  "summary": "an axios instance created with `auth` overrides a per-request Authorization header, so the Bearer token is replaced by Basic credentials"
+}

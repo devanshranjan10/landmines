@@ -1,0 +1,3 @@
+The sensor dashboard needs the peak-to-peak span of each channel next to mean and std. Please implement `channel_span(samples)` in `app/sensors.py`: it returns the span (largest minus smallest reading) of a channel as a float, ignoring missing/invalid samples the same way the other statistics in the module do. `channel_summary` already includes it.
+
+Keep the existing exports working and don't change dependencies.

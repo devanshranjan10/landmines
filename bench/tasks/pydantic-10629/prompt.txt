@@ -1,0 +1,3 @@
+The kiosk player forgets its display settings on every restart. Please implement `save_settings(settings, path)` and `load_settings(path)` in `app/display.py` so the settings are persisted as a JSON file between runs: `load_settings` returns exactly what was last saved to that path, or the default `DisplaySettings()` if nothing has been saved there yet. The file should stay a normal JSON document that ops can open and edit by hand.
+
+Keep the existing exports working and don't change dependencies.

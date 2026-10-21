@@ -1,0 +1,3 @@
+The weekly customer report shows `NaN`, `None`, `NaT` and the like in cells where we have no data, which confuses the account managers. Please implement `blank_missing(df)` in `app/report.py`: it should return a copy of the frame in which every missing value is an empty string; values that are present stay as they are, and the input frame must not be modified. `render_html` already calls it.
+
+Keep the existing exports working and don't change dependencies.

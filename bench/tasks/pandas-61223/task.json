@@ -1,0 +1,14 @@
+{
+  "id": "pandas-61223",
+  "issue": "pandas-dev/pandas#61223",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "pandas",
+  "version": "2.2.3",
+  "tier": "B",
+  "entry": ["app/tickets.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": { "regex": "(?<![\\s\\S])(?![\\s\\S]*\\[\\s*[\"']tags[\"']\\s*\\]\\s*=[^=])[\\s\\S]*\\.(at|loc)\\[[^\\]]*[\"']tags[\"']\\s*\\]\\s*=[^=]", "about": "assigns a list into a not-yet-existing column with df.at/df.loc[row, 'tags'] = [...] without creating the object column first" },
+  "summary": "df.at[row, new_col] = [list] raises 'Must have equal len keys and value' (or stores garbage for a 1-element list) when the column doesn't exist"
+}

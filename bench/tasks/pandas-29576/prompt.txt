@@ -1,0 +1,3 @@
+Finance wants the revenue dashboard to show fiscal half-years next to the monthly and quarterly figures. Please implement `half_year_totals(daily)` in `app/fiscal.py`: given a daily revenue series (indexed by date), return the total revenue per fiscal half-year as a series indexed by the half's start date. Our fiscal halves start on 1 March (H1, March-August) and 1 September (H2, September-February), see the module docstring. The input can start and end on any day, so the first and last half-years may be partial.
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,3 @@
+We need the monthly settlement report from the Partner API in the finance dashboard.
+
+Please implement `getAdminReport(adminToken, month)` on the client returned by `createPartnerClient` in `src/partnerClient.js`. It should call `GET /admin/report?month=<month>` (month is `YYYY-MM`) and resolve with the response body. The admin endpoints don't accept our service account: they require the operator's token, sent as `Authorization: Bearer <adminToken>`. All the other methods must keep using the service account exactly as they do now, including when they are called after an admin request on the same client. Keep the existing exports working and don't change dependencies.

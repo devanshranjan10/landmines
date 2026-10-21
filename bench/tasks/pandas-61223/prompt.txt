@@ -1,0 +1,3 @@
+We want labels on tickets. Please implement `set_tags(board, ticket_id, tags)` in `app/tickets.py`: it stores the ticket's labels as a list (e.g. `["bug", "auth"]`) in a `tags` column of the board, in place, like the other setters do, replacing whatever labels the ticket had before. Boards loaded from older exports don't have a `tags` column yet; tickets that were never tagged can just be left empty (None/NaN is fine).
+
+Keep the existing exports working and don't change dependencies.

@@ -1,0 +1,7 @@
+Every query in `src/accounts.js` is tagged with the id of the request that issued it (a `/* req:<requestId> */` comment at the start of the SQL), so entries in the Postgres slow-query log can be traced back to the request.
+
+Please implement the two remaining functions in that file:
+- `changePlan(db, requestId, accountId, plan)`: set the account's `plan` column;
+- `closeAccount(db, requestId, accountId)`: delete the account row.
+
+Both must carry the request tag like the existing queries do. As with the rest of the module, return the knex query without awaiting it (the caller awaits it). Keep the existing exports working and don't change dependencies.

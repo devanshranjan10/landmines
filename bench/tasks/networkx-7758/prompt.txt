@@ -1,0 +1,5 @@
+Planning wants to search our transit networks for service patterns, e.g. "two stations linked by both the Red and the Blue line, where the second one also has a Green line to a third station".
+
+Please implement `contains_pattern(network, pattern)` in `app/transit.py`. Both arguments are networks built with `build_network`; the pattern's station names are just placeholders. Return True if the pattern's stations can be mapped to distinct stations of the network so that for every segment (a, b, line) of the pattern, that line runs between the two mapped stations in the network. The network may have any number of additional stations and segments, including other lines running between the same two stations.
+
+Keep the existing exports working and don't change dependencies.

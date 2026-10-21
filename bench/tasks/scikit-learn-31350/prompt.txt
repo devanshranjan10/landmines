@@ -1,0 +1,5 @@
+Rows with a missing `plan` or `region` currently break the churn model, so we need to impute those columns the same way we already impute the numeric ones.
+
+Please implement `CategoryImputer` in `app/prep.py`, mirroring `NumericImputer`: `fit(train)` learns the most frequent value of each `CATEGORICAL` column on the training frame and returns `self`, and `transform(df)` returns a DataFrame with just the `CATEGORICAL` columns of `df` (same index) where missing values are replaced by those learned values. `plan` and `region` are pandas `category` columns and the encoder downstream reads their `.cat.categories`, so the output columns need to keep the categorical dtype with the same categories. `preprocess()` already wires the imputer in.
+
+Keep the existing exports working and don't change dependencies.

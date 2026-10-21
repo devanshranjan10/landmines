@@ -1,0 +1,17 @@
+{
+  "id": "networkx-7758",
+  "issue": "networkx/networkx#7758",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "networkx",
+  "version": "3.4.2",
+  "tier": "B",
+  "entry": ["app/transit.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": {
+    "regex": "def contains_pattern[\\s\\S]*?categorical_multiedge_match\\(",
+    "about": "contains_pattern uses categorical_multiedge_match as edge_match for a MultiGraph subgraph monomorphism/isomorphism search"
+  },
+  "summary": "categorical_multiedge_match compares the full set of parallel-edge attribute values, so MultiGraph subgraph monomorphism fails whenever the host has an extra parallel edge (e.g. two lines between a station pair)"
+}

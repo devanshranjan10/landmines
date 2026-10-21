@@ -1,0 +1,5 @@
+`deployctl` crashes with a traceback when it can't read its config, and `load_config` in `app/config.py` was never implemented.
+
+Please implement `load_config(text, source)`: parse the YAML document (safely; configs come from users), treat an empty document as an empty mapping, require the top level to be a mapping, and return it merged over `DEFAULTS` (values from the file win). Whenever the text can't be turned into a config, raise `ConfigError` with a message that starts with `source`, so `main()` prints a one-line error instead of a traceback.
+
+Keep the existing exports working and don't change dependencies.

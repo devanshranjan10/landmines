@@ -1,0 +1,14 @@
+{
+  "id": "numpy-27674",
+  "issue": "numpy/numpy#27674",
+  "related": [],
+  "ecosystem": "pypi",
+  "package": "numpy",
+  "version": "2.1.2",
+  "tier": "A",
+  "entry": ["app/sensors.py"],
+  "test": ["{python}", "hidden/test_hidden.py"],
+  "env": {},
+  "trigger": { "regex": "\\b(np|numpy)\\.ptp\\(", "about": "calls np.ptp() on a masked array (the mask is ignored in numpy 2)" },
+  "summary": "np.ptp(masked_array) ignores the mask in numpy 2 and returns nan/inf instead of the span of valid values"
+}
