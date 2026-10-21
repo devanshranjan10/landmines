@@ -1,0 +1,27 @@
+{
+  "note": "C1 and C2 were used to design and tune corroboration; their numbers are tuning results, not held-out.",
+  "C1": {
+    "files": 60,
+    "before_corroboration": {
+      "hits": 28,
+      "relevant": 2,
+      "partial": 1,
+      "noise": 25
+    },
+    "final_rules": {
+      "blocking": 0,
+      "headsUp": 28
+    }
+  },
+  "C2": {
+    "files": 60,
+    "first_corroboration_rule": {
+      "blocking": 8,
+      "headsUp": 18
+    },
+    "final_rules": {
+      "blocking": 0,
+      "headsUp": 17
+    }
+  }
+}

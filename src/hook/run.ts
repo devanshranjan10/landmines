@@ -12,6 +12,8 @@ import { ShownState } from './state.js';
 
 export interface HookOptions {
   mode?: HookMode;
+  /** In block mode, also pass uncorroborated matches to the model as non-blocking context. Off by default (D-29). */
+  headsUp?: boolean;
   harness?: Harness;
   env?: NodeJS.ProcessEnv;
   now?: () => Date;
@@ -87,9 +89,13 @@ function evaluate(stdin: string, opts: HookOptions, env: NodeJS.ProcessEnv): Hoo
     const summary = hits.map((h) => ({ id: h.landmine.id, symbol: h.symbol, file: h.file }));
     if (unseen.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };
 
-    // Block only on corroborated hits; a bare symbol match is passed on as a heads-up.
+    // Block only on corroborated hits. A bare symbol match was relevant ~7% of the time on held-out real code
+    // (docs/ACCURACY.md), so it is dropped unless heads-ups are on; it does not use up the issue's one showing.
     const corroborated = unseen.filter((h) => h.corroboratedBy);
     const blocking = mode === 'block' && corroborated.length > 0;
+    if (mode === 'block' && !blocking && !opts.headsUp) {
+      return { stdout: '', harness, decision: 'none', hits: summary, reason: 'only uncorroborated matches (heads-up off)' };
+    }
     const candidates = blocking ? corroborated : unseen;
     const fresh = candidates.filter((h) => stateFor(h).claim(h.landmine.id)).slice(0, MAX_HITS);
     if (fresh.length === 0) return { stdout: '', harness, decision: 'none', hits: summary, reason: 'already shown this session' };

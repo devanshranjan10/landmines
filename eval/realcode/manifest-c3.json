@@ -1,0 +1,422 @@
+[
+  {
+    "pkg": "pandas",
+    "repo": "sfadfe/projectile-motion",
+    "path": "r.py",
+    "sha": "a2389583148bae61e86c9de60a1671f22bfc5c44",
+    "url": "https://github.com/sfadfe/projectile-motion/blob/b97ec8eff5d9a2ff77ec82f04a5a4a8ae537b1ae/r.py"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "ciscops/msak",
+    "path": "msak",
+    "sha": "5a06b94bdf13bb391a253a21df5dff74b204c9d9",
+    "url": "https://github.com/ciscops/msak/blob/039ba54de15619ab6028310c0c208bd801c91a80/msak"
+  },
+  {
+    "pkg": "pandas",
+    "repo": "programmingGod-byte/NanoVaultDb",
+    "path": "a.py",
+    "sha": "66eed11d0ad514faf5beda27fff1f955068453fa",
+    "url": "https://github.com/programmingGod-byte/NanoVaultDb/blob/4b99f6aa3a28d91bf6eb96b8a0161bc4bcef163d/a.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "mmasenheimer/neural-networks-for-LHC",
+    "path": ".py",
+    "sha": "b07c7522ea03ae755d223b4dc757937ab2be48a3",
+    "url": "https://github.com/mmasenheimer/neural-networks-for-LHC/blob/7224446db82329147cf5d8a9f9f2d687076441a1/.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "jueqingsizhe66/cleanWindVim",
+    "path": "a.py",
+    "sha": "834cf3c3d55c85f63240a60ebd04814a37bd8e98",
+    "url": "https://github.com/jueqingsizhe66/cleanWindVim/blob/e2fb8b1fe0cf85c73a26d58fd4dafaed526351db/a.py"
+  },
+  {
+    "pkg": "numpy",
+    "repo": "HamidSyed298/Computer_Vision",
+    "path": "3.py",
+    "sha": "11ba640ce06e5752939c5842fc3a9fbe6051cd81",
+    "url": "https://github.com/HamidSyed298/Computer_Vision/blob/356b87b3f8ca8147e4e62ddd1da4dff892bf21bc/3.py"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "douglasbagnall/image-tsne",
+    "path": "tsne",
+    "sha": "ba4244252a58f81bc5786e67be9c7dde9e71c0b9",
+    "url": "https://github.com/douglasbagnall/image-tsne/blob/81ddd0e1bf090091663d4a63317df7460de6e94e/tsne"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "zhangbo2008/wav2lip384_my2",
+    "path": "2.py",
+    "sha": "5f7c87f52af21d26134a35635c4069ef4e4835bd",
+    "url": "https://github.com/zhangbo2008/wav2lip384_my2/blob/4a53b6c78524b779e13bc5c52d9287723b5dd8b0/2.py"
+  },
+  {
+    "pkg": "matplotlib",
+    "repo": "DataScienceDisciple/AOC2022",
+    "path": "8.py",
+    "sha": "d6006958c21a04a853c0308aa9462960f755db2f",
+    "url": "https://github.com/DataScienceDisciple/AOC2022/blob/0466fda4a33a759cf36faaf08f596c794b1e96f3/8.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "pbusenius/polars-maxminddb",
+    "path": "run.py",
+    "sha": "3b1629d0910077e1f7a2bbb3b933e025296ce470",
+    "url": "https://github.com/pbusenius/polars-maxminddb/blob/8cb19ecf950968f77def9cafebbdbf110602c051/run.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "TianoRao/Cloud_hosted_notebook_TR",
+    "path": "lib.py",
+    "sha": "741d4d2f8c9c66c249651666953a2397eff65185",
+    "url": "https://github.com/TianoRao/Cloud_hosted_notebook_TR/blob/3876f48200f9d4436712679ab771c2142e69eb0f/lib.py"
+  },
+  {
+    "pkg": "polars",
+    "repo": "B4ZPalani/Heart-Attack-Prediction",
+    "path": "app.py",
+    "sha": "94515d8ca932858693613bdb2c1a3cf311b6daef",
+    "url": "https://github.com/B4ZPalani/Heart-Attack-Prediction/blob/dd7e314a767346a4f0d5a8a0896d6053cc4df3e5/app.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "commonsmachinery/commonshasher",
+    "path": "app.py",
+    "sha": "0b9a3934441b92db8e1f84ffe34b68c02f9cd5ca",
+    "url": "https://github.com/commonsmachinery/commonshasher/blob/5a8198b3d06d0047a2f541882fc2f14b46f0b568/app.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "iwootten/celery-socketio",
+    "path": "app.py",
+    "sha": "4620dc7d8179f6dcd801ec0ca30d199e49b39e36",
+    "url": "https://github.com/iwootten/celery-socketio/blob/0d4ea995840de9c15ee2011ddeb3614bd34c5836/app.py"
+  },
+  {
+    "pkg": "celery",
+    "repo": "javoxirone/bilagon-ai-bot",
+    "path": "tasks.py",
+    "sha": "e070e26abdecb04b4d605aeef9af907fb2ecca60",
+    "url": "https://github.com/javoxirone/bilagon-ai-bot/blob/2d215cc6e5736eb22db40710580638cfe0da5ef8/tasks.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "AgeOfLearning/coeus-python-template",
+    "path": "main.py",
+    "sha": "2f994f8f9f26bcad47bc1c0fc7fb8bf54b1fe65d",
+    "url": "https://github.com/AgeOfLearning/coeus-python-template/blob/2f1d796a3c6143c27640ab3b8eecfdfefb735896/main.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "orzcncn/txxdk",
+    "path": "run.py",
+    "sha": "8aba8c1af2655eefdea7dc0e3fe91c06ae9e24c5",
+    "url": "https://github.com/orzcncn/txxdk/blob/07c12a805e6e2ba8afcf73f20fac17afbde7d80c/run.py"
+  },
+  {
+    "pkg": "pytest",
+    "repo": "zed123214/api-autotest-framework",
+    "path": "run.py",
+    "sha": "33915a4dc16812c18cf21a1bde1dc3fb8cd3cc42",
+    "url": "https://github.com/zed123214/api-autotest-framework/blob/e0ac76720265609d63249fed630016821659b679/run.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "ponnarasua/Python-Learning",
+    "path": "9.py",
+    "sha": "fd4faeedd10c0a877419cc7f289ae7f5c2bb2aca",
+    "url": "https://github.com/ponnarasua/Python-Learning/blob/8017511c8cbf96353600c06333db6e381508a2fe/9.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "ParkerSm1th/WikiStoreCode",
+    "path": "qa.py",
+    "sha": "f7b504811e2f142e0f086686e8722e153790fed0",
+    "url": "https://github.com/ParkerSm1th/WikiStoreCode/blob/d5539dba04569074f0e5c9bac64d85a2348df275/qa.py"
+  },
+  {
+    "pkg": "langchain",
+    "repo": "yaseminkoc/havelsan-ekspres-nlp",
+    "path": "q2.py",
+    "sha": "f0e7bd9aef29d197b2568ab3aec103ef035893ed",
+    "url": "https://github.com/yaseminkoc/havelsan-ekspres-nlp/blob/e80b91b141713d7bb63c7df5eaf0388779161e72/q2.py"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "nice-winter/livekun",
+    "path": "src/main.ts",
+    "sha": "9e1051e27f0305dd238a1a6906623f7f37e10579",
+    "url": "https://github.com/nice-winter/livekun/blob/1aed8f6f001a74fe1138321d9a6abd069494f206/src/main.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "laincarl/react-gantt-component",
+    "path": "src/types.ts",
+    "sha": "af61b7c6211b72f7556d019f2531451c8cea7b42",
+    "url": "https://github.com/laincarl/react-gantt-component/blob/3e0ef8dee4b4280f92ec6f4e40021d986069957d/src/types.ts"
+  },
+  {
+    "pkg": "dayjs",
+    "repo": "vikiboss/blog",
+    "path": "lib/dayjs.ts",
+    "sha": "84ee0e11848c3c8e2ff8fe6c88b569491cf27cb6",
+    "url": "https://github.com/vikiboss/blog/blob/78a79394e1983fdc6005129002026fabcd31bfe4/lib/dayjs.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "Ritvik2021/linkedin-scraper-revised",
+    "path": "src/mw.ts",
+    "sha": "15cae15fbbce514ccd82e205270324b5798da404",
+    "url": "https://github.com/Ritvik2021/linkedin-scraper-revised/blob/7168dac43d7d0420d0cac068dd328a8eff8b912c/src/mw.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "carbonplan/auth",
+    "path": "src/api.ts",
+    "sha": "da3a3b679d124e6972f37af4586ba00711d14dc3",
+    "url": "https://github.com/carbonplan/auth/blob/2183d330d8fa390954d6a25280841b5d17a4eded/src/api.ts"
+  },
+  {
+    "pkg": "jsonwebtoken",
+    "repo": "MatthewStanciu/apple-music-slack-status",
+    "path": "index.ts",
+    "sha": "991f5774e8a0541fe0deed94cf7517ad4cad34c0",
+    "url": "https://github.com/MatthewStanciu/apple-music-slack-status/blob/37ab7619048fa8e06c63a8446182c2dd5f3b6e57/index.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "DoGood-org/dogood-backend",
+    "path": "src/app.ts",
+    "sha": "6dd51be5023f31516b934b130a27b64d83ca72ef",
+    "url": "https://github.com/DoGood-org/dogood-backend/blob/62131cbf9808f1cc9cbb2f867447ba705f8c3a5b/src/app.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "slice3984/PugMaster",
+    "path": "devpage.ts",
+    "sha": "a6286aae85b37218422d023371972f5d2f845781",
+    "url": "https://github.com/slice3984/PugMaster/blob/b7155153b3e31a41743b46bde391f2c93280aff5/devpage.ts"
+  },
+  {
+    "pkg": "socket.io",
+    "repo": "rapid-sensemaking-framework/rsf-twilio-bot",
+    "path": "index.ts",
+    "sha": "c1ce47fef7865de3ec682fbebc4aa1fb6b14f793",
+    "url": "https://github.com/rapid-sensemaking-framework/rsf-twilio-bot/blob/90a039d04e1da88e43921de6e90697d1050eab5c/index.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "Lucas98Fernando/vue3-vite-ts-pinia-boilerplate",
+    "path": "src/main.ts",
+    "sha": "0c25c992a43f30764fd33acc35cd9a153ed6a949",
+    "url": "https://github.com/Lucas98Fernando/vue3-vite-ts-pinia-boilerplate/blob/ba82aeaecacca37906857743c4f0dae83bf03af0/src/main.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "CyanSalt/roughness",
+    "path": "src/all.ts",
+    "sha": "f7adcf3bfa9d8d00cda3bc4e0ef3b47f916c3218",
+    "url": "https://github.com/CyanSalt/roughness/blob/6b27a06706076fe866e69e7057d65c8241c94f74/src/all.ts"
+  },
+  {
+    "pkg": "vue",
+    "repo": "AK081KA/vue-x6",
+    "path": "src/app.ts",
+    "sha": "f3e6ded29d7a15de3c7cb2e6e0763160c9f39f1d",
+    "url": "https://github.com/AK081KA/vue-x6/blob/6e095bf479f7490f7b5f5c922fea229832cb646f/src/app.ts"
+  },
+  {
+    "pkg": "torch",
+    "repo": "FlorenceZh/ACG-face-master",
+    "path": "v.py",
+    "sha": "3b4ec30d1f7e2f56fe358a22c0f97798d12b3c12",
+    "url": "https://github.com/FlorenceZh/ACG-face-master/blob/53dac511c54065a683f9c2fd36332be27e16bf3f/v.py"
+  },
+  {
+    "pkg": "torch",
+    "repo": "ljwa2323/PyTorch-SRGAN-master",
+    "path": "train",
+    "sha": "7acef50227dea31b56d75474f2a299c1c7596f03",
+    "url": "https://github.com/ljwa2323/PyTorch-SRGAN-master/blob/88e5d1493464dbbeeb85c680e00b6bbe67e93452/train"
+  },
+  {
+    "pkg": "torch",
+    "repo": "zjrcczu/OMTL-PTP",
+    "path": "x.py",
+    "sha": "188dd7ce57f414eba6a55118bf5108bc3d810777",
+    "url": "https://github.com/zjrcczu/OMTL-PTP/blob/144c174d5bd2dd4d00f97cc9b52a199727742e61/x.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "V3ence/DS_education",
+    "path": "5.py",
+    "sha": "5ea19ea53d6e66de6633e5676cee17b8c2f78b8f",
+    "url": "https://github.com/V3ence/DS_education/blob/8ee6fe4de556b2e6dc9ded2554f86f72b79ed01f/5.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "Optimus3264/Python",
+    "path": "s.py",
+    "sha": "535dedcb4474068c6b52b6b8815ec4742264ffa4",
+    "url": "https://github.com/Optimus3264/Python/blob/5a011f4c6bc930696f2bb68313b02524ae8d2d1b/s.py"
+  },
+  {
+    "pkg": "seaborn",
+    "repo": "Adithya3124/First",
+    "path": "7.py",
+    "sha": "8e8e11525101ccf72c54f7ed18190e6453d00eb4",
+    "url": "https://github.com/Adithya3124/First/blob/77b9cab3ad44f58bd9538b7d9728d72d6f2b0fe1/7.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "nurbilu/car_kagg",
+    "path": "app.py",
+    "sha": "31b7fefa078a3b5ac483633a8024affe970f5d8a",
+    "url": "https://github.com/nurbilu/car_kagg/blob/3d5881a306908faa304257e553e5e807527183c7/app.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "jorgeiscoding/WebServicesProject",
+    "path": "app.py",
+    "sha": "2812268c955c183dcc6b9f385aae48cb6ab8b88a",
+    "url": "https://github.com/jorgeiscoding/WebServicesProject/blob/46f2ff2ffa764019b3f6a38522ea8d512f576a0e/app.py"
+  },
+  {
+    "pkg": "plotly",
+    "repo": "amiltontorres/sprint5-vehicles",
+    "path": "app.py",
+    "sha": "7c0900a2af7047d58b6a71673df69ab00b5bca20",
+    "url": "https://github.com/amiltontorres/sprint5-vehicles/blob/498ae40f948121ed284612564e3cdc06cb39e9dd/app.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "nournia/dirichlet-process",
+    "path": "dp.py",
+    "sha": "50c1769c4a94c61e963ea79dfcd7f111f990677c",
+    "url": "https://github.com/nournia/dirichlet-process/blob/285417bb776ff0a1007497dc805eec2f717be40b/dp.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "andersborges/natural-orbitals",
+    "path": "NO.py",
+    "sha": "99c46355c58fb7866318daf7569cfbc017ea425e",
+    "url": "https://github.com/andersborges/natural-orbitals/blob/b676a3e002c36472fd6bfb99c51de57218e2fa6c/NO.py"
+  },
+  {
+    "pkg": "scipy",
+    "repo": "rfanheather/Echo-Cancellation_LinearAdaptiveFilter",
+    "path": "Q2.py",
+    "sha": "c223c436888b3bce9a871dbc02c6aae1e3a5d5fd",
+    "url": "https://github.com/rfanheather/Echo-Cancellation_LinearAdaptiveFilter/blob/f44c5b046f45564fd514d97acd968f15f6ccad19/Q2.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "SubhangiSati/Machine-Learning",
+    "path": "k.py",
+    "sha": "e6b0b14e8813ef0a08c2a35716d20b49a6428020",
+    "url": "https://github.com/SubhangiSati/Machine-Learning/blob/426ab81affe0e729d7b2dfdc032e9275fdcc682c/k.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "jheankar831/ra",
+    "path": "l.py",
+    "sha": "9e7999cd79f50e380fd53d283384c8b7e9307ad0",
+    "url": "https://github.com/jheankar831/ra/blob/cb1260b59d3acd2df9e5852a3d305c5a2c09e319/l.py"
+  },
+  {
+    "pkg": "scikit-learn",
+    "repo": "shreyashbandekar/ML-Lab",
+    "path": "8.py",
+    "sha": "75a8062d52d3b90d8dcc25092d30eae64f5edc9e",
+    "url": "https://github.com/shreyashbandekar/ML-Lab/blob/03bbb48fb940507d70b2ba9f39c13be4b1413d81/8.py"
+  },
+  {
+    "pkg": "click",
+    "repo": "THUCampus/Intelligent-monitoring-platform",
+    "path": "db.py",
+    "sha": "28e3652084dd1b6ec8265ac3157ab10b0a4ff90b",
+    "url": "https://github.com/THUCampus/Intelligent-monitoring-platform/blob/d7452a95922b82a7b8ff9b997a29ff0e944e7f47/db.py"
+  },
+  {
+    "pkg": "click",
+    "repo": "noahgift/devml",
+    "path": "dml",
+    "sha": "35c39b64f0a500e798dcb40080f2ca42d878b718",
+    "url": "https://github.com/noahgift/devml/blob/079aefd83b63c7c387846a8e1a8f8ecb16cc9a6c/dml"
+  },
+  {
+    "pkg": "click",
+    "repo": "hgayan7/gearbox",
+    "path": "cli.py",
+    "sha": "fd3b705a6eb877c2bbd4d39bf583f77b4148ea1a",
+    "url": "https://github.com/hgayan7/gearbox/blob/3759cf30b31faf1980c7668afea5bfaa1e880a57/cli.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "baskerville/bin-linux",
+    "path": "stoic",
+    "sha": "702092986179944c183559d5f940fc2aeeae6add",
+    "url": "https://github.com/baskerville/bin-linux/blob/f90189ba453d1974c1f8ffaf4a4783734c1777fd/stoic"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "monasca/monasca-helm",
+    "path": "ci.py",
+    "sha": "127d84d7b4d18c17a4ea45616e58db4dd205ffe4",
+    "url": "https://github.com/monasca/monasca-helm/blob/65529892127e600eefd8e360a6b850c3c79583b8/ci.py"
+  },
+  {
+    "pkg": "pyyaml",
+    "repo": "kunjing96/GMAENAS",
+    "path": "sp.py",
+    "sha": "a8faa3d0c8686b2748a1d273994bb46a301e7e4c",
+    "url": "https://github.com/kunjing96/GMAENAS/blob/7cb5ff4f31f76ca5a90834bd71994432583e074f/sp.py"
+  },
+  {
+    "pkg": "knex",
+    "repo": "wajeht/bang",
+    "path": "src/libs.ts",
+    "sha": "c3a7b0fe551be93e610eb01cc15ce270477f9238",
+    "url": "https://github.com/wajeht/bang/blob/1b9caa7666651b2a7bb73714fe407a5e45285929/src/libs.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "mwanago/nestjs-raw-sql",
+    "path": "knexfile.ts",
+    "sha": "8d504723c80c4c641bbf347e717e3b48d37fa9a5",
+    "url": "https://github.com/mwanago/nestjs-raw-sql/blob/23d514c4e4120023238af1f2926ca3ada9d7972c/knexfile.ts"
+  },
+  {
+    "pkg": "knex",
+    "repo": "majori/piikki",
+    "path": "src/config.ts",
+    "sha": "2c36114f42cefa4f0302f09c67c5a2454ba9b319",
+    "url": "https://github.com/majori/piikki/blob/ca1dcd2643a79cc9ef7253bb73a2c456bbaa8214/src/config.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "oney/sequelize-proxy",
+    "path": "src/inject.ts",
+    "sha": "3536651e028af9e74d1acb70dac650901d268420",
+    "url": "https://github.com/oney/sequelize-proxy/blob/959227b264322dbcbec0e96398f34a9fafd67489/src/inject.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "sarkiisov/startpage-backend",
+    "path": "utils/db.ts",
+    "sha": "12b0f117cf19725df5150857c7aba0923561f190",
+    "url": "https://github.com/sarkiisov/startpage-backend/blob/aa00f3c7dc2e2f2e1a9df0380762c6879e85886f/utils/db.ts"
+  },
+  {
+    "pkg": "sequelize",
+    "repo": "sallar/typescript-api-starter",
+    "path": "src/utils/db.ts",
+    "sha": "221d33b8b9432c34de2d636d3db39a0a88ace9b8",
+    "url": "https://github.com/sallar/typescript-api-starter/blob/0ca5882982ce50e6f5353a4c0cf38b29c6cb20a5/src/utils/db.ts"
+  }
+]

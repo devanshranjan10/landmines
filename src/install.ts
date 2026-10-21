@@ -147,8 +147,8 @@ export function preferredNode(execPath: string, pathEnv: string | undefined): st
 }
 
 /** The command a harness should run. Stable installs get an absolute script path; npx runs get a pinned npx call. */
-export function hookCommand(opts: { execPath: string; script: string; version: string; mode: 'block' | 'warn'; pathEnv?: string }): string {
-  const suffix = opts.mode === 'warn' ? ' --mode warn' : '';
+export function hookCommand(opts: { execPath: string; script: string; version: string; mode: 'block' | 'warn'; headsUp?: boolean; pathEnv?: string }): string {
+  const suffix = `${opts.mode === 'warn' ? ' --mode warn' : ''}${opts.headsUp && opts.mode === 'block' ? ' --heads-up' : ''}`;
   if (/[\\/]_npx[\\/]/.test(opts.script)) return `npx -y landmines@${opts.version} hook${suffix}`;
   return `${preferredNode(opts.execPath, opts.pathEnv)} "${opts.script}" hook${suffix}`;
 }

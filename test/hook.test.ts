@@ -168,20 +168,27 @@ describe('runHook', () => {
   it('python edits are matched through import names; a bare symbol match is a heads-up, not a block', () => {
     const edit = (newString: string): string =>
       JSON.stringify({ session_id: 'py', hook_event_name: 'PreToolUse', tool_name: 'Edit', cwd: root, tool_input: { file_path: join(root, 'src', 'client.py'), old_string: 'import requests\n', new_string: newString } });
-    const bare = runHook(edit('import requests\n\nrequests.put(url, data=payload)\n'), { stateDir: state() });
+    // default: an uncorroborated match is dropped silently and does not use up the issue's one showing
+    const dir = state();
+    expect(runHook(edit('import requests\n\nrequests.put(url, data=payload)\n'), { stateDir: dir })).toMatchObject({
+      stdout: '',
+      decision: 'none',
+      reason: 'only uncorroborated matches (heads-up off)',
+    });
+    const bare = runHook(edit('import requests\n\nrequests.put(url, data=payload)\n'), { stateDir: dir, headsUp: true });
     expect(bare.decision).toBe('context');
     expect(bare.hits[0]?.id).toMatch(/^psf\/requests#/);
     const ctx = JSON.parse(bare.stdout) as { hookSpecificOutput: Record<string, string> };
     expect(ctx.hookSpecificOutput.permissionDecision).toBeUndefined();
     expect(ctx.hookSpecificOutput.additionalContext).toMatch(/^landmine \(heads-up, not blocking\)/);
     // importing urllib3 (another package the issue names) is not using requests' API in the buggy way: still a heads-up
-    expect(runHook(edit('import requests\nimport urllib3\n\nrequests.put(url, data=payload)\n'), { stateDir: state() }).decision).toBe('context');
+    expect(runHook(edit('import requests\nimport urllib3\n\nrequests.put(url, data=payload)\n'), { stateDir: state(), headsUp: true }).decision).toBe('context');
   });
 
   it('a heads-up stays silent on harnesses with no non-blocking context channel', () => {
     const r = runHook(
       JSON.stringify({ session_id: 'g2', hook_event_name: 'BeforeTool', tool_name: 'replace', cwd: root, tool_input: { file_path: join(root, 'src', 'client.py'), old_string: 'import requests\n', new_string: 'import requests\n\nrequests.put(url, data=payload)\n' } }),
-      { stateDir: state() },
+      { stateDir: state(), headsUp: true },
     );
     expect(r).toMatchObject({ stdout: '', decision: 'none' });
   });

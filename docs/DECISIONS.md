@@ -174,3 +174,17 @@ show which dotted names are modules (`sklearn.model_selection`, `torch.distribut
 Those, plus lowercase middle segments of chains rooted at the package, are scored as
 generic. Touching a module says nothing about which function is buggy.
 
+**D-29 — Heads-ups are off by default.** On held-out real-code set C3 (60 files from 60
+new repos, final rules), 13 files had matches.
+- 1 file would block. That block was a near miss: right API and option, wrong calling
+  form.
+- Of 27 uncorroborated matches, 2 were partly relevant and 25 were not.
+
+Feeding the agent context that is about 93% irrelevant is a cost, not a feature. The
+default is now: block once on corroborated matches, otherwise say nothing. Skipped
+matches don't use up the issue's one showing. Two ways to see more:
+- `--heads-up` adds the weaker matches as non-blocking context.
+- `--mode warn` never blocks and passes everything as context.
+
+The scan report and `landmine list/check` still show every match.
+

@@ -128,7 +128,8 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .description('Hook entry point: reads the harness payload on stdin, blocks an edit once per known bug (always exits 0)')
     .option('--mode <mode>', 'block (deny once, then allow the retry) or warn (add context, never block)', modeArg, 'block')
     .option('--harness <name>', `force the payload format (${HARNESSES.join(', ')}); default: detect`, harnessArg)
-    .action(async (opts: { mode: HookMode; harness?: Harness | 'all' }) => {
+    .option('--heads-up', 'in block mode, also pass weaker (uncorroborated) matches to the agent as non-blocking context')
+    .action(async (opts: { mode: HookMode; harness?: Harness | 'all'; headsUp?: boolean }) => {
       if (process.stdin.isTTY) {
         process.stderr.write('landmine hook reads a hook payload on stdin; it is meant to be run by Claude Code, Codex, Cursor or Gemini CLI. See `landmine install`.\n');
         return;
@@ -136,7 +137,7 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
       try {
         const input = await readStdin();
         const harness = opts.harness === 'all' ? undefined : opts.harness;
-        const result = runHook(input, { mode: opts.mode, env, ...(harness ? { harness } : {}) });
+        const result = runHook(input, { mode: opts.mode, env, ...(harness ? { harness } : {}), ...(opts.headsUp ? { headsUp: true } : {}) });
         if (result.stdout) process.stdout.write(`${result.stdout}\n`);
         if (env.LANDMINE_DEBUG === '1') process.stderr.write(`landmine: ${result.decision}${result.reason ? ` (${result.reason})` : ''}\n`);
       } catch {
@@ -149,12 +150,15 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .description('Wire the hook into this project (default: Claude Code, which Cursor also reads)')
     .option('-r, --root <dir>', 'project directory (default: nearest directory with a lockfile)')
     .option('--harness <name>', `${HARNESSES.join(', ')} or all`, harnessArg, 'claude')
-    .option('--mode <mode>', 'block or warn', modeArg, 'block')
+    .option('--mode <mode>', 'block (interrupt once on a strong match) or warn (never block; pass every match as context)', modeArg, 'block')
+    .option('--heads-up', 'block mode: also pass weaker matches to the agent as non-blocking context')
     .option('--command <cmd>', 'exact command the harness should run (default: this landmine install)')
-    .action((opts: { root?: string; harness: Harness | 'all'; mode: HookMode; command?: string }) => {
+    .action((opts: { root?: string; harness: Harness | 'all'; mode: HookMode; headsUp?: boolean; command?: string }) => {
       const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
       const script = process.argv[1] ? realpathSync(process.argv[1]) : '';
-      const command = opts.command ?? hookCommand({ execPath: process.execPath, script, version: VERSION, mode: opts.mode, ...(env.PATH ? { pathEnv: env.PATH } : {}) });
+      const command =
+        opts.command ??
+        hookCommand({ execPath: process.execPath, script, version: VERSION, mode: opts.mode, headsUp: Boolean(opts.headsUp), ...(env.PATH ? { pathEnv: env.PATH } : {}) });
       const targets: Harness[] = opts.harness === 'all' ? [...HARNESSES] : [opts.harness];
       for (const h of targets) {
         const r = install(root, h, command);
