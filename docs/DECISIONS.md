@@ -514,3 +514,19 @@ Verified live in this pass:
   factory.
 - **Node 18.** It gets the version message and exits 2.
 - **The packed tarball** installs and runs on Node 22.
+
+**D-49: Released 0.2.0; one benchmark check was platform-dependent.**
+- **Release.** landmines 0.2.0 is on npm. The repo is public at
+  devanshranjan10/landmines, with a Homebrew tap at devanshranjan10/homebrew-tap (the
+  formula installs the npm tarball; `landmine` is an alias).
+- **The faulty check.** The first CI run on x86-64 Linux found that one check in
+  `scikit-learn-30332` (2024 dev split) failed even with the fixed solution: "a heavier
+  fraud weight flags more". Nothing guarantees a higher total flag count for NuSVC
+  sample weights, and on x86-64 the count went down.
+- **The replacement.** The check now asks whether a heavier weight changes any
+  prediction. That fails when the weight is ignored (the bug) and passes for any real
+  fix. The three recall checks still check the direction.
+- **Verification.** On x86-64 (emulated `linux/amd64`, exact pins) the naive solution
+  fails 3/5 and the fixed one passes 5/5. On macOS arm64 the task validates.
+- **Effect on results.** The task is on the 2024 dev split, so it is in no reported
+  table.
