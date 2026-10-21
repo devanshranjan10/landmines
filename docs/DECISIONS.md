@@ -478,3 +478,16 @@ among landmine's own arms. Two alternatives a user would actually reach for:
 *Setup note:* Claude Code 2.1.306 loads four bundled plugins (`cc-plugin-*`) in every
 session, on every account and in every arm, including all earlier runs. They are part
 of the CLI build, the same for every arm, and cannot bias an arm comparison.
+- **Outcome (run K, 168 sessions, all reached the model, $10.82):**
+  - rules 42/42, web 36/42, none 35/42, context7 35/42.
+  - rules > web: 6–0, p = 0.03. Confirmed.
+  - rules > context7: 7–0, p = 0.016. Confirmed.
+  - rules > none: replicated a third time, 7–0.
+  - web vs none: 2–1. Context7 vs none: 1–1.
+- **Why the competitors gained nothing.** In all 84 competitor sessions the agent
+  never called WebSearch, WebFetch or a Context7 tool, although the session init
+  showed them available and connected. A lookup tool helps only when the agent thinks
+  to look. A known-bugs section in the agent's instructions does not depend on that.
+- **Limit.** The competitor arms got the same prompt as every other arm, so nobody told
+  them to check for known bugs. An instructed web arm would be a stronger baseline; it
+  was not run.

@@ -17,6 +17,7 @@ import { langForPath } from './source/lang.js';
 import { touches } from './source/touches.js';
 import { PROVIDERS, type ProviderName, provider } from './llm.js';
 import { humanLandmine } from './message.js';
+import { shareText } from './share.js';
 import { isArmed } from './policy.js';
 import { renderScanSummary, wantsColor } from './render.js';
 import { DEFAULT_MAX_RULES, RULES_TARGETS, SKILL_PATH, renderRules, renderSkill, stripRules, writeRules } from './rules.js';
@@ -341,6 +342,15 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     .action(async (opts: { root?: string }) => {
       const { serveStdio } = await import('./mcp.js');
       await serveStdio({ ...(opts.root ? { root: resolve(opts.root) } : {}), cwd: process.cwd() });
+    });
+
+  program
+    .command('share')
+    .description('Print a one-line summary of this project\'s scan and a README badge, to post or paste')
+    .option('-r, --root <dir>', 'project with .landmine/index.json (default: nearest directory with a lockfile)')
+    .action((opts: { root?: string }) => {
+      const root = opts.root ? resolve(opts.root) : requireRoot(undefined);
+      process.stdout.write(`${shareText(loadIndex(root))}\n`);
     });
 
   program

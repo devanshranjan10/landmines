@@ -39,6 +39,9 @@ filed after the model's training cutoff:
 - **Unaided:** Claude Sonnet 5.5 passed 86% (72/84).
 - **With the `landmine rules` section in CLAUDE.md:** it passed 99% (83/84). That held
   up in a pre-registered run on unseen seeds, 6 wins and 0 losses, p = 0.03.
+- **Against the alternatives:** with web search turned on, Sonnet passed 36/42; with
+  the Context7 docs MCP, 35/42; with the landmine rules section, 42/42. In 84 sessions
+  the agent never once used web search or Context7. It didn't think to look.
 - **The pre-edit hook did not significantly beat no help.**
 
 So start with `landmine scan && landmine install --rules`. That adds the hook and
@@ -282,6 +285,18 @@ user would ask, 4 seeds:
 | pre-edit hook with trigger cards | 76/84 (90%) |
 | hook with cards, context only (`--mode warn`) | 74/84 (88%) |
 
+Against what you might use instead (same tasks, seeds 1–2, run as one batch):
+
+| Arm | Passed |
+|---|---|
+| **landmine rules section** | **42/42** |
+| web search on (WebSearch + WebFetch) | 36/42 |
+| Context7 docs MCP | 35/42 |
+| none | 35/42 |
+
+In those 84 web and Context7 sessions the agent never called either tool. Nobody told
+those arms to look for known bugs, which is also how a user's agent works.
+
 - **Same ranking everywhere.** Rules also came first with spec prompts and without
   shell access. With Haiku 5.5 it tied for first with context-only cards.
 - **Statistics.** Over all 126 planned pairs it beat no help 20–3 (exact McNemar
@@ -315,7 +330,7 @@ user would ask, 4 seeds:
   and Opus 5.5. A Codex run was attempted and voided when the ChatGPT plan's quota ran
   out. The rules section is plain markdown that any agent reads, but other
   agents were not benchmarked.
-- **Spend.** $74 of metered agent runs (1,534 graded sessions). Card generation went
+- **Spend.** $85 of metered agent runs (1,702 graded sessions). Card generation went
   through a Claude Code login and was not metered.
 
 ## Accuracy

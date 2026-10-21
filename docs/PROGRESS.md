@@ -34,7 +34,7 @@ posted.
     - 35 from 2024, kept as a contaminated control.
   - Frozen package-level dev/test splits.
   - Two to six arms per run, run headless through Claude Code with Sonnet, Haiku and
-    Opus 5.5. There are 1,534 graded sessions, for $74.20 of metered agent cost.
+    Opus 5.5. There are 1,702 graded sessions, for about $85 of metered agent cost.
   - Offline trap track and a real-code false-block track, the latter with a tuning set
     and a held-out set.
 - **The headline result.** The `landmine rules` section in CLAUDE.md is the best arm.
@@ -46,6 +46,9 @@ posted.
   - Added later on two more accounts (D-46): Haiku with shell access 41/42 vs 37/42,
     and Opus 41/42 vs 39/42 (same direction, not significant). Pooled over all 252
     fresh pairs across three models, rules beat none 33–4.
+  - **Against the alternatives (D-47):** rules 42/42 against web search on 36/42
+    (6–0, p = 0.03) and the Context7 MCP 35/42 (7–0, p = 0.016). The agent never used
+    web search or Context7 in 84 sessions.
   - On the contaminated 2024 set every arm ties, because the model already knows those
     bugs.
 - **Trigger cards** (`landmine cards`). One model call per issue, cached, with
@@ -134,7 +137,7 @@ posted.
 5. **Codex quota.** Rerunning the Codex arm (`run.ts --agent codex --arm none,rules
    --split fresh-test --prompt terse --seeds 2`) needs a plan with more Codex usage, or
    waiting until 2026-11-20.
-6. **More benchmark spend.** About $74 of the ~$100 is used. Options for the rest:
+6. **More benchmark spend.** About $85 of the ~$100 is used. Options for the rest:
    - more seeds;
    - a second agent (Codex) on the rules arm;
    - a fresh-task set built from issues landmine did *not* pick, for recall.

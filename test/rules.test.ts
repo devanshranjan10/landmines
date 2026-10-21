@@ -144,3 +144,14 @@ describe('rules section', () => {
     expect(rulesLandmines(idx, 15).map((l) => l.issue.number)).toEqual([3, 1, 2]); // confidence, then reactions
   });
 });
+
+describe('share', () => {
+  it('summarises counts and builds a shields badge without issue text', async () => {
+    const { shareText } = await import('../src/share.js');
+    const idx = { ...index([landmine(1, { card: card() }), landmine(2)]), packages: [{ ecosystem: 'npm', name: 'dayjs', version: '1.11.13', dev: false, status: 'ok', searchHits: 0, verified: 0, landmines: 2, dropped: { unverified: 0, unaffected: 0, incidental: 0 } }] } as LandmineIndex;
+    const text = shareText(idx);
+    expect(text).toContain('landmine found 2 open GitHub issues filed against the exact versions this project pins, in 1 of 1 dependencies (most: dayjs (2)). 2 point at specific APIs, 1 has a workaround in the thread.');
+    expect(text).toContain('https://img.shields.io/badge/landmine-2_open_bugs_in_pinned_deps-e05d44');
+    expect(text).not.toContain('Bug 1 in add');
+  });
+});

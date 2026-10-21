@@ -108,6 +108,29 @@ data) and run F (seeds 3–4, a confirmatory run pre-registered in D-42 before i
 - **H2, rules+cards ≥ rules: not shown.** 0 wins, 1 loss. The card hook added nothing
   on top of the rules section.
 
+### Against the alternatives (run K, D-47)
+
+Do you need landmine, or would web search or a docs MCP server do? Same 21 held-out
+tasks, Sonnet 5.5, shell access, terse prompts, seeds 1–2, with all four arms in one
+batch. Every session reached the model.
+
+| Arm | Passed | rules vs this arm |
+|---|---|---|
+| **landmine rules section** | **42/42** | n/a |
+| web search on (WebSearch + WebFetch, so the agent can search GitHub issues) | 36/42 | 6–0, p = 0.03 |
+| no help | 35/42 | 7–0, p = 0.016 |
+| Context7 MCP (`@upstash/context7-mcp@4.4.4`) | 35/42 | 7–0, p = 0.016 |
+
+- **Both hypotheses recorded in advance were confirmed.**
+- **The alternatives were never used.** In all 84 sessions of the two alternative arms
+  the agent never searched the web and never called Context7. The tools were available
+  and connected; the agent didn't think to look. Context7 serves documentation,
+  which these bugs are not in. Web search would have found most of the issues, but only
+  if the agent had asked.
+- **Limit.** Nobody told those arms to check for known bugs. They got the same
+  prompt as every other arm, as a real user's agent would. An agent explicitly told to
+  search for open issues would be a stronger baseline, and that was not run.
+
 ### Every configuration
 
 | Run | Model | Condition | Prompt | none | rules | hook | cards | cards-warn |
