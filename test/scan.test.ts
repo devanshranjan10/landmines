@@ -108,3 +108,17 @@ describe('cli scan (built binary, replayed HTTP)', () => {
     ).rejects.toMatchObject({ code: 1, stderr: expect.stringContaining('No supported lockfile found') as unknown });
   });
 });
+
+describe('@types packages', () => {
+  it('are recorded as skipped, not searched', async () => {
+    const root = mkdtempSync(join(tmpdir(), 'lm-types-'));
+    writeFileSync(join(root, 'package.json'), JSON.stringify({ devDependencies: { '@types/node': '22.7.4' } }));
+    writeFileSync(
+      join(root, 'package-lock.json'),
+      JSON.stringify({ lockfileVersion: 3, packages: { '': { devDependencies: { '@types/node': '22.7.4' } }, 'node_modules/@types/node': { version: '22.7.4' } } }),
+    );
+    const offline: Http = { fetch: () => Promise.reject(new Error('network used')) };
+    const r = await scan({ root, ...clients(offline), now: () => NOW, write: false });
+    expect(r.index.packages).toMatchObject([{ name: '@types/node', status: 'skipped', detail: 'type definitions (DefinitelyTyped)' }]);
+  });
+});

@@ -281,3 +281,10 @@ describe('lang', () => {
     expect(langForFence('bash')).toBeUndefined();
   });
 });
+
+describe('single-file components', () => {
+  it('reads imports and script-block usage in a Vue SFC with apostrophes in the template', () => {
+    const vue = `<template>\n  <div>Don't panic</div>\n</template>\n<script setup lang="ts">\nimport { format } from 'date-fns'\nconst when = format(new Date(), "PPP")\n</script>\n`;
+    expect(touches({ fileText: vue, changedText: vue, lang: 'js' })).toEqual([{ package: 'date-fns', symbols: ['format'] }]);
+  });
+});
