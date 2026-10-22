@@ -1,6 +1,7 @@
 // Builds landmine.tech: copies site/ to .site-dist/, filling in the shared nav and footer partials.
 // Usage: node scripts/site/build.mjs
 import { cpSync, mkdirSync, readFileSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -9,6 +10,9 @@ const src = join(root, 'site');
 const out = join(root, '.site-dist');
 const nav = readFileSync(join(src, 'partials/nav.html'), 'utf8');
 const footer = readFileSync(join(src, 'partials/footer.html'), 'utf8');
+// Cache-bust the stylesheet and script: pages link them as /assets/x?v=<content hash>.
+const version = (file) => createHash('sha256').update(readFileSync(join(src, file))).digest('hex').slice(0, 10);
+const assets = { '/assets/site.css': version('assets/site.css'), '/assets/site.js': version('assets/site.js') };
 
 rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
@@ -25,7 +29,8 @@ function walk(dir) {
     // "/docs/index.html" -> "/docs/": mark that nav link as the current page.
     const path = '/' + rel.replace(/index\.html$/, '').replace(/\\/g, '/');
     const pageNav = path === '/' ? nav : nav.replace(`<a href="${path}">`, `<a href="${path}" aria-current="page">`);
-    const html = readFileSync(from, 'utf8').replace('<!-- @nav -->', pageNav).replace('<!-- @footer -->', footer);
+    let html = readFileSync(from, 'utf8').replace('<!-- @nav -->', pageNav).replace('<!-- @footer -->', footer);
+    for (const [path, v] of Object.entries(assets)) html = html.replaceAll(`"${path}"`, `"${path}?v=${v}"`);
     if (html.includes('<!-- @')) throw new Error(`unfilled partial in ${rel}`);
     writeFileSync(to, html);
   }
