@@ -56,7 +56,7 @@
     "check": "npm run typecheck && npm run lint && npm run test",
     "prepublishOnly": "npm run build && npm run check",
     "site:build": "node scripts/site/build.mjs",
-    "site:deploy": "node scripts/site/build.mjs && wrangler pages deploy .site-dist --project-name landmine --branch main"
+    "site:deploy": "node scripts/site/build.mjs && wrangler deploy -c scripts/site/wrangler.jsonc"
   },
   "dependencies": {
     "@modelcontextprotocol/server": "^2.3.1",

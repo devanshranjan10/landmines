@@ -21,4 +21,5 @@ export default tseslint.config(
   },
   { files: ['site/**/*.js'], languageOptions: { globals: globals.browser } },
   { files: ['scripts/**/*.mjs'], languageOptions: { globals: globals.node } },
+  { files: ['scripts/site/worker.js'], languageOptions: { globals: globals.serviceworker } },
 );
