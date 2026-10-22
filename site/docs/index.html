@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs · landmine</title>
+<meta name="description" content="Install landmine, scan your lockfile for open GitHub issues filed against your exact dependency versions, and give your coding agent a known-bugs list, a pre-edit hook and an MCP server.">
+<link rel="canonical" href="https://landmine.tech/docs/">
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="landmine">
+<meta property="og:url" content="https://landmine.tech/docs/">
+<meta property="og:title" content="landmine docs: known bugs in your exact versions, for coding agents">
+<meta property="og:description" content="Quickstart, commands, the 20 supported agents, hook behaviour, MCP, CI and security.">
+<meta property="og:image" content="https://landmine.tech/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://landmine.tech/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<!-- @nav -->
+<main id="main">
+  <section class="page-head grid-bg glow">
+    <div class="wrap">
+      <p class="kicker">Docs · v0.2</p>
+      <h1>Everything landmine does, in one page.</h1>
+      <p class="sub">Scan once, tell the agent first, keep the hook as a backstop. Node ≥ 22.12. The npm package is <code>landmines</code>, with an s; it installs the <code>landmine</code> and <code>landmines</code> commands.</p>
+    </div>
+  </section>
+
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <h4>On this page</h4>
+      <ol>
+        <li><a href="#quickstart">Quickstart</a></li>
+        <li><a href="#install">Install options</a></li>
+        <li><a href="#team">Teams and CI</a></li>
+        <li><a href="#commands">Commands</a></li>
+        <li><a href="#agents">Agents</a></li>
+        <li><a href="#hook">Hook behaviour</a></li>
+        <li><a href="#mcp">MCP server</a></li>
+        <li><a href="#cards">Trigger cards</a></li>
+        <li><a href="#lockfiles">Lockfiles and languages</a></li>
+        <li><a href="#exit-codes">Exit codes</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#uninstall">Uninstall</a></li>
+      </ol>
+    </aside>
+    <div class="prose">
+      <section id="quickstart">
+        <h2>Quickstart</h2>
+        <p>In your project's root:</p>
+        <div class="code"><pre>npx landmines scan             <span class="c"># find the open issues filed against your exact versions</span>
+npx landmines install --rules  <span class="c"># known-bugs section in AGENTS.md + CLAUDE.md, plus the pre-edit hook</span></pre></div>
+        <p><code>scan</code> needs a GitHub token, because GitHub search and GraphQL require auth. It uses <code>GITHUB_TOKEN</code>, then <code>GH_TOKEN</code>, then <code>gh auth token</code>. A token with no scopes is enough for public repositories.</p>
+        <div class="callout"><p><strong>Start with the rules section.</strong> On landmine-bench it took Claude Sonnet 5.5 from 86% to 99%; the hook alone didn't significantly beat no help. <code>--rules</code> writes both. Claude Code doesn't read AGENTS.md, which is why CLAUDE.md gets its own copy.</p></div>
+        <p>Re-run <code>scan</code> after you change dependencies. The hook only reads the index.</p>
+      </section>
+
+      <section id="install">
+        <h2>Install options</h2>
+        <div class="code"><pre>npx landmines &lt;command&gt;                         <span class="c"># no install</span>
+npm i -D landmines                              <span class="c"># dev dependency (recommended for teams)</span>
+npm i -g landmines                              <span class="c"># global: `landmine` and `landmines` on PATH</span>
+brew install devanshranjan10/tap/landmines      <span class="c"># Homebrew (also: devanshranjan10/tap/landmine)</span></pre></div>
+        <p><code>install</code> writes the hook command that matches how you installed, so it keeps working for everyone:</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Installed as</th><th>Command it writes</th></tr></thead>
+          <tbody>
+            <tr><td>dev dependency</td><td><code>npx --no-install landmines hook</code></td></tr>
+            <tr><td><code>npx</code> / <code>pnpm dlx</code> / <code>bunx</code></td><td>the pinned <code>npx -y landmines@&lt;version&gt; hook</code></td></tr>
+            <tr><td>global</td><td><code>landmine hook</code></td></tr>
+            <tr><td>source checkout</td><td>absolute paths, with a warning</td></tr>
+          </tbody>
+        </table></div>
+        <p>The same package is on GitHub Packages as <code>@devanshranjan10/landmines</code>; that needs a token with <code>read:packages</code>, so npm is the simpler route. <code>landmine</code> (no s) on npm is an unrelated package.</p>
+      </section>
+
+      <section id="team">
+        <h2>Teams and CI</h2>
+        <div class="code"><pre>npm i -D landmines
+npx landmines scan &amp;&amp; npx landmines install --rules
+git add .landmine/index.json .landmine/cards AGENTS.md CLAUDE.md</pre></div>
+        <ul>
+          <li><strong>Commit the index.</strong> <code>.landmine/index.json</code> (and <code>.landmine/cards/</code>) lets teammates and CI share one index. <code>.landmine/.gitignore</code> keeps the raw cache and the per-machine install registry out of git.</li>
+          <li><strong>Pre-commit or CI backstop</strong>, for agents with no pre-edit hook: <code>npx landmines check --staged --exit-code</code> checks only the lines a commit adds and exits 1 on a blocking match.</li>
+          <li><strong>Refresh the index</strong> on a schedule with <code>npx landmines scan</code>. If a package can't be fetched, its previous issues are kept, marked stale, and the scan exits 2.</li>
+        </ul>
+      </section>
+
+      <section id="commands">
+        <h2>Commands</h2>
+        <p>Run each as <code>npx landmines &lt;command&gt;</code>, or <code>landmine &lt;command&gt;</code> after a global install.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Command</th><th>What it does</th></tr></thead>
+          <tbody>
+            <tr><td><code>scan</code></td><td>Reads lockfiles, queries npm, PyPI and GitHub, and writes <code>.landmine/index.json</code>. Raw responses are cached for 24 h. Flags: <code>--refresh</code>, <code>--offline</code> (re-analyse the cache, no network), <code>--max-issues 100</code>, <code>--prod</code>, <code>--json</code>, <code>-q</code>.</td></tr>
+            <tr><td><code>install</code></td><td>Adds the hook or plugin for Claude Code plus every agent whose config is in the project. Leaves your other hooks alone; running it again is harmless. <code>--harness auto|all|&lt;names&gt;</code>, <code>--mode block|warn</code>, <code>--heads-up</code>, <code>--mcp [agents]</code>, <code>--rules [files]</code>.</td></tr>
+            <tr><td><code>rules</code></td><td>Prints, or writes between <code>&lt;!-- landmine:start/end --&gt;</code> markers, a short known-bugs section any agent reads, ranked by the APIs your code uses. <code>--write &lt;files&gt;</code>, <code>--skill</code> (full list as an Agent Skill), <code>--max 15</code>, <code>--rank usage|confidence</code>.</td></tr>
+            <tr><td><code>cards</code></td><td>Optional. A model reads each indexed issue once and writes a trigger card. At most 50 new model calls per run unless <code>--all</code>. <code>--provider anthropic|claude-cli|openai</code>, <code>--model</code>, <code>--from</code>, <code>--export</code>.</td></tr>
+            <tr><td><code>check &lt;files&gt;</code></td><td>Treats whole files as just written and reports matches, marked <code>[blocks: …]</code> or <code>[heads-up only]</code>. <code>--exit-code [--strict]</code>, <code>--json</code>.</td></tr>
+            <tr><td><code>check --staged</code></td><td>Checks only the lines staged for commit.</td></tr>
+            <tr><td><code>mcp</code></td><td>Runs the MCP server over stdio.</td></tr>
+            <tr><td><code>list [package]</code></td><td>Shows indexed issues; by default only the ones the hook can act on. <code>--all</code>, <code>--json</code>.</td></tr>
+            <tr><td><code>share</code></td><td>One postable line about this project's scan, plus a README badge. Counts and package names only.</td></tr>
+            <tr><td><code>uninstall</code></td><td>Removes landmine's hook entries, plugin files, rules sections and skill.</td></tr>
+            <tr><td><code>hook</code></td><td>The hook entry point: harness payload on stdin, response on stdout. You don't call it yourself.</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+
+      <section id="agents">
+        <h2>Agents</h2>
+        <p>One normaliser reads every agent's payload shape (tool names, argument keys, patch formats) and answers in that agent's own deny format. <span class="pill live">live</span> means run end to end against the real agent; "from docs" means built from the agent's documentation (and source, where open) with each payload shape covered by a test.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Agent</th><th>What <code>install</code> writes</th><th>Verified</th></tr></thead>
+          <tbody>
+            <tr><td>Claude Code</td><td><code>PreToolUse</code> hook, <code>.claude/settings.json</code></td><td><span class="pill live">live</span> 2.1.304: blocked once, agent changed approach</td></tr>
+            <tr><td>Codex CLI</td><td><code>PreToolUse</code> on <code>apply_patch</code>, <code>.codex/hooks.json</code></td><td><span class="pill live">live</span> 0.159.0; trust the hook with <code>/hooks</code></td></tr>
+            <tr><td>OpenCode</td><td>plugin, <code>.opencode/plugins/landmine.ts</code></td><td>loaded live in 1.18.33; a blocked edit not yet run live</td></tr>
+            <tr><td>Cursor</td><td><code>preToolUse</code>, <code>.cursor/hooks.json</code></td><td>from docs</td></tr>
+            <tr><td>Gemini CLI</td><td><code>BeforeTool</code>, <code>.gemini/settings.json</code></td><td>from docs</td></tr>
+            <tr><td>GitHub Copilot</td><td><code>.github/hooks/landmine.json</code></td><td>from docs</td></tr>
+            <tr><td>Windsurf / Devin</td><td><code>pre_write_code</code>, <code>.devin/hooks.json</code></td><td>from docs</td></tr>
+            <tr><td>Antigravity</td><td><code>.agents/hooks.json</code></td><td>from docs</td></tr>
+            <tr><td>Factory Droid</td><td><code>.factory/hooks.json</code></td><td>from docs</td></tr>
+            <tr><td>Augment (Auggie)</td><td><code>.augment/settings.json</code></td><td>from docs</td></tr>
+            <tr><td>Kiro</td><td><code>.kiro/hooks/landmine.json</code></td><td>from docs</td></tr>
+            <tr><td>Qwen Code</td><td><code>.qwen/settings.json</code></td><td>from docs</td></tr>
+            <tr><td>Crush</td><td><code>crush.json</code></td><td>from docs</td></tr>
+            <tr><td>Goose</td><td><code>.agents/plugins/landmine/</code></td><td>from docs</td></tr>
+            <tr><td>OpenHands</td><td><code>.openhands/hooks.json</code></td><td>from docs</td></tr>
+            <tr><td>Trae</td><td><code>.trae/hooks.json</code></td><td>from docs</td></tr>
+            <tr><td>Kilo Code</td><td>plugin, <code>.kilo/plugin/landmine.ts</code></td><td>tested against a stub host</td></tr>
+            <tr><td>Cline</td><td>plugin, <code>.cline/plugins/landmine.ts</code></td><td>tested against a stub host</td></tr>
+            <tr><td>Amp</td><td>plugin, <code>.amp/plugins/landmine.ts</code></td><td>tested against a stub host</td></tr>
+            <tr><td>Pi</td><td>extension, <code>.pi/extensions/landmine.ts</code></td><td>tested against a stub host</td></tr>
+            <tr><td>Freebuff, Aider, Zed, Roo, Continue, Warp…</td><td>no pre-edit hook: <code>rules --write AGENTS.md</code>, <code>rules --skill</code>, <code>install --mcp</code>, <code>check --staged</code></td><td>rules, skill and MCP config tested</td></tr>
+          </tbody>
+        </table></div>
+        <p><code>install --mcp &lt;agents&gt;</code> registers the MCP server in the project config of 16 agents: Claude Code, Cursor, Gemini CLI, Qwen, Copilot, Droid, Kiro, Trae, Antigravity, Freebuff, Roo, Warp, Pi, OpenCode, Kilo and Crush. Codex, Windsurf and Cline keep MCP servers in user-level config; for Codex run <code>codex mcp add landmine -- npx -y landmines mcp</code>.</p>
+      </section>
+
+      <section id="hook">
+        <h2>Hook behaviour</h2>
+        <ul>
+          <li><strong>Blocks once, then steps aside.</strong> The default <code>--mode block</code> denies an edit once per issue per agent session, and only for corroborated matches: the edit uses an issue's symbol <em>and</em> the file also uses something else the issue names (an option, a sibling API, the database driver). The retry goes through.</li>
+          <li><strong>Weaker matches are dropped by default</strong>: on held-out real code about 93% of them didn't apply. <code>--heads-up</code> passes them as non-blocking context; <code>--mode warn</code> never blocks.</li>
+          <li><strong>Fast and offline.</strong> About 0.11 s per call including Node startup, with a 149 KB index. It never touches the network.</li>
+          <li><strong>Never says "allow"</strong>, so your own permission prompts still apply.</li>
+          <li><strong>Fails open.</strong> Any error, a missing index or an unknown payload means no output, and the edit goes through.</li>
+        </ul>
+      </section>
+
+      <section id="mcp">
+        <h2>MCP server</h2>
+        <p>The hook stays quiet unless a match is strong. The MCP server is for when the agent is already looking: a confusing error, or behaviour it can't explain. Three read-only tools:</p>
+        <ul>
+          <li><code>landmine_check</code>: a file in the project, or a snippet.</li>
+          <li><code>landmine_search</code>: error text or an API name.</li>
+          <li><code>landmine_list</code>: the indexed issues.</li>
+        </ul>
+        <div class="code"><pre>npx landmines install --mcp claude,cursor    <span class="c"># comma-separated; plain --mcp means Claude Code</span></pre></div>
+        <p>In a live Claude Code session, asked whether inconsistent <code>RootModel</code> equality was a known bug in the pinned pydantic, Claude called <code>landmine_search</code> and answered with pydantic#10544, reported against 2.9.2.</p>
+      </section>
+
+      <section id="cards">
+        <h2>Trigger cards</h2>
+        <p>Optional. A model reads each issue thread once and writes a card: the APIs, the extra conditions that make the bug fire, tokens that show the workaround is already applied, and the workaround. Each card is self-checked against the issue's own repro. The hook, rules and MCP server use cards when present; the hook never calls a model.</p>
+        <div class="code"><pre>npx landmines cards --provider claude-cli      <span class="c"># uses an existing Claude Code login</span>
+npx landmines cards --provider openai          <span class="c"># any OpenAI-compatible endpoint (OPENAI_BASE_URL)</span>
+npx landmines cards --provider anthropic       <span class="c"># needs @anthropic-ai/sdk installed</span></pre></div>
+        <p>Cards are cached per issue, version and model. Each run prints its plan first and caps new model calls at 50 unless you pass <code>--all</code>.</p>
+      </section>
+
+      <section id="lockfiles">
+        <h2>Lockfiles and languages</h2>
+        <ul>
+          <li><strong>npm</strong>: <code>package-lock.json</code> v1–v3, <code>npm-shrinkwrap.json</code></li>
+          <li><strong>pnpm</strong>: <code>pnpm-lock.yaml</code> 5.4, 6 and 9</li>
+          <li><strong>yarn</strong>: classic and berry</li>
+          <li><strong>bun</strong>: <code>bun.lock</code> (text; binary <code>bun.lockb</code> is not supported)</li>
+          <li><strong>Python</strong>: <code>uv.lock</code>, <code>poetry.lock</code>, <code>Pipfile.lock</code>, pinned <code>requirements*.txt</code></li>
+        </ul>
+        <p>Only direct dependencies are checked. Source files: JS/TS (<code>.js .jsx .ts .tsx .mjs .cjs .mts .cts</code>) and Python (<code>.py .pyi</code>), read with a tolerant lexer so half-written code works. In <code>.vue</code>, <code>.svelte</code> and <code>.astro</code> files, template expressions can be missed.</p>
+      </section>
+
+      <section id="exit-codes">
+        <h2>Exit codes</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Code</th><th>Meaning</th></tr></thead>
+          <tbody>
+            <tr><td><code>0</code></td><td>Success.</td></tr>
+            <tr><td><code>1</code></td><td><code>check --exit-code</code> found a match that would block an edit. With <code>--strict</code>, a heads-up match counts too.</td></tr>
+            <tr><td><code>2</code></td><td>An error or a partial result: bad input, a scan that couldn't fetch every package, or cards that failed.</td></tr>
+          </tbody>
+        </table></div>
+        <p>The hook always exits 0 (it fails open), except in the <code>exit2</code> format, where a block is exit code 2 with the reason on stderr.</p>
+      </section>
+
+      <section id="security">
+        <h2>Security</h2>
+        <ul>
+          <li><strong>Untrusted text reaches your agent.</strong> Issue titles, quotes and card summaries come from strangers on GitHub. landmine puts all of it inside one delimited untrusted block, neutralises forged delimiters, strips HTML, caps length, flags quotes that pipe a download into a shell or link unfamiliar hosts, and tells the agent never to follow instructions inside them. Don't let an agent run a quoted workaround without reading it.</li>
+          <li><strong>Network.</strong> <code>scan</code> sends your direct dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. <code>cards</code> sends each indexed issue's public thread to the model provider you choose. Nothing else leaves your machine.</li>
+          <li><strong>Credentials.</strong> The GitHub token is sent only to api.github.com and never written to the index, cache or logs.</li>
+          <li><strong>Files.</strong> Only <code>.landmine/</code>, the agent config files <code>install</code> names, and the marker-delimited rules sections. <code>install</code> refuses to rewrite a settings file it can't parse without losing comments.</li>
+        </ul>
+        <p>Report vulnerabilities privately through the repository's <a href="https://github.com/devanshranjan10/landmines/security/advisories/new">security advisory form</a>.</p>
+      </section>
+
+      <section id="uninstall">
+        <h2>Uninstall</h2>
+        <div class="code"><pre>npx landmines uninstall</pre></div>
+        <p>Removes landmine's hook entries, plugin files, rules sections and skill, deletes config files and directories it leaves empty, and skips config it never touched. Delete <code>.landmine/</code> to remove the index.</p>
+      </section>
+    </div>
+  </div>
+</main>
+<!-- @footer -->
+</body>
+</html>

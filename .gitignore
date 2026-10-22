@@ -13,3 +13,4 @@ bench/.venv/
 bench/.work/
 __pycache__/
 bench/.venv-*/
+.site-dist/

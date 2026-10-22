@@ -1,201 +1,309 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>landmine: your coding agent doesn't know about the bug in your exact version</title>
-<meta name="description" content="landmine finds open GitHub issues filed against the exact dependency versions you pin and puts them where your coding agent reads them. Claude Sonnet 5.5: 86% to 99% on post-cutoff bug traps.">
-<meta property="og:title" content="landmine: your coding agent doesn't know about the bug in your exact version">
-<meta property="og:description" content="Claude Sonnet 5.5 went from 86% to 99% on 21 held-out traps built from bugs filed after its training cutoff. Web search and Context7 didn't move it: the agent never thought to look.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://landmine.tech/">
-<meta name="twitter:card" content="summary">
+<title>landmine: known bugs in your exact dependency versions, for coding agents</title>
+<meta name="description" content="landmine reads your lockfile, finds the open GitHub issues filed against the exact versions you pin, and puts them where your coding agent reads them, with the workaround from the thread. Claude Sonnet 5.5: 86% to 99% on post-cutoff bug traps.">
 <link rel="canonical" href="https://landmine.tech/">
-<style>
-  :root {
-    color-scheme: dark;
-    --bg: #111110;
-    --surface-1: #1a1a19;
-    --surface-2: #232321;
-    --rule: #383835;
-    --text-primary: #f0efec;
-    --text-secondary: #c3c2b7;
-    --text-muted: #8f8e86;
-    --accent: #3987e5;      /* the one highlighted series: landmine */
-    --neutral-bar: #4a4945; /* everything else recedes */
-    --deny: #d95926;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: var(--bg); color: var(--text-primary); font: 17px/1.55 var(--sans); }
-  main { max-width: 980px; margin: 0 auto; padding: 56px 24px 80px; }
-  a { color: var(--text-primary); text-decoration-color: var(--accent); text-underline-offset: 3px; }
-  h1 { font-size: clamp(34px, 5.4vw, 56px); line-height: 1.08; letter-spacing: -0.02em; margin: 0 0 18px; }
-  h2 { font-size: 26px; letter-spacing: -0.01em; margin: 64px 0 12px; }
-  p.lede { font-size: 20px; color: var(--text-secondary); max-width: 760px; margin: 0 0 28px; }
-  .eyebrow { font: 600 13px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 18px; }
-  .cmd { display: flex; align-items: center; gap: 12px; background: var(--surface-1); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; font: 16px var(--mono); max-width: 760px; }
-  .cmd code { flex: 1; overflow-x: auto; white-space: nowrap; }
-  .cmd button { font: 600 13px var(--sans); color: var(--text-primary); background: var(--surface-2); border: 1px solid var(--rule); border-radius: 6px; padding: 6px 10px; cursor: pointer; }
-  .note { font-size: 14px; color: var(--text-muted); margin-top: 10px; }
-  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 40px 0 0; }
-  .stat { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px; }
-  .stat .num { font: 700 40px/1.1 var(--sans); letter-spacing: -0.02em; }
-  .stat .num .from { color: var(--text-muted); font-weight: 600; }
-  .stat .lbl { color: var(--text-secondary); font-size: 15px; margin-top: 6px; }
-  /* chart */
-  .chart { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; padding: 22px 22px 14px; position: relative; }
-  .chart h3 { margin: 0 0 4px; font-size: 17px; }
-  .chart .sub { margin: 0 0 18px; color: var(--text-muted); font-size: 14px; }
-  .row { display: grid; grid-template-columns: 220px 1fr 64px; align-items: center; gap: 12px; padding: 7px 0; cursor: default; }
-  .row .name { color: var(--text-secondary); font-size: 15px; }
-  .row .name strong { color: var(--text-primary); }
-  .track { position: relative; height: 22px; }
-  .bar { position: absolute; left: 0; top: 0; bottom: 0; background: var(--neutral-bar); border-radius: 0 4px 4px 0; }
-  .row.hl .bar { background: var(--accent); }
-  .row .val { font: 600 15px var(--mono); color: var(--text-primary); text-align: right; }
-  .row:hover .bar, .row:focus .bar { outline: 2px solid var(--text-secondary); outline-offset: 2px; }
-  .axis { display: grid; grid-template-columns: 220px 1fr 64px; gap: 12px; color: var(--text-muted); font: 12px var(--mono); margin-top: 4px; }
-  .axis .ticks { display: flex; justify-content: space-between; border-top: 1px solid var(--rule); padding-top: 4px; }
-  .tip { position: absolute; pointer-events: none; background: var(--surface-2); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; font-size: 13px; color: var(--text-primary); opacity: 0; transition: opacity .1s; max-width: 280px; }
-  details { margin-top: 12px; color: var(--text-secondary); font-size: 14px; }
-  table { border-collapse: collapse; margin-top: 8px; width: 100%; }
-  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--rule); }
-  /* terminal */
-  .term { background: #0b0b0a; border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; }
-  .term .bar3 { display: flex; gap: 6px; padding: 10px 12px; border-bottom: 1px solid var(--rule); color: var(--text-muted); font: 12px var(--mono); }
-  .term pre { margin: 0; padding: 16px 18px; font: 14px/1.5 var(--mono); color: var(--text-secondary); white-space: pre-wrap; overflow-x: auto; }
-  .term .p { color: var(--text-muted); }
-  .term .deny { color: var(--deny); font-weight: 600; }
-  .term .hi { color: var(--text-primary); }
-  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
-  .card { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 12px; padding: 18px 20px; }
-  .card h3 { margin: 0 0 6px; font-size: 17px; }
-  .card p { margin: 0; color: var(--text-secondary); font-size: 15px; }
-  .agents { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
-  .agents span { background: var(--surface-1); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 12px; font-size: 14px; color: var(--text-secondary); }
-  .fine { color: var(--text-secondary); font-size: 15px; }
-  .fine li { margin: 6px 0; }
-  footer { margin-top: 72px; color: var(--text-muted); font-size: 14px; border-top: 1px solid var(--rule); padding-top: 18px; }
-  @media (max-width: 640px) { .row, .axis { grid-template-columns: 120px 1fr 52px; } }
-</style>
+<meta name="theme-color" content="#000000">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="landmine">
+<meta property="og:url" content="https://landmine.tech/">
+<meta property="og:title" content="landmine: your coding agent doesn't know the bug in your exact version">
+<meta property="og:description" content="Open GitHub issues filed against the exact versions you pin, put where your agent reads them. Claude Sonnet 5.5 went from 86% to 99% on 21 held-out traps built from bugs filed after its training cutoff.">
+<meta property="og:image" content="https://landmine.tech/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="landmine: Claude Sonnet 5.5 went from 86% to 99% on post-cutoff bug traps">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://landmine.tech/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"landmine","alternateName":"landmines","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","license":"https://opensource.org/licenses/MIT","url":"https://landmine.tech/","downloadUrl":"https://www.npmjs.com/package/landmines","codeRepository":"https://github.com/devanshranjan10/landmines","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Finds open GitHub issues filed against the exact dependency versions a project pins and puts them where coding agents read them."}
+</script>
+<script defer src="/assets/site.js"></script>
 </head>
 <body>
-<main>
-  <div class="eyebrow">landmine · open source · MIT</div>
-  <h1>Your coding agent doesn't know about the bug in your exact version.</h1>
-  <p class="lede">landmine reads your lockfile, finds the open GitHub issues filed against the exact versions you pin, and puts them where your agent reads them, with the workaround from the thread. Before it writes the code that hits them.</p>
+<a class="skip" href="#main">Skip to content</a>
 
-  <div class="cmd" role="group" aria-label="Install command">
-    <code id="cmd">npx landmines scan &amp;&amp; npx landmines install --rules</code>
-    <button type="button" onclick="navigator.clipboard.writeText(document.getElementById('cmd').innerText)">Copy</button>
-  </div>
-  <div class="note">Writes a known-bugs section into AGENTS.md and CLAUDE.md, plus a pre-edit hook for the agents it finds. <code>npx landmines uninstall</code> removes all of it.</div>
+<!-- @nav -->
 
-  <div class="stats">
-    <div class="stat"><div class="num"><span class="from">86%</span> → 99%</div><div class="lbl">Claude Sonnet 5.5 pass rate on 21 held-out traps built from bugs filed after its training cutoff (72/84 → 83/84)</div></div>
-    <div class="stat"><div class="num">6–0</div><div class="lbl">Wins without a loss in a confirmation run written down before it ran (p = 0.03)</div></div>
-    <div class="stat"><div class="num">0 of 84</div><div class="lbl">Sessions where the agent used web search or Context7 when it had them. It didn't think to look.</div></div>
-  </div>
+<main id="main">
+  <section class="hero grid-bg glow">
+    <div class="wrap">
+      <a class="eyebrow" href="/benchmark/"><span class="tag">New</span>landmine-bench: Claude Sonnet 5.5, 86% → 99% on post-cutoff bugs <span aria-hidden="true">→</span></a>
+      <h1>Your coding agent doesn't know the bug in your <em>exact version</em>.</h1>
+      <p class="lede">landmine reads your lockfile, finds the open GitHub issues filed against the exact versions you pin, and puts them where your agent reads them, with the workaround from the thread. Before it writes the code that hits them.</p>
+      <div class="actions">
+        <div class="cmd"><code><span class="p">$</span>npx landmines scan &amp;&amp; npx landmines install --rules</code><button type="button" data-copy="npx landmines scan &amp;&amp; npx landmines install --rules" aria-label="Copy install command"></button></div>
+        <a class="btn" href="https://github.com/devanshranjan10/landmines">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>
+          Star on GitHub
+        </a>
+      </div>
+      <p class="note">Free and open source (MIT). Hooks for 20 agents, a rules section any agent reads. <code>npx landmines uninstall</code> removes all of it.</p>
 
-  <h2>Measured against what you'd use instead</h2>
-  <div class="chart" id="chart">
-    <h3>Traps passed, Claude Sonnet 5.5 (42 runs each)</h3>
-    <p class="sub">Same 21 held-out tasks, shell access, the request phrased the way a user would ask, all four setups run in one batch.</p>
-    <div id="rows"></div>
-    <div class="axis"><span></span><div class="ticks"><span>0</span><span>21</span><span>42</span></div><span></span></div>
-    <div class="tip" id="tip" role="status"></div>
-    <details><summary>Table view</summary>
-      <table><thead><tr><th>Setup</th><th>Passed</th><th>landmine vs this setup (paired)</th></tr></thead>
-      <tbody id="tbody"></tbody></table>
-    </details>
-  </div>
-
-  <h2>What your agent sees</h2>
-  <div class="term" aria-label="Terminal output from a real run">
-    <div class="bar3">examples/demo · drizzle-orm 0.36.0 pinned</div>
-<pre><span class="p">$</span> <span class="hi">npx landmines scan</span>
-landmine scanned 7 direct dependencies from package-lock.json, requirements.txt
-  date-fns@3.6.0      21 open issues · 13 tied to symbols · 4 workarounds
-  drizzle-orm@0.36.0  13 open issues · 9 tied to symbols · 6 workarounds
-  pydantic@2.9.2      16 open issues · 15 tied to symbols · 9 workarounds
-  …
-Found 71 open issues filed against your exact versions in 6 of 7 packages.
-
-<span class="p"># the agent's own first try at closing the pool:</span>
-<span class="hi">await db.$client.end();</span>
-
-<span class="deny">landmine: this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub
-issue filed against exactly that version describes a bug there.</span>
+      <div class="window" role="figure" aria-label="A Claude Code session where landmine pauses an edit that hits a known drizzle-orm bug">
+        <div class="chrome">
+          <div class="pane">
+            <div class="pane-head"><span class="title">Claude Code</span><span class="chip">drizzle-orm 0.36.0</span><span class="path">examples/demo</span><span class="live"><i class="dot"></i>hook on</span></div>
+            <div class="session" data-play>
+              <div class="step" data-delay="0">
+                <p class="who">You</p>
+                <div class="user">Add an exported async function closeDb() to src/db.ts that closes the underlying Postgres connection pool.</div>
+              </div>
+              <div class="step" data-delay="1100" data-flag="drizzle">
+                <p class="who">Agent · Edit src/db.ts</p>
+                <div class="edit bad"><div class="bar"><span>src/db.ts</span><span class="status blocked">✕ paused by landmine</span></div><pre><span class="kw">export async function</span> <span class="fn">closeDb</span>() {
+<span class="del">  <span class="kw">await</span> db.$client.<span class="fn">end</span>();</span>
+}</pre></div>
+              </div>
+              <div class="step" data-delay="900">
+                <div class="warn"><b>landmine:</b> this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub issue filed against exactly that version describes a bug there.
 drizzle-team/drizzle-orm#3402 · [BUG]: node-postgres client doesn't have end function
-Evidence: the issue template says "What version of `drizzle-orm` are you using? 0.36.0"
-Workaround from @cluah (1 reaction), quoted from a public GitHub comment …</pre>
-  </div>
-  <p class="note">Real output. In a live Claude Code session, the agent changed approach and told the user which issue it worked around.</p>
+<span class="q">Workaround from @cluah (untrusted, quoted): … the other way around: const pool = new pg.Pool(…); const db = drizzle(pool);</span></div>
+              </div>
+              <div class="step" data-delay="1500" data-flag="none">
+                <p class="who">Agent · Edit src/db.ts (retry)</p>
+                <div class="edit good"><div class="bar"><span>src/db.ts</span><span class="status applied">✓ applied</span></div><pre><span class="ins"><span class="kw">const</span> pool = <span class="kw">new</span> pg.<span class="fn">Pool</span>({ connectionString: process.env.DATABASE_URL ?? <span class="str">'postgres://localhost/demo'</span> });</span>
+<span class="ins"><span class="kw">export const</span> db = <span class="fn">drizzle</span>(pool);</span>
 
-  <h2>How it works</h2>
-  <div class="grid3">
-    <div class="card"><h3>1 · scan</h3><p>Lockfile → exact versions → the open GitHub issues that name them. Every hit is checked for the version, and the workaround is picked from the thread. Optional: a model reads each issue once and writes down exactly what triggers it.</p></div>
-    <div class="card"><h3>2 · tell the agent first</h3><p>A short known-bugs section in AGENTS.md / CLAUDE.md, ranked by the APIs your code actually uses. That's the part that measured as working.</p></div>
-    <div class="card"><h3>3 · backstop</h3><p>A pre-edit hook that pauses a matching edit once, an MCP server for "is this error a known bug?", and <code>check --staged</code> for pre-commit. All offline after the scan.</p></div>
-  </div>
+<span class="kw">export async function</span> <span class="fn">closeDb</span>() {
+<span class="ins">  <span class="kw">await</span> pool.<span class="fn">end</span>();</span>
+}</pre></div>
+              </div>
+              <div class="step" data-delay="1100">
+                <p class="who">Agent → you</p>
+                <div class="said">I first wrote closeDb() as await db.$client.end(). The landmine hook flagged a known bug in drizzle-orm 0.36.0 (#3402). I avoided that by creating the pool myself.</div>
+              </div>
+            </div>
+          </div>
+          <div class="pane">
+            <div class="pane-head"><span class="title">.landmine/index.json</span><span class="live"><i class="dot amber"></i>offline</span></div>
+            <ul class="index-list">
+              <li data-hit="drizzle"><div class="pkg">drizzle-orm@0.36.0 <span>13</span></div><div class="meta">open issues · 9 tied to symbols · 6 workarounds</div></li>
+              <li data-hit="date-fns"><div class="pkg">date-fns@3.6.0 <span>21</span></div><div class="meta">open issues · 13 tied to symbols · 4 workarounds</div></li>
+              <li data-hit="pydantic"><div class="pkg">pydantic@2.9.2 <span>16</span></div><div class="meta">open issues · 15 tied to symbols · 9 workarounds</div></li>
+              <li data-hit="typescript"><div class="pkg">typescript@5.6.3 <span>14</span></div><div class="meta">open issues · 11 tied to symbols · 4 workarounds</div></li>
+              <li data-hit="requests"><div class="pkg">requests@2.32.3 <span>6</span></div><div class="meta">open issues · 5 tied to symbols · 3 workarounds</div></li>
+              <li data-hit="pg"><div class="pkg">pg@8.13.1 <span>1</span></div><div class="meta">open issue · 0 tied to symbols</div></li>
+            </ul>
+            <div class="index-foot">71 open issues against the exact versions in 6 of 7 dependencies. The hook only reads this file, in about 0.1 s, and never touches the network.</div>
+          </div>
+        </div>
+      </div>
+      <p class="caption">Replayed from a real, headless Claude Code 2.1.304 session on <a href="https://github.com/devanshranjan10/landmines/tree/main/examples/demo">examples/demo</a>, abridged. The prompt didn't mention bugs. <a href="https://github.com/devanshranjan10/landmines/tree/main/docs/e2e">Transcripts and hook logs</a>.</p>
+    </div>
+  </section>
 
-  <h2>Works with your agent</h2>
-  <div class="agents">
-    <span>Claude Code</span><span>Codex</span><span>Cursor</span><span>Gemini CLI</span><span>GitHub Copilot</span><span>Windsurf / Devin</span><span>OpenCode</span><span>Kilo Code</span><span>Cline</span><span>Antigravity</span><span>Amp</span><span>Factory Droid</span><span>Augment</span><span>Kiro</span><span>Qwen Code</span><span>Crush</span><span>Goose</span><span>OpenHands</span><span>Trae</span><span>Pi</span><span>Freebuff · Aider · Zed · Roo (rules + MCP)</span>
-  </div>
-  <p class="note">The rules section is plain markdown that any agent reads. The benchmark ran on Claude Code only. The other agents' hooks and plugins are built from their docs and tested against their payload shapes.</p>
+  <section class="section tight">
+    <div class="wrap">
+      <div class="stats reveal">
+        <div class="stat"><div class="big">86%<span class="arrow">→</span><span class="hl">99%</span></div><p>Claude Sonnet 5.5's pass rate on 21 held-out traps built from bugs filed after its training cutoff (72/84 → 83/84).</p></div>
+        <div class="stat"><div class="big"><span class="hl">6</span>–0</div><p>Wins without a loss in a confirmation run on unseen seeds, written down before it ran (p = 0.03).</p></div>
+        <div class="stat"><div class="big">0 <span style="font-size:.5em;color:var(--text-3)">of 84</span></div><p>Sessions where the agent used web search or Context7 when it had them. It didn't think to look.</p></div>
+      </div>
+    </div>
+  </section>
 
-  <h2>Post your number</h2>
-  <div class="cmd"><code>npx landmines share</code></div>
-  <p class="note">Prints one line, such as "landmine found 71 open GitHub issues filed against the exact versions this project pins…", plus a README badge. It shares only counts and package names.</p>
+  <section class="section">
+    <div class="wrap split">
+      <div class="text reveal">
+        <p class="kicker">Any agent</p>
+        <h2 class="h2">One command. Every agent in the repo.</h2>
+        <p class="sub"><code>install</code> finds the agents configured in your project and writes each one its own pre-edit hook or plugin, plus a known-bugs section in AGENTS.md and CLAUDE.md (and GEMINI.md when Gemini CLI is set up) that any agent reads.</p>
+        <div class="agents">
+          <div class="faces" aria-hidden="true"><span class="mono-badge">CC</span><span class="mono-badge">Cx</span><span class="mono-badge">Cu</span><span class="mono-badge">Ge</span></div>
+          <div class="cmd" style="border:0;flex:1"><code>npm i -D landmines</code><button type="button" data-copy="npm i -D landmines" aria-label="Copy"></button></div>
+        </div>
+      </div>
+      <div class="term reveal">
+        <div class="lights"><i></i><i></i><i></i></div>
+<pre><span class="p">$ </span><span class="c">npx landmines install --rules</span>
+<span class="g">Installed:</span> claude hook in .claude/settings.json
+  <span class="d">Claude Code picks up hook changes immediately. landmine runs</span>
+  <span class="d">before Edit/Write and blocks once per issue per session.</span>
+<span class="g">Installed:</span> cursor hook in .cursor/hooks.json
+<span class="g">Installed:</span> gemini hook in .gemini/settings.json
+  <span class="d">Gemini CLI warns before running project hooks for the first time.</span>
+  Command: <span class="a">npx --no-install landmines hook</span>
+<span class="g">Rules created:</span> AGENTS.md
+<span class="g">Rules created:</span> CLAUDE.md
+<span class="g">Rules created:</span> GEMINI.md</pre>
+      </div>
+    </div>
+  </section>
 
-  <h2>The fine print</h2>
-  <ul class="fine">
-    <li><strong>Our benchmark, not a public one.</strong> No public benchmark measures this, so we built landmine-bench: 66 validated trap tasks, frozen dev/test splits, and confirmation runs written down before they ran. Method, every run, and every caveat: <a href="https://github.com/devanshranjan10/landmines/blob/main/docs/BENCHMARK.md">BENCHMARK.md</a>.</li>
-    <li><strong>Selection.</strong> Every trap is a bug landmine had already indexed. The benchmark measures whether landmine helps once the bug is in its index, not how many bugs it finds. Only open issues that name your exact version are found.</li>
-    <li><strong>List length.</strong> A big project can have more known bugs than fit in the 15-item list, which is why it is ranked by the APIs your code uses.</li>
-    <li><strong>Prompt wording.</strong> With fully specified prompts the agent already avoids most traps (19/21 unaided against 21/21 with landmine). The gap shows up when the request reads like a real one.</li>
-    <li><strong>The hook alone didn&rsquo;t measurably help.</strong> Telling the agent up front did, which is why the command above writes the rules section.</li>
-  </ul>
+  <section class="section tight rule-top">
+    <div class="wrap center reveal">
+      <p class="kicker">20 hooks and plugins · rules for the rest</p>
+      <h2 class="h2">Agents write the code. landmine knows where the bugs are.</h2>
+      <p class="sub">One normaliser reads every agent's payload and answers in its own deny format. The rules section is plain markdown, so agents without a hook still get the list.</p>
+    </div>
+    <div class="marquee" style="margin-top:56px">
+      <div class="track">
+        <span class="tile live"><span class="mono-badge">CC</span>Claude Code<span class="kind">live</span></span>
+        <span class="tile live"><span class="mono-badge">Cx</span>Codex CLI<span class="kind">live</span></span>
+        <span class="tile"><span class="mono-badge">Cu</span>Cursor<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Ge</span>Gemini CLI<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">GC</span>GitHub Copilot<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Wi</span>Windsurf / Devin<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Ag</span>Antigravity<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">FD</span>Factory Droid<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Au</span>Augment<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Ki</span>Kiro<span class="kind">hook</span></span>
+        <span class="tile live" aria-hidden="true"><span class="mono-badge">CC</span>Claude Code<span class="kind">live</span></span>
+        <span class="tile live" aria-hidden="true"><span class="mono-badge">Cx</span>Codex CLI<span class="kind">live</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Cu</span>Cursor<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Ge</span>Gemini CLI<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">GC</span>GitHub Copilot<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Wi</span>Windsurf / Devin<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Ag</span>Antigravity<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">FD</span>Factory Droid<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Au</span>Augment<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Ki</span>Kiro<span class="kind">hook</span></span>
+      </div>
+    </div>
+    <div class="marquee rev" style="margin-top:6px">
+      <div class="track">
+        <span class="tile"><span class="mono-badge">OC</span>OpenCode<span class="kind">plugin</span></span>
+        <span class="tile"><span class="mono-badge">Kc</span>Kilo Code<span class="kind">plugin</span></span>
+        <span class="tile"><span class="mono-badge">Cl</span>Cline<span class="kind">plugin</span></span>
+        <span class="tile"><span class="mono-badge">Am</span>Amp<span class="kind">plugin</span></span>
+        <span class="tile"><span class="mono-badge">Pi</span>Pi<span class="kind">plugin</span></span>
+        <span class="tile"><span class="mono-badge">Qw</span>Qwen Code<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Cr</span>Crush<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Go</span>Goose<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">OH</span>OpenHands<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Tr</span>Trae<span class="kind">hook</span></span>
+        <span class="tile"><span class="mono-badge">Fb</span>Freebuff<span class="kind">rules + mcp</span></span>
+        <span class="tile"><span class="mono-badge">Ai</span>Aider<span class="kind">rules + mcp</span></span>
+        <span class="tile"><span class="mono-badge">Ze</span>Zed<span class="kind">rules + mcp</span></span>
+        <span class="tile"><span class="mono-badge">Ro</span>Roo Code<span class="kind">rules + mcp</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">OC</span>OpenCode<span class="kind">plugin</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Kc</span>Kilo Code<span class="kind">plugin</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Cl</span>Cline<span class="kind">plugin</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Am</span>Amp<span class="kind">plugin</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Pi</span>Pi<span class="kind">plugin</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Qw</span>Qwen Code<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Cr</span>Crush<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Go</span>Goose<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">OH</span>OpenHands<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Tr</span>Trae<span class="kind">hook</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Fb</span>Freebuff<span class="kind">rules + mcp</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Ai</span>Aider<span class="kind">rules + mcp</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Ze</span>Zed<span class="kind">rules + mcp</span></span>
+        <span class="tile" aria-hidden="true"><span class="mono-badge">Ro</span>Roo Code<span class="kind">rules + mcp</span></span>
+      </div>
+    </div>
+    <p class="caption">"live" means run end to end against the real agent. The others are built from each agent's docs and tested against its payload shapes. <a href="/docs/#agents">Details</a>.</p>
+  </section>
 
-  <footer>landmine · <a href="https://www.npmjs.com/package/landmines">npm: landmines</a> · <a href="https://github.com/devanshranjan10/landmines">GitHub</a> · MIT · Issue text is third-party: landmine frames every quote as untrusted.</footer>
+  <section class="section rule-top grid-bg">
+    <div class="wrap split rev" style="align-items:center">
+      <div class="chart reveal" data-max="42" data-rows='[{"name":"landmine rules section","passed":42,"note":"","hl":true},{"name":"web search on","passed":36,"note":"landmine won 6, lost 0 (p = 0.03)"},{"name":"Context7 docs MCP","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"},{"name":"no help","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"}]'>
+        <h3>Traps passed, Claude Sonnet 5.5</h3>
+        <p class="desc">21 held-out tasks × 2 seeds, shell access, requests phrased the way a user would ask. All four setups in one batch.</p>
+        <div class="bars" role="list"></div>
+        <div class="axis" aria-hidden="true"><span></span><span class="ticks"><span>0</span><span>21</span><span>42</span></span><span></span></div>
+        <div class="tip" role="status"></div>
+        <noscript><p class="desc" style="margin-top:20px">landmine rules section 42/42 · web search on 36/42 · Context7 docs MCP 35/42 · no help 35/42.</p></noscript>
+      </div>
+      <div class="text reveal">
+        <p class="kicker">landmine-bench</p>
+        <h2 class="h2">Measured against what you'd use instead.</h2>
+        <p class="sub">No public benchmark measured whether agents avoid bugs already filed against the version they're using, so we built one: 66 validated trap tasks, frozen dev/test splits, a contamination canary, and an open harness for any agent.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:36px">
+          <a class="btn primary" href="/benchmark/">See the benchmark</a>
+          <a class="btn" href="/benchmark/#run">Run it on your agent</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rule-top">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">How it works</p>
+        <h2 class="h2" style="max-width:20ch">Lockfile in. Known bugs out. Before the edit.</h2>
+      </div>
+      <div class="steps">
+        <div class="card reveal">
+          <div class="num">01 · scan</div>
+          <h3>Find the issues for your exact versions</h3>
+          <p>Lockfile → exact versions → open GitHub issues that name them. Every hit is checked for the version, tied to code symbols, and given the most useful workaround from its thread. Optional: <code>cards</code> has a model read each issue once and write down what triggers it.</p>
+          <span class="tagline muted">npm · pnpm · yarn · bun · uv · poetry · pip</span>
+        </div>
+        <div class="card reveal">
+          <div class="num">02 · tell the agent first</div>
+          <h3>A short known-bugs list where it reads</h3>
+          <p>A marker-delimited section in AGENTS.md / CLAUDE.md, ranked by the APIs your code actually uses, with the condition and workaround for each. Issue text is framed as untrusted.</p>
+          <span class="tagline">measured: 86% → 99%</span>
+        </div>
+        <div class="card reveal">
+          <div class="num">03 · backstop</div>
+          <h3>Hook, MCP server and pre-commit</h3>
+          <p>A pre-edit hook that pauses a matching edit once, an MCP server for "is this error a known bug?", and <code>check --staged</code> for CI. All offline after the scan.</p>
+          <span class="tagline muted">the hook alone wasn't a significant win</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rule-top">
+    <div class="wrap split" style="align-items:center">
+      <div class="text reveal">
+        <p class="kicker">Post your number</p>
+        <h2 class="h2">How many open bugs does your lockfile pin?</h2>
+        <p class="sub"><code>share</code> prints one postable line and a README badge. It shares only counts and package names.</p>
+        <div class="cmd" style="margin-top:36px;max-width:420px"><code><span class="p">$</span>npx landmines share</code><button type="button" data-copy="npx landmines share" aria-label="Copy"></button></div>
+      </div>
+      <div class="term reveal">
+        <div class="lights"><i></i><i></i><i></i></div>
+<pre style="white-space:pre-wrap"><span class="p">$ </span><span class="c">npx landmines share</span>
+landmine found <span class="a">86 open GitHub issues</span> filed against the exact versions this project pins, in 6 of 7 dependencies (most: date-fns (23), pydantic (22), typescript (18)). 53 point at specific APIs, 34 have a workaround in the thread.
+Check yours: <span class="g">npx landmines scan</span>
+
+<span class="d">README badge:</span>
+<span class="d">[![landmine](https://img.shields.io/badge/landmine-86_open_bugs_in_pinned_deps-e05d44)](https://www.npmjs.com/package/landmines)</span></pre>
+      </div>
+    </div>
+  </section>
+
+  <section class="section rule-top">
+    <div class="wrap">
+      <div class="reveal">
+        <p class="kicker">The fine print</p>
+        <h2 class="h2" style="max-width:22ch">What the numbers do and don't say.</h2>
+      </div>
+      <div class="fine">
+        <div class="card reveal"><h3>Our benchmark</h3><p>No public benchmark measures this, so the numbers come from landmine-bench, which we built. Frozen splits, confirmation runs written down before they ran, and every run published. <a href="/benchmark/">Method and caveats</a>.</p></div>
+        <div class="card reveal"><h3>Selection</h3><p>Every trap is a bug landmine had already indexed. The benchmark measures whether landmine helps once a bug is in its index, not how many bugs it finds. Only open issues that name your exact version are found.</p></div>
+        <div class="card reveal"><h3>Prompt wording</h3><p>With fully specified prompts the agent already avoids most traps (19/21 unaided against 21/21 with landmine). The gap shows up when the request reads like a real one.</p></div>
+        <div class="card reveal"><h3>The hook alone</h3><p>The pre-edit hook didn't measurably beat no help. Telling the agent up front did, which is why the command above writes the rules section first.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final grid-bg glow">
+    <div class="wrap reveal">
+      <h2 class="h2">Find the landmines before your agent steps on them.</h2>
+      <p class="sub" style="margin-inline:auto">One command per project. Commit <code>.landmine/index.json</code> and the whole team's agents share it.</p>
+      <div class="actions">
+        <div class="cmd"><code><span class="p">$</span>npx landmines scan</code><button type="button" data-copy="npx landmines scan" aria-label="Copy"></button></div>
+        <a class="btn" href="/docs/">Read the docs</a>
+      </div>
+      <p class="caption">Also: <code>npm i -D landmines</code> · <code>brew install devanshranjan10/tap/landmines</code> · <span class="nowrap">Node ≥ 22.12</span></p>
+    </div>
+  </section>
 </main>
-<script>
-  // Run K (docs/BENCHMARK.md, D-47): 42 runs per setup, seeds 1–2, one batch.
-  const data = [
-    { name: 'landmine rules section', passed: 42, vs: 'n/a', hl: true },
-    { name: 'web search on', passed: 36, vs: 'landmine won 6, lost 0 (p = 0.03)' },
-    { name: 'Context7 docs MCP', passed: 35, vs: 'landmine won 7, lost 0 (p = 0.016)' },
-    { name: 'nothing', passed: 35, vs: 'landmine won 7, lost 0 (p = 0.016)' },
-  ];
-  const max = 42;
-  const rows = document.getElementById('rows');
-  const tbody = document.getElementById('tbody');
-  const tip = document.getElementById('tip');
-  const chart = document.getElementById('chart');
-  for (const d of data) {
-    const row = document.createElement('div');
-    row.className = 'row' + (d.hl ? ' hl' : '');
-    row.tabIndex = 0;
-    row.setAttribute('aria-label', `${d.name}: ${d.passed} of ${max} passed`);
-    row.innerHTML = `<div class="name">${d.hl ? '<strong>' + d.name + '</strong>' : d.name}</div><div class="track"><div class="bar" style="width:${(d.passed / max) * 100}%"></div></div><div class="val">${d.passed}/${max}</div>`;
-    const show = (x, y) => {
-      tip.innerHTML = `<strong>${d.name}</strong><br>${d.passed} of ${max} runs passed (${Math.round((d.passed / max) * 100)}%)${d.hl ? '' : '<br>' + d.vs}`;
-      tip.style.left = Math.min(x + 14, chart.clientWidth - 290) + 'px';
-      tip.style.top = y + 14 + 'px';
-      tip.style.opacity = 1;
-    };
-    row.addEventListener('mousemove', (e) => { const r = chart.getBoundingClientRect(); show(e.clientX - r.left, e.clientY - r.top); });
-    row.addEventListener('focus', () => show(row.offsetLeft + 230, row.offsetTop));
-    row.addEventListener('mouseleave', () => (tip.style.opacity = 0));
-    row.addEventListener('blur', () => (tip.style.opacity = 0));
-    rows.appendChild(row);
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${d.name}</td><td>${d.passed}/${max}</td><td>${d.vs}</td>`;
-    tbody.appendChild(tr);
-  }
-</script>
+
+<!-- @footer -->
 </body>
 </html>

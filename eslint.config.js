@@ -1,8 +1,9 @@
 import js from '@eslint/js';
+import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'node_modules/**', 'examples/**', 'test/fixtures/**', 'coverage/**', 'docs/**', 'bench/tasks/**', 'bench/.venv*/**', 'eval/**', 'bench/.work/**'] },
+  { ignores: ['dist/**', 'node_modules/**', 'examples/**', 'test/fixtures/**', 'coverage/**', 'docs/**', 'bench/tasks/**', 'bench/.venv*/**', 'eval/**', 'bench/.work/**', '.site-dist/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
@@ -15,7 +16,9 @@ export default tseslint.config(
     },
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.js', '**/*.mjs'],
     ...tseslint.configs.disableTypeChecked,
   },
+  { files: ['site/**/*.js'], languageOptions: { globals: globals.browser } },
+  { files: ['scripts/**/*.mjs'], languageOptions: { globals: globals.node } },
 );
