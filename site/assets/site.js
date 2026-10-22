@@ -3,7 +3,7 @@ document.documentElement.classList.remove('no-js');
 const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Copy buttons: <button data-copy="text"> or a .code block's button.
-const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="9" y="9" width="12" height="12"/><path d="M5 15H3V3h12v2"/></svg>';
+const COPY_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h9"/></svg>';
 const DONE_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true"><path d="M4 12l5 5L20 6"/></svg>';
 async function copy(text, btn, label) {
   try { await navigator.clipboard.writeText(text); } catch { return; }
@@ -35,6 +35,10 @@ nav?.querySelector('.menu-btn')?.addEventListener('click', (e) => {
   const open = nav.classList.toggle('open');
   e.currentTarget.setAttribute('aria-expanded', String(open));
 });
+// Hairline under the nav once the page has scrolled.
+const onScroll = () => nav?.classList.toggle('scrolled', window.scrollY > 8);
+addEventListener('scroll', onScroll, { passive: true });
+onScroll();
 
 // GitHub star count (public API, cached for the tab; silently absent on failure).
 const starEl = document.querySelector('[data-stars]');

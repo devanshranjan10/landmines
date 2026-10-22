@@ -2,33 +2,34 @@
 <!-- Social card source. Rendered to site/og.png by scripts/site/render-images.sh -->
 <html><head><meta charset="utf-8">
 <style>
-@font-face { font-family: 'Sora'; font-weight: 400 800; src: url(../../site/fonts/sora.woff2) format('woff2'); }
-@font-face { font-family: 'Manrope'; font-weight: 400 700; src: url(../../site/fonts/manrope.woff2) format('woff2'); }
-@font-face { font-family: 'JetBrains Mono'; font-weight: 400 600; src: url(../../site/fonts/jetbrainsmono.woff2) format('woff2'); }
-html, body { margin: 0; width: 1200px; height: 630px; background: #000; color: #f4f4f2; overflow: hidden; }
-body { position: relative; font-family: Manrope, sans-serif; }
-.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px); background-size: 60px 60px; -webkit-mask-image: radial-gradient(ellipse 85% 85% at 70% 40%, #000 25%, transparent 100%); }
-.glow { position: absolute; right: -120px; top: -160px; width: 760px; height: 620px; background: radial-gradient(closest-side, rgba(255,178,36,.22), transparent); }
-.in { position: absolute; inset: 64px 72px; display: flex; flex-direction: column; }
-.brand { display: flex; align-items: center; gap: 14px; font: 700 32px/1 Sora; letter-spacing: -.02em; }
-.brand svg { width: 42px; height: 42px; }
-h1 { font: 700 60px/1.06 Sora; letter-spacing: -.035em; margin: 46px 0 0; max-width: 820px; }
-h1 em { font-style: normal; color: #ffb224; }
-.row { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; }
-.stat .big { font: 700 84px/1 Sora; letter-spacing: -.04em; }
-.stat .big span { color: #ffb224; }
-.stat .big i { font-style: normal; color: #7c7c76; font-weight: 500; }
-.stat p { margin: 12px 0 0; font-size: 21px; color: #b4b4ae; }
-.cmd { display: flex; white-space: nowrap; border: 1px solid #3a3a3a; background: #0d0d0d; font: 500 21px/1 "JetBrains Mono"; }
-.cmd code { padding: 22px 26px; } .cmd code b { color: #7c7c76; font-weight: 400; margin-right: 12px; }
-.cmd .url { background: #ffb224; color: #120c00; padding: 22px 24px; font: 700 23px/1 Manrope; }
+@font-face { font-family: 'Geist'; font-weight: 300 800; src: url(../../site/fonts/geist.woff2) format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-weight: 400 600; src: url(../../site/fonts/geistmono.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; src: url(../../site/fonts/instrumentserif.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; src: url(../../site/fonts/instrumentserif-italic.woff2) format('woff2'); }
+html, body { margin: 0; width: 1200px; height: 630px; background: #f3f1ea; color: #17160f; overflow: hidden; }
+body { position: relative; font-family: Geist, sans-serif; }
+.in { position: absolute; inset: 60px 72px 58px; display: flex; flex-direction: column; }
+.top { display: flex; justify-content: space-between; align-items: center; }
+.brand { display: flex; align-items: center; gap: 12px; font: 600 30px/1 Geist; letter-spacing: -.02em; }
+.brand svg { width: 38px; height: 38px; }
+.url { font: 500 20px/1 'Geist Mono'; color: #7d7a70; }
+h1 { font: 400 76px/.96 'Instrument Serif'; letter-spacing: -.025em; margin: 50px 0 0; max-width: 980px; }
+h1 em { color: #e4531b; }
+.row { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; border-top: 2px solid #17160f; padding-top: 26px; }
+.num { font: 400 92px/.85 'Instrument Serif'; letter-spacing: -.03em; }
+.num .f { color: #7d7a70; } .num .t { color: #e4531b; } .num .s { color: #c3beb1; font: 400 46px/1 Geist; vertical-align: .3em; margin: 0 8px; }
+.cap { font-size: 20px; color: #4b4940; margin-top: 14px; }
+.cmd { background: #17160f; color: #f3f1ea; border-radius: 12px; padding: 22px 26px; font: 450 24px/1 'Geist Mono'; white-space: nowrap; }
+.cmd b { color: #e4531b; font-weight: 400; margin-right: 12px; }
 </style></head>
-<body><div class="grid"></div><div class="glow"></div>
-<div class="in">
-  <div class="brand"><svg viewBox="0 0 32 32"><path d="M24.00 16.00L28.60 16.00M21.66 21.66L24.91 24.91M16.00 24.00L16.00 28.60M10.34 21.66L7.09 24.91M8.00 16.00L3.40 16.00M10.34 10.34L7.09 7.09M16.00 8.00L16.00 3.40M21.66 10.34L24.91 7.09" stroke="#ffb224" stroke-width="2.6"/><g fill="#ffb224"><circle cx="28.60" cy="16.00" r="2.4"/><circle cx="24.91" cy="24.91" r="2.4"/><circle cx="16.00" cy="28.60" r="2.4"/><circle cx="7.09" cy="24.91" r="2.4"/><circle cx="3.40" cy="16.00" r="2.4"/><circle cx="7.09" cy="7.09" r="2.4"/><circle cx="16.00" cy="3.40" r="2.4"/><circle cx="24.91" cy="7.09" r="2.4"/></g><circle cx="16" cy="16" r="9" fill="#ffb224"/><circle cx="16" cy="16" r="5.2" fill="none" stroke="#000" stroke-opacity=".28" stroke-width="1.6"/><circle cx="16" cy="16" r="1.9" fill="#000" fill-opacity=".45"/></svg>landmine</div>
-  <h1>Your coding agent doesn't know the bug in your <em>exact version</em>.</h1>
+<body><div class="in">
+  <div class="top">
+    <div class="brand"><svg viewBox="0 0 24 24"><path d="M3 17.25V15c0-1.3 1-2.3 2.3-2.5L8.5 12h7l3.2.5c1.3.2 2.3 1.2 2.3 2.5v2.25z" fill="#17160f"/><rect x="8.25" y="8.6" width="7.5" height="2.8" rx="1.1" fill="#e4531b"/><path d="M1.5 17.25h21" stroke="#17160f" stroke-width="1.6" stroke-linecap="round"/></svg>landmine</div>
+    <div class="url">landmine.tech</div>
+  </div>
+  <h1>Your coding agent doesn't know about the bug in your <em>exact version</em>.</h1>
   <div class="row">
-    <div class="stat"><div class="big">86%<i> → </i><span>99%</span></div><p>Claude Sonnet 5.5 · post-cutoff bug traps</p></div>
-    <div class="cmd"><code><b>$</b>npx landmines scan</code><span class="url">landmine.tech</span></div>
+    <div><div class="num"><span class="f">86%</span><span class="s">→</span><span class="t">99%</span></div><div class="cap">Claude Sonnet 5.5 on post-cutoff bug traps</div></div>
+    <div class="cmd"><b>$</b>npx landmines scan</div>
   </div>
 </div></body></html>

@@ -6,7 +6,7 @@
 <title>landmine-bench: do coding agents avoid known bugs in pinned versions?</title>
 <meta name="description" content="landmine-bench: 66 validated tasks built from open GitHub issues against pinned dependency versions. Results for Claude Sonnet, Opus and Haiku 5.5 with no help, web search, Context7 and landmine.">
 <link rel="canonical" href="https://landmine.tech/benchmark/">
-<meta name="theme-color" content="#000000">
+<meta name="theme-color" content="#f3f1ea">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="landmine">
 <meta property="og:url" content="https://landmine.tech/benchmark/">
@@ -20,8 +20,8 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/sora.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/manrope.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Dataset","name":"landmine-bench v0","description":"66 validated coding-agent tasks, each a small project pinning a library version with an open upstream bug, a feature request whose natural implementation hits it, and a hidden test.","url":"https://landmine.tech/benchmark/","license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"distribution":{"@type":"DataDownload","contentUrl":"https://github.com/devanshranjan10/landmines/tree/main/bench"}}
@@ -32,27 +32,23 @@
 <a class="skip" href="#main">Skip to content</a>
 <!-- @nav -->
 <main id="main">
-  <section class="page-head grid-bg glow">
+  <section class="page-head">
     <div class="wrap">
-      <p class="kicker">landmine-bench v0</p>
+      <span class="label">landmine-bench v0</span>
       <h1>Does your coding agent avoid a bug that's already been filed?</h1>
-      <p class="sub">Each task is a small project that pins a library version with an open, reproducible upstream bug, plus a feature request whose natural implementation walks into it. A hidden test decides. As far as we know, no public benchmark measured this before.</p>
-      <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:36px">
-        <a class="btn primary" href="#run">Run it on your agent</a>
+      <p class="lede">Each task is a small project that pins a library version with an open, reproducible upstream bug, plus a feature request whose natural implementation walks into it. A hidden test decides. As far as we know, no public benchmark measured this before.</p>
+      <div class="row">
+        <a class="btn dark" href="#run">Run it on your agent</a>
         <a class="btn" href="https://github.com/devanshranjan10/landmines/tree/main/bench">Tasks on GitHub</a>
       </div>
     </div>
   </section>
 
-  <section class="section tight">
-    <div class="wrap">
-      <div class="stats reveal">
-        <div class="stat"><div class="big">66</div><p>Tasks, each validated fail→pass: the untouched project and a naive solution fail, the workaround from the issue thread passes.</p></div>
-        <div class="stat"><div class="big"><span class="hl">31</span></div><p>"Fresh" tasks from issues opened on or after 2026-07-01, after the measured models' training cutoff. The headline set.</p></div>
-        <div class="stat"><div class="big">25</div><p>Packages: pandas, polars, pyarrow, scipy, numpy, pydantic, scikit-learn, zod, date-fns, axios, knex and more.</p></div>
-      </div>
-    </div>
-  </section>
+  <div class="wrap facts">
+    <div><div class="num">66</div><p>Tasks, each validated fail→pass: the untouched project and a naive solution fail, the workaround from the issue thread passes.</p></div>
+    <div><div class="num acc">31</div><p>"Fresh" tasks from issues opened on or after 2026-07-01, after the measured models' training cutoff. The headline set.</p></div>
+    <div><div class="num">25</div><p>Packages: pandas, polars, pyarrow, scipy, numpy, pydantic, scikit-learn, zod, date-fns, axios, knex and more.</p></div>
+  </div>
 
   <div class="wrap doc">
     <aside class="toc" aria-label="On this page">
@@ -94,11 +90,10 @@
         <h2>Against what you'd use instead</h2>
         <p>Same 21 tasks, Sonnet 5.5, seeds 1–2, all four setups in one batch (run K). Every session reached the model.</p>
         <div class="chart" data-max="42" data-rows='[{"name":"landmine rules section","passed":42,"note":"","hl":true},{"name":"web search on","passed":36,"note":"landmine won 6, lost 0 (p = 0.03)"},{"name":"Context7 docs MCP","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"},{"name":"no help","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"}]' style="margin:24px 0">
-          <h3>Traps passed out of 42</h3>
+          <div class="title"><h3 class="h3">Traps passed</h3><span class="label">passed / 42</span></div>
           <p class="desc">Web search had WebSearch and WebFetch, so the agent could have searched GitHub issues. Context7 was <code>@upstash/context7-mcp@4.4.4</code>.</p>
           <div class="bars" role="list"></div>
-          <div class="axis" aria-hidden="true"><span></span><span class="ticks"><span>0</span><span>21</span><span>42</span></span><span></span></div>
-          <div class="tip" role="status"></div>
+                    <div class="tip" role="status"></div>
           <noscript><p class="desc">landmine rules 42/42 · web search 36/42 · Context7 35/42 · no help 35/42.</p></noscript>
         </div>
         <ul>
