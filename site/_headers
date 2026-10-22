@@ -11,3 +11,27 @@
 
 /assets/*
   Cache-Control: public, max-age=3600, must-revalidate
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/index.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://landmine.tech/>; rel="canonical"
+
+/docs.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://landmine.tech/docs/>; rel="canonical"
+
+/benchmark.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://landmine.tech/benchmark/>; rel="canonical"
+
+/faq.md
+  Content-Type: text/markdown; charset=utf-8
+  Link: <https://landmine.tech/faq/>; rel="canonical"

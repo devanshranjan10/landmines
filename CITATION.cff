@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use landmine or landmine-bench, please cite it as below."
+title: "landmine: known open bugs in your exact dependency versions, for coding agents"
+abstract: >-
+  landmine reads a project's lockfile, finds the open GitHub issues filed against the
+  exact dependency versions it pins, and puts them where coding agents read them, with
+  the workaround from each issue thread. It ships with landmine-bench, a benchmark of
+  66 validated tasks measuring whether coding agents avoid open upstream bugs in pinned
+  dependency versions.
+type: software
+authors:
+  - family-names: Ranjan
+    given-names: Devansh
+repository-code: "https://github.com/devanshranjan10/landmines"
+url: "https://landmine.tech/"
+license: MIT
+version: 0.2.0
+date-released: "2026-10-21"
+keywords:
+  - coding agents
+  - dependencies
+  - known bugs
+  - lockfile
+  - benchmark
+  - Claude Code
+  - MCP

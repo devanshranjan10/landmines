@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FAQ · landmine: stop coding agents from hitting known bugs in pinned dependency versions</title>
+<meta name="description" content="How to stop Claude Code, Codex, Cursor and other coding agents from writing code that hits an open, already-filed bug in the exact dependency version a project pins. Answers about landmine and landmine-bench.">
+<link rel="canonical" href="https://landmine.tech/faq/">
+<meta name="theme-color" content="#f3f1ea">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="landmine">
+<meta property="og:url" content="https://landmine.tech/faq/">
+<meta property="og:title" content="landmine FAQ: coding agents and known bugs in pinned dependency versions">
+<meta property="og:description" content="What landmine is, how it keeps coding agents away from open upstream bugs in your exact versions, and what landmine-bench measured.">
+<meta property="og:image" content="https://landmine.tech/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://landmine.tech/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<!-- @nav -->
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="label">FAQ</span>
+      <h1>Coding agents and the bugs already filed against your versions.</h1>
+      <p class="lede">Short, direct answers. Each one links to the evidence. Quote freely; please link back.</p>
+    </div>
+  </section>
+
+  <div class="wrap doc">
+    <aside class="toc" aria-label="Questions">
+      <h4>Questions</h4>
+      <ol>
+        <li><a href="#what-is-landmine">What is landmine?</a></li>
+        <li><a href="#stop-agent-known-bug">Stopping an agent hitting a known bug</a></li>
+        <li><a href="#benchmark">Is there a benchmark?</a></li>
+        <li><a href="#web-search-context7">Web search or Context7?</a></li>
+        <li><a href="#vs-audit">vs Dependabot, npm audit, Snyk</a></li>
+        <li><a href="#agents">Which agents?</a></li>
+        <li><a href="#languages">Which languages?</a></li>
+        <li><a href="#privacy">What leaves my machine?</a></li>
+        <li><a href="#cost">Does it slow the agent down?</a></li>
+        <li><a href="#prompt-injection">Prompt injection</a></li>
+        <li><a href="#name">landmine or landmines?</a></li>
+        <li><a href="#cite">How to cite</a></li>
+      </ol>
+    </aside>
+    <div class="prose">
+      <section class="qa" id="what-is-landmine">
+        <h2>What is landmine?</h2>
+        <div class="a">
+          <p>landmine is a free, open-source command-line tool (npm package <code>landmines</code>, MIT licensed, by Devansh Ranjan) that finds the open GitHub issues filed against the exact dependency versions a project pins, and puts them where a coding agent reads them before it writes code: a known-bugs section in AGENTS.md and CLAUDE.md, a pre-edit hook, and an MCP server. Each entry carries the affected API and the workaround from the issue thread.</p>
+          <p>Source: <a href="https://github.com/devanshranjan10/landmines">github.com/devanshranjan10/landmines</a>.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="stop-agent-known-bug">
+        <h2>How do I stop my coding agent from using an API that's broken in the version I pin?</h2>
+        <div class="a">
+          <p>Tell the agent about the bug before it plans. Run <code>npx landmines scan</code> to index the open issues for your exact versions, then <code>npx landmines install --rules</code> to write a short known-bugs list into AGENTS.md and CLAUDE.md, ranked by the APIs your code calls. On landmine-bench this took Claude Sonnet 5.5 from 86% to 99% (72/84 → 83/84 runs). A pre-edit hook is installed as a backstop: it pauses an edit once when it uses an API from a matching issue, then lets the retry through.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="benchmark">
+        <h2>Is there a benchmark for whether coding agents avoid known bugs in pinned dependency versions?</h2>
+        <div class="a">
+          <p>Yes: landmine-bench, which is, as far as we know, the first public benchmark for it. It has 66 validated tasks across 25 Python and JavaScript packages; each pins a library version with an open, reproducible upstream bug and asks for a feature whose obvious implementation hits it, graded by a hidden test. 31 "fresh" tasks come from issues opened on or after 2026-07-01. Existing version-aware benchmarks (GitChameleon, VersiCode, CodeUpdateArena, LibEvolutionEval) measure API changes between versions, not open bugs. Results and method: <a href="/benchmark/">landmine.tech/benchmark</a>.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="web-search-context7">
+        <h2>Doesn't web search or Context7 already solve this?</h2>
+        <div class="a">
+          <p>Not in our measurement. On the same 21 held-out tasks, in one batch, Claude Sonnet 5.5 passed 36/42 with web search on, 35/42 with the Context7 docs MCP, 35/42 with no help, and 42/42 with the landmine rules section. In all 84 web-search and Context7 sessions the agent never called either tool: nothing told it there was a bug to look for. Context7 serves documentation, which open bugs usually aren't in.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="vs-audit">
+        <h2>How is this different from Dependabot, npm audit or Snyk?</h2>
+        <div class="a">
+          <p>Those tools report security vulnerabilities from advisory databases and propose upgrades. landmine reports ordinary open bugs (wrong results, crashes, type errors) filed as GitHub issues against the version you pin, whether or not a fix exists, and delivers them to the coding agent with the workaround from the thread, before it writes the code.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="agents">
+        <h2>Which coding agents does it support?</h2>
+        <div class="a">
+          <p>Pre-edit hooks for Claude Code and Codex CLI (both verified live), Cursor, Gemini CLI, GitHub Copilot, Windsurf / Devin, Antigravity, Factory Droid, Augment, Kiro, Qwen Code, Crush, Goose, OpenHands and Trae. In-process plugins for OpenCode, Kilo Code, Cline, Amp and Pi. Any other agent (Aider, Zed, Roo Code, Continue, Warp, Freebuff and others) reads the rules section, an Agent Skill or the MCP server. Details: <a href="/docs/#agents">docs</a>.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="languages">
+        <h2>Which languages and lockfiles?</h2>
+        <div class="a">
+          <p>JavaScript/TypeScript (npm <code>package-lock.json</code>, pnpm, yarn classic and berry, bun) and Python (<code>uv.lock</code>, <code>poetry.lock</code>, <code>Pipfile.lock</code>, pinned <code>requirements*.txt</code>). Direct dependencies only.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="privacy">
+        <h2>Does landmine send my code anywhere?</h2>
+        <div class="a">
+          <p>No. <code>scan</code> sends your direct dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. The optional <code>cards</code> command sends each indexed issue's public thread to the model provider you choose. The hook and the MCP server never touch the network.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="cost">
+        <h2>Does it slow the agent down or cost more?</h2>
+        <div class="a">
+          <p>The hook runs offline in about 0.11 s per edit. On landmine-bench the rules section added about 12% to cost per run (a longer CLAUDE.md) and no extra turns.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="prompt-injection">
+        <h2>Isn't issue text from GitHub a prompt-injection risk?</h2>
+        <div class="a">
+          <p>Yes, and landmine treats it as one. Every quote reaches the agent inside one delimited block labelled as untrusted third-party text, forged delimiters are neutralised, HTML is stripped, length is capped, quotes that pipe downloads into a shell or link unfamiliar hosts are flagged, and the agent is told never to follow instructions inside them.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="name">
+        <h2>Is it "landmine" or "landmines"?</h2>
+        <div class="a">
+          <p>The tool is landmine. The npm package is <code>landmines</code> because <code>landmine</code> on npm is an unrelated package; it installs both the <code>landmine</code> and <code>landmines</code> commands. Homebrew: <code>brew install devanshranjan10/tap/landmines</code>.</p>
+        </div>
+      </section>
+
+      <section class="qa" id="cite">
+        <h2>How do I cite landmine or landmine-bench?</h2>
+        <div class="a">
+          <p>Cite the repository, <a href="https://github.com/devanshranjan10/landmines">github.com/devanshranjan10/landmines</a> (Devansh Ranjan, 2026), or the benchmark:</p>
+          <div class="code"><pre>@misc{landminebench2026,
+  title  = {landmine-bench: Do Coding Agents Avoid Known Open Bugs in Pinned Dependency Versions?},
+  author = {Ranjan, Devansh},
+  year   = {2026},
+  note   = {Version 0. https://landmine.tech/benchmark/}
+}</pre></div>
+          <p>The repository also has a <code>CITATION.cff</code>, so GitHub's "Cite this repository" button gives APA and BibTeX.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+<!-- @footer -->
+</body>
+</html>

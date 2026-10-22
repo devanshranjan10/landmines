@@ -1,4 +1,31 @@
+# landmine.tech: everything here is public documentation. Crawling, indexing, AI search and citation are welcome.
+# Agent-readable copies: https://landmine.tech/llms.txt (index) and /llms-full.txt; every page also has a .md twin.
+
 User-agent: *
+Content-Signal: search=yes, ai-input=yes, ai-train=yes
+Allow: /
+
+# Named explicitly so no default block list catches them.
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: anthropic-ai
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+User-agent: Google-Extended
+User-agent: Googlebot
+User-agent: Bingbot
+User-agent: Applebot
+User-agent: Applebot-Extended
+User-agent: CCBot
+User-agent: DuckAssistBot
+User-agent: meta-externalagent
+User-agent: MistralAI-User
+User-agent: cohere-ai
+User-agent: YouBot
 Allow: /
 
 Sitemap: https://landmine.tech/sitemap.xml

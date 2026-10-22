@@ -24,7 +24,7 @@
 <link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"Dataset","name":"landmine-bench v0","description":"66 validated coding-agent tasks, each a small project pinning a library version with an open upstream bug, a feature request whose natural implementation hits it, and a hidden test.","url":"https://landmine.tech/benchmark/","license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"distribution":{"@type":"DataDownload","contentUrl":"https://github.com/devanshranjan10/landmines/tree/main/bench"}}
+{"@context":"https://schema.org","@type":"Dataset","name":"landmine-bench v0","description":"66 validated coding-agent tasks, each a small project pinning a library version with an open upstream bug, a feature request whose natural implementation hits it, and a hidden test.","url":"https://landmine.tech/benchmark/","license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"creator":{"@type":"Person","name":"Devansh Ranjan","url":"https://github.com/devanshranjan10"},"datePublished":"2026-10-21","version":"0","keywords":["coding agents","known bugs","dependency versions","benchmark","LLM evaluation"],"citation":"Ranjan, D. (2026). landmine-bench: Do Coding Agents Avoid Known Open Bugs in Pinned Dependency Versions? Version 0. https://landmine.tech/benchmark/","distribution":{"@type":"DataDownload","contentUrl":"https://github.com/devanshranjan10/landmines/tree/main/bench"}}
 </script>
 <script defer src="/assets/site.js"></script>
 </head>
@@ -218,7 +218,8 @@ npx tsx scripts/bench/run.ts --agent codex --arm none --split fresh-test --promp
         <div class="code"><pre>@misc{landminebench2026,
   title  = {landmine-bench: Do Coding Agents Avoid Known Open Bugs in Pinned Dependency Versions?},
   year   = {2026},
-  note   = {Version 0. https://github.com/devanshranjan10/landmines}
+  author = {Ranjan, Devansh},
+  note   = {Version 0. https://landmine.tech/benchmark/}
 }</pre></div>
         <p>Task data is CC BY 4.0, code is MIT. Cached issue text in <code>fixtures/</code> belongs to its authors. <a href="https://github.com/devanshranjan10/landmines/blob/main/bench/DATASHEET.md">Datasheet</a> · <a href="https://github.com/devanshranjan10/landmines/blob/main/docs/BENCHMARK.md">Full method</a>.</p>
       </section>

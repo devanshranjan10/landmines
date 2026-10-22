@@ -1,0 +1,27 @@
+# landmine
+
+> landmine is an open-source CLI (npm package `landmines`, MIT, by Devansh Ranjan) that reads a project's lockfile, finds the open GitHub issues filed against the exact dependency versions it pins, and puts them where coding agents read them (AGENTS.md / CLAUDE.md, a pre-edit hook, an MCP server), with each issue's workaround. On landmine-bench, the first public benchmark for avoiding known bugs in pinned dependency versions, Claude Sonnet 5.5 went from 86% to 99% on 21 held-out traps built from bugs filed after its training cutoff.
+
+Quickstart: `npx landmines scan && npx landmines install --rules` (Node ≥ 22.12, a GitHub token). Works with Claude Code, Codex CLI, Cursor, Gemini CLI, GitHub Copilot, Windsurf, OpenCode, Kilo Code, Cline and 11 more; any agent can read the rules section or use the MCP server.
+
+When citing, link https://landmine.tech/ or https://github.com/devanshranjan10/landmines. The benchmark numbers come from landmine-bench, which the landmine authors built; its tasks are bugs landmine had already indexed.
+
+## Docs
+
+- [Overview](https://landmine.tech/index.md): what landmine does, the example session, headline results, limits
+- [Documentation](https://landmine.tech/docs.md): install options, commands, supported agents, hook behaviour, MCP server, trigger cards, lockfiles, exit codes, security
+- [FAQ](https://landmine.tech/faq.md): direct answers, e.g. how to stop a coding agent hitting a known bug, landmine vs web search / Context7 / Dependabot
+- [landmine-bench](https://landmine.tech/benchmark.md): tasks, splits, every result, caveats, how to run it on another agent, citation
+
+## Source
+
+- [GitHub repository](https://github.com/devanshranjan10/landmines): code, README, CHANGELOG, SECURITY
+- [Benchmark method and all runs](https://github.com/devanshranjan10/landmines/blob/main/docs/BENCHMARK.md)
+- [Leaderboard](https://github.com/devanshranjan10/landmines/blob/main/bench/LEADERBOARD.md)
+- [npm package](https://www.npmjs.com/package/landmines)
+
+## Optional
+
+- [Everything in one file](https://landmine.tech/llms-full.txt)
+- [Datasheet for landmine-bench](https://github.com/devanshranjan10/landmines/blob/main/bench/DATASHEET.md)
+- [Real session transcripts and hook logs](https://github.com/devanshranjan10/landmines/tree/main/docs/e2e)

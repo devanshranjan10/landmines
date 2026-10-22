@@ -6,6 +6,8 @@
 [![landmine-bench](https://img.shields.io/badge/landmine--bench-86%25%E2%86%9299%25-3987e5)](docs/BENCHMARK.md)
 [![website](https://img.shields.io/badge/web-landmine.tech-111110)](https://landmine.tech)
 
+Website and docs: [landmine.tech](https://landmine.tech) · For AI agents: [llms.txt](https://landmine.tech/llms.txt) · Cite: [`CITATION.cff`](CITATION.cff)
+
 Your coding agent is about to write `await db.$client.end()`. Your lockfile pins
 drizzle-orm **0.36.0**, an open GitHub issue filed against exactly that version
 says this call is broken, and a stranger in the thread posted the way around it.

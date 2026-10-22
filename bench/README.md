@@ -230,6 +230,7 @@ The bug itself is never mentioned in the prompt.
 @misc{landminebench2026,
   title  = {landmine-bench: Do Coding Agents Avoid Known Open Bugs in Pinned Dependency Versions?},
   year   = {2026},
-  note   = {Version 0. https://github.com/devanshranjan10/landmines}
+  author = {Ranjan, Devansh},
+  note   = {Version 0. https://landmine.tech/benchmark/}
 }
 ```
