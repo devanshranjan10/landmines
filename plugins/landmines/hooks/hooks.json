@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx -y landmines@0.2.0 hook",
+            "command": "npx -y landmines@0.2.1 hook",
             "timeout": 30,
             "statusMessage": "landmine: checking for known open bugs"
           }

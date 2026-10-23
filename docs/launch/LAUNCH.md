@@ -31,19 +31,14 @@ Re-render the video: `CHROME=… PLAYWRIGHT_CORE=… node scripts/video/render.m
 - **One command.** `npx landmines scan && npx landmines install --rules`
 - **Post your own.** `npx landmines share` prints one line and a README badge (fixed in 0.2.1 to count like `scan`).
 
-## Before launch (needs you)
+## Released
 
-1. **Publish 0.2.1** (npm's login token on this machine has expired):
-   `npm login`, then `sh scripts/release.sh`. That publishes to npm, pushes the tag (whose workflow lists the server
-   in the official MCP Registry), creates the GitHub release, dispatches GitHub Packages and bumps the Homebrew tap.
-   Check the registry step: `gh run list -w release -L 1`, then
-   `curl "https://registry.modelcontextprotocol.io/v0.1/servers?search=landmines"`.
-   Alternative without a local token: configure npm trusted publishing for `release.yml` on npmjs.com, then
-   `git tag -a v0.2.1 -m "landmines 0.2.1" && git push origin v0.2.1`.
-2. After it's live, bump the plugin pins (`plugins/landmines/.mcp.json`, `hooks/hooks.json`, `commands/scan.md`,
-   `plugin.json`) and the site's `softwareVersion` to 0.2.1, and add "listed in the official MCP Registry" to the
-   README only once the curl above returns it.
-3. Submit the directories below (they need your logins).
+0.2.1 is out (2026-10-23): npm, GitHub release, GitHub Packages, Homebrew tap, and the
+[official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=landmines) (active, 0.2.1).
+The plugin pins 0.2.1. Next release: bump `package.json`, `server.json` and the plugin pins, add a CHANGELOG section,
+push main, then `sh scripts/release.sh` (npm asks for browser approval).
+
+What's left is the directory submissions below (they need your logins).
 
 ## Directory submissions (prefilled)
 
@@ -61,8 +56,8 @@ Use the same text everywhere:
 
 | Directory | How | Status |
 |---|---|---|
-| Official MCP Registry | automatic from the `v0.2.1` tag (`server.json`) | waits on npm 0.2.1 |
-| PulseMCP | ingests the official registry | automatic |
+| Official MCP Registry | automatic from the `v0.2.1` tag (`server.json`) | listed, 0.2.1 |
+| PulseMCP | ingests the official registry | automatic (check in a few days) |
 | Glama | glama.ai/mcp/servers → Add Server (repo has `glama.json`) | needs your login |
 | awesome-mcp-servers (punkpeye) | PR adding one line under Developer Tools, with the Glama badge; their rule for agent-made PRs is to end the title with 🤖🤖🤖 | after Glama |
 | Smithery | smithery.ai → Publish (stdio, `npx -y landmines mcp`) | needs your login |
@@ -181,4 +176,3 @@ discussion invites it:
 - "Benchmarked on Codex / Cursor / …": only Claude Code was benchmarked.
 - "395 bugs in your project": they are open issues in dependency versions you pin, about 75% confirmed on the exact
   version, and your code may never touch them. Always say "open issues filed against the versions you pin".
-- "Listed in the MCP Registry" before the curl above returns it.

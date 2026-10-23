@@ -1,6 +1,6 @@
 #!/bin/sh
 # Release the version in package.json from this machine: npm, the tag (whose workflow lists it in the MCP Registry),
-# a GitHub release, GitHub Packages and the Homebrew tap. Each step is skipped if it is already done.
+# a GitHub release (which publishes to GitHub Packages) and the Homebrew tap. Each step is skipped if it is already done.
 # Needs: `npm login` (npm), `gh auth login` (everything else), a clean main that is pushed.
 # Usage: sh scripts/release.sh
 set -eu
@@ -36,8 +36,7 @@ else
   gh release create "v$v" --title "landmines $v" --notes-file /tmp/landmines-notes.md
 fi
 
-# 4. GitHub Packages (@devanshranjan10/landmines)
-gh workflow run github-packages.yml --ref main && echo "GitHub Packages: dispatched"
+# 4. GitHub Packages (@devanshranjan10/landmines): publishing the release above triggers github-packages.yml
 
 # 5. Homebrew tap: point the formula at the new npm tarball
 tgz="https://registry.npmjs.org/landmines/-/landmines-$v.tgz"
@@ -49,7 +48,9 @@ if grep -q "landmines-$v.tgz" "$f"; then
   echo "Homebrew: already at $v"
 else
   sed -i.bak -e "s#^  url .*#  url \"$tgz\"#" -e "s#^  sha256 .*#  sha256 \"$sha\"#" "$f" && rm "$f.bak"
-  git -C "$tap" commit -qam "landmines $v" && git -C "$tap" push -q && echo "Homebrew: tap updated to $v"
+  # commit as this repo's identity: a fresh clone uses the global one, and GitHub rejects pushes with a private email
+  git -C "$tap" -c user.name="$(git config user.name)" -c user.email="$(git config user.email)" commit -qam "landmines $v"
+  git -C "$tap" push -q && echo "Homebrew: tap updated to $v"
 fi
 rm -rf "$tap"
 

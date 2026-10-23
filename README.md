@@ -141,7 +141,9 @@ claude plugin install landmines@landmines
 ```
 
 **MCP server only.** Any MCP client can run it as `npx -y landmines mcp` (stdio), after
-`npx landmines scan` in the project. Its registry name is `io.github.devanshranjan10/landmines`.
+`npx landmines scan` in the project. It is listed in the
+[official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=landmines) as
+`io.github.devanshranjan10/landmines`.
 
 **Other ways to install:**
 

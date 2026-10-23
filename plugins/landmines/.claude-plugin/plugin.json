@@ -1,7 +1,7 @@
 {
   "name": "landmines",
   "displayName": "landmine",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Known open bugs in your exact dependency versions, checked before Claude edits the code that hits them.",
   "author": { "name": "Devansh Ranjan", "url": "https://landmine.tech" },
   "homepage": "https://landmine.tech",

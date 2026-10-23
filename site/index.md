@@ -14,7 +14,7 @@ updated: 2026-10-23
 - Homebrew: `brew install devanshranjan10/tap/landmines`
 - Author: Devansh Ranjan
 - License: MIT (code); CC BY 4.0 (benchmark task data)
-- Current version: 0.2.0 (2026-10-21)
+- Current version: 0.2.1 (2026-10-23)
 
 ## The problem
 
