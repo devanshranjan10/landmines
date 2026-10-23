@@ -122,6 +122,10 @@ function walk(dir) {
     if (MD_FOR[path]) alt.unshift(`<link rel="alternate" type="text/markdown" title="This page as Markdown" href="/${MD_FOR[path]}">`);
     html = html.replace('<link rel="stylesheet"', `${alt.join('\n')}\n${faqJsonLd(html)}<link rel="stylesheet"`);
     if (html.includes('<!-- @')) throw new Error(`unfilled partial in ${rel}`);
+    // Links that leave landmine.tech (GitHub, npm, the registry…) open in a new tab.
+    html = html.replace(/<a ([^>]*?)href="(https?:\/\/(?!landmine\.tech)[^"]+)"([^>]*)>/g, (tag, before, href, after) =>
+      /\btarget=/.test(tag) ? tag : `<a ${before}href="${href}" target="_blank" rel="noopener"${after}>`,
+    );
     writeFileSync(to, html);
     if (GENERATED_MD[path]) markdown[GENERATED_MD[path]] = toMarkdown(html, path);
   }
