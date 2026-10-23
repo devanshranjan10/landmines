@@ -16,6 +16,21 @@ const out = join(root, '.site-dist');
 const nav = readFileSync(join(src, 'partials/nav.html'), 'utf8');
 const footer = readFileSync(join(src, 'partials/footer.html'), 'utf8');
 
+// The home page's carousel: the checked examples from the lockfile scans (docs/showcase/examples.json).
+const esc = (t) => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const showcase = JSON.parse(readFileSync(join(root, 'docs/showcase/examples.json'), 'utf8'));
+const bugs = showcase.examples
+  .map((e, i) => {
+    const short = e.package.replace(/^@[^/]+\//, '').split(/[-/]/)[0].slice(0, 9);
+    const by = e.pinnedBy.length;
+    return `          <a class="bug${i % 3 === 2 ? ' alt' : ''}" href="${esc(e.url)}">
+            <div class="art"><canvas data-bug data-text="${esc(short)}" aria-hidden="true"></canvas></div>
+            <div class="body"><span class="pkg">${esc(e.package)}@${esc(e.version)} · ${esc(e.issue.replace(/^.*\//, ''))}</span><h3>${esc(e.title)}</h3><p>${esc(e.summary)}</p>
+            <div class="foot"><span>Pinned by ${by} of the 28 projects</span><span class="go">Read the issue ↗</span></div></div>
+          </a>`;
+  })
+  .join('\n');
+
 // Cache-bust the stylesheet and script: pages link them as /assets/x?v=<content hash>.
 const version = (file) => createHash('sha256').update(readFileSync(join(src, file))).digest('hex').slice(0, 10);
 const assets = { '/assets/site.css': version('assets/site.css'), '/assets/site.js': version('assets/site.js') };
@@ -101,7 +116,7 @@ function walk(dir) {
     // "/docs/index.html" -> "/docs/": mark that nav link as the current page.
     const path = '/' + rel.replace(/index\.html$/, '').replace(/\\/g, '/');
     const pageNav = path === '/' ? nav : nav.replace(`<a href="${path}">`, `<a href="${path}" aria-current="page">`);
-    let html = readFileSync(from, 'utf8').replace('<!-- @nav -->', pageNav).replace('<!-- @footer -->', footer);
+    let html = readFileSync(from, 'utf8').replace('<!-- @nav -->', pageNav).replace('<!-- @footer -->', footer).replace('<!-- @bugs -->', bugs);
     for (const [asset, v] of Object.entries(assets)) html = html.replaceAll(`"${asset}"`, `"${asset}?v=${v}"`);
     const alt = [`<link rel="alternate" type="text/plain" title="llms.txt" href="/llms.txt">`];
     if (MD_FOR[path]) alt.unshift(`<link rel="alternate" type="text/markdown" title="This page as Markdown" href="/${MD_FOR[path]}">`);

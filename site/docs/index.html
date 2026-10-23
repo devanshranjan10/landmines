@@ -6,7 +6,7 @@
 <title>Docs · landmine</title>
 <meta name="description" content="Install landmine, scan your lockfile for open GitHub issues filed against your exact dependency versions, and give your coding agent a known-bugs list, a pre-edit hook and an MCP server.">
 <link rel="canonical" href="https://landmine.tech/docs/">
-<meta name="theme-color" content="#f3f1ea">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="landmine">
 <meta property="og:url" content="https://landmine.tech/docs/">
@@ -20,8 +20,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/rethinksans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"TechArticle","headline":"landmine documentation","url":"https://landmine.tech/docs/","author":{"@type":"Person","name":"Devansh Ranjan","url":"https://github.com/devanshranjan10"},"about":{"@type":"SoftwareApplication","name":"landmine","url":"https://landmine.tech/"},"dateModified":"2026-10-23","proficiencyLevel":"Beginner"}
@@ -31,11 +30,12 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <!-- @nav -->
-<main id="main">
+<main id="main" class="rails">
   <section class="page-head">
+    <canvas class="dots" data-field="edge" aria-hidden="true"></canvas>
     <div class="wrap">
       <span class="label">Docs · v0.2</span>
-      <h1>Everything landmine does, in one page.</h1>
+      <h1>Everything landmine does, <em>in one page</em>.</h1>
       <p class="lede">Scan once, tell the agent first, keep the hook as a backstop. Node ≥ 22.12. The npm package is <code>landmines</code>, with an s; it installs the <code>landmine</code> and <code>landmines</code> commands.</p>
     </div>
   </section>
@@ -244,7 +244,8 @@ npx landmines cards --provider anthropic       <span class="c"># needs @anthropi
         <h2>Security</h2>
         <ul>
           <li><strong>Untrusted text reaches your agent.</strong> Issue titles, quotes and card summaries come from strangers on GitHub. landmine puts all of it inside one delimited untrusted block, neutralises forged delimiters, strips HTML, caps length, flags quotes that pipe a download into a shell or link unfamiliar hosts, and tells the agent never to follow instructions inside them. Don't let an agent run a quoted workaround without reading it.</li>
-          <li><strong>Network.</strong> <code>scan</code> sends your direct dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. <code>cards</code> sends each indexed issue's public thread to the model provider you choose. Nothing else leaves your machine.</li>
+          <li><strong>Network.</strong> <code>scan</code>, <code>lookup</code> and the MCP server's <code>landmine_lookup</code> send dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. <code>cards</code> sends each indexed issue's public thread to the model provider you choose. Nothing else leaves your machine.</li>
+          <li><strong>The hosted server.</strong> landmine.tech/mcp receives the package versions you look up and any snippet you pass to its <code>landmine_check</code>. It caches each package version's result for a day and stores no snippets.</li>
           <li><strong>Credentials.</strong> The GitHub token is sent only to api.github.com and never written to the index, cache or logs.</li>
           <li><strong>Files.</strong> Only <code>.landmine/</code>, the agent config files <code>install</code> names, and the marker-delimited rules sections. <code>install</code> refuses to rewrite a settings file it can't parse without losing comments.</li>
         </ul>

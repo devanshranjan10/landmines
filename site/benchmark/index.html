@@ -6,7 +6,7 @@
 <title>landmine-bench: do coding agents avoid known bugs in pinned versions?</title>
 <meta name="description" content="landmine-bench: 66 validated tasks built from open GitHub issues against pinned dependency versions. Results for Claude Sonnet, Opus and Haiku 5.5 with no help, web search, Context7 and landmine.">
 <link rel="canonical" href="https://landmine.tech/benchmark/">
-<meta name="theme-color" content="#f3f1ea">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="landmine">
 <meta property="og:url" content="https://landmine.tech/benchmark/">
@@ -20,8 +20,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/rethinksans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Dataset","name":"landmine-bench v0","description":"66 validated coding-agent tasks, each a small project pinning a library version with an open upstream bug, a feature request whose natural implementation hits it, and a hidden test.","url":"https://landmine.tech/benchmark/","license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"creator":{"@type":"Person","name":"Devansh Ranjan","url":"https://github.com/devanshranjan10"},"datePublished":"2026-10-21","version":"0","keywords":["coding agents","known bugs","dependency versions","benchmark","LLM evaluation"],"citation":"Ranjan, D. (2026). landmine-bench: Do Coding Agents Avoid Known Open Bugs in Pinned Dependency Versions? Version 0. https://landmine.tech/benchmark/","distribution":{"@type":"DataDownload","contentUrl":"https://github.com/devanshranjan10/landmines/tree/main/bench"}}
@@ -31,11 +30,12 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <!-- @nav -->
-<main id="main">
+<main id="main" class="rails">
   <section class="page-head">
+    <canvas class="dots" data-field="edge" aria-hidden="true"></canvas>
     <div class="wrap">
       <span class="label">landmine-bench v0</span>
-      <h1>Does your coding agent avoid a bug that's already been filed?</h1>
+      <h1>Does your coding agent avoid a bug <em>that's already been filed</em>?</h1>
       <p class="lede">Each task is a small project that pins a library version with an open, reproducible upstream bug, plus a feature request whose natural implementation walks into it. A hidden test decides. As far as we know, no public benchmark measured this before.</p>
       <div class="row">
         <a class="btn dark" href="#run">Run it on your agent</a>

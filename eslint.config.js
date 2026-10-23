@@ -3,7 +3,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'node_modules/**', 'examples/**', 'test/fixtures/**', 'coverage/**', 'docs/**', 'bench/tasks/**', 'bench/.venv*/**', 'eval/**', 'bench/.work/**', '.site-dist/**'] },
+  { ignores: ['dist/**', 'node_modules/**', 'examples/**', 'test/fixtures/**', 'coverage/**', 'docs/**', 'bench/tasks/**', 'bench/.venv*/**', 'eval/**', 'bench/.work/**', '.site-dist/**', '**/.wrangler/**'] },
   js.configs.recommended,
   ...tseslint.configs.recommendedTypeChecked,
   {

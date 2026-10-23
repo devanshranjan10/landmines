@@ -4,8 +4,9 @@
 // - HTML pages advertise that twin in a Link header;
 // - /media/ files answer byte-range requests (static assets don't, and Safari won't play a video without them);
 // - /mcp is the hosted MCP server (src/remote.ts): Streamable HTTP, no sign-in, rate-limited per IP;
+// - /api/lookup?q=next@16.4.0 is the same lookup as JSON, for the live lookup on the home page;
 // - everything else is served from static assets.
-import { createRemoteHandler, edgeCache } from '../../src/remote.ts';
+import { createRemoteHandler, edgeCache, lookupForSite } from '../../src/remote.ts';
 
 const HOST = 'landmine.tech';
 const MARKDOWN = { '/': '/index.md', '/docs/': '/docs.md', '/benchmark/': '/benchmark.md', '/faq/': '/faq.md' };
@@ -68,19 +69,40 @@ async function serveMcp(request, env) {
   if (request.method === 'GET' && accept.includes('text/html') && !accept.includes('text/event-stream')) {
     return Response.redirect(`https://${HOST}/docs/#remote-mcp`, 302);
   }
-  if (env.MCP_LIMIT && request.method === 'POST') {
-    const { success } = await env.MCP_LIMIT.limit({ key: request.headers.get('cf-connecting-ip') ?? 'unknown' });
-    if (!success) return jsonRpcError(429, 'Too many requests to landmine.tech/mcp; wait a minute. For heavy use, run `npx landmines mcp` locally.');
+  if (request.method === 'POST' && (await limited(request, env))) {
+    return jsonRpcError(429, 'Too many requests to landmine.tech/mcp; wait a minute. For heavy use, run `npx landmines mcp` locally.');
   }
-  mcp ??= createRemoteHandler({
-    githubToken: env.GITHUB_TOKEN,
-    http: { fetch: (url, init) => fetch(url, { signal: AbortSignal.timeout(15_000), ...init }) },
-    cache: edgeCache(caches.default),
-  });
+  mcp ??= createRemoteHandler(remoteEnv(env));
   const res = await mcp.fetch(request);
   const out = new Response(res.body, res);
   for (const [k, v] of Object.entries(CORS)) out.headers.set(k, v);
   return out;
+}
+
+function remoteEnv(env) {
+  return {
+    githubToken: env.GITHUB_TOKEN,
+    http: { fetch: (url, init) => fetch(url, { signal: AbortSignal.timeout(15_000), ...init }) },
+    cache: edgeCache(caches.default),
+  };
+}
+
+async function limited(request, env) {
+  if (!env.MCP_LIMIT) return false;
+  const { success } = await env.MCP_LIMIT.limit({ key: request.headers.get('cf-connecting-ip') ?? 'unknown' });
+  return !success;
+}
+
+async function serveLookupApi(request, env) {
+  const json = (body, status = 200) => new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store', ...CORS } });
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
+  if (request.method !== 'GET') return json({ error: 'GET /api/lookup?q=next@16.4.0' }, 405);
+  const q = new URL(request.url).searchParams.get('q') ?? '';
+  const specs = q.split(/[\s,]+/).map((s) => s.trim()).filter(Boolean);
+  if (specs.length === 0 || q.length > 600) return json({ error: 'Pass ?q= with exact versions, like next@16.4.0 or pandas==2.3.1.' }, 400);
+  if (await limited(request, env)) return json({ error: 'Too many lookups from your network; wait a minute.' }, 429);
+  const results = await lookupForSite(remoteEnv(env), specs);
+  return 'error' in results ? json(results, 503) : json({ results });
 }
 
 export default {
@@ -92,6 +114,7 @@ export default {
       return Response.redirect(url.toString(), 301);
     }
     if (url.pathname === '/mcp' || url.pathname === '/mcp/') return serveMcp(request, env);
+    if (url.pathname === '/api/lookup') return serveLookupApi(request, env);
     if (url.pathname.startsWith('/media/')) return ranged(request, env);
     const path = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
     const md = MARKDOWN[path];

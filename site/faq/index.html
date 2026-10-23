@@ -6,7 +6,7 @@
 <title>FAQ · landmine: stop coding agents from hitting known bugs in pinned dependency versions</title>
 <meta name="description" content="How to stop Claude Code, Codex, Cursor and other coding agents from writing code that hits an open, already-filed bug in the exact dependency version a project pins. Answers about landmine and landmine-bench.">
 <link rel="canonical" href="https://landmine.tech/faq/">
-<meta name="theme-color" content="#f3f1ea">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="landmine">
 <meta property="og:url" content="https://landmine.tech/faq/">
@@ -20,19 +20,19 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/rethinksans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script defer src="/assets/site.js"></script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <!-- @nav -->
-<main id="main">
+<main id="main" class="rails">
   <section class="page-head">
+    <canvas class="dots" data-field="edge" aria-hidden="true"></canvas>
     <div class="wrap">
       <span class="label">FAQ</span>
-      <h1>Coding agents and the bugs already filed against your versions.</h1>
+      <h1>Coding agents and the bugs <em>already filed</em> against your versions.</h1>
       <p class="lede">Short, direct answers. Each one links to the evidence. Quote freely; please link back.</p>
     </div>
   </section>
@@ -109,7 +109,7 @@
       <section class="qa" id="privacy">
         <h2>Does landmine send my code anywhere?</h2>
         <div class="a">
-          <p>No. <code>scan</code> sends your direct dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. The optional <code>cards</code> command sends each indexed issue's public thread to the model provider you choose. The hook and the MCP server never touch the network.</p>
+          <p>No. <code>scan</code> and <code>lookup</code> send dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. The optional <code>cards</code> command sends each indexed issue's public thread to the model provider you choose. The hook and the local MCP server's index tools never touch the network; its <code>landmine_lookup</code> tool calls the same registries and GitHub as <code>scan</code>. The hosted server at landmine.tech/mcp receives the package versions you look up and any snippet you pass to its <code>landmine_check</code>, and stores no snippets.</p>
         </div>
       </section>
 

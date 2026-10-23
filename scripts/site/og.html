@@ -2,34 +2,40 @@
 <!-- Social card source. Rendered to site/og.png by scripts/site/render-images.sh -->
 <html><head><meta charset="utf-8">
 <style>
-@font-face { font-family: 'Geist'; font-weight: 300 800; src: url(../../site/fonts/geist.woff2) format('woff2'); }
+@font-face { font-family: 'Rethink Sans'; font-weight: 400 800; src: url(../../site/fonts/rethinksans.woff2) format('woff2'); }
 @font-face { font-family: 'Geist Mono'; font-weight: 400 600; src: url(../../site/fonts/geistmono.woff2) format('woff2'); }
-@font-face { font-family: 'Instrument Serif'; src: url(../../site/fonts/instrumentserif.woff2) format('woff2'); }
-@font-face { font-family: 'Instrument Serif'; font-style: italic; src: url(../../site/fonts/instrumentserif-italic.woff2) format('woff2'); }
-html, body { margin: 0; width: 1200px; height: 630px; background: #f3f1ea; color: #17160f; overflow: hidden; }
-body { position: relative; font-family: Geist, sans-serif; }
-.in { position: absolute; inset: 60px 72px 58px; display: flex; flex-direction: column; }
-.top { display: flex; justify-content: space-between; align-items: center; }
-.brand { display: flex; align-items: center; gap: 12px; font: 600 30px/1 Geist; letter-spacing: -.02em; }
-.brand svg { width: 38px; height: 38px; }
-.url { font: 500 20px/1 'Geist Mono'; color: #7d7a70; }
-h1 { font: 400 76px/.96 'Instrument Serif'; letter-spacing: -.025em; margin: 50px 0 0; max-width: 980px; }
-h1 em { color: #e4531b; }
-.row { margin-top: auto; display: flex; align-items: flex-end; justify-content: space-between; border-top: 2px solid #17160f; padding-top: 26px; }
-.num { font: 400 92px/.85 'Instrument Serif'; letter-spacing: -.03em; }
-.num .f { color: #7d7a70; } .num .t { color: #e4531b; } .num .s { color: #c3beb1; font: 400 46px/1 Geist; vertical-align: .3em; margin: 0 8px; }
-.cap { font-size: 20px; color: #4b4940; margin-top: 14px; }
-.cmd { background: #17160f; color: #f3f1ea; border-radius: 12px; padding: 22px 26px; font: 450 24px/1 'Geist Mono'; white-space: nowrap; }
-.cmd b { color: #e4531b; font-weight: 400; margin-right: 12px; }
+html, body { margin: 0; width: 1200px; height: 630px; background: #fff; color: #09090b; overflow: hidden; }
+body { position: relative; font-family: 'Rethink Sans', sans-serif; }
+/* the minefield: hollow and filled dots in the right-hand gutter, a few of them mines */
+.field { position: absolute; inset: 0 0 0 auto; width: 430px;
+  background:
+    radial-gradient(circle, #ffcbb8 4.6px, transparent 5px) 0 0 / 26px 26px,
+    radial-gradient(circle, transparent 3.4px, #ffd9cb 3.6px 5px, transparent 5.3px) 13px 13px / 26px 26px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 55%); mask-image: linear-gradient(90deg, transparent, #000 55%); }
+.in { position: absolute; inset: 56px 72px 56px; display: flex; flex-direction: column; }
+.brand { display: flex; align-items: center; gap: 12px; font: 600 32px/1 'Rethink Sans'; letter-spacing: -.035em; }
+.brand svg { width: 40px; height: 40px; }
+.url { font: 500 20px/1 'Geist Mono'; color: #71717a; margin-left: auto; }
+.top { display: flex; align-items: center; }
+h1 { font: 400 74px/1.02 'Rethink Sans'; letter-spacing: -.05em; margin: 46px 0 0; max-width: 860px; }
+h1 em { font-style: normal; color: #ff5a1f; }
+.row { margin-top: auto; display: flex; align-items: flex-end; gap: 28px; }
+.frame { background: #fff3ee; border: 1px solid #ffe3d8; border-radius: 26px; padding: 6px; }
+.card { background: #fff; border: 1px solid #ececef; border-radius: 20px; padding: 20px 26px 22px; }
+.num { font: 400 80px/.9 'Rethink Sans'; letter-spacing: -.06em; color: #ff5a1f; white-space: nowrap; }
+.num .f { color: #a1a1aa; } .num .s { color: #dedee3; font-size: 40px; vertical-align: .35em; margin: 0 4px; }
+.cap { font-size: 18px; color: #3f3f46; margin-top: 10px; }
+.cmd { background: #09090b; color: #fff; border-radius: 99px; padding: 20px 28px; font: 450 23px/1 'Geist Mono'; white-space: nowrap; margin-bottom: 8px; }
+.cmd b { color: #ff5a1f; font-weight: 400; margin-right: 12px; }
 </style></head>
-<body><div class="in">
+<body><div class="field"></div><div class="in">
   <div class="top">
-    <div class="brand"><svg viewBox="0 0 24 24"><path d="M3 17.25V15c0-1.3 1-2.3 2.3-2.5L8.5 12h7l3.2.5c1.3.2 2.3 1.2 2.3 2.5v2.25z" fill="#17160f"/><rect x="8.25" y="8.6" width="7.5" height="2.8" rx="1.1" fill="#e4531b"/><path d="M1.5 17.25h21" stroke="#17160f" stroke-width="1.6" stroke-linecap="round"/></svg>landmine</div>
+    <div class="brand"><svg viewBox="0 0 24 24"><path d="M3 17.25V15c0-1.3 1-2.3 2.3-2.5L8.5 12h7l3.2.5c1.3.2 2.3 1.2 2.3 2.5v2.25z" fill="#09090b"/><rect x="8.25" y="8.6" width="7.5" height="2.8" rx="1.1" fill="#ff5a1f"/><path d="M1.5 17.25h21" stroke="#09090b" stroke-width="1.6" stroke-linecap="round"/></svg>landmine</div>
     <div class="url">landmine.tech</div>
   </div>
-  <h1>Your coding agent doesn't know about the bug in your <em>exact version</em>.</h1>
+  <h1>Your agent doesn't know the bug in your <em>exact version</em>.</h1>
   <div class="row">
-    <div><div class="num"><span class="f">86%</span><span class="s">→</span><span class="t">99%</span></div><div class="cap">Claude Sonnet 5.5 on post-cutoff bug traps</div></div>
+    <div class="frame"><div class="card"><div class="num"><span class="f">86%</span><span class="s">→</span>99%</div><div class="cap">Claude Sonnet 5.5 on post-cutoff bug traps</div></div></div>
     <div class="cmd"><b>$</b>npx landmines scan</div>
   </div>
 </div></body></html>

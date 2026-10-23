@@ -2,8 +2,9 @@ import { McpServer, createMcpHandler } from '@modelcontextprotocol/server';
 import { z } from 'zod';
 import { GitHubClient } from './github/client.js';
 import type { Http } from './http.js';
-import type { LookupCache, LookupResult } from './lookup.js';
+import { type LookupCache, type LookupResult, lookupPackage, lookupSummary, parseSpec } from './lookup.js';
 import { type LookupDeps, SERVER_INFO, registerLookupTools } from './mcpLookup.js';
+import { armedSymbols } from './policy.js';
 import { VERSION } from './version.js';
 
 /**
@@ -57,4 +58,70 @@ export function edgeCache(cache: { match(req: Request): Promise<Response | undef
       await cache.put(req(key), new Response(JSON.stringify(value), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' } }));
     },
   };
+}
+
+/** What landmine.tech/api/lookup returns per issue: enough for the site's live lookup, nothing from the full thread. */
+export interface PublicIssue {
+  id: string;
+  title: string;
+  url: string;
+  strength: string;
+  evidence: string;
+  apis: string[];
+  reactions: number;
+  comments: number;
+  opened: string;
+  workaround?: { kind: string; author: string; excerpt: string; url: string };
+}
+
+export interface PublicLookup {
+  spec: string;
+  status: LookupResult['status'];
+  name: string;
+  version: string;
+  latest?: boolean;
+  repo?: string;
+  detail?: string;
+  summary: string;
+  total: number;
+  issues: PublicIssue[];
+}
+
+/** The site's live lookup: up to 5 specs, the top issues of each, as JSON. */
+export async function lookupForSite(env: RemoteEnv, specs: string[], perPackage = 6): Promise<PublicLookup[] | { error: string }> {
+  const deps = await remoteDeps(env)();
+  if ('error' in deps) return { error: deps.error };
+  const out: PublicLookup[] = [];
+  for (const spec of specs.slice(0, 5)) {
+    const t = parseSpec(spec);
+    if ('error' in t) {
+      out.push({ spec, status: 'not-found', name: spec, version: '', detail: t.error, summary: t.error, total: 0, issues: [] });
+      continue;
+    }
+    const r = await lookupPackage(t, deps);
+    out.push({
+      spec,
+      status: r.status,
+      name: r.name,
+      version: r.version,
+      ...(r.latest ? { latest: true } : {}),
+      ...(r.repo ? { repo: r.repo } : {}),
+      ...(r.detail ? { detail: r.detail } : {}),
+      summary: lookupSummary(r),
+      total: r.landmines.length,
+      issues: r.landmines.slice(0, perPackage).map((l) => ({
+        id: l.id,
+        title: l.issue.title.slice(0, 200),
+        url: l.issue.url,
+        strength: l.evidence.strength,
+        evidence: l.evidence.quote.slice(0, 160),
+        apis: armedSymbols(l).slice(0, 4),
+        reactions: l.issue.reactions,
+        comments: l.issue.comments,
+        opened: l.issue.createdAt.slice(0, 10),
+        ...(l.workaround ? { workaround: { kind: l.workaround.kind, author: l.workaround.author, excerpt: l.workaround.excerpt.slice(0, 360), url: l.workaround.url } } : {}),
+      })),
+    });
+  }
+  return out;
 }

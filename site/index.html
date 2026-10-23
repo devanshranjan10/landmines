@@ -2,11 +2,11 @@
 <html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>landmine: known bugs in your exact dependency versions, for coding agents</title>
 <meta name="description" content="landmine reads your lockfile, finds the open GitHub issues filed against the exact versions you pin, and puts them where your coding agent reads them, with the workaround from the thread. Claude Sonnet 5.5: 86% to 99% on post-cutoff bug traps.">
 <link rel="canonical" href="https://landmine.tech/">
-<meta name="theme-color" content="#f3f1ea">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="landmine">
 <meta property="og:url" content="https://landmine.tech/">
@@ -25,8 +25,7 @@
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/rethinksans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"landmine","alternateName":"landmines","applicationCategory":"DeveloperApplication","operatingSystem":"macOS, Linux, Windows","license":"https://opensource.org/licenses/MIT","url":"https://landmine.tech/","downloadUrl":"https://www.npmjs.com/package/landmines","codeRepository":"https://github.com/devanshranjan10/landmines","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"softwareVersion":"0.2.1","author":{"@type":"Person","name":"Devansh Ranjan","url":"https://github.com/devanshranjan10"},"sameAs":["https://github.com/devanshranjan10/landmines","https://www.npmjs.com/package/landmines"],"installUrl":"https://www.npmjs.com/package/landmines","description":"Finds open GitHub issues filed against the exact dependency versions a project pins and puts them where coding agents read them, with the workaround from each issue thread."}
@@ -36,21 +35,67 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <!-- @nav -->
-<main id="main">
+<main id="main" class="rails">
 
   <section class="hero">
+    <canvas class="dots" data-field="hero" aria-hidden="true"></canvas>
     <div class="wrap">
-      <p class="meta label"><span class="pulse" aria-hidden="true"></span><a href="https://github.com/devanshranjan10/landmines/blob/main/CHANGELOG.md">v0.2.1</a> · open source CLI · MIT</p>
-      <h1 class="display">Your coding agent doesn't know about the bug in your <em>exact version</em>.</h1>
-      <div class="below">
-        <p class="lede">landmine reads your lockfile, finds the open GitHub issues filed against the versions you pin, and puts them where your agent reads them, with the workaround from the thread. Before it writes the code that hits them.</p>
-        <div class="actions">
-          <div class="cmd"><code><span class="p">$</span>npx landmines scan &amp;&amp; npx landmines install --rules</code><button type="button" data-copy="npx landmines scan &amp;&amp; npx landmines install --rules" aria-label="Copy command"></button></div>
-          <span class="small">Works with Claude Code, Codex, Cursor and <a href="#agents">17 more</a>. <code>uninstall</code> removes it all.</span>
+      <a class="badge" href="/docs/#remote-mcp"><span class="tag">New</span>Hosted MCP server<span class="hide-sm">&nbsp;at landmine.tech/mcp</span><span class="go">→</span></a>
+      <h1 class="display">Your agent doesn't know the bug in your <em>exact version</em>.</h1>
+      <p class="lede sub">landmine reads your lockfile, finds the open GitHub issues filed against the versions you pin, and puts them where your coding agent reads them, with the workaround from the thread. Before it writes the code that hits them.</p>
+      <div class="ctas">
+        <a class="btn dark" href="/docs/#quickstart">Get started</a>
+        <a class="btn accent" href="/docs/#remote-mcp">Connect the MCP server <span class="arrow">↗</span></a>
+      </div>
+      <p class="note">Open source, MIT. Works with Claude Code, Codex, Cursor and <a class="link" href="#agents">17 more agents</a>.</p>
+
+      <div class="console reveal" id="try">
+        <div class="slab">
+          <div class="box">
+            <div class="tabs" role="tablist" aria-label="Try landmine">
+              <button type="button" role="tab" id="t-look" aria-controls="p-look" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4.2-4.2"/></svg>Look up a version</button>
+              <button type="button" role="tab" id="t-scan" aria-controls="p-scan" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7V5a1 1 0 011-1h2M17 4h2a1 1 0 011 1v2M20 17v2a1 1 0 01-1 1h-2M7 20H5a1 1 0 01-1-1v-2M4 12h16"/></svg>Scan a project</button>
+              <button type="button" role="tab" id="t-mcp" aria-controls="p-mcp" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 7V3M15 7V3M6 7h12v4a6 6 0 01-12 0zM12 17v4"/></svg>Add to your agent</button>
+            </div>
+            <div class="pane" id="p-look" role="tabpanel" aria-labelledby="t-look">
+              <form class="lookup" data-lookup="#results" autocomplete="off">
+                <svg class="glyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 010 18M12 3a14 14 0 000 18"/></svg>
+                <label class="sr-only" for="q">Package and exact version</label>
+                <input id="q" name="q" type="text" spellcheck="false" autocapitalize="off" placeholder="next@16.4.0" aria-describedby="q-hint">
+                <button class="go" type="submit" aria-label="Look up open issues"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+              </form>
+              <div class="examples-row" id="q-hint"><span>Try</span><button type="button" data-try="vaul@1.1.2">vaul@1.1.2</button><button type="button" data-try="node-fetch@3.3.2">node-fetch@3.3.2</button><button type="button" data-try="pandas==2.3.1">pandas==2.3.1</button><button type="button" data-try="sympy==1.14.0">sympy==1.14.0</button></div>
+              <div class="results" id="results" aria-live="polite" hidden></div>
+            </div>
+            <div class="pane" id="p-scan" role="tabpanel" aria-labelledby="t-scan" hidden>
+              <div class="cmdline"><code><span class="p">$</span>npx landmines scan &amp;&amp; npx landmines install --rules</code><button type="button" data-copy="npx landmines scan &amp;&amp; npx landmines install --rules" data-copy-label>Copy</button></div>
+              <p class="hint">Reads every lockfile in the project, indexes the open issues for each exact version, then writes the known-bugs section into AGENTS.md and CLAUDE.md and adds the pre-edit hook. Needs Node ≥ 22.12 and a GitHub token with no scopes. <a href="/docs/#quickstart">Quickstart</a></p>
+            </div>
+            <div class="pane" id="p-mcp" role="tabpanel" aria-labelledby="t-mcp" hidden>
+              <div class="cmdline"><code><span class="p">$</span>claude mcp add --transport http landmine https://landmine.tech/mcp</code><button type="button" data-copy="claude mcp add --transport http landmine https://landmine.tech/mcp" data-copy-label>Copy</button></div>
+              <p class="hint">Nothing to install or sign into. Codex: <code>codex mcp add landmine --url https://landmine.tech/mcp</code>. Cursor, OpenCode and any client with Streamable HTTP take the same URL. <a href="/docs/#remote-mcp">Setup for each</a></p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <figure class="stage" style="margin-inline:0">
+      <div class="strip reveal">
+        <p class="lead">Works with the agents you already use: <a href="#agents">20 of them</a>, plus anything that reads AGENTS.md or speaks MCP.</p>
+        <div class="marquee" aria-label="Supported agents">
+          <div class="track"><span class="live"><i></i>Claude Code</span><span class="live"><i></i>Codex</span><span><i></i>Cursor</span><span><i></i>Gemini CLI</span><span><i></i>GitHub Copilot</span><span><i></i>OpenCode</span><span><i></i>Cline</span><span><i></i>Windsurf</span><span><i></i>Kilo Code</span><span><i></i>Antigravity</span><span><i></i>Goose</span><span><i></i>Amp</span><span><i></i>Qwen Code</span><span><i></i>Kiro</span></div>
+          <div class="track" aria-hidden="true"><span class="live"><i></i>Claude Code</span><span class="live"><i></i>Codex</span><span><i></i>Cursor</span><span><i></i>Gemini CLI</span><span><i></i>GitHub Copilot</span><span><i></i>OpenCode</span><span><i></i>Cline</span><span><i></i>Windsurf</span><span><i></i>Kilo Code</span><span><i></i>Antigravity</span><span><i></i>Goose</span><span><i></i>Amp</span><span><i></i>Qwen Code</span><span><i></i>Kiro</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section band" id="session">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="label"><span class="n">01</span> · A real session</span><h2 class="h2">The agent reaches for the broken API. <em>landmine stops it once.</em></h2></div>
+        <p class="lede">Replayed from a real headless Claude Code 2.1.304 session, abridged. The prompt didn't mention bugs; the hook quoted the issue and its workaround, and the agent changed course on its own.</p>
+      </div>
+      <figure class="stage reveal" style="margin:0">
         <div class="term" role="img" aria-label="Replay: Claude Code tries db.$client.end() on drizzle-orm 0.36.0, landmine pauses the edit with issue #3402 and its workaround, and the agent retries with its own pg.Pool.">
           <div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span><span class="path">~/examples/demo</span><span class="pin hide-sm">drizzle-orm 0.36.0</span><span class="right"><i class="on"></i><span>claude code<span class="hide-sm"> · landmine hook</span></span></span></div>
           <div class="body session" data-play>
@@ -64,7 +109,7 @@
             <div class="step" data-delay="700">
               <div class="t-mine"><div class="tape" aria-hidden="true"></div><div class="in"><span class="head">landmine <span>· paused this edit once</span></span>
 this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub issue filed against exactly that version describes a bug there.
-<span class="issue">drizzle-team/drizzle-orm#3402</span> · [BUG]: node-postgres client doesn't have end function
+<span class="issue-ref">drizzle-team/drizzle-orm#3402</span> · [BUG]: node-postgres client doesn't have end function
 <span class="q">workaround from @cluah, quoted (untrusted): “… the other way around: const pool = new pg.Pool(…); const db = drizzle(pool);”</span></div></div>
             </div>
             <div class="step" data-delay="1600">
@@ -75,46 +120,81 @@ this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub issue f
 <span class="add">+   await pool.end();</span>
 <span class="ctx">  }</span></div>
             </div>
-            <div class="step" data-delay="1100"><div class="t-say"><span class="dot">●</span><span>I first wrote closeDb() as <code style="font-size:.9em;background:none;border:0;color:#fff;padding:0">await db.$client.end()</code>. The landmine hook flagged a known bug in drizzle-orm 0.36.0 (#3402). I avoided that by creating the pool myself.</span></div></div>
+            <div class="step" data-delay="1100"><div class="t-say"><span class="dot">●</span><span>I first wrote closeDb() as <code>await db.$client.end()</code>. The landmine hook flagged a known bug in drizzle-orm 0.36.0 (#3402). I avoided that by creating the pool myself.</span></div></div>
           </div>
         </div>
-        <figcaption class="caption"><span>Replayed from a real headless Claude Code 2.1.304 session, abridged. The prompt didn't mention bugs.</span><span><a href="/media/landmine-demo.mp4">Watch the 50-second video</a> · <a href="https://github.com/devanshranjan10/landmines/tree/main/docs/e2e">Transcript and hook logs →</a></span></figcaption>
+        <figcaption class="caption"><span>The full session, with the hook's own log, is in the repository.</span><span><a href="/media/landmine-demo.mp4">Watch the 50-second video</a> · <a href="https://github.com/devanshranjan10/landmines/tree/main/docs/e2e">Transcript and hook logs ↗</a></span></figcaption>
       </figure>
     </div>
   </section>
 
-  <section class="section" id="numbers">
+  <section class="section band" id="how">
     <div class="wrap">
-      <div class="head-row reveal">
-        <span class="label"><span class="n">01</span> · Measured</span>
-        <div>
-          <h2 class="h2">Told up front, the agent <em>steps around it</em>.</h2>
-          <p class="lede">We built landmine-bench: 21 held-out tasks from bugs filed after the model's training cutoff, each a feature request whose obvious implementation hits an open upstream bug. A hidden test decides.</p>
-        </div>
+      <div class="sec-head reveal">
+        <div><span class="label"><span class="n">02</span> · How it works</span><h2 class="h2">Lockfile in. Known bugs out. <em>Before the edit.</em></h2></div>
+        <p class="lede">Each hit is checked to really name the version you pin, tied to the code symbols it is about, and given the most useful workaround from its thread.</p>
       </div>
-      <div class="proof">
-        <div class="figures reveal">
-          <div class="figure"><div class="num"><span class="from">86%</span><span class="sep">→</span><span class="to">99%</span></div><p>Claude Sonnet 5.5 pass rate with landmine's known-bugs section in CLAUDE.md (72/84 → 83/84 runs).</p></div>
-          <div class="figure"><div class="num">6–0</div><p>Wins and losses in a confirmation run on unseen seeds, written down before it ran. p = 0.03.</p></div>
-        </div>
-        <div class="chart reveal" data-max="42" data-rows='[{"name":"landmine rules section","passed":42,"note":"","hl":true},{"name":"Web search on","passed":36,"note":"landmine won 6, lost 0 (p = 0.03)"},{"name":"Context7 docs MCP","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"},{"name":"No help","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"}]'>
+      <div class="features">
+        <div class="feature frame reveal"><div class="card">
+          <div class="top"><h3 class="h3">Scan</h3><a class="btn accent sm" href="/docs/#commands">Explore <span class="arrow">↗</span></a></div>
+          <p>Reads your lockfiles, resolves each exact version, and finds the open GitHub issues filed against it.</p>
+          <div class="chips"><span class="chip">npm</span><span class="chip">pnpm</span><span class="chip">yarn</span><span class="chip">bun</span><span class="chip">uv</span><span class="chip">poetry</span><span class="chip">pip</span></div>
+          <div class="panel" style="margin-top:22px"><div class="win"><canvas data-scene="scan" aria-hidden="true"></canvas></div></div>
+        </div></div>
+        <div class="feature frame reveal"><div class="card">
+          <div class="top"><h3 class="h3">Tell the agent first</h3><a class="btn accent sm" href="/docs/#quickstart">Explore <span class="arrow">↗</span></a></div>
+          <p>A short known-bugs section in the file your agent already reads, ranked by the APIs your code calls. The part that measured as working.</p>
+          <div class="chips"><span class="chip">AGENTS.md</span><span class="chip">CLAUDE.md</span><span class="chip">GEMINI.md</span><span class="chip">Agent Skill</span></div>
+          <div class="panel" style="margin-top:22px"><div class="win"><canvas data-scene="rules" aria-hidden="true"></canvas></div></div>
+        </div></div>
+        <div class="feature frame reveal"><div class="card">
+          <div class="top"><h3 class="h3">Pre-edit hook</h3><a class="btn accent sm" href="/docs/#hook">Explore <span class="arrow">↗</span></a></div>
+          <p>Pauses an edit once when it uses an API from a matching issue, quotes the workaround, then lets the retry through. Offline, about 0.11 s.</p>
+          <div class="chips"><span class="chip">15 hook agents</span><span class="chip">5 plugins</span><span class="chip">check --staged</span></div>
+          <div class="panel" style="margin-top:22px"><div class="win"><canvas data-scene="hook" aria-hidden="true"></canvas></div></div>
+        </div></div>
+        <div class="feature frame reveal"><div class="card">
+          <div class="top"><h3 class="h3">MCP server</h3><a class="btn accent sm" href="/docs/#remote-mcp">Explore <span class="arrow">↗</span></a></div>
+          <p>For when the agent is already looking: a confusing error, or a dependency it is about to add. Local over stdio, or hosted with nothing to install.</p>
+          <div class="chips"><span class="chip">landmine_lookup</span><span class="chip">landmine_check</span><span class="chip">landmine_search</span></div>
+          <div class="panel" style="margin-top:22px"><div class="win"><canvas data-scene="mcp" aria-hidden="true"></canvas></div></div>
+        </div></div>
+      </div>
+      <div class="also reveal"><span>Also in the CLI</span><span class="chip">lookup</span><span class="chip">check</span><span class="chip">list</span><span class="chip">cards</span><span class="chip">share</span><span class="chip">uninstall</span></div>
+    </div>
+  </section>
+
+  <section class="section band" id="numbers">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div><span class="label"><span class="n">03</span> · Measured</span><h2 class="h2">Told up front, the agent <em>steps around it</em>.</h2></div>
+        <p class="lede">landmine-bench: 21 held-out tasks built from bugs filed after the model's training cutoff, each a feature request whose obvious implementation hits an open upstream bug. A hidden test decides.</p>
+      </div>
+      <div class="bento">
+        <div class="frame c5 reveal"><div class="card big">
+          <div class="num"><span class="from">86%</span><span class="sep">→</span>99%</div>
+          <p>Claude Sonnet 5.5's pass rate with landmine's known-bugs section in CLAUDE.md (72/84 → 83/84 runs).</p>
+        </div></div>
+        <div class="frame c7 reveal"><div class="card chart" data-max="42" data-rows='[{"name":"landmine rules section","passed":42,"note":"","hl":true},{"name":"Web search on","passed":36,"note":"landmine won 6, lost 0 (p = 0.03)"},{"name":"Context7 docs MCP","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"},{"name":"No help","passed":35,"note":"landmine won 7, lost 0 (p = 0.016)"}]'>
           <div class="title"><h3 class="h3">Against what you'd use instead</h3><span class="label">passed / 42</span></div>
-          <p class="desc">Sonnet 5.5, 21 tasks × 2 seeds, one batch. With web search and Context7 available, the agent used neither in 84 sessions: it didn't think to look.</p>
+          <p class="desc">Sonnet 5.5, 21 tasks × 2 seeds, one batch.</p>
           <div class="bars" role="list"></div>
           <div class="tip" role="status"></div>
           <noscript><p class="desc">landmine rules section 42 · web search on 36 · Context7 docs MCP 35 · no help 35</p></noscript>
           <p class="foot"><a class="link" href="/benchmark/">Method, every run and every caveat</a></p>
-        </div>
+        </div></div>
+        <div class="frame c4 reveal"><div class="card mini"><div class="k acc">6–0</div><h3>Confirmation run</h3><p>Wins and losses on unseen seeds, in a run written down before it ran. p = 0.03.</p></div></div>
+        <div class="frame c4 reveal"><div class="card mini"><div class="k">0 / 84</div><h3>Sessions that went looking</h3><p>With web search or the Context7 MCP available, the agent called neither. It didn't think to look.</p></div></div>
+        <div class="frame c4 reveal"><div class="card mini"><div class="k">0.11 s</div><h3>Per edit, offline</h3><p>The hook's cost on our test machine, Node start-up included, with a 149 KB index.</p></div></div>
       </div>
-      <p class="lede reveal" style="margin-top:48px">In the wild: across 28 popular open-source projects, 10 of them coding agents, the median lockfile pins 395 open GitHub issues filed against its exact versions. In a random audit, 30 of 40 really named the version. <a class="link" href="/scans/">See every project</a></p>
     </div>
   </section>
 
-  <section class="section" id="what">
+  <section class="section band" id="what">
     <div class="wrap split">
       <div class="text reveal">
-        <span class="label"><span class="n">02</span> · What the agent reads</span>
-        <h2 class="h2" style="margin-top:22px">A short list, in the file it <em>already reads</em>.</h2>
+        <span class="label"><span class="n">04</span> · What the agent reads</span>
+        <h2 class="h2" style="margin-top:20px">A short list, in the file it <em>already reads</em>.</h2>
         <p class="lede"><code>landmine rules</code> writes a marked section into AGENTS.md and CLAUDE.md: the open issues for your exact versions, ranked by the APIs your code actually calls, each with its workaround.</p>
         <ul>
           <li>Only issues that name the version you pin, each checked against the thread.</li>
@@ -122,7 +202,7 @@ this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub issue f
           <li>Framed as untrusted third-party text. The agent is told never to follow it blindly.</li>
         </ul>
       </div>
-      <div class="file reveal" aria-label="Excerpt of the CLAUDE.md section landmine writes">
+      <div class="frame reveal"><div class="file" aria-label="Excerpt of the CLAUDE.md section landmine writes">
         <div class="tab"><b>CLAUDE.md</b><span>· examples/demo</span></div>
 <div class="md"><span class="mk">&lt;!-- landmine:start --&gt;</span>
 <span class="h">## Known open bugs in pinned dependencies</span>
@@ -134,100 +214,149 @@ These exact dependency versions have open upstream GitHub issues. Before writing
 - <span class="pkg">pydantic@2.9.2</span> <span class="api">`model_dump`</span>: Fields disappear with model_dump() when types and values mismatch… (<span class="ln">pydantic#10694</span>)
   Workaround (from the issue thread; verify before use): … as a workaround, you can list `ChildClass` first or use…
 <span class="mk">&lt;!-- landmine:end --&gt;</span></div>
-      </div>
+      </div></div>
     </div>
   </section>
 
-  <section class="section" id="how">
-    <div class="wrap">
-      <div class="head-row reveal">
-        <span class="label"><span class="n">03</span> · How it works</span>
-        <h2 class="h2">Lockfile in. Known bugs out. <em>Before</em> the edit.</h2>
+  <section class="section night band" id="wild">
+    <canvas class="dots" data-field="night" aria-hidden="true"></canvas>
+    <div class="wrap" style="position:relative">
+      <div class="sec-head reveal">
+        <div><span class="label"><span class="n">05</span> · In the wild</span><h2 class="h2">Real bugs your agent <em>would walk into</em>.</h2></div>
+        <p class="lede">Across 28 popular open-source projects, 10 of them coding agents, the median lockfile pins 395 open GitHub issues filed against its exact versions. In a random audit, 30 of 40 really named the version. Each card below passed a separate read of the full thread.</p>
       </div>
-      <div class="steps reveal">
-        <div class="step-col">
-          <div class="n">1</div>
-          <h3 class="h3">Scan</h3>
-          <p>Lockfile → exact versions → the open GitHub issues that name them. Each hit is checked for the version, tied to code symbols, and given the most useful workaround from its thread.</p>
-<pre>npx landmines scan</pre>
-          <span class="note">npm · pnpm · yarn · bun · uv · poetry · pip</span>
+      <div data-carousel>
+        <div class="carousel reveal">
+<!-- @bugs -->
         </div>
-        <div class="step-col">
-          <div class="n">2</div>
-          <h3 class="h3">Tell the agent first</h3>
-          <p>The known-bugs section above, in AGENTS.md and CLAUDE.md. This is the part that measured as working.</p>
-<pre>npx landmines install --rules</pre>
-          <span class="note good">86% → 99% on landmine-bench</span>
-        </div>
-        <div class="step-col">
-          <div class="n">3</div>
-          <h3 class="h3">Backstop</h3>
-          <p>A pre-edit hook that pauses a matching edit once, an MCP server for "is this error a known bug?", and a pre-commit check. All offline after the scan.</p>
-<pre>npx landmines check --staged</pre>
-          <span class="note">the hook alone wasn't a significant win</span>
-        </div>
+        <div class="car-nav"><button type="button" data-prev aria-label="Previous"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></button><div class="pips" aria-hidden="true"></div><button type="button" data-next aria-label="Next"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></button></div>
       </div>
+      <div class="row reveal" style="display:flex;justify-content:center;margin-top:36px"><a class="btn" href="/scans/">See all 28 projects <span class="arrow">↗</span></a></div>
     </div>
   </section>
 
-  <section class="section" id="agents">
+  <section class="section band" id="agents">
     <div class="wrap">
-      <div class="head-row reveal">
-        <span class="label"><span class="n">04</span> · Agents</span>
-        <div>
-          <h2 class="h2">One command for <em>every agent</em> in the repo.</h2>
-          <p class="lede"><code>install</code> finds the agents configured in your project and writes each one its own hook or plugin, in its own deny format.</p>
-        </div>
+      <div class="sec-head reveal">
+        <div><span class="label"><span class="n">06</span> · Agents</span><h2 class="h2">One command for <em>every agent</em> in the repo.</h2></div>
+        <p class="lede"><code>install</code> finds the agents configured in your project and writes each one its own hook or plugin, in its own deny format.</p>
       </div>
-      <div class="spec reveal">
-        <div>
+      <div class="agents">
+        <div class="frame reveal"><div class="card">
           <h3>Pre-edit hook <span>15</span></h3>
           <p class="what">Pauses a matching edit once, then lets the retry through.</p>
-          <ul>
-            <li>Claude Code<sup>live</sup></li><li>Codex CLI<sup>live</sup></li><li>Cursor</li><li>Gemini CLI</li><li>GitHub Copilot</li><li>Windsurf / Devin</li><li>Antigravity</li><li>Factory Droid</li><li>Augment</li><li>Kiro</li><li>Qwen Code</li><li>Crush</li><li>Goose</li><li>OpenHands</li><li>Trae</li>
-          </ul>
-        </div>
-        <div>
+          <ul><li class="live">Claude Code</li><li class="live">Codex CLI</li><li>Cursor</li><li>Gemini CLI</li><li>GitHub Copilot</li><li>Windsurf / Devin</li><li>Antigravity</li><li>Factory Droid</li><li>Augment</li><li>Kiro</li><li>Qwen Code</li><li>Crush</li><li>Goose</li><li>OpenHands</li><li>Trae</li></ul>
+        </div></div>
+        <div class="frame reveal"><div class="card">
           <h3>In-process plugin <span>5</span></h3>
           <p class="what">Runs inside the agent and rejects the tool call.</p>
           <ul><li>OpenCode</li><li>Kilo Code</li><li>Cline</li><li>Amp</li><li>Pi</li></ul>
-        </div>
-        <div>
+        </div></div>
+        <div class="frame reveal"><div class="card">
           <h3>Rules + MCP <span>any</span></h3>
           <p class="what">For agents without a pre-edit hook: the rules section, an Agent Skill and the MCP server.</p>
           <ul><li>Freebuff</li><li>Aider</li><li>Zed</li><li>Roo Code</li><li>Continue</li><li>Warp</li></ul>
+        </div></div>
+      </div>
+      <p class="spec-foot reveal"><b style="color:var(--accent-ink);font:500 12px var(--mono)">live</b> means run end to end against the real agent. The rest are built from each agent's documentation and tested against its payload shapes. <a class="link" href="/docs/#agents">What install writes for each</a>.</p>
+      <div class="hosted frame reveal"><div class="card">
+        <div><h3 class="h3">Hosted MCP server, nothing to install</h3><p><code>https://landmine.tech/mcp</code> looks up the open issues filed against any exact npm or PyPI version, and checks a snippet against them. No sign-in.</p></div>
+        <div class="cmd"><code><span class="p">$</span>claude mcp add --transport http landmine https://landmine.tech/mcp</code><button type="button" data-copy="claude mcp add --transport http landmine https://landmine.tech/mcp" aria-label="Copy command"></button></div>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="section band" id="setup">
+    <div class="wrap split">
+      <div class="text reveal">
+        <span class="label"><span class="n">07</span> · Set it up</span>
+        <h2 class="h2" style="margin-top:20px">Your terminal, your MCP client, <em>or just ask</em>.</h2>
+        <p class="lede">Every route ends in the same place: the open issues for your exact versions, in front of the agent before it edits. <code>uninstall</code> removes all of it.</p>
+        <ul>
+          <li>Local and read-only. Only dependency names and versions leave your machine.</li>
+          <li>Commit <code>.landmine/index.json</code> and your team's agents share one index.</li>
+          <li>Also <code>npm i -D landmines</code> or <code>brew install devanshranjan10/tap/landmines</code>.</li>
+        </ul>
+      </div>
+      <div class="shell reveal">
+        <div class="bar"><span class="lights" aria-hidden="true"><i></i><i></i><i></i></span>
+          <div class="tabs" role="tablist" aria-label="Ways to set up landmine">
+            <button type="button" role="tab" id="s-cli" aria-controls="sp-cli" aria-selected="true">CLI</button>
+            <button type="button" role="tab" id="s-mcp" aria-controls="sp-mcp" aria-selected="false" tabindex="-1">MCP</button>
+            <button type="button" role="tab" id="s-plug" aria-controls="sp-plug" aria-selected="false" tabindex="-1">Plugin</button>
+            <button type="button" role="tab" id="s-ask" aria-controls="sp-ask" aria-selected="false" tabindex="-1">Prompt</button>
+          </div>
         </div>
+        <div class="pane" id="sp-cli" role="tabpanel" aria-labelledby="s-cli"><pre><span class="c"># find the open issues filed against your exact versions</span>
+<span class="p">$</span> npx landmines scan
+<span class="c"># known-bugs section in AGENTS.md + CLAUDE.md, plus the pre-edit hook</span>
+<span class="p">$</span> npx landmines install --rules
+<span class="c"># optional backstop for any agent: check what a commit adds</span>
+<span class="p">$</span> npx landmines check --staged --exit-code</pre></div>
+        <div class="pane" id="sp-mcp" role="tabpanel" aria-labelledby="s-mcp" hidden><pre><span class="c"># hosted: nothing to install</span>
+<span class="p">$</span> claude mcp add --transport http landmine https://landmine.tech/mcp
+<span class="p">$</span> codex mcp add landmine --url https://landmine.tech/mcp
+<span class="c"># local, over your project's index (stdio)</span>
+<span class="p">$</span> npx landmines install --mcp claude,cursor</pre></div>
+        <div class="pane" id="sp-plug" role="tabpanel" aria-labelledby="s-plug" hidden><pre><span class="c"># Claude Code plugin: the hook, the MCP server and /landmines:scan</span>
+<span class="p">$</span> claude plugin marketplace add devanshranjan10/landmines
+<span class="p">$</span> claude plugin install landmines@landmines
+<span class="c"># then, inside Claude Code</span>
+<span class="g">›</span> /landmines:scan</pre></div>
+        <div class="pane" id="sp-ask" role="tabpanel" aria-labelledby="s-ask" hidden><pre><span class="c"># paste this to your coding agent</span>
+Set up landmine in this project: run <span class="a">npx landmines scan</span>, then
+<span class="a">npx landmines install --rules</span>. Before editing code that uses
+a dependency, read the "Known open bugs" section in CLAUDE.md,
+and tell me which issue you worked around.
+<span class="c"># agent-readable instructions:</span> <a href="https://github.com/devanshranjan10/landmines/blob/main/llms-install.md">llms-install.md</a></pre></div>
       </div>
-      <p class="spec-foot"><sup style="color:#2f7a46;font:500 11px var(--mono)">live</sup> run end to end against the real agent. The rest are built from each agent's documentation and tested against its payload shapes. <a class="link" href="/docs/#agents">What install writes for each</a>.</p>
-      <p class="lede reveal" style="margin-top:48px">Nothing to install: the hosted MCP server at <code>https://landmine.tech/mcp</code> looks up the open issues filed against any exact npm or PyPI version, and checks a snippet against them. <a class="link" href="/docs/#remote-mcp">Connect your agent</a></p>
-<div class="code reveal" style="max-width:720px"><pre>claude mcp add --transport http landmine https://landmine.tech/mcp</pre></div>
     </div>
   </section>
 
-  <section class="section" id="limits">
+  <section class="section band" id="limits">
     <div class="wrap">
-      <div class="head-row reveal">
-        <span class="label"><span class="n">05</span> · Limits</span>
-        <h2 class="h2">What the numbers <em>don't</em> say.</h2>
+      <div class="sec-head solo reveal">
+        <div><span class="label"><span class="n">08</span> · Limits</span><h2 class="h2">What the numbers <em>don't</em> say.</h2></div>
       </div>
-      <div class="honest reveal">
-        <div><h3>It's our benchmark</h3><p>No public benchmark measured this, so we built landmine-bench. Splits were frozen before tuning, a confirmation run was written down before it ran, and every result file is public.</p></div>
-        <div><h3>Selection</h3><p>Every trap is a bug landmine had already indexed. The benchmark shows it helps once a bug is in the index, not how many bugs it finds. Only open issues that name your exact version are found.</p></div>
-        <div><h3>Prompt wording</h3><p>With fully specified prompts the agent already avoids most traps (19/21 unaided, 21/21 with landmine). The gap shows up when the request reads like a real one.</p></div>
-        <div><h3>The hook alone</h3><p>The pre-edit hook didn't measurably beat no help. Telling the agent up front did, which is why <code>--rules</code> comes first.</p></div>
+      <div class="honest">
+        <div class="frame reveal"><div class="card"><h3>It's our benchmark</h3><p>No public benchmark measured this, so we built landmine-bench. Splits were frozen before tuning, a confirmation run was written down before it ran, and every result file is public.</p></div></div>
+        <div class="frame reveal"><div class="card"><h3>Selection</h3><p>Every trap is a bug landmine had already indexed. The benchmark shows it helps once a bug is in the index, not how many bugs it finds. Only open issues that name your exact version are found.</p></div></div>
+        <div class="frame reveal"><div class="card"><h3>Prompt wording</h3><p>With fully specified prompts the agent already avoids most traps (19/21 unaided, 21/21 with landmine). The gap shows up when the request reads like a real one.</p></div></div>
+        <div class="frame reveal"><div class="card"><h3>The hook alone</h3><p>The pre-edit hook didn't measurably beat no help. Telling the agent up front did, which is why <code>--rules</code> comes first.</p></div></div>
       </div>
     </div>
   </section>
 
-  <section class="closing">
+  <section class="section band" id="faq">
+    <div class="wrap faq">
+      <div class="side reveal">
+        <span class="label"><span class="n">09</span> · FAQ</span>
+        <h2 class="h2" style="margin-top:20px">Frequently asked <em>questions</em></h2>
+        <p class="lede">Direct answers, with the numbers behind them.</p>
+        <a class="btn accent" href="/faq/">All questions <span class="arrow">↗</span></a>
+        <div class="panel"><div class="win"><canvas data-scene="ask" aria-hidden="true"></canvas></div></div>
+      </div>
+      <div class="list">
+        <details class="reveal" open><summary>What is landmine?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="a"><p>A free, open-source command-line tool (npm package <code>landmines</code>, MIT) that finds the open GitHub issues filed against the exact dependency versions a project pins, and puts them where a coding agent reads them before it writes code: a known-bugs section in AGENTS.md and CLAUDE.md, a pre-edit hook, and an MCP server. Each entry carries the affected API and the workaround from the issue thread.</p></div></details>
+        <details class="reveal"><summary>Doesn't web search or Context7 already solve this?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="a"><p>Not in our measurement. On the same 21 held-out tasks, in one batch, Claude Sonnet 5.5 passed 36/42 with web search on, 35/42 with the Context7 docs MCP, 35/42 with no help, and 42/42 with the landmine rules section. In all 84 web-search and Context7 sessions the agent never called either tool: nothing told it there was a bug to look for.</p></div></details>
+        <details class="reveal"><summary>How is this different from Dependabot, npm audit or Snyk?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="a"><p>Those tools report security vulnerabilities from advisory databases and propose upgrades. landmine reports ordinary open bugs (wrong results, crashes, type errors) filed as GitHub issues against the version you pin, whether or not a fix exists, and delivers them to the coding agent with the workaround from the thread, before it writes the code.</p></div></details>
+        <details class="reveal"><summary>Which languages and lockfiles?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="a"><p>JavaScript/TypeScript (npm package-lock.json, pnpm, yarn classic and berry, bun) and Python (uv.lock, poetry.lock, Pipfile.lock, pinned requirements*.txt). Direct dependencies only.</p></div></details>
+        <details class="reveal"><summary>Does landmine send my code anywhere?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="a"><p>No. <code>scan</code> and <code>lookup</code> send dependency names and versions to registry.npmjs.org, pypi.org and api.github.com. The hook and the local MCP server's index tools never touch the network. The hosted server at landmine.tech/mcp receives the versions you look up and any snippet you pass to its <code>landmine_check</code>, and stores no snippets.</p></div></details>
+        <details class="reveal"><summary>Isn't issue text from GitHub a prompt-injection risk?<span class="pm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></span></summary><div class="a"><p>Yes, and landmine treats it as one. Every quote reaches the agent inside one delimited block labelled as untrusted third-party text, forged delimiters are neutralised, HTML is stripped, length is capped, quotes that pipe downloads into a shell or link unfamiliar hosts are flagged, and the agent is told never to follow instructions inside them.</p></div></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing band">
+    <canvas class="dots" data-field="edge" aria-hidden="true"></canvas>
     <div class="wrap reveal">
       <h2 class="display">Check your lockfile <em>before</em> your agent does.</h2>
       <div class="row">
         <div class="cmd"><code><span class="p">$</span>npx landmines scan</code><button type="button" data-copy="npx landmines scan" aria-label="Copy command"></button></div>
-        <a class="btn" href="https://github.com/devanshranjan10/landmines"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>Star on GitHub</a>
-        <a class="btn" href="/docs/">Read the docs <span class="arrow">→</span></a>
+        <a class="btn dark" href="https://github.com/devanshranjan10/landmines"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .25a.75.75 0 01.673.418l1.882 3.815 4.21.612a.75.75 0 01.416 1.279l-3.046 2.97.719 4.192a.75.75 0 01-1.088.791L8 12.347l-3.766 1.98a.75.75 0 01-1.088-.79l.72-4.194L.818 6.374a.75.75 0 01.416-1.28l4.21-.611L7.327.668A.75.75 0 018 .25z"/></svg>Star on GitHub</a>
+        <a class="btn" href="/docs/">Read the docs <span class="arrow">↗</span></a>
       </div>
-      <p class="alt">Also <code>npm i -D landmines</code> or <code>brew install devanshranjan10/tap/landmines</code>. Needs <span class="nowrap">Node ≥ 22.12</span>. Commit <code>.landmine/index.json</code> and your team's agents share it.</p>
+      <p class="alt">Needs <span class="nowrap">Node ≥ 22.12</span> and a GitHub token with no scopes. Commit <code>.landmine/index.json</code> and your team's agents share it.</p>
     </div>
   </section>
 </main>

@@ -71,7 +71,7 @@ const html = `<!doctype html>
 <title>Open bugs in the exact versions popular projects pin: landmine scans</title>
 <meta name="description" content="landmine scanned the lockfiles of ${repos.length} popular open-source projects, including ${agents.length} coding agents. The median project pins ${fmt(med)} open GitHub issues filed against its exact versions. A random audit confirmed ${versionOk} of ${n}.">
 <link rel="canonical" href="https://landmine.tech/scans/">
-<meta name="theme-color" content="#f3f1ea">
+<meta name="theme-color" content="#ffffff">
 <meta property="og:type" content="article">
 <meta property="og:site_name" content="landmine">
 <meta property="og:url" content="https://landmine.tech/scans/">
@@ -85,8 +85,7 @@ const html = `<!doctype html>
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/rethinksans.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/assets/site.css">
 <script type="application/ld+json">
 ${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Dataset', name: 'landmine scans of popular open-source lockfiles', description: `Open GitHub issues filed against the exact dependency versions pinned by ${repos.length} open-source projects, with a random precision audit.`, url: 'https://landmine.tech/scans/', license: 'https://creativecommons.org/licenses/by/4.0/', isAccessibleForFree: true, creator: { '@type': 'Person', name: 'Devansh Ranjan', url: 'https://github.com/devanshranjan10' }, datePublished: summary.scanned, distribution: { '@type': 'DataDownload', contentUrl: 'https://github.com/devanshranjan10/landmines/tree/main/docs/showcase' } })}
@@ -96,11 +95,12 @@ ${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Dataset', name: '
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <!-- @nav -->
-<main id="main">
+<main id="main" class="rails">
   <section class="page-head">
+    <canvas class="dots" data-field="edge" aria-hidden="true"></canvas>
     <div class="wrap">
       <span class="label">Scans · ${summary.scanned}</span>
-      <h1>The bugs already sitting in popular lockfiles.</h1>
+      <h1>The bugs already sitting in <em>popular lockfiles</em>.</h1>
       <p class="lede">We ran <code>npx landmines scan</code> on ${repos.length} well-known open-source projects, ${agents.length} of them coding agents. Each one pins hundreds of dependency versions that have open, unfixed GitHub issues filed against that exact version. These are upstream bugs in libraries, not bugs in these projects, and a project may never touch the affected API.</p>
       <div class="row">
         <a class="btn dark" href="/docs/#quickstart">Scan your project</a>
