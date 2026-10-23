@@ -33,9 +33,11 @@ beforeAll(async () => {
 });
 
 describe('MCP server', () => {
-  it('lists the three tools', async () => {
+  it('lists the tools and tells the agent when to use them', async () => {
     const { tools } = await client.listTools();
-    expect(tools.map((t) => t.name).sort()).toEqual(['landmine_check', 'landmine_list', 'landmine_search']);
+    expect(tools.map((t) => t.name).sort()).toEqual(['landmine_check', 'landmine_list', 'landmine_lookup', 'landmine_search']);
+    expect(client.getInstructions()).toContain('landmine_check');
+    expect(client.getServerVersion()).toMatchObject({ name: 'landmine', websiteUrl: 'https://landmine.tech' });
   });
 
   it('landmine_check on a file reports the issue, evidence, corroboration and an untrusted-framed workaround', async () => {
@@ -71,13 +73,16 @@ describe('MCP server', () => {
     const other = new Client({ name: 'test2', version: '0.0.0' });
     await other.connect(c2);
     const r = await other.callTool({ name: 'landmine_list', arguments: {} });
-    expect(textOf(r)).toContain('Run `landmine scan`');
+    expect(textOf(r)).toContain('`npx landmines scan`');
+    expect(textOf(r)).toContain('landmine_lookup');
     expect((r as { isError?: boolean }).isError).toBe(true);
   });
 
-  it('declares every tool read-only, closed-world and idempotent', async () => {
+  it('declares every tool read-only and idempotent; only landmine_lookup leaves the machine', async () => {
     const { tools } = await client.listTools();
-    for (const t of tools) expect(t.annotations).toMatchObject({ readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false });
+    for (const t of tools) {
+      expect(t.annotations).toMatchObject({ readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: t.name === 'landmine_lookup' });
+    }
   });
 
   it('landmine_check refuses files outside the project', async () => {

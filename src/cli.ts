@@ -6,6 +6,7 @@ import { GitHubClient } from './github/client.js';
 import { findToken } from './github/token.js';
 import { type Http, liveHttp, recordingHttp, replayHttp } from './http.js';
 import { findProjectRoot } from './lockfiles/index.js';
+import { lookupPackage, lookupSummary, parseSpec } from './lookup.js';
 import { HARNESSES, type Harness } from './hook/payload.js';
 import { FORMATS, FORMAT_FOR, type Format, type HookMode, canWarn } from './hook/respond.js';
 import { runHook } from './hook/run.js';
@@ -410,8 +411,37 @@ export function buildProgram(env: NodeJS.ProcessEnv = process.env): Command {
     });
 
   program
+    .command('lookup')
+    .description('Open GitHub issues filed against exact package versions, without a lockfile or scan (next@16.4.0, pandas==2.3.1)')
+    .argument('<packages...>', 'exact versions: name@version (npm), name==version (PyPI), or a bare name for the latest')
+    .option('--pypi', 'treat name@version specs as PyPI packages')
+    .option('-m, --max-issues <n>', 'most issues to fetch per package version', positiveInt, 100)
+    .option('--json', 'print the results as JSON')
+    .action(async (specs: string[], opts: { pypi?: boolean; maxIssues: number; json?: boolean }) => {
+      const { http, replay } = httpFromEnv(env);
+      const token = replay ? { token: 'offline', source: 'GITHUB_TOKEN' as const } : await findToken(env);
+      if (!token) throw new CliError('landmine lookup needs a GitHub token. Set GITHUB_TOKEN or GH_TOKEN, or log in with `gh auth login`. A token with no scopes is enough.');
+      const targets = specs.map((s) => parseSpec(s, opts.pypi ? 'pypi' : 'npm'));
+      const bad = targets.find((t) => 'error' in t);
+      if (bad && 'error' in bad) throw new CliError(bad.error);
+      const github = new GitHubClient({ http, token: token.token });
+      const results = [];
+      for (const t of targets) if (!('error' in t)) results.push(await lookupPackage(t, { http, github, maxIssues: opts.maxIssues }));
+      if (opts.json) process.stdout.write(`${JSON.stringify(results, null, 2)}\n`);
+      else {
+        const color = { color: wantsColor(process.stdout, env) };
+        for (const r of results) {
+          process.stdout.write(`${lookupSummary(r)}\n`);
+          for (const l of r.landmines) process.stdout.write(`${humanLandmine(l, color)}\n`);
+          if (results.length > 1) process.stdout.write('\n');
+        }
+      }
+      if (results.some((r) => r.status === 'error')) process.exitCode = 2;
+    });
+
+  program
     .command('mcp')
-    .description('Run an MCP server (stdio) with landmine_check, landmine_search and landmine_list over the index')
+    .description('Run an MCP server (stdio): landmine_check, landmine_search and landmine_list over the index, and landmine_lookup for any version')
     .option('-r, --root <dir>', 'project with .landmine/index.json (default: working directory)')
     .action(async (opts: { root?: string }) => {
       const { serveStdio } = await import('./mcp.js');

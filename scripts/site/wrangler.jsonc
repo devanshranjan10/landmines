@@ -1,9 +1,11 @@
-// landmine.tech: a Worker serving .site-dist/ (built by scripts/site/build.mjs); worker.js only redirects http and www.
+// landmine.tech: a Worker serving .site-dist/ (built by scripts/site/build.mjs) and the hosted MCP server at /mcp.
+// Secret: GITHUB_TOKEN, a GitHub token with no scopes (`wrangler secret put GITHUB_TOKEN -c scripts/site/wrangler.jsonc`).
 // The custom domains create their own DNS records and certificates in the landmine.tech zone.
 {
   "name": "landmine-site",
   "main": "worker.js",
   "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
   "assets": {
     "directory": "../../.site-dist",
     "binding": "ASSETS",
@@ -16,5 +18,7 @@
     { "pattern": "www.landmine.tech", "custom_domain": true }
   ],
   "workers_dev": true,
-  "observability": { "enabled": false }
+  // 60 MCP requests a minute per IP; lookups are cached at the edge for a day.
+  "ratelimits": [{ "name": "MCP_LIMIT", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } }],
+  "observability": { "enabled": true }
 }

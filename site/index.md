@@ -25,6 +25,7 @@ Coding agents write code against the API they remember, not against the version 
 1. **Scan.** `npx landmines scan` reads lockfiles (npm, pnpm, yarn, bun, uv, poetry, Pipfile, pinned requirements), resolves exact versions, and finds open GitHub issues that name those versions. Each hit is checked for the version, tied to the code symbols it is about, and given the most useful workaround from its thread. The result is `.landmine/index.json`.
 2. **Tell the agent first.** `npx landmines install --rules` writes a short, marker-delimited "known open bugs" section into AGENTS.md and CLAUDE.md, ranked by the APIs the project's code actually calls. This is the part that measured as working.
 3. **Backstop.** A pre-edit hook pauses an edit once when it uses an API from a matching issue; an MCP server answers "is this error a known bug in the version we pin?"; `landmine check --staged` checks a commit. All offline after the scan.
+4. **Any version, no install.** The hosted MCP server at `https://landmine.tech/mcp` looks up the open issues filed against any exact npm or PyPI version (`landmine_lookup`) and checks a snippet against them (`landmine_check`). Claude Code: `claude mcp add --transport http landmine https://landmine.tech/mcp`. Locally: `npx landmines lookup next@16.4.0`.
 
 ## Example
 

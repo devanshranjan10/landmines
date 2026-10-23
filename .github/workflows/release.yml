@@ -1,9 +1,12 @@
 name: release
 # On a version tag (v0.2.1): publish to npm unless that version is already there, then list the same version in the
-# official MCP Registry (registry.modelcontextprotocol.io) as io.github.devanshranjan10/landmines.
+# official MCP Registry (registry.modelcontextprotocol.io) as tech.landmine/landmine, with the npm package (stdio) and
+# the hosted server https://landmine.tech/mcp.
 # npm auth: the NPM_TOKEN secret if set, otherwise npm trusted publishing (configure it once on npmjs.com:
 # package settings → Trusted publisher → GitHub Actions, repo devanshranjan10/landmines, workflow release.yml).
-# The MCP Registry uses this workflow's OIDC token; it checks package.json `mcpName` in the published npm version.
+# The MCP Registry proves the landmine.tech namespace with the Ed25519 key whose public half is served at
+# https://landmine.tech/.well-known/mcp-registry-auth (private half: the MCP_REGISTRY_PRIVATE_KEY secret), and checks
+# package.json `mcpName` in the published npm version.
 on:
   push:
     tags: ['v*']
@@ -38,6 +41,11 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: MCP Registry
         run: |
-          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
-          ./mcp-publisher login github-oidc
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.2/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login http --domain landmine.tech --private-key "$MCP_REGISTRY_PRIVATE_KEY"
           ./mcp-publisher publish
+          # 0.2.1 was listed as io.github.devanshranjan10/landmines; keep that name deprecated in favour of this one.
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher status --status deprecated --all-versions --message "Moved to tech.landmine/landmine" io.github.devanshranjan10/landmines || true
+        env:
+          MCP_REGISTRY_PRIVATE_KEY: ${{ secrets.MCP_REGISTRY_PRIVATE_KEY }}

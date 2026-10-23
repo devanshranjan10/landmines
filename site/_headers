@@ -35,3 +35,7 @@
 /faq.md
   Content-Type: text/markdown; charset=utf-8
   Link: <https://landmine.tech/faq/>; rel="canonical"
+
+/.well-known/mcp-registry-auth
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=300

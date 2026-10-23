@@ -199,6 +199,8 @@ These exact dependency versions have open upstream GitHub issues. Before writing
         </div>
       </div>
       <p class="spec-foot"><sup style="color:#2f7a46;font:500 11px var(--mono)">live</sup> run end to end against the real agent. The rest are built from each agent's documentation and tested against its payload shapes. <a class="link" href="/docs/#agents">What install writes for each</a>.</p>
+      <p class="lede reveal" style="margin-top:48px">Nothing to install: the hosted MCP server at <code>https://landmine.tech/mcp</code> looks up the open issues filed against any exact npm or PyPI version, and checks a snippet against them. <a class="link" href="/docs/#remote-mcp">Connect your agent</a></p>
+<pre class="reveal">claude mcp add --transport http landmine https://landmine.tech/mcp</pre>
     </div>
   </section>
 

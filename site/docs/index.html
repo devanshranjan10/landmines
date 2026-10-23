@@ -51,6 +51,7 @@
         <li><a href="#agents">Agents</a></li>
         <li><a href="#hook">Hook behaviour</a></li>
         <li><a href="#mcp">MCP server</a></li>
+        <li><a href="#remote-mcp">Hosted MCP server</a></li>
         <li><a href="#cards">Trigger cards</a></li>
         <li><a href="#lockfiles">Lockfiles and languages</a></li>
         <li><a href="#exit-codes">Exit codes</a></li>
@@ -88,7 +89,7 @@ brew install devanshranjan10/tap/landmines      <span class="c"># Homebrew (also
         <p><strong>Claude Code plugin.</strong> The hook, the MCP server and a <code>/landmines:scan</code> command, without touching your settings files:</p>
         <div class="code"><pre>claude plugin marketplace add devanshranjan10/landmines
 claude plugin install landmines@landmines</pre></div>
-        <p><strong>MCP server only.</strong> Any MCP client can run <code>npx -y landmines mcp</code> (stdio) after a scan. Registry name: <code>io.github.devanshranjan10/landmines</code>.</p>
+        <p><strong>MCP server only.</strong> Any MCP client can run <code>npx -y landmines mcp</code> (stdio) after a scan, or connect to the <a href="#remote-mcp">hosted server</a> at <code>https://landmine.tech/mcp</code> with nothing to install.</p>
         <p>The same package is on GitHub Packages as <code>@devanshranjan10/landmines</code>; that needs a token with <code>read:packages</code>, so npm is the simpler route. <code>landmine</code> (no s) on npm is an unrelated package.</p>
       </section>
 
@@ -116,6 +117,7 @@ git add .landmine/index.json .landmine/cards AGENTS.md CLAUDE.md</pre></div>
             <tr><td><code>cards</code></td><td>Optional. A model reads each indexed issue once and writes a trigger card. At most 50 new model calls per run unless <code>--all</code>. <code>--provider anthropic|claude-cli|openai</code>, <code>--model</code>, <code>--from</code>, <code>--export</code>.</td></tr>
             <tr><td><code>check &lt;files&gt;</code></td><td>Treats whole files as just written and reports matches, marked <code>[blocks: …]</code> or <code>[heads-up only]</code>. <code>--exit-code [--strict]</code>, <code>--json</code>.</td></tr>
             <tr><td><code>check --staged</code></td><td>Checks only the lines staged for commit.</td></tr>
+            <tr><td><code>lookup &lt;packages…&gt;</code></td><td>The open issues filed against exact versions, without a lockfile or scan: <code>lookup next@16.4.0 pandas==2.3.1</code>. A bare name means the latest. <code>--pypi</code>, <code>--json</code>.</td></tr>
             <tr><td><code>mcp</code></td><td>Runs the MCP server over stdio.</td></tr>
             <tr><td><code>list [package]</code></td><td>Shows indexed issues; by default only the ones the hook can act on. <code>--all</code>, <code>--json</code>.</td></tr>
             <tr><td><code>share</code></td><td>One postable line about this project's scan, plus a README badge. Counts and package names only.</td></tr>
@@ -170,14 +172,38 @@ git add .landmine/index.json .landmine/cards AGENTS.md CLAUDE.md</pre></div>
 
       <section id="mcp">
         <h2>MCP server</h2>
-        <p>The hook stays quiet unless a match is strong. The MCP server is for when the agent is already looking: a confusing error, or behaviour it can't explain. Three read-only tools:</p>
+        <p>The hook stays quiet unless a match is strong. The MCP server is for when the agent is already looking: a confusing error, behaviour it can't explain, or a dependency it is about to add. Four read-only tools:</p>
         <ul>
-          <li><code>landmine_check</code>: a file in the project, or a snippet.</li>
+          <li><code>landmine_check</code>: a file in the project, or a snippet, against the scanned index.</li>
           <li><code>landmine_search</code>: error text or an API name.</li>
           <li><code>landmine_list</code>: the indexed issues.</li>
+          <li><code>landmine_lookup</code>: any exact version, scanned or not (<code>next@16.4.0</code>, <code>pandas==2.3.1</code>), for adding or upgrading a dependency. It uses the same GitHub token as <code>scan</code>.</li>
         </ul>
         <div class="code"><pre>npx landmines install --mcp claude,cursor    <span class="c"># comma-separated; plain --mcp means Claude Code</span></pre></div>
         <p>In a live Claude Code session, asked whether inconsistent <code>RootModel</code> equality was a known bug in the pinned pydantic, Claude called <code>landmine_search</code> and answered with pydantic#10544, reported against 2.9.2.</p>
+        <p>Registry name: <code>tech.landmine/landmine</code> in the <a href="https://registry.modelcontextprotocol.io/v0.1/servers?search=tech.landmine">official MCP Registry</a>.</p>
+      </section>
+
+      <section id="remote-mcp">
+        <h2>Hosted MCP server</h2>
+        <p>Nothing to install: <code>https://landmine.tech/mcp</code> speaks Streamable HTTP and needs no sign-in. It has no project to read, so its tools take exact versions:</p>
+        <ul>
+          <li><code>landmine_lookup</code>: the open issues filed against each version, with the evidence and the workaround from the thread. Pass <code>query</code> (an error message) to keep only the matching ones.</li>
+          <li><code>landmine_check</code>: a code snippet plus the versions it runs on; returns the issues the code touches.</li>
+        </ul>
+        <div class="code"><pre><span class="c"># Claude Code</span>
+claude mcp add --transport http landmine https://landmine.tech/mcp
+
+<span class="c"># Codex</span>
+codex mcp add landmine --url https://landmine.tech/mcp
+
+<span class="c"># Cursor: .cursor/mcp.json (or ~/.cursor/mcp.json)</span>
+{ "mcpServers": { "landmine": { "url": "https://landmine.tech/mcp" } } }
+
+<span class="c"># OpenCode: opencode.json</span>
+{ "mcp": { "landmine": { "type": "remote", "url": "https://landmine.tech/mcp" } } }</pre></div>
+        <p>Any other client that supports Streamable HTTP takes the same URL.</p>
+        <p>Lookups are cached for a day and limited to 60 requests a minute per IP. For a whole project, the CLI is better: <code>scan</code> covers every dependency in your lockfile, and <code>install --rules</code> puts the result where the agent always reads it.</p>
       </section>
 
       <section id="cards">

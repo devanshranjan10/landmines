@@ -33,7 +33,9 @@ workaround, and then lets the retry through.
   *trigger card*: the API, the extra conditions that make the bug fire, and the
   workaround. The hook then checks cards offline. It never calls a model.
 - **`landmine mcp`.** An MCP server the agent can query on demand ("is this error a
-  known bug in the version we pin?").
+  known bug in the version we pin?"). There is also a hosted one at
+  `https://landmine.tech/mcp`, with nothing to install, for any exact npm or PyPI
+  version.
 - **The hook.** It runs before each edit, offline. It took 0.11 s per call on our test
   machine, including Node startup, with a 149 KB index that has trigger cards. It pauses an edit
   only when two things are true:
@@ -141,9 +143,20 @@ claude plugin install landmines@landmines
 ```
 
 **MCP server only.** Any MCP client can run it as `npx -y landmines mcp` (stdio), after
-`npx landmines scan` in the project. It is listed in the
-[official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=landmines) as
-`io.github.devanshranjan10/landmines`.
+`npx landmines scan` in the project.
+
+**Hosted MCP server, nothing to install.** `https://landmine.tech/mcp` (Streamable HTTP,
+no sign-in) has `landmine_lookup` and `landmine_check` for exact versions you pass it:
+
+```sh
+claude mcp add --transport http landmine https://landmine.tech/mcp   # Claude Code
+codex mcp add landmine --url https://landmine.tech/mcp               # Codex
+```
+
+Cursor (`.cursor/mcp.json`): `{ "mcpServers": { "landmine": { "url": "https://landmine.tech/mcp" } } }`.
+OpenCode (`opencode.json`): `{ "mcp": { "landmine": { "type": "remote", "url": "https://landmine.tech/mcp" } } }`.
+It has no project to read, so for a whole project `scan` and `install --rules` are
+better.
 
 **Other ways to install:**
 
@@ -174,7 +187,8 @@ global install).
 | `cards [--provider anthropic\|claude-cli\|openai] [--model id] [--max 50] [--all] [--from dir] [--export dir]` | Writes a trigger card per indexed issue, cached per issue, version and model.<br>At most 50 new model calls per run unless you pass `--all`. It prints the count first.<br>`claude-cli` uses an existing Claude Code login. `openai` takes any OpenAI-compatible endpoint (`OPENAI_BASE_URL`). `anthropic` needs `@anthropic-ai/sdk` installed. |
 | `check <files…> [--exit-code [--strict]] [--json]` | Treats whole files as just written and reports matches, marked `[blocks: …]` or `[heads-up only]`. |
 | `check --staged [--exit-code]` | Checks only the lines staged for commit, for a pre-commit hook or CI. A backstop for agents with no pre-edit hook. |
-| `mcp [--root]` | Runs an MCP server over stdio. Its read-only tools are `landmine_check` (a file in the project, or a snippet), `landmine_search` (error text or API name) and `landmine_list`. |
+| `lookup <packages…> [--pypi] [--json]` | The open issues filed against exact versions, with no lockfile or scan: `lookup next@16.4.0 pandas==2.3.1`. A bare name means the latest version. |
+| `mcp [--root]` | Runs an MCP server over stdio. Its read-only tools are `landmine_check` (a file in the project, or a snippet), `landmine_search` (error text or API name) and `landmine_list` over the index, and `landmine_lookup` for any exact version. |
 | `list [package] [--all] [--json]` | Shows indexed issues. By default, only the ones the hook can act on. |
 | `share` | Prints one postable line about this project's scan, plus a README badge. Counts and package names only. |
 | `uninstall [--harness …]` | Removes landmine's hook entries, plugin files, rules sections and skill. It deletes config files and directories it leaves empty, and skips config it never touched. |
@@ -451,7 +465,8 @@ exactly why it thinks the bug applies, and the agent can simply retry.
   `cmd /c` MCP commands and skips Cline's shell-script hook there, but no agent has
   been run with landmine on Windows yet.
 - **The MCP server only reads.** Its tools declare `readOnlyHint`, and
-  `landmine_check` refuses files outside the project.
+  `landmine_check` refuses files outside the project. `landmine_lookup` is the one tool
+  that uses the network (registries and GitHub, like `scan`).
 - **Some edits are invisible.** Edits made through shell commands (`sed -i`,
   `cat > file`) don't pass through any harness's edit hook. Notebooks are not checked.
 - **Workaround picking is heuristic.** It needs a phrase that claims a fix. A reply with
@@ -483,6 +498,9 @@ exactly why it thinks the bug applies, and the agent can simply retry.
   registry.npmjs.org, pypi.org and api.github.com. `landmine cards`, when you run it,
   sends each indexed issue's public thread to the model provider you pick. Nothing
   else leaves your machine, and the hook never touches the network.
+- **The hosted server** (`landmine.tech/mcp`) receives the package names and versions
+  you look up, and the snippet you pass to its `landmine_check`. It caches the results
+  for each package version for a day; it does not store snippets.
 - **Files landmine writes:**
   - `.landmine/index.json`, small enough to commit if your team wants to share it
   - `.landmine/cache/`, which is git-ignored

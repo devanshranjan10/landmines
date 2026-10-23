@@ -1,21 +1,29 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.devanshranjan10/landmines",
+  "name": "tech.landmine/landmine",
   "title": "landmine",
-  "description": "Known open GitHub issues in your exact pinned dependency versions, for coding agents.",
+  "description": "Known open GitHub issues in exact npm and PyPI versions, with workarounds, for coding agents.",
   "websiteUrl": "https://landmine.tech",
   "repository": { "url": "https://github.com/devanshranjan10/landmines", "source": "github" },
-  "version": "0.2.1",
+  "icons": [
+    { "src": "https://landmine.tech/icon.png", "mimeType": "image/png", "sizes": ["400x400"] },
+    { "src": "https://landmine.tech/favicon.svg", "mimeType": "image/svg+xml", "sizes": ["any"] }
+  ],
+  "version": "0.2.2",
+  "remotes": [{ "type": "streamable-http", "url": "https://landmine.tech/mcp" }],
   "packages": [
     {
       "registryType": "npm",
       "identifier": "landmines",
-      "version": "0.2.1",
+      "version": "0.2.2",
       "runtimeHint": "npx",
       "transport": { "type": "stdio" },
       "packageArguments": [
         { "type": "positional", "value": "mcp", "description": "Run the MCP server over stdio" },
         { "type": "named", "name": "--root", "description": "Project directory with .landmine/index.json (default: the working directory). Create it with `npx landmines scan`.", "format": "filepath", "isRequired": false }
+      ],
+      "environmentVariables": [
+        { "name": "GITHUB_TOKEN", "description": "GitHub token for landmine_lookup (no scopes needed). Without it, the GitHub CLI's login is used.", "isRequired": false, "isSecret": true }
       ]
     }
   ]

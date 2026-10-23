@@ -1,6 +1,10 @@
 {
   "mcpServers": {
-    "landmines": {
+    "landmine": {
+      "type": "http",
+      "url": "https://landmine.tech/mcp"
+    },
+    "landmines-local": {
       "command": "npx",
       "args": ["-y", "landmines", "mcp"]
     }

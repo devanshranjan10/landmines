@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.2 (2026-10-23)
+
+### Added
+- **Hosted MCP server at https://landmine.tech/mcp.** Streamable HTTP, no install or sign-in. `landmine_lookup`
+  returns the open issues filed against exact npm or PyPI versions (`next@16.4.0`, `pandas==2.3.1`), optionally
+  filtered by an error message; `landmine_check` checks a code snippet against the versions it runs on. Results are
+  cached for a day; 60 requests a minute per IP. `claude mcp add --transport http landmine https://landmine.tech/mcp`.
+- **`landmine lookup <packages…>`** and a `landmine_lookup` tool in the local MCP server: any exact version, scanned
+  or not, through the same registry → GitHub → verify pipeline as `scan`. A bare name means the latest version.
+- The MCP servers now introduce themselves with instructions (when to call which tool), a title, an icon and
+  https://landmine.tech.
+
+### Changed
+- **MCP Registry name: `tech.landmine/landmine`**, verified through landmine.tech, listing both the npm package
+  (stdio) and the hosted server. The 0.2.1 name `io.github.devanshranjan10/landmines` is deprecated.
+- Without an index, the local MCP server's tools say how to create one and point at `landmine_lookup`.
+
 ## 0.2.1 (2026-10-23)
 
 ### Added

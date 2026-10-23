@@ -3,7 +3,10 @@
 // - agents that ask for Markdown (Accept: text/markdown) get the page's .md twin;
 // - HTML pages advertise that twin in a Link header;
 // - /media/ files answer byte-range requests (static assets don't, and Safari won't play a video without them);
+// - /mcp is the hosted MCP server (src/remote.ts): Streamable HTTP, no sign-in, rate-limited per IP;
 // - everything else is served from static assets.
+import { createRemoteHandler, edgeCache } from '../../src/remote.ts';
+
 const HOST = 'landmine.tech';
 const MARKDOWN = { '/': '/index.md', '/docs/': '/docs.md', '/benchmark/': '/benchmark.md', '/faq/': '/faq.md' };
 
@@ -41,6 +44,45 @@ async function ranged(request, env) {
   return out;
 }
 
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, DELETE, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Accept, Authorization, Mcp-Session-Id, Mcp-Protocol-Version, Last-Event-ID',
+  'Access-Control-Expose-Headers': 'Mcp-Session-Id, Mcp-Protocol-Version',
+  'Access-Control-Max-Age': '86400',
+};
+
+let mcp;
+
+function jsonRpcError(status, message) {
+  return new Response(JSON.stringify({ jsonrpc: '2.0', id: null, error: { code: -32000, message } }), {
+    status,
+    headers: { 'Content-Type': 'application/json', ...CORS },
+  });
+}
+
+async function serveMcp(request, env) {
+  if (request.method === 'OPTIONS') return new Response(null, { status: 204, headers: CORS });
+  // A person opening the URL in a browser gets the setup instructions, not a protocol error.
+  const accept = request.headers.get('accept') ?? '';
+  if (request.method === 'GET' && accept.includes('text/html') && !accept.includes('text/event-stream')) {
+    return Response.redirect(`https://${HOST}/docs/#remote-mcp`, 302);
+  }
+  if (env.MCP_LIMIT && request.method === 'POST') {
+    const { success } = await env.MCP_LIMIT.limit({ key: request.headers.get('cf-connecting-ip') ?? 'unknown' });
+    if (!success) return jsonRpcError(429, 'Too many requests to landmine.tech/mcp; wait a minute. For heavy use, run `npx landmines mcp` locally.');
+  }
+  mcp ??= createRemoteHandler({
+    githubToken: env.GITHUB_TOKEN,
+    http: { fetch: (url, init) => fetch(url, { signal: AbortSignal.timeout(15_000), ...init }) },
+    cache: edgeCache(caches.default),
+  });
+  const res = await mcp.fetch(request);
+  const out = new Response(res.body, res);
+  for (const [k, v] of Object.entries(CORS)) out.headers.set(k, v);
+  return out;
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -49,6 +91,7 @@ export default {
       url.hostname = HOST;
       return Response.redirect(url.toString(), 301);
     }
+    if (url.pathname === '/mcp' || url.pathname === '/mcp/') return serveMcp(request, env);
     if (url.pathname.startsWith('/media/')) return ranged(request, env);
     const path = url.pathname.endsWith('/') ? url.pathname : `${url.pathname}/`;
     const md = MARKDOWN[path];

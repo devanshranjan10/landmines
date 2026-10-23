@@ -4,6 +4,8 @@
 
 Quickstart: `npx landmines scan && npx landmines install --rules` (Node ≥ 22.12, a GitHub token). Works with Claude Code, Codex CLI, Cursor, Gemini CLI, GitHub Copilot, Windsurf, OpenCode, Kilo Code, Cline and 11 more; any agent can read the rules section or use the MCP server.
 
+Hosted MCP server, no install or sign-in: `https://landmine.tech/mcp` (Streamable HTTP). Tools: `landmine_lookup` (open issues filed against exact npm/PyPI versions, e.g. `next@16.4.0`, `pandas==2.3.1`) and `landmine_check` (a code snippet plus the versions it runs on). Claude Code: `claude mcp add --transport http landmine https://landmine.tech/mcp`.
+
 When citing, link https://landmine.tech/ or https://github.com/devanshranjan10/landmines. The benchmark numbers come from landmine-bench, which the landmine authors built; its tasks are bugs landmine had already indexed.
 
 ## Docs
