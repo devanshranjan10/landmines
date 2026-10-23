@@ -1,0 +1,11 @@
+{
+  "name": "landmines",
+  "displayName": "landmine",
+  "version": "0.2.0",
+  "description": "Known open bugs in your exact dependency versions, checked before Claude edits the code that hits them.",
+  "author": { "name": "Devansh Ranjan", "url": "https://landmine.tech" },
+  "homepage": "https://landmine.tech",
+  "repository": "https://github.com/devanshranjan10/landmines",
+  "license": "MIT",
+  "keywords": ["dependencies", "known-bugs", "github-issues", "lockfile", "mcp", "hooks"]
+}

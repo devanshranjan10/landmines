@@ -8,6 +8,10 @@
 
 Website and docs: [landmine.tech](https://landmine.tech) · For AI agents: [llms.txt](https://landmine.tech/llms.txt) · Cite: [`CITATION.cff`](CITATION.cff)
 
+[![A real Claude Code session: landmine pauses an edit that uses drizzle-orm's $client.end(), cites issue #3402 and the workaround from the thread, and the agent switches to its own pg.Pool](docs/media/landmine-hook.gif)](https://landmine.tech/media/landmine-demo.mp4)
+
+<sub>A real Claude Code session, replayed from its transcript (`docs/e2e`). Full 50-second video: [landmine.tech/media/landmine-demo.mp4](https://landmine.tech/media/landmine-demo.mp4).</sub>
+
 Your coding agent is about to write `await db.$client.end()`. Your lockfile pins
 drizzle-orm **0.36.0**, an open GitHub issue filed against exactly that version
 says this call is broken, and a stranger in the thread posted the way around it.
@@ -128,6 +132,16 @@ picks the command that matches how you installed:
 Commit `.landmine/index.json` (and `.landmine/cards/`) so teammates and CI share one
 index. `.landmine/.gitignore` keeps the raw cache and the per-machine install registry
 out of git.
+
+**Claude Code plugin** (the hook, the MCP server and a `/landmines:scan` command, nothing written to your settings):
+
+```sh
+claude plugin marketplace add devanshranjan10/landmines
+claude plugin install landmines@landmines
+```
+
+**MCP server only.** Any MCP client can run it as `npx -y landmines mcp` (stdio), after
+`npx landmines scan` in the project. Its registry name is `io.github.devanshranjan10/landmines`.
 
 **Other ways to install:**
 

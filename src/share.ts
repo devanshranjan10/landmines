@@ -26,6 +26,6 @@ export function shareText(index: LandmineIndex): string {
       ? `landmine found no open GitHub issues filed against the exact dependency versions this project pins (${scanned} checked).`
       : `landmine found ${issues} open GitHub issue${issues === 1 ? '' : 's'} filed against the exact versions this project pins, in ${withIssues} of ${scanned} dependencies${top.length ? ` (most: ${top.join(', ')})` : ''}. ${armed} point at specific APIs, ${workarounds} ${workarounds === 1 ? 'has' : 'have'} a workaround in the thread.`;
   const message = `${issues} open bug${issues === 1 ? '' : 's'} in pinned deps`;
-  const badge = `[![landmine](https://img.shields.io/badge/${badgeSegment('landmine')}-${badgeSegment(message)}-${issues ? 'e05d44' : '44cc11'})](https://www.npmjs.com/package/landmines)`;
+  const badge = `[![landmine](https://img.shields.io/badge/${badgeSegment('landmine')}-${badgeSegment(message)}-${issues ? 'e05d44' : '44cc11'})](https://landmine.tech)`;
   return [line, 'Check yours: npx landmines scan', '', 'README badge:', badge].join('\n');
 }

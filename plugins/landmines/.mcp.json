@@ -1,0 +1,5 @@
+{
+  "mcpServers": {
+    "landmines": { "command": "npx", "args": ["-y", "landmines@0.2.0", "mcp"] }
+  }
+}

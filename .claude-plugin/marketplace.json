@@ -1,0 +1,13 @@
+{
+  "name": "landmines",
+  "owner": { "name": "Devansh Ranjan", "url": "https://landmine.tech" },
+  "description": "landmine: known open bugs in your exact dependency versions, put in front of Claude Code before it edits.",
+  "plugins": [
+    {
+      "name": "landmines",
+      "source": "./plugins/landmines",
+      "description": "Known open GitHub issues filed against the exact dependency versions your project pins: a pre-edit hook, an MCP server, and /landmines:scan.",
+      "category": "development"
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+<!doctype html>
+<!--
+  The landmine demo video, as a page. render.mjs seeks it frame by frame (window.seek(t)) and pipes the frames to ffmpeg.
+  Every terminal line is real: the scan and install output come from a live run on examples/demo (2026-10-23), the
+  Claude Code session from docs/e2e/claude-session-final.jsonl, the numbers from docs/BENCHMARK.md (run K).
+  Open it in a browser with ?play to watch it in real time.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>landmine demo</title>
+<style>
+@font-face { font-family: 'Geist'; font-weight: 300 800; src: url(../../site/fonts/geist.woff2) format('woff2'); }
+@font-face { font-family: 'Geist Mono'; font-weight: 400 600; src: url(../../site/fonts/geistmono.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-weight: 400; src: url(../../site/fonts/instrumentserif.woff2) format('woff2'); }
+@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; src: url(../../site/fonts/instrumentserif-italic.woff2) format('woff2'); }
+:root {
+  --paper: #f3f1ea; --paper-2: #ebe8de; --ink: #17160f; --ink-2: #4b4940; --ink-3: #7d7a70; --rule: #d8d4c8;
+  --accent: #e4531b; --accent-ink: #b8400f;
+  --term: #15140f; --term-2: #1d1c17; --term-rule: #2e2c25; --term-fg: #e8e5da; --term-dim: #8a867a;
+  --green: #86d39a; --red: #ff8466; --amber: #ffb35c; --blue: #9dbcff;
+  --serif: 'Instrument Serif', Georgia, serif; --sans: 'Geist', system-ui, sans-serif; --mono: 'Geist Mono', Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: var(--paper); color: var(--ink); }
+body { font: 400 24px/1.5 var(--sans); -webkit-font-smoothing: antialiased; }
+.scene { position: absolute; inset: 0; opacity: 0; }
+em { font-style: italic; color: var(--accent); }
+code { font-family: var(--mono); }
+
+/* corner brand + progress, on every scene but the first and last */
+.brand { position: absolute; left: 96px; top: 56px; display: flex; align-items: center; gap: 12px; font: 600 26px/1 var(--sans); letter-spacing: -.02em; }
+.brand svg { width: 34px; height: 34px; }
+.site { position: absolute; right: 96px; top: 62px; font: 500 22px/1 var(--mono); color: var(--ink-3); }
+
+.cap { position: absolute; left: 96px; top: 118px; width: 1728px; font: 400 60px/1.08 var(--serif); letter-spacing: -.01em; }
+.cap small { display: block; margin-top: 14px; font: 400 25px/1.4 var(--sans); color: var(--ink-2); letter-spacing: 0; }
+
+.term { position: absolute; left: 96px; top: 300px; width: 1728px; height: 700px; background: var(--term); border-radius: 18px; overflow: hidden; box-shadow: 0 30px 80px -30px rgba(23, 22, 15, .45); }
+.term .bar { height: 52px; display: flex; align-items: center; gap: 10px; padding: 0 22px; border-bottom: 1px solid var(--term-rule); background: var(--term-2); }
+.term .bar i { width: 14px; height: 14px; border-radius: 50%; background: #3a382f; }
+.term .bar span { margin-left: 14px; font: 500 20px/1 var(--mono); color: var(--term-dim); }
+.term .bar b { margin-left: auto; font: 500 18px/1 var(--mono); color: var(--term-dim); }
+.term .view { position: absolute; left: 0; right: 0; top: 52px; bottom: 0; overflow: hidden; }
+.term .body { padding: 28px 36px; font: 400 25px/1.55 var(--mono); color: var(--term-fg); }
+.term .body > div { opacity: 0; white-space: pre-wrap; min-height: 1.55em; }
+.p { color: var(--accent); }
+.dim { color: var(--term-dim); }
+.g { color: var(--green); }
+.r { color: var(--red); }
+.a { color: var(--amber); }
+.b { color: var(--blue); }
+.w { color: #fff; font-weight: 500; }
+.caret { display: inline-block; width: .6em; height: 1.1em; vertical-align: -.2em; background: var(--term-fg); margin-left: 2px; }
+
+/* Claude Code look */
+.prompt { border: 1px solid #3a382f; border-radius: 10px; padding: 14px 20px; color: #fff; }
+.prompt .p { margin-right: 10px; }
+.tool { margin-top: 22px; }
+.tool .st { float: right; font-size: 22px; }
+.diff { margin: 6px 0 0 28px; padding: 6px 18px; border-left: 2px solid var(--term-rule); font-size: 23px; }
+.mine { margin: 16px 0 0 28px; border: 1px solid #5a3a1f; border-radius: 12px; overflow: hidden; background: #1e1710; }
+.mine .tape { height: 10px; background: repeating-linear-gradient(-45deg, var(--amber) 0 12px, #1e1710 12px 24px); }
+.mine .in { padding: 16px 22px 18px; font-size: 23px; }
+.mine .q { display: block; margin-top: 10px; padding-left: 16px; border-left: 3px solid #4a3a28; color: #c9c3b3; }
+.say { margin-top: 24px; color: var(--term-fg); font: 400 26px/1.5 var(--sans); }
+.say::before { content: '● '; color: #fff; }
+
+.note { position: absolute; right: 96px; bottom: 36px; font: 400 19px/1 var(--mono); color: var(--ink-3); }
+
+/* CLAUDE.md panel */
+.file { position: absolute; left: 640px; top: 470px; width: 1184px; background: #fffdf7; border: 1px solid var(--rule); border-radius: 14px; box-shadow: 0 30px 80px -30px rgba(23, 22, 15, .35); overflow: hidden; }
+.file .fh { display: flex; justify-content: space-between; padding: 14px 24px; border-bottom: 1px solid var(--rule); font: 500 20px/1 var(--mono); color: var(--ink-3); background: var(--paper-2); }
+.file .fb { padding: 20px 28px 22px; font: 400 21px/1.5 var(--mono); color: var(--ink-2); white-space: pre-wrap; }
+.file .fb .h { color: var(--ink); font-weight: 600; }
+.file .fb .k { color: var(--accent-ink); }
+.file .fb .l { color: #2c55b8; }
+
+/* title + end cards */
+.center { display: flex; flex-direction: column; justify-content: center; padding: 0 160px; }
+.big { font: 400 112px/1.02 var(--serif); letter-spacing: -.02em; margin: 0; }
+.kicker { font: 500 26px/1 var(--mono); color: var(--ink-3); margin-bottom: 40px; display: flex; align-items: center; gap: 16px; }
+.kicker svg { width: 44px; height: 44px; }
+.cmd { display: inline-flex; align-items: center; gap: 18px; margin-top: 56px; padding: 26px 36px; background: var(--term); color: #fff; border-radius: 14px; font: 500 44px/1 var(--mono); align-self: flex-start; }
+.cmd .p { font-weight: 400; }
+.links { margin-top: 44px; font: 400 30px/1.6 var(--sans); color: var(--ink-2); }
+.links b { color: var(--ink); font-weight: 600; }
+
+/* chart */
+.chart { position: absolute; left: 96px; top: 360px; width: 1728px; }
+.row { display: grid; grid-template-columns: 470px 1fr; align-items: center; gap: 32px; height: 112px; border-top: 1px solid var(--rule); }
+.row:last-child { border-bottom: 1px solid var(--rule); }
+.row .name { font: 500 30px/1.2 var(--sans); }
+.row .name small { display: block; font: 400 22px/1.3 var(--sans); color: var(--ink-3); margin-top: 4px; }
+.row .track { position: relative; height: 56px; margin-right: 180px; }
+.row .fill { position: absolute; left: 0; top: 0; bottom: 0; width: 0; background: var(--ink-3); border-radius: 4px; }
+.row.hl .fill { background: var(--accent); }
+.row .val { position: absolute; top: 50%; transform: translateY(-50%); font: 600 34px/1 var(--mono); white-space: nowrap; }
+.row .val span { font: 400 24px/1 var(--sans); color: var(--ink-3); margin-left: 14px; }
+.foot { position: absolute; left: 96px; top: 860px; font: 400 30px/1.4 var(--sans); color: var(--ink-2); }
+.foot b { color: var(--ink); }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="logo" viewBox="0 0 32 32"><rect width="32" height="32" rx="7" fill="#17160f"/><g transform="translate(16 17) scale(1.12) translate(-12 -13)"><path d="M3 17.25V15c0-1.3 1-2.3 2.3-2.5L8.5 12h7l3.2.5c1.3.2 2.3 1.2 2.3 2.5v2.25z" fill="#f3f1ea"/><rect x="8.25" y="8.6" width="7.5" height="2.8" rx="1.1" fill="#e4531b"/><path d="M1.5 17.25h21" stroke="#f3f1ea" stroke-width="1.6" stroke-linecap="round"/></g></symbol>
+</svg>
+
+<!-- 0: title -->
+<section class="scene center" data-in="0" data-out="3.9">
+  <div class="kicker" data-in="0.2"><svg><use href="#logo"/></svg>landmine</div>
+  <h1 class="big" data-in="0.5">Your coding agent doesn't know about the bug in your <em>exact version</em>.</h1>
+</section>
+
+<!-- 1: scan -->
+<section class="scene" data-in="3.9" data-out="12.6">
+  <div class="brand"><svg><use href="#logo"/></svg>landmine</div><div class="site">landmine.tech</div>
+  <div class="cap">It reads your lockfile and finds the open GitHub issues filed against those exact versions.</div>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i><span>~/demo</span><b>real output · 13 s, sped up</b></div>
+    <div class="view"><div class="body">
+<div data-in="4.1"><span class="p">$ </span><span data-type="4.3" data-cps="22">npx landmines scan</span></div>
+<div data-in="5.4" class="dim">landmine scanned 7 direct dependencies from package-lock.json, requirements.txt</div>
+<div data-in="5.6"> </div>
+<div data-in="6.0">  <span class="w">date-fns@3.6.0</span>      21 open issues · 13 tied to symbols · 4 workarounds</div>
+<div data-in="6.2">  <span class="w">drizzle-orm@0.36.0</span>  11 open issues · 7 tied to symbols · 4 workarounds</div>
+<div data-in="6.4">  <span class="w">pg@8.13.1</span>           1 open issue · 0 tied to symbols · 0 workarounds</div>
+<div data-in="6.6">  <span class="w">typescript@5.6.3</span>    14 open issues · 11 tied to symbols · 4 workarounds</div>
+<div data-in="6.8">  <span class="w">pydantic@2.9.2</span>      16 open issues · 15 tied to symbols · 9 workarounds</div>
+<div data-in="7.0">  <span class="w">requests@2.32.3</span>     6 open issues · 5 tied to symbols · 3 workarounds</div>
+<div data-in="7.2"> </div>
+<div data-in="7.5"><span class="a">Found 69 open issues filed against your exact versions in 6 of 7 packages.</span></div>
+<div data-in="7.7">51 point at specific symbols the hook will watch. <span class="g">24 have a workaround in the comments.</span></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- 2: rules -->
+<section class="scene" data-in="12.6" data-out="19.6">
+  <div class="brand"><svg><use href="#logo"/></svg>landmine</div><div class="site">landmine.tech</div>
+  <div class="cap">Then it writes them where your agent reads first.<small>A short known-bugs section in AGENTS.md and CLAUDE.md, ranked by the APIs your code calls. Plus a pre-edit hook and an MCP server.</small></div>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i><span>~/demo</span><b>real output</b></div>
+    <div class="view"><div class="body">
+<div data-in="12.8"><span class="p">$ </span><span data-type="13.0" data-cps="24">npx landmines install --rules</span></div>
+<div data-in="14.6"><span class="g">Installed:</span> claude hook in .claude/settings.json</div>
+<div data-in="14.8"><span class="g">Rules created:</span> AGENTS.md</div>
+<div data-in="15.0"><span class="g">Rules created:</span> CLAUDE.md</div>
+    </div></div>
+  </div>
+  <div class="file" data-in="15.7" data-rise>
+    <div class="fh"><span>CLAUDE.md</span><span>excerpt</span></div>
+<div class="fb"><span class="h">## Known open bugs in pinned dependencies</span>
+
+These exact dependency versions have open upstream GitHub issues. Before writing code that uses an API listed here, check whether your code meets the condition; if it does, use the workaround or a different API, and tell the user which issue you worked around.
+
+- <span class="h">date-fns@3.6.0</span> <span class="k">`subDays`</span>: subDays adds one hour arround DST (<span class="l">date-fns/date-fns#3750</span>)
+- <span class="h">date-fns@3.6.0</span> <span class="k">`formatRFC3339`</span>: formatRFC3339 outputs two digit year (<span class="l">date-fns/date-fns#3825</span>)
+- <span class="h">pydantic@2.9.2</span> <span class="k">`model_dump`</span>: Fields disappear with model_dump() when types and values mismatch… (<span class="l">pydantic/pydantic#10694</span>)
+…</div>
+  </div>
+</section>
+
+<!-- 3: the session -->
+<section class="scene" data-in="19.6" data-out="36.4">
+  <div class="brand"><svg><use href="#logo"/></svg>landmine</div><div class="site">landmine.tech</div>
+  <div class="cap">Your agent hits one. landmine stops it, with the workaround.</div>
+  <div class="term">
+    <div class="bar"><i></i><i></i><i></i><span>claude · ~/demo</span><b>a real Claude Code session, replayed</b></div>
+    <div class="view" data-scroll><div class="body">
+<div data-in="19.8" class="prompt"><span class="p">&gt;</span><span data-type="20.0" data-cps="70">Add an exported async function closeDb() to src/db.ts that closes the underlying Postgres connection pool, so test suites can shut down cleanly. Keep the change small.</span></div>
+<div data-in="22.7" class="tool"><span class="w">● Read</span>(src/db.ts)</div>
+<div data-in="23.5" class="tool"><span class="w">● Edit</span>(src/db.ts)<span class="st r" data-in="24.6">✕ paused by landmine</span></div>
+<div data-in="23.6" class="diff"><span class="g">+ export async function closeDb() {
++   await db.$client.end();
++ }</span></div>
+<div data-in="24.7" class="mine"><div class="tape"></div><div class="in"><span class="a">landmine: this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub issue filed against exactly that version describes a bug there.</span>
+
+<span class="b">drizzle-team/drizzle-orm#3402</span> · [BUG]: node-postgres client doesn't have end function
+<span class="dim">Why it applies here: this file also uses `drizzle-orm/node-postgres`, which the issue names.</span>
+<span class="q"><span class="dim">Workaround from @cluah, quoted from the thread:</span>
+// using pool
+const pool = new pg.Pool(process.env.DATABASE_URL);
+const db = drizzle(pool);</span></div></div>
+<div data-in="28.6" class="tool"><span class="w">● Edit</span>(src/db.ts)<span class="st g" data-in="29.5">✓ allowed</span></div>
+<div data-in="28.7" class="diff"><span class="g">+ const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL ?? 'postgres://localhost/demo' });
++ export const db = drizzle(pool);
++ export async function closeDb() {
++   await pool.end();
++ }</span></div>
+<div data-in="30.4" class="say">I first wrote closeDb() as <code>await db.$client.end()</code>. The landmine hook flagged a known bug in drizzle-orm 0.36.0 (#3402) … I avoided that by creating the pool myself. <code>pool.end()</code> is correctly typed.</div>
+    </div></div>
+  </div>
+  <div class="note">Claude Code 2.1.304 · transcript: github.com/devanshranjan10/landmines/tree/main/docs/e2e</div>
+</section>
+
+<!-- 4: numbers -->
+<section class="scene" data-in="36.4" data-out="45.2">
+  <div class="brand"><svg><use href="#logo"/></svg>landmine</div><div class="site">landmine.tech/benchmark</div>
+  <div class="cap">Measured: does the agent avoid the bug?<small>Claude Sonnet 5.5 on 21 held-out traps, built from bugs filed after its training cutoff. Each run graded by a hidden test. Same tasks, same batch.</small></div>
+  <div class="chart">
+    <div class="row hl" data-in="36.9"><div class="name">landmine section in CLAUDE.md</div><div class="track"><div class="fill" data-bar="42" data-max="42" data-at="37.1"></div><div class="val" data-in="37.9">42/42</div></div></div>
+    <div class="row" data-in="37.2"><div class="name">Web search on<small>never searched once</small></div><div class="track"><div class="fill" data-bar="36" data-max="42" data-at="37.4"></div><div class="val" data-in="38.2">36/42</div></div></div>
+    <div class="row" data-in="37.5"><div class="name">No help</div><div class="track"><div class="fill" data-bar="35" data-max="42" data-at="37.7"></div><div class="val" data-in="38.5">35/42</div></div></div>
+    <div class="row" data-in="37.8"><div class="name">Context7 docs MCP<small>never called once</small></div><div class="track"><div class="fill" data-bar="35" data-max="42" data-at="38.0"></div><div class="val" data-in="38.8">35/42</div></div></div>
+  </div>
+  <div class="foot" data-in="39.6">All held-out runs: <b>86% → 99%</b> (72/84 → 83/84). A confirmation run written down before it ran: <b>6 wins, 0 losses</b>.</div>
+</section>
+
+<!-- 5: end -->
+<section class="scene center" data-in="45.2" data-out="99">
+  <div class="kicker"><svg><use href="#logo"/></svg>landmine · open source · MIT</div>
+  <h1 class="big" style="font-size:96px">Put the known bugs in front of your agent.</h1>
+  <div class="cmd" data-in="45.8"><span class="p">$</span>npx landmines scan</div>
+  <div class="links" data-in="46.4"><b>landmine.tech</b> · github.com/devanshranjan10/landmines<br>Claude Code, Codex, Cursor, Gemini CLI, Copilot, OpenCode and 14 more agents</div>
+</section>
+
+<script>
+const DURATION = 50;
+const FADE = 0.35;
+const clamp = (x) => Math.max(0, Math.min(1, x));
+const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+const num = (el, a) => parseFloat(el.getAttribute(a));
+
+const faders = [...document.querySelectorAll('[data-in]')];
+const typers = [...document.querySelectorAll('[data-type]')].map((el) => ({ el, text: el.textContent, t0: num(el, 'data-type'), cps: num(el, 'data-cps') }));
+const bars = [...document.querySelectorAll('[data-bar]')];
+const views = [...document.querySelectorAll('[data-scroll]')];
+
+// For each scrolling terminal, how far it has to scroll once each line is showing: measured once, with everything laid out.
+for (const v of views) {
+  const body = v.firstElementChild;
+  v._steps = [...body.children].map((c) => ({ t: num(c, 'data-in'), need: Math.max(0, c.offsetTop + c.offsetHeight + 40 - v.clientHeight) }));
+}
+
+function seek(t) {
+  for (const el of faders) {
+    const tin = num(el, 'data-in');
+    const tout = el.hasAttribute('data-out') ? num(el, 'data-out') : Infinity;
+    const o = Math.min(ease((t - tin) / FADE), 1 - ease((t - tout) / FADE));
+    el.style.opacity = o;
+    if (el.hasAttribute('data-rise')) el.style.transform = `translateY(${(1 - ease((t - tin) / 0.6)) * 40}px)`;
+  }
+  for (const ty of typers) {
+    const n = Math.max(0, Math.min(ty.text.length, Math.floor((t - ty.t0) * ty.cps)));
+    const typing = t >= ty.t0 - 0.6 && n < ty.text.length;
+    ty.el.innerHTML = '';
+    ty.el.append(ty.text.slice(0, n));
+    if (typing && Math.floor(t * 2.4) % 2 === 0) { const c = document.createElement('span'); c.className = 'caret'; ty.el.append(c); }
+  }
+  for (const b of bars) b.style.width = `${(num(b, 'data-bar') / num(b, 'data-max')) * 100 * ease((t - num(b, 'data-at')) / 0.9)}%`;
+  for (const b of bars) { const val = b.nextElementSibling; val.style.left = `calc(${b.style.width} + 22px)`; }
+  for (const v of views) {
+    let y = 0;
+    for (const s of v._steps) if (t >= s.t) y = Math.max(y, s.need * ease((t - s.t) / 0.5));
+    v.firstElementChild.style.transform = `translateY(${-y}px)`;
+  }
+}
+window.seek = seek;
+window.DURATION = DURATION;
+seek(0);
+if (location.search.includes('play')) { const t0 = performance.now(); const tick = () => { seek((performance.now() - t0) / 1000); requestAnimationFrame(tick); }; tick(); }
+</script>
+</body>
+</html>

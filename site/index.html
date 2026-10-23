@@ -16,6 +16,10 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="landmine: Claude Sonnet 5.5 went from 86% to 99% on post-cutoff bug traps">
+<meta property="og:video" content="https://landmine.tech/media/landmine-demo.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="1920">
+<meta property="og:video:height" content="1080">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://landmine.tech/og.png">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -74,7 +78,7 @@ this edit uses `$client.end` from drizzle-orm@0.36.0, and an open GitHub issue f
             <div class="step" data-delay="1100"><div class="t-say"><span class="dot">●</span><span>I first wrote closeDb() as <code style="font-size:.9em;background:none;border:0;color:#fff;padding:0">await db.$client.end()</code>. The landmine hook flagged a known bug in drizzle-orm 0.36.0 (#3402). I avoided that by creating the pool myself.</span></div></div>
           </div>
         </div>
-        <figcaption class="caption"><span>Replayed from a real headless Claude Code 2.1.304 session, abridged. The prompt didn't mention bugs.</span><a href="https://github.com/devanshranjan10/landmines/tree/main/docs/e2e">Transcript and hook logs →</a></figcaption>
+        <figcaption class="caption"><span>Replayed from a real headless Claude Code 2.1.304 session, abridged. The prompt didn't mention bugs.</span><span><a href="/media/landmine-demo.mp4">Watch the 50-second video</a> · <a href="https://github.com/devanshranjan10/landmines/tree/main/docs/e2e">Transcript and hook logs →</a></span></figcaption>
       </figure>
     </div>
   </section>

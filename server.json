@@ -1,0 +1,22 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.devanshranjan10/landmines",
+  "title": "landmine",
+  "description": "Known open GitHub issues in your exact pinned dependency versions, for coding agents.",
+  "websiteUrl": "https://landmine.tech",
+  "repository": { "url": "https://github.com/devanshranjan10/landmines", "source": "github" },
+  "version": "0.2.1",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "landmines",
+      "version": "0.2.1",
+      "runtimeHint": "npx",
+      "transport": { "type": "stdio" },
+      "packageArguments": [
+        { "type": "positional", "value": "mcp", "description": "Run the MCP server over stdio" },
+        { "type": "named", "name": "--root", "description": "Project directory with .landmine/index.json (default: the working directory). Create it with `npx landmines scan`.", "format": "filepath", "isRequired": false }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.1 (2026-10-23)
+
+### Added
+- **Claude Code plugin.** This repo is now a plugin marketplace:
+  `claude plugin marketplace add devanshranjan10/landmines`, then
+  `claude plugin install landmines@landmines`. The plugin brings the pre-edit hook, the
+  MCP server and a `/landmines:scan` command. Verified in a live session:
+  `docs/e2e/claude-plugin-session.jsonl`.
+- **Official MCP Registry metadata.** `server.json` and `mcpName`
+  (`io.github.devanshranjan10/landmines`). Tagged releases now list themselves in the
+  registry from CI.
+- `.mcp.json` at the repo root and `glama.json`, for MCP directories that read them.
+
+### Changed
+- The `landmine share` badge links to https://landmine.tech instead of the npm page.
+
+### Fixed
+- Windows: `check --staged` shows paths relative to the working directory when Windows
+  mixes 8.3 short and long path names.
+
 ## 0.2.0 (2026-10-21)
 
 **Headline.** A known-bugs section in the agent's instructions measurably helps.

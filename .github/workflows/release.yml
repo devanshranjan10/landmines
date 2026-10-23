@@ -1,9 +1,13 @@
 name: release
-# Publishes to npm with provenance when a version tag (v0.2.0) is pushed. Needs the NPM_TOKEN secret, or switch to
-# npm trusted publishing (OIDC) once the package exists on npm. Provenance needs package.json `repository` to match this repo.
+# On a version tag (v0.2.1): publish to npm unless that version is already there, then list the same version in the
+# official MCP Registry (registry.modelcontextprotocol.io) as io.github.devanshranjan10/landmines.
+# npm auth: the NPM_TOKEN secret if set, otherwise npm trusted publishing (configure it once on npmjs.com:
+# package settings → Trusted publisher → GitHub Actions, repo devanshranjan10/landmines, workflow release.yml).
+# The MCP Registry uses this workflow's OIDC token; it checks package.json `mcpName` in the published npm version.
 on:
   push:
     tags: ['v*']
+  workflow_dispatch:
 permissions:
   contents: read
   id-token: write
@@ -18,8 +22,22 @@ jobs:
           registry-url: https://registry.npmjs.org
           cache: npm
       - run: npm ci
-      - name: tag matches package.json
-        run: test "v$(node -p "require('./package.json').version")" = "$GITHUB_REF_NAME"
-      - run: npm publish --provenance --access public
+      - name: tag, package.json and server.json agree
+        run: |
+          v=$(node -p "require('./package.json').version")
+          test "$GITHUB_EVENT_NAME" != push || test "v$v" = "$GITHUB_REF_NAME"
+          test "$(node -p "require('./server.json').version")" = "$v"
+          test "$(node -p "require('./server.json').packages[0].version")" = "$v"
+          echo "VERSION=$v" >> "$GITHUB_ENV"
+      - name: npm publish (skipped if this version is already on npm)
+        run: |
+          if npm view "landmines@$VERSION" version >/dev/null 2>&1; then echo "landmines@$VERSION is already on npm"; exit 0; fi
+          npm install -g npm@latest   # trusted publishing needs npm >= 11.5
+          npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: MCP Registry
+        run: |
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.1/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          ./mcp-publisher login github-oidc
+          ./mcp-publisher publish

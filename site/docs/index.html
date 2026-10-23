@@ -85,6 +85,10 @@ brew install devanshranjan10/tap/landmines      <span class="c"># Homebrew (also
             <tr><td>source checkout</td><td>absolute paths, with a warning</td></tr>
           </tbody>
         </table></div>
+        <p><strong>Claude Code plugin.</strong> The hook, the MCP server and a <code>/landmines:scan</code> command, without touching your settings files:</p>
+        <div class="code"><pre>claude plugin marketplace add devanshranjan10/landmines
+claude plugin install landmines@landmines</pre></div>
+        <p><strong>MCP server only.</strong> Any MCP client can run <code>npx -y landmines mcp</code> (stdio) after a scan. Registry name: <code>io.github.devanshranjan10/landmines</code>.</p>
         <p>The same package is on GitHub Packages as <code>@devanshranjan10/landmines</code>; that needs a token with <code>read:packages</code>, so npm is the simpler route. <code>landmine</code> (no s) on npm is an unrelated package.</p>
       </section>
 
