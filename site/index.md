@@ -44,6 +44,10 @@ In a real headless Claude Code 2.1.304 session on a project pinning drizzle-orm 
 - The pre-edit hook on its own was not significantly better than no help.
 - Full results: https://landmine.tech/benchmark.md
 
+## In the wild
+
+Scanned on 2026-10-23: across 28 popular open-source projects (10 of them coding agents: Cline, Continue, OpenCode, Kilo Code, Gemini CLI, Qwen Code, OpenHands, Aider, Codex, Goose), the median lockfile pins 395 open GitHub issues filed against its exact versions (range 192–839). In a random audit of 40, 30 were confirmed on the exact version (95% CI 60–86%). Every project, commit and label: https://landmine.tech/scans.md
+
 ## Supported agents
 
 Pre-edit hook (15): Claude Code (verified live), Codex CLI (verified live), Cursor, Gemini CLI, GitHub Copilot, Windsurf / Devin, Antigravity, Factory Droid, Augment, Kiro, Qwen Code, Crush, Goose, OpenHands, Trae. In-process plugin (5): OpenCode, Kilo Code, Cline, Amp, Pi. Any other agent (Aider, Zed, Roo Code, Continue, Warp, Freebuff…) gets the rules section, an Agent Skill and the MCP server.

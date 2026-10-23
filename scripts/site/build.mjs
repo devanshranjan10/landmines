@@ -22,7 +22,7 @@ const assets = { '/assets/site.css': version('assets/site.css'), '/assets/site.j
 
 // Pages whose markdown twin is generated from the HTML. The home page's twin (site/index.md) is hand-written,
 // because the page itself is mostly visual.
-const GENERATED_MD = { '/docs/': 'docs.md', '/benchmark/': 'benchmark.md', '/faq/': 'faq.md' };
+const GENERATED_MD = { '/docs/': 'docs.md', '/benchmark/': 'benchmark.md', '/scans/': 'scans.md', '/faq/': 'faq.md' };
 const MD_FOR = { '/': 'index.md', ...GENERATED_MD };
 
 const td = new TurndownService({ headingStyle: 'atx', codeBlockStyle: 'fenced', bulletListMarker: '-', emDelimiter: '*' });
@@ -115,7 +115,7 @@ walk(src);
 
 for (const [file, md] of Object.entries(markdown)) writeFileSync(join(out, file), md);
 markdown['index.md'] = readFileSync(join(src, 'index.md'), 'utf8');
-const order = ['index.md', 'docs.md', 'faq.md', 'benchmark.md'];
+const order = ['index.md', 'docs.md', 'faq.md', 'benchmark.md', 'scans.md'];
 const full = order.map((f) => `<!-- ${ORIGIN}/${f} -->\n\n${markdown[f].trim()}\n`).join('\n\n---\n\n');
 writeFileSync(join(out, 'llms-full.txt'), `# landmine: everything on landmine.tech, as Markdown (generated ${UPDATED})\n\n${full}`);
 console.log(`built ${relative(root, out)}/ (+ ${Object.keys(GENERATED_MD).length} generated .md, llms-full.txt)`);

@@ -410,6 +410,12 @@ October 2024 versions, none used while tuning.
   categories were fixed after measurement.
 - Quoted workarounds were genuine for **4 of 9**.
 
+**In the wild (2026-10-23).** We scanned 28 popular open-source projects, 10 of them coding agents; the median lockfile
+pins 395 open issues filed against its exact versions. Of 40 random armed issues across them, **30 (75%)** were
+confirmed on the exact version, and 24 of those were also clearly bug reports. Most misses were a sibling package from
+the same repository. Labels by an independent agent, one per issue: [`docs/showcase`](docs/showcase/README.md),
+[landmine.tech/scans](https://landmine.tech/scans/).
+
 **Hook quality on real code.** We ran `check` on 180 real source files from public
 repos. That's whole files, so the worst case.
 - Matching on a symbol alone was mostly noise. Before corroboration, 25 of 28 matches

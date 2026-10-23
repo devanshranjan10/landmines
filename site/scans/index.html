@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Open bugs in the exact versions popular projects pin: landmine scans</title>
+<meta name="description" content="landmine scanned the lockfiles of 28 popular open-source projects, including 10 coding agents. The median project pins 395 open GitHub issues filed against its exact versions. A random audit confirmed 30 of 40.">
+<link rel="canonical" href="https://landmine.tech/scans/">
+<meta name="theme-color" content="#f3f1ea">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="landmine">
+<meta property="og:url" content="https://landmine.tech/scans/">
+<meta property="og:title" content="The median popular repo pins 395 open, version-specific bugs">
+<meta property="og:description" content="Lockfile scans of 28 open-source projects, 10 of them coding agents. Every count, commit and audit label is public.">
+<meta property="og:image" content="https://landmine.tech/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://landmine.tech/og.png">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/fonts/instrumentserif.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/geist.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/site.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Dataset","name":"landmine scans of popular open-source lockfiles","description":"Open GitHub issues filed against the exact dependency versions pinned by 28 open-source projects, with a random precision audit.","url":"https://landmine.tech/scans/","license":"https://creativecommons.org/licenses/by/4.0/","isAccessibleForFree":true,"creator":{"@type":"Person","name":"Devansh Ranjan","url":"https://github.com/devanshranjan10"},"datePublished":"2026-10-23","distribution":{"@type":"DataDownload","contentUrl":"https://github.com/devanshranjan10/landmines/tree/main/docs/showcase"}}
+</script>
+<script defer src="/assets/site.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<!-- @nav -->
+<main id="main">
+  <section class="page-head">
+    <div class="wrap">
+      <span class="label">Scans · 2026-10-23</span>
+      <h1>The bugs already sitting in popular lockfiles.</h1>
+      <p class="lede">We ran <code>npx landmines scan</code> on 28 well-known open-source projects, 10 of them coding agents. Each one pins hundreds of dependency versions that have open, unfixed GitHub issues filed against that exact version. These are upstream bugs in libraries, not bugs in these projects, and a project may never touch the affected API.</p>
+      <div class="row">
+        <a class="btn dark" href="/docs/#quickstart">Scan your project</a>
+        <a class="btn" href="https://github.com/devanshranjan10/landmines/tree/main/docs/showcase">Data and audit labels</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap facts">
+    <div><div class="num acc">395</div><p>Median open GitHub issues filed against the exact versions one of these 28 projects pins (range 192–839). 270 of them in runtime dependencies.</p></div>
+    <div><div class="num">40%</div><p>Of all the dependency versions these projects pin, the share with at least one open issue naming that exact version.</p></div>
+    <div><div class="num">30/40</div><p>Issues from a random sample that really were filed against the exact version (95% CI 60–86%). Read the counts with that in mind.</p></div>
+  </div>
+
+  <div class="wrap doc">
+    <aside class="toc" aria-label="On this page">
+      <h4>On this page</h4>
+      <ol>
+        <li><a href="#results">Every project</a></li>
+        <li><a href="#examples">Checked examples</a></li>
+        <li><a href="#audit">How many are real</a></li>
+        <li><a href="#method">Method</a></li>
+        <li><a href="#caveats">Caveats</a></li>
+        <li><a href="#yours">Scan yours</a></li>
+      </ol>
+    </aside>
+    <div class="prose">
+      <section id="results">
+        <h2>Every project</h2>
+        <p>Scanned on 2026-10-23 at the commit shown. <strong>Open issues</strong>: distinct open GitHub issues that name the exact version the lockfile pins. <strong>Runtime</strong>: in dependencies the lockfile doesn't mark as dev-only. <strong>API-specific</strong>: tied to named functions or options, which the pre-edit hook watches. <strong>Workaround</strong>: the thread has one.</p>
+        <h3>Coding agents (median 430.5)</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Project</th><th class="num">Open issues</th><th class="num">Runtime</th><th class="num">API-specific</th><th class="num">Workaround</th><th class="num">Deps</th><th class="num">With issues</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/continuedev/continue/tree/5522c6f44ca0ac3528b37244818fbfa39b5af470">continuedev/continue</a> <span class="label">5522c6f</span></td><td class="num"><strong>670</strong></td><td class="num">297</td><td class="num">423</td><td class="num">165</td><td class="num">341</td><td class="num">129</td></tr>
+            <tr><td><a href="https://github.com/cline/cline/tree/1619168bdeb570aa233d0f0a9af1d332d83a2816">cline/cline</a> <span class="label">1619168</span></td><td class="num"><strong>616</strong></td><td class="num">490</td><td class="num">465</td><td class="num">170</td><td class="num">330</td><td class="num">124</td></tr>
+            <tr><td><a href="https://github.com/QwenLM/qwen-code/tree/03ea964d380d23519af7d57c2bdddfade1db3754">QwenLM/qwen-code</a> <span class="label">03ea964</span></td><td class="num"><strong>558</strong></td><td class="num">389</td><td class="num">401</td><td class="num">155</td><td class="num">262</td><td class="num">95</td></tr>
+            <tr><td><a href="https://github.com/Kilo-Org/kilocode/tree/f29df226d712fd65b24820d8fbc3026f18e4a058">Kilo-Org/kilocode</a> <span class="label">f29df22</span></td><td class="num"><strong>444</strong></td><td class="num">290</td><td class="num">327</td><td class="num">145</td><td class="num">257</td><td class="num">94</td></tr>
+            <tr><td><a href="https://github.com/Aider-AI/aider/tree/5dc9490bb35f9729ef2c95d00a19ccd30c26339c">Aider-AI/aider</a> <span class="label">5dc9490</span></td><td class="num"><strong>435</strong></td><td class="num">399</td><td class="num">335</td><td class="num">103</td><td class="num">188</td><td class="num">76</td></tr>
+            <tr><td><a href="https://github.com/aaif-goose/goose/tree/e970eea8ac23067eb5f3bbad767e51cfaf917a91">aaif-goose/goose</a> <span class="label">e970eea</span></td><td class="num"><strong>426</strong></td><td class="num">162</td><td class="num">335</td><td class="num">126</td><td class="num">137</td><td class="num">78</td></tr>
+            <tr><td><a href="https://github.com/anomalyco/opencode/tree/2a3e7c0f349ba0e9454fa0529ec041cf57e53cb8">anomalyco/opencode</a> <span class="label">2a3e7c0</span></td><td class="num"><strong>306</strong></td><td class="num">161</td><td class="num">216</td><td class="num">87</td><td class="num">236</td><td class="num">92</td></tr>
+            <tr><td><a href="https://github.com/OpenHands/OpenHands/tree/801a3c72886f731ffb7c4af130b46d10e1906e4c">OpenHands/OpenHands</a> <span class="label">801a3c7</span></td><td class="num"><strong>300</strong></td><td class="num">122</td><td class="num">245</td><td class="num">79</td><td class="num">94</td><td class="num">49</td></tr>
+            <tr><td><a href="https://github.com/google-gemini/gemini-cli/tree/a713410aba5d594594e20d5c822e3aab8f822089">google-gemini/gemini-cli</a> <span class="label">a713410</span></td><td class="num"><strong>275</strong></td><td class="num">137</td><td class="num">178</td><td class="num">59</td><td class="num">153</td><td class="num">50</td></tr>
+            <tr><td><a href="https://github.com/openai/codex/tree/e6ebdfe00b520e21ed50ac0362656f32dd64d2fc">openai/codex</a> <span class="label">e6ebdfe</span></td><td class="num"><strong>206</strong></td><td class="num">81</td><td class="num">124</td><td class="num">60</td><td class="num">29</td><td class="num">19</td></tr>
+          </tbody>
+        </table></div>
+        <h3>Apps and libraries (median 343.5)</h3>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Project</th><th class="num">Open issues</th><th class="num">Runtime</th><th class="num">API-specific</th><th class="num">Workaround</th><th class="num">Deps</th><th class="num">With issues</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://github.com/n8n-io/n8n/tree/9184012fc569c5d969b061be3c3ea834f6f712ae">n8n-io/n8n</a> <span class="label">9184012</span></td><td class="num"><strong>839</strong></td><td class="num">659</td><td class="num">540</td><td class="num">180</td><td class="num">563</td><td class="num">205</td></tr>
+            <tr><td><a href="https://github.com/twentyhq/twenty/tree/8c1a920d7c6e52fe89c1516a1e3400646b660049">twentyhq/twenty</a> <span class="label">8c1a920</span></td><td class="num"><strong>717</strong></td><td class="num">420</td><td class="num">524</td><td class="num">210</td><td class="num">418</td><td class="num">171</td></tr>
+            <tr><td><a href="https://github.com/immich-app/immich/tree/1cf5bb41153478c180b65c6d93106fce5802b474">immich-app/immich</a> <span class="label">1cf5bb4</span></td><td class="num"><strong>709</strong></td><td class="num">419</td><td class="num">539</td><td class="num">151</td><td class="num">232</td><td class="num">120</td></tr>
+            <tr><td><a href="https://github.com/Significant-Gravitas/AutoGPT/tree/9eefeb9a586c8f616ef434e3fa9153ab5bc34556">Significant-Gravitas/AutoGPT</a> <span class="label">9eefeb9</span></td><td class="num"><strong>689</strong></td><td class="num">498</td><td class="num">505</td><td class="num">171</td><td class="num">301</td><td class="num">133</td></tr>
+            <tr><td><a href="https://github.com/langgenius/dify/tree/44564a1dec7d183b44a959a7f5fb531988132d2e">langgenius/dify</a> <span class="label">44564a1</span></td><td class="num"><strong>647</strong></td><td class="num">438</td><td class="num">533</td><td class="num">170</td><td class="num">353</td><td class="num">151</td></tr>
+            <tr><td><a href="https://github.com/supabase/supabase/tree/60b51d74d53c788d120b6dd656f137828a8cc9e3">supabase/supabase</a> <span class="label">60b51d7</span></td><td class="num"><strong>645</strong></td><td class="num">500</td><td class="num">481</td><td class="num">173</td><td class="num">363</td><td class="num">132</td></tr>
+            <tr><td><a href="https://github.com/open-webui/open-webui/tree/91ea4e3421d1d8069f13d4a463fcb5986d94ea60">open-webui/open-webui</a> <span class="label">91ea4e3</span></td><td class="num"><strong>532</strong></td><td class="num">459</td><td class="num">391</td><td class="num">155</td><td class="num">226</td><td class="num">96</td></tr>
+            <tr><td><a href="https://github.com/calcom/cal.diy/tree/0f19cc46ef6b6426ee398c670575b3c96be7af9e">calcom/cal.diy</a> <span class="label">0f19cc4</span></td><td class="num"><strong>428</strong></td><td class="num">285</td><td class="num">272</td><td class="num">134</td><td class="num">329</td><td class="num">104</td></tr>
+            <tr><td><a href="https://github.com/outline/outline/tree/cfdb04e3e2a11887300a1e8632ae68b4e9f4ca78">outline/outline</a> <span class="label">cfdb04e</span></td><td class="num"><strong>364</strong></td><td class="num">255</td><td class="num">278</td><td class="num">77</td><td class="num">220</td><td class="num">84</td></tr>
+            <tr><td><a href="https://github.com/documenso/documenso/tree/8707e33c124e4b1a68dde92d5e05178c9aabd0be">documenso/documenso</a> <span class="label">8707e33</span></td><td class="num"><strong>323</strong></td><td class="num">239</td><td class="num">262</td><td class="num">122</td><td class="num">209</td><td class="num">70</td></tr>
+            <tr><td><a href="https://github.com/crewAIInc/crewAI/tree/fa6d7121abaa432899b68b58a1be16488f545e13">crewAIInc/crewAI</a> <span class="label">fa6d712</span></td><td class="num"><strong>318</strong></td><td class="num">318</td><td class="num">241</td><td class="num">84</td><td class="num">97</td><td class="num">42</td></tr>
+            <tr><td><a href="https://github.com/lobehub/lobehub/tree/c52ddde4082a59742a9d9717e578b66c9233ccf7">lobehub/lobehub</a> <span class="label">c52ddde</span></td><td class="num"><strong>313</strong></td><td class="num">107</td><td class="num">245</td><td class="num">70</td><td class="num">129</td><td class="num">54</td></tr>
+            <tr><td><a href="https://github.com/vercel/chatbot/tree/c2f8235e1f3ea903ad8b7f61447c4f74164b5c58">vercel/chatbot</a> <span class="label">c2f8235</span></td><td class="num"><strong>298</strong></td><td class="num">207</td><td class="num">238</td><td class="num">115</td><td class="num">66</td><td class="num">29</td></tr>
+            <tr><td><a href="https://github.com/fastapi/full-stack-fastapi-template/tree/b1125d8839482cb7bbae603ddc6d0081bf87532e">fastapi/full-stack-fastapi-template</a> <span class="label">b1125d8</span></td><td class="num"><strong>292</strong></td><td class="num">120</td><td class="num">256</td><td class="num">59</td><td class="num">65</td><td class="num">41</td></tr>
+            <tr><td><a href="https://github.com/dubinc/dub/tree/20ca8994950f83d5aedab88b802b55b7243c89b6">dubinc/dub</a> <span class="label">20ca899</span></td><td class="num"><strong>285</strong></td><td class="num">169</td><td class="num">183</td><td class="num">86</td><td class="num">217</td><td class="num">71</td></tr>
+            <tr><td><a href="https://github.com/shadcn-ui/ui/tree/3d98900e9b73c45f035f8109e9d41ba6a51685e7">shadcn-ui/ui</a> <span class="label">3d98900</span></td><td class="num"><strong>273</strong></td><td class="num">239</td><td class="num">195</td><td class="num">64</td><td class="num">147</td><td class="num">56</td></tr>
+            <tr><td><a href="https://github.com/mastodon/mastodon/tree/8179db49adb98060baa7037b95c196c555ba4257">mastodon/mastodon</a> <span class="label">8179db4</span></td><td class="num"><strong>250</strong></td><td class="num">118</td><td class="num">201</td><td class="num">49</td><td class="num">134</td><td class="num">61</td></tr>
+            <tr><td><a href="https://github.com/excalidraw/excalidraw/tree/b7de45e88111f5680ae4bb3c3f3541c7d3b279fe">excalidraw/excalidraw</a> <span class="label">b7de45e</span></td><td class="num"><strong>192</strong></td><td class="num">38</td><td class="num">112</td><td class="num">52</td><td class="num">86</td><td class="num">27</td></tr>
+          </tbody>
+        </table></div>
+        <p>Across all 28 projects: 6,622 distinct issues, 4,788 of them API-specific. browser-use/browser-use commits no lockfile, so there was nothing to scan.</p>
+      </section>
+
+      <section id="examples">
+        <h2>Checked examples</h2>
+        <p>The 14 below were each read in full and kept only if the issue is open, is a bug report, was confirmed on the exact version pinned, and is in the package named. They come from the three most-discussed API-specific runtime issues per project: 41 of those 84 candidates passed. Heavily discussed issues fail more often than average, because long threads collect "fixed in X" and other versions.</p>
+        <ul class="examples">
+          <li><strong><code>sympy@1.14.0</code></strong>, <a href="https://github.com/sympy/sympy/issues/28169">sympy/sympy#28169</a>. sympy.discrete.transforms.fft uses the opposite sign in the exponent, so it effectively computes the inverse DFT (e.g. fft([0,1,0,0]) returns [1, I, -1, -I] instead of [1, -I, -1, I]). <span class="label">Pinned by Aider-AI/aider</span></li>
+          <li><strong><code>vaul@1.1.2</code></strong>, <a href="https://github.com/emilkowalski/vaul/issues/492">emilkowalski/vaul#492</a>. A controlled Drawer with modal={false} that is opened from outside (via the open prop) leaves pointer-events: none on the body, blocking interaction with the rest of the page. <span class="label">Pinned by cline/cline, QwenLM/qwen-code, supabase/supabase, shadcn-ui/ui, Significant-Gravitas/AutoGPT, outline/outline, dubinc/dub</span></li>
+          <li><strong><code>next-auth@5.0.0-beta.25</code></strong>, <a href="https://github.com/nextauthjs/next-auth/issues/7558">nextauthjs/next-auth#7558</a>. When the <code>jwt</code> callback refreshes an access token, next-auth does not persist the returned token, so later requests keep using the old, expired one. <span class="label">Pinned by vercel/chatbot</span></li>
+          <li><strong><code>react-dom@19.3.1</code></strong>, <a href="https://github.com/react/react/issues/37899">react/react#37899</a>. When an element's type changes from a React.lazy wrapper to the plain component it resolved to, React remounts it and discards its state (e.g. RSC client components later rendered from plain JSX). <span class="label">Pinned by mastodon/mastodon, langgenius/dify, immich-app/immich</span></li>
+          <li><strong><code>next@16.3.8</code></strong>, <a href="https://github.com/vercel/next.js/issues/87737">vercel/next.js#87737</a>. Turbopack production builds reference external modules by hashed aliases (e.g. require-in-the-middle-&lt;hash&gt;) that fail with &quot;Cannot find module&quot; when node_modules is reinstalled or laid out differently at runtime; next build --webpack works. <span class="label">Pinned by Kilo-Org/kilocode, twentyhq/twenty</span></li>
+          <li><strong><code>node-fetch@3.3.2</code></strong>, <a href="https://github.com/node-fetch/node-fetch/issues/1801">node-fetch/node-fetch#1801</a>. Aborting a node-fetch request with a body via AbortSignal can crash the process with an unhandled 'error' event, because the request body stream has no error listener when destroyed. <span class="label">Pinned by continuedev/continue, dubinc/dub, lobehub/lobehub</span></li>
+          <li><strong><code>@phosphor-icons/react@2.1.10</code></strong>, <a href="https://github.com/phosphor-icons/react/issues/135">phosphor-icons/react#135</a>. Recent releases mislabel the CommonJS build as ESM (type: module with a .js CJS file), so tools such as Vitest, Playwright and Sanity fail with &quot;ReferenceError: exports is not defined&quot;; 2.1.8 works. <span class="label">Pinned by mastodon/mastodon, shadcn-ui/ui, Significant-Gravitas/AutoGPT</span></li>
+          <li><strong><code>vite@8.0.16</code></strong>, <a href="https://github.com/vitejs/vite/issues/21903">vitejs/vite#21903</a>. Production builds can link auto-imported component CSS chunks in a different order than dev (e.g. a component stylesheet before index.css), so the CSS cascade differs between dev and production and the wrong rules win. <span class="label">Pinned by OpenHands/OpenHands, twentyhq/twenty</span></li>
+          <li><strong><code>@modelcontextprotocol/sdk@1.32.1</code></strong>, <a href="https://github.com/modelcontextprotocol/typescript-sdk/issues/2721">modelcontextprotocol/typescript-sdk#2721</a>. McpServer always emits tool <code>outputSchema</code> as JSON Schema draft-07 with no way to choose 2020-12, so clients that accept only 2020-12 reject every tool that declares an outputSchema. <span class="label">Pinned by shadcn-ui/ui, lobehub/lobehub</span></li>
+          <li><strong><code>pytube@15.0.0</code></strong>, <a href="https://github.com/pytube/pytube/issues/1678">pytube/pytube#1678</a>. pytube raises <code>RegexMatchError: get_throttling_function_name: could not find match for multiple</code> when fetching streams because its regex no longer matches YouTube's player JS. <span class="label">Pinned by crewAIInc/crewAI</span></li>
+          <li><strong><code>react-data-grid@7.0.0-beta.47</code></strong>, <a href="https://github.com/Comcast/react-data-grid/issues/3463">Comcast/react-data-grid#3463</a>. In production builds, react-data-grid header cells collapse when columns are resizable, sortable or frozen, because the minifier merges its nested <code>@layer</code> CSS rules. <span class="label">Pinned by supabase/supabase, vercel/chatbot</span></li>
+          <li><strong><code>next@16.4.0</code></strong>, <a href="https://github.com/vercel/next.js/issues/82117">vercel/next.js#82117</a>. Next.js emits duplicate <code>Location</code> headers for <code>redirect()</code>/<code>permanentRedirect()</code> on static/ISR routes, which some proxies and clients turn into a broken <code>/target,/target</code> redirect. <span class="label">Pinned by documenso/documenso</span></li>
+          <li><strong><code>exceljs@4.4.0</code></strong>, <a href="https://github.com/exceljs/exceljs/issues/683">exceljs/exceljs#683</a>. The streaming XLSX reader sometimes returns { sharedString: n } placeholder objects instead of the actual cell strings. <span class="label">Pinned by cline/cline, QwenLM/qwen-code</span></li>
+          <li><strong><code>@tanstack/react-table@9.2.4</code></strong>, <a href="https://github.com/TanStack/table/issues/6601">TanStack/table#6601</a>. In TanStack Table v9 with React Compiler, replacing <code>data</code> from an external source does not re-render components built with <code>createTableHook</code>, so they keep showing stale rows. <span class="label">Pinned by fastapi/full-stack-fastapi-template</span></li>
+        </ul>
+      </section>
+
+      <section id="audit">
+        <h2>How many are real</h2>
+        <p>We drew 40 issues at random (seed 20261023) from the 4,788 distinct API-specific issues and had each one read in full by an agent that didn't build the tool.</p>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Check</th><th class="num">Passed</th><th class="num">95% CI</th></tr></thead>
+          <tbody>
+            <tr><td>Still open</td><td class="num">40/40</td><td class="num">91–100%</td></tr>
+            <tr class="hl"><td><strong>Reporter or a confirming commenter ran the exact version</strong></td><td class="num"><strong>30/40</strong></td><td class="num">60–86%</td></tr>
+            <tr><td>…and it's clearly a bug report (not a question, usage error or docs)</td><td class="num">24/40</td><td class="num">45–74%</td></tr>
+          </tbody>
+        </table></div>
+        <ul>
+          <li><strong>Where the version was wrong.</strong> Four were a sibling package from the same repository (an <code>@xterm/xterm</code> bug counted against <code>@xterm/headless</code>). Two took the version of another package in a dependency list. Two read "6.0.3 is fine" as the affected version. One was a semver range, not an installed version, and one was unclear.</li>
+          <li><strong>Consistent with the earlier measurement.</strong> <a href="https://github.com/devanshranjan10/landmines/blob/main/docs/ACCURACY.md">ACCURACY.md</a> found 78% and 82.5% on two held-out samples.</li>
+          <li><strong>One labeller per issue, an AI agent.</strong> Every label, with the quote that decided it, is in <a href="https://github.com/devanshranjan10/landmines/blob/main/docs/showcase/audit.json">audit.json</a>.</li>
+        </ul>
+      </section>
+
+      <section id="method">
+        <h2>Method</h2>
+        <ul>
+          <li><strong>Projects.</strong> 10 open-source coding agents and 19 widely used apps and libraries, chosen before scanning.</li>
+          <li><strong>Lockfiles.</strong> Every <code>pnpm-lock.yaml</code>, <code>yarn.lock</code>, <code>bun.lock</code>, <code>package-lock.json</code>, <code>uv.lock</code>, <code>poetry.lock</code>, <code>Pipfile.lock</code> or <code>requirements*.txt</code> at most three folders deep, outside tests, fixtures, examples and docs. Folders that don't ship (evals, sandboxes, scratch artifacts, integration-test projects) were dropped afterwards and are listed in the data.</li>
+          <li><strong>Counting.</strong> Exactly what <code>landmine scan</code> prints: weak mentions and non-bugs left out, and each issue counted once per project even when several packages or lockfiles pin it.</li>
+          <li><strong>Reproduce.</strong> <code>scripts/showcase/run.sh</code>, <code>aggregate.py</code> and <code>sample.py</code> in the repository, with landmine 0.2.1. Issues get opened, closed and edited, so a rerun on another day will differ.</li>
+        </ul>
+      </section>
+
+      <section id="caveats">
+        <h2>Caveats</h2>
+        <ul>
+          <li><strong>An open issue in a dependency is not a bug in the project.</strong> The project may never call the affected API, may already work around it, or may not meet the conditions.</li>
+          <li><strong>Dev tooling is included.</strong> TypeScript, Prettier and test runners carry many issues. The runtime column leaves dev-only dependencies out.</li>
+          <li><strong>Precision is about 75%</strong>, measured above; the raw counts are what the tool reports, not audited totals.</li>
+          <li><strong>Recall is not measured.</strong> Bugs whose reports don't name a version are missed entirely.</li>
+        </ul>
+      </section>
+
+      <section id="yours">
+        <h2>Scan yours</h2>
+        <div class="code"><pre>npx landmines scan                 <span class="c"># what's in your lockfile</span>
+npx landmines install --rules      <span class="c"># put it where your agent reads it</span>
+npx landmines share                <span class="c"># one postable line and a README badge</span></pre></div>
+      </section>
+    </div>
+  </div>
+</main>
+<!-- @footer -->
+</body>
+</html>

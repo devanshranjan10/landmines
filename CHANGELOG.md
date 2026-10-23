@@ -12,11 +12,17 @@
   (`io.github.devanshranjan10/landmines`). Tagged releases now list themselves in the
   registry from CI.
 - `.mcp.json` at the repo root and `glama.json`, for MCP directories that read them.
+- **Scans of popular lockfiles** (`docs/showcase`, https://landmine.tech/scans/): 28 open-source projects, 10 of
+  them coding agents, with a random audit (30 of 40 issues confirmed on the exact version) and checked examples.
+  Reproduce with `scripts/showcase/`.
 
 ### Changed
 - The `landmine share` badge links to https://landmine.tech instead of the npm page.
 
 ### Fixed
+- `landmine share` counted an issue once per package that pins it, so one Storybook issue shared by five addons
+  counted six times, and it included weak mentions. It now prints the same counts as `scan`: each issue once,
+  weak mentions and non-bugs left out. On mastodon's lockfile that is 250 issues, not 385.
 - Windows: `check --staged` shows paths relative to the working directory when Windows
   mixes 8.3 short and long path names.
 

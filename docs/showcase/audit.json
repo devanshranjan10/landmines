@@ -1,0 +1,800 @@
+{
+ "seed": 20261023,
+ "population": 4788,
+ "n": 40,
+ "sample": [
+  {
+   "id": "microsoft/TypeScript#63671",
+   "package": "typescript",
+   "version": "6.0.3",
+   "title": "Module value in TSConfig does not enforce ModuleResolution value",
+   "url": "https://github.com/microsoft/TypeScript/issues/63671",
+   "evidence": "typescript version: 6.0.3",
+   "workaround": false,
+   "repos": [
+    "OpenHands/OpenHands",
+    "fastapi/full-stack-fastapi-template",
+    "lobehub/lobehub"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "unclear",
+    "version_ok": "yes",
+    "quote": "reporter yohny: \"typescript version: 6.0.3\"",
+    "note": "Reporter ran tsc 6.0.3, but the report is a behavior-vs-docs mismatch ('fix the behavior or the docs') about module/moduleResolution enforcement, with no triage beyond 'Needs Investigation', so it may be a docs issue rather than a bug."
+   }
+  },
+  {
+   "id": "microsoft/monaco-editor#4954",
+   "package": "monaco-editor",
+   "version": "0.52.2",
+   "title": "[Bug] canBuildAST in BracketPairsTextModelPart affect language configuration",
+   "url": "https://github.com/microsoft/monaco-editor/issues/4954",
+   "evidence": "In contrary to monaco-editor(v0.21.2), monaco-editor(v0.52.2) adds a getter `canBuildAST` in class `BracketPairsTextModelPart`. As long as `canBuildAST` returns",
+   "workaround": false,
+   "repos": [
+    "supabase/supabase",
+    "twentyhq/twenty"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter BingruLin: \"monaco-editor(v0.52.2) adds a getter `canBuildAST` ... functions like `matchBracket` always return `null`\"",
+    "note": "Bracket matching fails for a custom language configuration on monaco-editor 0.52.2 (0.21.2 is cited as the working version). The issue is labeled bug, but the maintainer asked for a playground repro that was never provided."
+   }
+  },
+  {
+   "id": "inngest/inngest#5050",
+   "package": "inngest-cli",
+   "version": "1.46.0",
+   "title": "Self-hosted `inngest start`: MCP tools backed by REST API v2 always return 401 when a signing key is set",
+   "url": "https://github.com/inngest/inngest/issues/5050",
+   "evidence": "- `inngest/inngest:v1.46.0`, `command: inngest start`",
+   "workaround": false,
+   "repos": [
+    "documenso/documenso"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter MonsterDeveloper: \"`inngest/inngest:v1.46.0`, `command: inngest start` ... We saw it after upgrading straight to v1.46.0\"",
+    "note": "The reporter ran the Docker image of Inngest v1.46.0, not the npm inngest-cli wrapper. Both ship the same Go binary release, so I counted the version as a match, but the distribution channel is different."
+   }
+  },
+  {
+   "id": "vercel/next.js#80194",
+   "package": "eslint-config-next",
+   "version": "16.0.0",
+   "title": "Regression: Since 15.3 environment variables are not available in client components using standalone output mode",
+   "url": "https://github.com/vercel/next.js/issues/80194",
+   "evidence": "ixed** by changing the default bundler from `webpack` to `turbopack` since https://github.com/vercel/next.js/commit/9ba29b4125bf368f92d36b34a5a34aa8dce0a8ce and",
+   "workaround": true,
+   "repos": [
+    "shadcn-ui/ui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "commenter laishere: \"So the lowest working version is `next@v16.0.0-canary.5` or `next@v16.0.0`\"; reporter env: \"eslint-config-next: N/A\"",
+    "note": "The issue is about next 15.3.x, not eslint-config-next (the reporter lists it as N/A). 16.0.0 appears only as the next version where the bug is fixed."
+   }
+  },
+  {
+   "id": "pexpect/pexpect#829",
+   "package": "pexpect",
+   "version": "4.9.0",
+   "title": "AttributeError: module 'os' has no attribute 'login_tty' on AIX host",
+   "url": "https://github.com/pexpect/pexpect/issues/829",
+   "evidence": "On a host running AIX 7.3 with `pexpect` 4.9.0 I am getting the following error:",
+   "workaround": false,
+   "repos": [
+    "Aider-AI/aider"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter jose1711: \"On a host running AIX 7.3 with `pexpect` 4.9.0 I am getting the following error\"",
+    "note": "Crash on AIX with pexpect 4.9.0. The failing frame is CPython's stdlib pty.fork (os.login_tty), so the root cause may be outside pexpect."
+   }
+  },
+  {
+   "id": "mholt/PapaParse#1006",
+   "package": "papaparse",
+   "version": "5.4.1",
+   "title": "transformHeader returns function instead of string: trim is not a function",
+   "url": "https://github.com/mholt/PapaParse/issues/1006",
+   "evidence": "In version 5.4.1 i got the following error because header is sometimes a function, sometimes a string, but the 1st param should always be a string?!",
+   "workaround": false,
+   "repos": [
+    "supabase/supabase",
+    "dubinc/dub"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter bettysteger: \"In version 5.4.1 i got the following error\"",
+    "note": "A regression from 5.3.2: transformHeader receives a non-string in 5.4.1. The reporter links the duplicate-call bug in #1029."
+   }
+  },
+  {
+   "id": "winstonjs/winston#2592",
+   "package": "winston",
+   "version": "3.17.0",
+   "title": "[Bug]: logger.debug() not working",
+   "url": "https://github.com/winstonjs/winston/issues/2592",
+   "evidence": "What version of Winston presents the issue? v3.17.0",
+   "workaround": false,
+   "repos": [
+    "continuedev/continue",
+    "google-gemini/gemini-cli",
+    "calcom/cal.diy"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "unclear",
+    "version_ok": "yes",
+    "quote": "reporter ashish-naik: \"What version of Winston presents the issue? v3.17.0\"",
+    "note": "The reporter uses winston through parse-server's logger adapter and the level comes from an env var. The template applied the Bug label but no maintainer triaged it, so this looks like it could be a configuration or support problem rather than a winston defect."
+   }
+  },
+  {
+   "id": "prettier/prettier#20170",
+   "package": "prettier",
+   "version": "3.9.9",
+   "title": "`semi: false`: a key unquoted by `quoteProps` loses its ASI protection",
+   "url": "https://github.com/prettier/prettier/issues/20170",
+   "evidence": "**Prettier 3.9.9**",
+   "workaround": false,
+   "repos": [
+    "lobehub/lobehub"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter leonidaz: \"**Prettier 3.9.9**\" (playground header) plus \"Also reproduces on `main`\"",
+    "note": "The output fails to parse on the second format. It was reproduced in the Prettier 3.9.9 playground, and 3.9.9 is a published npm release."
+   }
+  },
+  {
+   "id": "Textualize/rich#2628",
+   "package": "rich",
+   "version": "15.0.0",
+   "title": "[BUG] Markdown formatting doesn\u2019t render newlines correctly in blockquotes",
+   "url": "https://github.com/Textualize/rich/issues/2628",
+   "evidence": "Hi @willmcgugan, looked into this and can confirm it's still reproducible on current `main` (v15.0.0), not just the reporter's 12.6.0 from 2022.",
+   "workaround": true,
+   "repos": [
+    "crewAIInc/crewAI",
+    "immich-app/immich"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "commenter tylerkanz: \"can confirm it's still reproducible on current `main` (v15.0.0), not just the reporter's 12.6.0\"",
+    "note": "The original reporter ran 12.6.0. The 15.0.0 confirmation was made on main, not the PyPI release, but between the v15.0.0 tag and that comment main only had a README commit, so the code was identical."
+   }
+  },
+  {
+   "id": "react-icons/react-icons#1038",
+   "package": "react-icons",
+   "version": "5.5.0",
+   "title": "[Bug]: DiResponsive icon is not displayed properly",
+   "url": "https://github.com/react-icons/react-icons/issues/1038",
+   "evidence": "Package version v5.5.0",
+   "workaround": false,
+   "repos": [
+    "Significant-Gravitas/AutoGPT",
+    "documenso/documenso"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter guglio: \"Package version v5.5.0\"; commenter sharaddh: \"Installed react-icons@5.5.0 ... the screen itself ... is not rendered\"",
+    "note": "The DiResponsive icon renders without its monitor screen. A second user reproduced it on react-icons 5.5.0."
+   }
+  },
+  {
+   "id": "brianc/node-postgres#3820",
+   "package": "pg",
+   "version": "8.23.1",
+   "title": "Query settles twice when a parameter fails to serialize (callback gets error, then success with no rows)",
+   "url": "https://github.com/brianc/node-postgres/issues/3820",
+   "evidence": "**Versions:** pg 8.22.0 and 8.23.1 (master), Node 20.18.0, PostgreSQL 17.5",
+   "workaround": false,
+   "repos": [
+    "mastodon/mastodon",
+    "immich-app/immich"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter YOGESH256: \"**Versions:** pg 8.22.0 and 8.23.1 (master)\"",
+    "note": "The query callback settles twice. master at the time was the 8.23.1 publish commit (no later commits before the issue date), so it matches the npm release."
+   }
+  },
+  {
+   "id": "pytube/pytube#1745",
+   "package": "pytube",
+   "version": "15.0.0",
+   "title": "4320p (8k) dash streams do not show up",
+   "url": "https://github.com/pytube/pytube/issues/1745",
+   "evidence": "Pytube version (run `print(pytube.__version__)` in python) - 15.0.0",
+   "workaround": false,
+   "repos": [
+    "crewAIInc/crewAI"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter Jodenee: \"Pytube version (run `print(pytube.__version__)` in python) - 15.0.0\" (installed via `pip install git+https://github.com/pytube/pytube`)",
+    "note": "The reporter installed from git, but __version__ reports 15.0.0 and master was only 2 trivial commits past the v15.0.0 tag (a logger deprecation fix and an editorconfig), so the code is effectively 15.0.0."
+   }
+  },
+  {
+   "id": "jaredhanson/passport-google-oauth2#73",
+   "package": "passport-google-oauth20",
+   "version": "2.0.0",
+   "title": "redirect_uri_mismatch The redirect URI in the request, http://localhost:4500/auth/auth/google/callback, does not match",
+   "url": "https://github.com/jaredhanson/passport-google-oauth2/issues/73",
+   "evidence": "\"passport-google-oauth20\": \"^2.0.0\",",
+   "workaround": false,
+   "repos": [
+    "twentyhq/twenty"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "no",
+    "version_ok": "yes",
+    "quote": "reporter yilmazbingo: \"\\\"passport-google-oauth20\\\": \\\"^2.0.0\\\"\"",
+    "note": "This is user misconfiguration: the relative callbackURL \"auth/google/callback\" resolves to /auth/auth/..., as the commenters point out. The ^2.0.0 range can only resolve to 2.0.0, the only 2.x version published, so the version itself matches."
+   }
+  },
+  {
+   "id": "node-fetch/node-fetch#1810",
+   "package": "node-fetch",
+   "version": "3.3.2",
+   "title": "Error [ERR_REQUIRE_ESM]: require() of ES Module",
+   "url": "https://github.com/node-fetch/node-fetch/issues/1810",
+   "evidence": "| node-fetch | 3.3.2",
+   "workaround": false,
+   "repos": [
+    "continuedev/continue",
+    "dubinc/dub",
+    "lobehub/lobehub"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "no",
+    "version_ok": "yes",
+    "quote": "reporter zhaoyiming0803: \"| node-fetch | 3.3.2\"",
+    "note": "ERR_REQUIRE_ESM is the documented behavior of ESM-only node-fetch v3 when it is loaded through require(). The template applied the bug label, and a commenter marked it a duplicate of #1809."
+   }
+  },
+  {
+   "id": "pandas-dev/pandas#69443",
+   "package": "pandas",
+   "version": "2.2.3",
+   "title": "BUG: loc assignment of a length-1 NumPy array into a PyArrow column raises TypeError",
+   "url": "https://github.com/pandas-dev/pandas/issues/69443",
+   "evidence": "On pandas 2.2.3 / 2.3.3 the same assignment does not raise. It emits",
+   "workaround": false,
+   "repos": [
+    "crewAIInc/crewAI"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "reporter hebian1994: \"On pandas 2.2.3 / 2.3.3 the same assignment does not raise.\"",
+    "note": "The bug affects pandas 3.0.x (reporter ran 3.0.5). 2.2.3 is cited as a version that does not raise."
+   }
+  },
+  {
+   "id": "modelcontextprotocol/typescript-sdk#3043",
+   "package": "@modelcontextprotocol/sdk",
+   "version": "1.31.0",
+   "title": "[v1.x] Backport #2654: `notifications/cancelled` with `requestId: 0` is ignored, so the first server\u2192client request cannot be cancelled (still in 1.32.1)",
+   "url": "https://github.com/modelcontextprotocol/typescript-sdk/issues/3043",
+   "evidence": "**Versions tested:** `@modelcontextprotocol/sdk` 1.31.0 and 1.32.1 \u2014 both affected. The `v1.x` branch tip (`fa56d815`) has the same line (`src/shared/protocol.t",
+   "workaround": true,
+   "repos": [
+    "Kilo-Org/kilocode",
+    "n8n-io/n8n"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter mihai-r-lupu: \"**Versions tested:** `@modelcontextprotocol/sdk` 1.31.0 and 1.32.1 \u2014 both affected.\"",
+    "note": "The issue is framed as a backport request, but it reports and reproduces a real bug (cancellation of requestId 0 is ignored) in the v1.x package, including 1.31.0."
+   }
+  },
+  {
+   "id": "microsoft/TypeScript#64683",
+   "package": "typescript",
+   "version": "6.0.3",
+   "title": "Type printer recurses without limit into nested array/tuple types (stack overflow; can leave later types `any`)",
+   "url": "https://github.com/microsoft/TypeScript/issues/64683",
+   "evidence": "Changed between `7.1.0-dev.20261001.1` and `7.1.0-dev.20261002.1` (edf7da4e93..09b1db0617). #64556 (\"Detect cycles while serializing array and tuple types\") is ",
+   "workaround": false,
+   "repos": [
+    "OpenHands/OpenHands",
+    "fastapi/full-stack-fastapi-template",
+    "lobehub/lobehub"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "reporter ssalbdivad: \"Still reproduces on `20261007.1`. 7.0.2 and 6.0.3 are fine.\"",
+    "note": "The regression is in TypeScript 7.1 dev builds. 6.0.3 is explicitly named as unaffected."
+   }
+  },
+  {
+   "id": "xtermjs/xterm.js#6143",
+   "package": "@xterm/headless",
+   "version": "5.5.0",
+   "title": "addon-webgl 0.19 throws on dispose under @xterm/xterm 5.5.0 (reads `_core._store`, absent in 5.5) despite ^5.0.0 peer range",
+   "url": "https://github.com/xtermjs/xterm.js/issues/6143",
+   "evidence": "Versions: `@xterm/xterm@5.5.0`, `@xterm/addon-webgl@0.19.0`, Chrome 139 / macOS.",
+   "workaround": false,
+   "repos": [
+    "google-gemini/gemini-cli",
+    "QwenLM/qwen-code"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "reporter Jesse-Schokker: \"Versions: `@xterm/xterm@5.5.0`, `@xterm/addon-webgl@0.19.0`\"",
+    "note": "The issue is about @xterm/addon-webgl 0.19.0 under @xterm/xterm 5.5.0. @xterm/headless is never mentioned, so the version string comes from a sibling package."
+   }
+  },
+  {
+   "id": "pmndrs/use-gesture#692",
+   "package": "@use-gesture/react",
+   "version": "10.3.1",
+   "title": "`transform` property breaks pinch and wheel actions",
+   "url": "https://github.com/pmndrs/use-gesture/issues/692",
+   "evidence": "- Use Gesture version: 10.3.1",
+   "workaround": false,
+   "repos": [
+    "mastodon/mastodon"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "reporter irvin93d: \"Use Gesture version: 10.3.1\"",
+    "note": "Adding a transform option breaks pinch and wheel. The reporter says only 'Use Gesture' rather than '@use-gesture/react', but the repro is a modified docs sandbox (React), and react and core are released in lockstep at 10.3.1."
+   }
+  },
+  {
+   "id": "airockchip/rknn-toolkit2#351",
+   "package": "rknn-toolkit-lite2",
+   "version": "2.3.2",
+   "title": "TypeError: 'unk__0' has type str, but expected one of: int \u5728\u4f7f\u75283588\u5f00\u53d1\u677f\uff0c\u5c06onnx\u6a21\u578b\u8f6c\u6210rknn\u6a21\u578b\u9047\u5230\u4e86\u8fd9\u4e2a\u95ee\u9898\uff0c\u662f\u81ea\u5df1\u7684\u6a21\u578b\uff0c\u8bf7\u95ee\u5982\u4f55\u6392\u67e5\u5f02\u5e38\uff0c\u89e3\u51b3\u8be5\u95ee\u9898",
+   "url": "https://github.com/airockchip/rknn-toolkit2/issues/351",
+   "evidence": "E rknn-toolkit2 version: 2.3.2",
+   "workaround": false,
+   "repos": [
+    "immich-app/immich"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "unclear",
+    "version_ok": "no",
+    "quote": "reporter EddyGogogo log: \"E rknn-toolkit2 version: 2.3.2\" (failing in rknn.build during ONNX->RKNN conversion)",
+    "note": "The reporter ran the host conversion package rknn-toolkit2, not the on-device runtime rknn-toolkit-lite2. The issue is also partly a how-do-I-debug question about their own model."
+   }
+  },
+  {
+   "id": "vitest-dev/vitest#7807",
+   "package": "vitest",
+   "version": "3.1.1",
+   "title": "__vitest_browser_runner__.runTests is not a function when browser mode x customzied root",
+   "url": "https://github.com/vitest-dev/vitest/issues/7807",
+   "evidence": "@vitest/browser: ^3.1.1 => 3.1.1",
+   "workaround": true,
+   "repos": [
+    "google-gemini/gemini-cli"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (Jinjiang) system info: 'vitest: ^3.1.1 => 3.1.1'",
+    "note": "Browser-mode bug with custom root; vitest 3.1.1 (and @vitest/browser 3.1.1) installed per envinfo."
+   }
+  },
+  {
+   "id": "radix-ui/primitives#3124",
+   "package": "@radix-ui/react-dropdown-menu",
+   "version": "2.0.5",
+   "title": "[Dropdown Menu] WCAG2.2 SC 2.5.2 violation - Dropdown Menu opens on `onPointerDown`",
+   "url": "https://github.com/radix-ui/primitives/issues/3124",
+   "evidence": "| Radix Package(s) | @radix-ui/react-dropdown-menu | ^2.0.5|",
+   "workaround": true,
+   "repos": [
+    "calcom/cal.diy"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "Reporter (bolonio): '| Radix Package(s) | @radix-ui/react-dropdown-menu | ^2.0.5|'",
+    "note": "Only a caret range is given (no resolved version) and the cited reproduction is the live Radix docs site; arguably an a11y/WCAG behaviour report, so exact 2.0.5 usage is not established."
+   }
+  },
+  {
+   "id": "TanStack/form#2407",
+   "package": "@tanstack/react-form",
+   "version": "1.33.5",
+   "title": "useAppForm causes infinite re-render loop when formId changes to undefined",
+   "url": "https://github.com/TanStack/form/issues/2407",
+   "evidence": "- Version: 1.33.5",
+   "workaround": false,
+   "repos": [
+    "aaif-goose/goose",
+    "langgenius/dify"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (JohnnyOu): 'TanStack Form adapter: react-form ... TanStack Form version: 1.33.5'",
+    "note": "Infinite re-render bug in useAppForm on @tanstack/react-form 1.33.5; a commenter traced the root cause in packages/react-form."
+   }
+  },
+  {
+   "id": "emotion-js/emotion#3300",
+   "package": "@emotion/is-prop-valid",
+   "version": "1.4.0",
+   "title": "Incredible lag in recent versions",
+   "url": "https://github.com/emotion-js/emotion/issues/3300",
+   "evidence": "\"@emotion/sheet\": \"npm:^1.4.0\"",
+   "workaround": true,
+   "repos": [
+    "outline/outline"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "Reporter (Nantris) lockfile: '\"@emotion/sheet\": \"npm:^1.4.0\"' (is-prop-valid appears only as '\"@emotion/is-prop-valid\": \"npm:^1.3.0\"')",
+    "note": "The evidence string is a different package (@emotion/sheet range); nothing shows @emotion/is-prop-valid@1.4.0, and the perf regression is attributed to @emotion/serialize 1.3.3."
+   }
+  },
+  {
+   "id": "storybookjs/storybook#36686",
+   "package": "storybook",
+   "version": "10.6.1",
+   "title": "[Bug]: addon-vitest with preact-vite and addon-docs puts unresolvable React deps in optimizeDeps.include",
+   "url": "https://github.com/storybookjs/storybook/issues/36686",
+   "evidence": "storybook 10.6.1",
+   "workaround": false,
+   "repos": [
+    "mastodon/mastodon"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (macchiitaka) System: 'storybook 10.6.1'",
+    "note": "Bug is in @storybook/addon-vitest + preact-vite + addon-docs (all 10.6.1); the storybook core package is part of the setup that was run, but the defect lives in a sibling addon package."
+   }
+  },
+  {
+   "id": "pydantic/pydantic#13300",
+   "package": "pydantic",
+   "version": "2.13.4",
+   "title": "`__pydantic_init_subclass__` cannot receive custom class keyword arguments without also defining `__init_subclass__`",
+   "url": "https://github.com/pydantic/pydantic/issues/13300",
+   "evidence": "- pydantic 2.13.4",
+   "workaround": true,
+   "repos": [
+    "openai/codex",
+    "open-webui/open-webui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (thomas-mckay): '- pydantic 2.13.4'",
+    "note": "TypeError when passing custom class kwargs with __pydantic_init_subclass__; labeled 'bug V2', though partly a docs/behaviour mismatch."
+   }
+  },
+  {
+   "id": "evanw/esbuild#4551",
+   "package": "esbuild",
+   "version": "0.28.2",
+   "title": "Lowering a top-level async arrow makes the file CommonJS (adds `__commonJS` wrapper and `export default`)",
+   "url": "https://github.com/evanw/esbuild/issues/4551",
+   "evidence": "Actual (0.28.2, and every version I tried back to 0.17.0):",
+   "workaround": false,
+   "repos": [
+    "immich-app/immich",
+    "documenso/documenso"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (zerofatorial): 'Actual (0.28.2, and every version I tried back to 0.17.0):'",
+    "note": "esbuild wraps file in __commonJS when lowering async arrows; reproduced on 0.28.2 with playground link pinned to 0.28.2."
+   }
+  },
+  {
+   "id": "modelcontextprotocol/typescript-sdk#2705",
+   "package": "@modelcontextprotocol/sdk",
+   "version": "1.30.0",
+   "title": "registerTool with zod raw shape: refine/superRefine/transform are silently dropped from validation",
+   "url": "https://github.com/modelcontextprotocol/typescript-sdk/issues/2705",
+   "evidence": "Observed on `@modelcontextprotocol/sdk` 1.30.0. Our mitigation: the tool wrapper runs an authoritative `safeParse` itself before delegating (regression-tested).",
+   "workaround": false,
+   "repos": [
+    "cline/cline",
+    "QwenLM/qwen-code"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (qiyueqiu): 'Observed on `@modelcontextprotocol/sdk` 1.30.0.'",
+    "note": "Validation gap where refine/superRefine/transform are skipped in registerTool; observed on sdk 1.30.0 (issue also asks for docs as an alternative)."
+   }
+  },
+  {
+   "id": "apache/arrow#46404",
+   "package": "pyarrow",
+   "version": "20.0.0",
+   "title": "[C++][Python][Parquet] Files with very large data page header can't be read with `pyarrow`",
+   "url": "https://github.com/apache/arrow/issues/46404",
+   "evidence": "- Issue is reproducible with `pyarrow` version `18.1.0`, `19.0.1` and `20.0.0`",
+   "workaround": false,
+   "repos": [
+    "open-webui/open-webui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (jonasdedden): 'Issue is reproducible with `pyarrow` version `18.1.0`, `19.0.1` and `20.0.0`'",
+    "note": "pyarrow fails to read files with >16MB page headers; maintainer calls the file technically valid and limits relaxable, labeled Type: bug."
+   }
+  },
+  {
+   "id": "mochajs/mocha#6219",
+   "package": "mocha",
+   "version": "11.7.5",
+   "title": "\ud83d\udc1b Bug: `--parallel` workers are force-killed before V8 coverage flushes, silently dropping coverage",
+   "url": "https://github.com/mochajs/mocha/issues/6219",
+   "evidence": "- `node_modules/.bin/mocha --version`: 11.7.5",
+   "workaround": true,
+   "repos": [
+    "continuedev/continue"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (kf6kjg): '`node_modules/.bin/mocha --version`: 11.7.5'",
+    "note": "Parallel workers force-killed before V8 coverage flush; observed on mocha 11.7.5 (fix proposed is a new option, but the report is of wrong behaviour)."
+   }
+  },
+  {
+   "id": "langchain-ai/langchain#40518",
+   "package": "langchain-text-splitters",
+   "version": "1.1.2",
+   "title": "UsageMetadataCallbackHandler silently drops usage_metadata when model_name is missing",
+   "url": "https://github.com/langchain-ai/langchain/issues/40518",
+   "evidence": "> langchain_text_splitters: 1.1.2",
+   "workaround": false,
+   "repos": [
+    "open-webui/open-webui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "Reporter (ammar-iitm) system info: '> langchain_core: 1.6.1 ... > langchain_text_splitters: 1.1.2'",
+    "note": "The bug is in langchain-core (callbacks/usage.py), not langchain-text-splitters; 1.1.2 is merely an incidental line in the package dump and the repro never touches text-splitters."
+   }
+  },
+  {
+   "id": "xtermjs/xterm.js#5796",
+   "package": "@xterm/xterm",
+   "version": "6.0.0",
+   "title": "Wrong module path in `package.json` file.",
+   "url": "https://github.com/xtermjs/xterm.js/issues/5796",
+   "evidence": "- xterm.js version: 6.0.0",
+   "workaround": true,
+   "repos": [
+    "Kilo-Org/kilocode",
+    "QwenLM/qwen-code",
+    "OpenHands/OpenHands",
+    "open-webui/open-webui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "no",
+    "quote": "Reporter (navtoj): 'The `node_modules/@xterm/headless/package.json` file has `\"module\": \"lib/xterm.mjs\"`' (with 'xterm.js version: 6.0.0')",
+    "note": "The broken package.json is in the sibling package @xterm/headless 6.0.0, not @xterm/xterm; the reporter did not install @xterm/xterm."
+   }
+  },
+  {
+   "id": "react/react#10657",
+   "package": "react-dom",
+   "version": "18.2.0",
+   "title": "Form restoration & React hydration",
+   "url": "https://github.com/react/react/issues/10657",
+   "evidence": "- React `@latest` (v18.2.0).",
+   "workaround": true,
+   "repos": [
+    "anomalyco/opencode",
+    "Kilo-Org/kilocode",
+    "calcom/cal.diy",
+    "n8n-io/n8n"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "unclear",
+    "version_ok": "unclear",
+    "quote": "Reporter (oliviertassinari), body edited 2023-05-18: '- React `@latest` (v18.2.0).'",
+    "note": "Labeled both 'Type: Bug' and 'Type: Feature Request'; version line names React (not react-dom) and was added 6 years after filing, and the repro is a Next.js app/ router sandbox which ships its own vendored React canary, so exact react-dom@18.2.0 is not established."
+   }
+  },
+  {
+   "id": "microsoft/TypeScript#64742",
+   "package": "typescript",
+   "version": "7.0.2",
+   "title": "Language server (tsc --lsp) exits with code 1 after `shutdown` and `exit`",
+   "url": "https://github.com/microsoft/TypeScript/issues/64742",
+   "evidence": "- I was unable to test this on prior versions because `--lsp` is new in TypeScript 7: seen with `typescript` 7.0.2 (`tsc --lsp --stdio`), macOS arm64. I have no",
+   "workaround": false,
+   "repos": [
+    "aaif-goose/goose",
+    "supabase/supabase",
+    "mastodon/mastodon",
+    "langgenius/dify",
+    "immich-app/immich",
+    "outline/outline",
+    "n8n-io/n8n"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (creasty): 'seen with `typescript` 7.0.2 (`tsc --lsp --stdio`), macOS arm64'",
+    "note": "tsc --lsp exits with code 1 after clean shutdown/exit; reported on typescript 7.0.2."
+   }
+  },
+  {
+   "id": "psycopg/psycopg#1427",
+   "package": "psycopg",
+   "version": "3.3.6",
+   "title": "Hang in futex, linked to garbage collection",
+   "url": "https://github.com/psycopg/psycopg/issues/1427",
+   "evidence": "I'm running a Django under gunicorn (sync worker), psycopg 3.3.6, (with and without pooling, the traces on this issue are with no pooling).",
+   "workaround": false,
+   "repos": [
+    "fastapi/full-stack-fastapi-template"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (JulienPalard): 'I'm running a Django under gunicorn (sync worker), psycopg 3.3.6'",
+    "note": "Deadlock during GC-triggered ServerCursor.close; maintainer suggests the trigger is Django code, so whether it is a psycopg defect is still under discussion."
+   }
+  },
+  {
+   "id": "opensearch-project/opensearch-py#1044",
+   "package": "opensearch-py",
+   "version": "3.2.0",
+   "title": "[BUG] `AWSV4SignerAsyncAuth` signs `connection` header that aiohttp overrides, causing SigV4 mismatch (3.2.0 regression)",
+   "url": "https://github.com/opensearch-project/opensearch-py/issues/1044",
+   "evidence": "**Version:** 3.2.0 (works in 3.1.0)",
+   "workaround": true,
+   "repos": [
+    "open-webui/open-webui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (snstanton): '**Version:** 3.2.0 (works in 3.1.0)'",
+    "note": "SigV4 mismatch regression in AWSV4SignerAsyncAuth introduced in opensearch-py 3.2.0."
+   }
+  },
+  {
+   "id": "adobe/react-spectrum#10644",
+   "package": "react-aria-components",
+   "version": "1.20.0",
+   "title": "Multiple Select with name submits nothing after a form reset",
+   "url": "https://github.com/adobe/react-spectrum/issues/10644",
+   "evidence": "Observed in headless Chromium (Playwright), react-aria-components 1.20.0 / react-aria 3.51.0, React 19.2.7:",
+   "workaround": false,
+   "repos": [
+    "shadcn-ui/ui"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (alexandru-bereghici-to): 'Observed in headless Chromium (Playwright), react-aria-components 1.20.0'",
+    "note": "Multiple Select with name submits nothing after form reset in react-aria-components 1.20.0."
+   }
+  },
+  {
+   "id": "vitest-dev/vitest#8400",
+   "package": "vitest",
+   "version": "3.2.4",
+   "title": "Can't find dt / dd tags by role `definition`",
+   "url": "https://github.com/vitest-dev/vitest/issues/8400",
+   "evidence": "@vitest/browser: ^3.2.4 => 3.2.4",
+   "workaround": false,
+   "repos": [
+    "continuedev/continue",
+    "google-gemini/gemini-cli"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "unclear",
+    "version_ok": "yes",
+    "quote": "Reporter (mjewell) system info: 'vitest: ^3.2.4 => 3.2.4'",
+    "note": "Reporter says it is 'partly a (possible) bug report and partly a question' and is unsure the behaviour is wrong; the version itself is clear."
+   }
+  },
+  {
+   "id": "TypeStrong/ts-node#1966",
+   "package": "ts-node",
+   "version": "10.9.1",
+   "title": "Cannot read file '/usr/local/lib/node_modules/ts-node/tsconfig.build-dist.json'",
+   "url": "https://github.com/TypeStrong/ts-node/issues/1966",
+   "evidence": "npm ERR! > ts-node@10.9.1 clean",
+   "workaround": false,
+   "repos": [
+    "twentyhq/twenty"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "unclear",
+    "version_ok": "yes",
+    "quote": "Reporter (zycoJamie): '* ts-node version: v10.9.1' and npm log '> ts-node@10.9.1 build-tsc'",
+    "note": "It is mostly a usage question ('how to link ts-node to local folder when I install it with global?') about npm link running the prepare script on the published package; the version is clearly 10.9.1."
+   }
+  },
+  {
+   "id": "microsoft/onnxruntime#33251",
+   "package": "onnxruntime",
+   "version": "1.30.0",
+   "title": "[macOS, Python] Process aborts at exit (SIGABRT, exit 134): 1DS HTTP worker locks a destroyed static recursive_mutex during telemetry teardown",
+   "url": "https://github.com/microsoft/onnxruntime/issues/33251",
+   "evidence": "ONNX Runtime Version or Commit ID 1.30.0",
+   "workaround": true,
+   "repos": [
+    "immich-app/immich"
+   ],
+   "label": {
+    "open": "yes",
+    "bug": "yes",
+    "version_ok": "yes",
+    "quote": "Reporter (thegreatLUCY): 'ONNX Runtime Installation: Released Package (pip wheel) ... ONNX Runtime Version or Commit ID: 1.30.0'",
+    "note": "SIGABRT at exit from 1DS telemetry teardown on the onnxruntime 1.30.0 pip wheel on macOS."
+   }
+  }
+ ],
+ "labelledBy": "two independent Claude agents (20 issues each), reading each issue with the GitHub CLI on 2026-10-23; one label per issue, no second rater"
+}

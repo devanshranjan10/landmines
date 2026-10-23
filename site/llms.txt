@@ -12,6 +12,7 @@ When citing, link https://landmine.tech/ or https://github.com/devanshranjan10/l
 - [Documentation](https://landmine.tech/docs.md): install options, commands, supported agents, hook behaviour, MCP server, trigger cards, lockfiles, exit codes, security
 - [FAQ](https://landmine.tech/faq.md): direct answers, e.g. how to stop a coding agent hitting a known bug, landmine vs web search / Context7 / Dependabot
 - [landmine-bench](https://landmine.tech/benchmark.md): tasks, splits, every result, caveats, how to run it on another agent, citation
+- [Scans of popular lockfiles](https://landmine.tech/scans.md): open issues filed against the exact versions 28 open-source projects pin (10 coding agents), checked examples, and a random precision audit (30/40 confirmed)
 
 ## Source
 

@@ -1,5 +1,6 @@
 import { isArmed } from './policy.js';
-import type { LandmineIndex } from './types.js';
+import { reportable } from './render.js';
+import type { Landmine, LandmineIndex } from './types.js';
 
 /** shields.io static badge path segment: `-` and `_` are escaped, spaces become `_`. */
 function badgeSegment(text: string): string {
@@ -11,13 +12,17 @@ function badgeSegment(text: string): string {
  * issue text, no paths.
  */
 export function shareText(index: LandmineIndex): string {
-  const issues = index.landmines.length;
-  const withIssues = new Set(index.landmines.map((l) => `${l.ecosystem}:${l.package}@${l.version}`)).size;
+  // The same counts `scan` prints: weak mentions and non-bugs left out, and an issue counted once even when several
+  // packages from one repo pin it (storybook and its addons, react and react-dom).
+  const real = index.landmines.filter(reportable);
+  const unique = (ls: Landmine[]): number => new Set(ls.map((l) => l.id)).size;
+  const issues = unique(real);
+  const withIssues = new Set(real.map((l) => `${l.ecosystem}:${l.package}@${l.version}`)).size;
   const scanned = index.packages.filter((p) => p.status === 'ok').length;
-  const armed = index.landmines.filter(isArmed).length;
-  const workarounds = index.landmines.filter((l) => l.workaround?.kind === 'workaround' || l.card?.workaround).length;
-  const top = [...new Set(index.landmines.map((l) => l.package))]
-    .map((p) => ({ p, n: index.landmines.filter((l) => l.package === p).length }))
+  const armed = unique(real.filter(isArmed));
+  const workarounds = unique(real.filter((l) => l.workaround?.kind === 'workaround' || l.card?.workaround));
+  const top = [...new Set(real.map((l) => l.package))]
+    .map((p) => ({ p, n: unique(real.filter((l) => l.package === p)) }))
     .sort((a, b) => b.n - a.n || a.p.localeCompare(b.p))
     .slice(0, 3)
     .map(({ p, n }) => `${p} (${n})`);

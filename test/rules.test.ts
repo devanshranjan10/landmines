@@ -155,4 +155,12 @@ describe('share', () => {
     expect(text).toContain('https://img.shields.io/badge/landmine-2_open_bugs_in_pinned_deps-e05d44');
     expect(text).not.toContain('Bug 1 in add');
   });
+
+  it('counts an issue once when several packages from one repo pin it, and leaves out weak mentions', async () => {
+    const { shareText } = await import('../src/share.js');
+    const ok = (name: string) => ({ ecosystem: 'npm', name, version: '1.11.13', dev: false, status: 'ok', searchHits: 0, verified: 0, landmines: 1, dropped: { unverified: 0, unaffected: 0, incidental: 0 } });
+    const weak = { strength: 'weak', where: 'body', kind: 'plain', quote: '' } as const;
+    const idx = { ...index([landmine(1), landmine(1, { package: 'dayjs-plugin' }), landmine(2, { evidence: weak })]), packages: [ok('dayjs'), ok('dayjs-plugin')] } as LandmineIndex;
+    expect(shareText(idx)).toContain('landmine found 1 open GitHub issue filed against the exact versions this project pins, in 2 of 2 dependencies (most: dayjs (1), dayjs-plugin (1)). 1 point at specific APIs');
+  });
 });

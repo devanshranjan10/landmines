@@ -1,0 +1,205 @@
+{
+ "checked": "2026-10-23",
+ "how": "Candidates were the 3 most-discussed armed issues in runtime dependencies per repo (84). Each was read in full by an independent agent and kept only if open, a bug report, confirmed on the exact version, and in the claimed package: 41 of 84 passed. These are a hand-picked, de-duplicated subset of those.",
+ "examples": [
+  {
+   "package": "sympy",
+   "version": "1.14.0",
+   "issue": "sympy/sympy#28169",
+   "title": "`sympy.discrete.transforms.fft` performs inverse FFT",
+   "url": "https://github.com/sympy/sympy/issues/28169",
+   "summary": "sympy.discrete.transforms.fft uses the opposite sign in the exponent, so it effectively computes the inverse DFT (e.g. fft([0,1,0,0]) returns [1, I, -1, -I] instead of [1, -I, -1, I]).",
+   "pinnedBy": [
+    "Aider-AI/aider"
+   ],
+   "evidence": "DietBru (reporter): \"In [3]: sy.__version__ / Out[3]: '1.14.0'\" then \"sy.fft(x)  # wrong result\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "vaul",
+   "version": "1.1.2",
+   "issue": "emilkowalski/vaul#492",
+   "title": "Controlled drawer with `modal={false}` does not work because of bug in `useControllableState`",
+   "url": "https://github.com/emilkowalski/vaul/issues/492",
+   "summary": "A controlled Drawer with modal={false} that is opened from outside (via the open prop) leaves pointer-events: none on the body, blocking interaction with the rest of the page.",
+   "pinnedBy": [
+    "cline/cline",
+    "QwenLM/qwen-code",
+    "supabase/supabase",
+    "shadcn-ui/ui",
+    "Significant-Gravitas/AutoGPT",
+    "outline/outline",
+    "dubinc/dub"
+   ],
+   "evidence": "bryanakitchen (comment): \"I'm experiencing this issue with vaul 1.1.2.\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "next-auth",
+   "version": "5.0.0-beta.25",
+   "issue": "nextauthjs/next-auth#7558",
+   "title": "Tokens rotation does not persist the new token",
+   "url": "https://github.com/nextauthjs/next-auth/issues/7558",
+   "summary": "When the `jwt` callback refreshes an access token, next-auth does not persist the returned token, so later requests keep using the old, expired one.",
+   "pinnedBy": [
+    "vercel/chatbot"
+   ],
+   "evidence": "DaviReisVieira: 'I have th same issue at beta.25.' (next-auth v5 beta)",
+   "workaroundInThread": true
+  },
+  {
+   "package": "react-dom",
+   "version": "19.3.1",
+   "issue": "react/react#37899",
+   "title": "Bug: a component loses its state when its type changes from React.lazy to the component the lazy resolved to",
+   "url": "https://github.com/react/react/issues/37899",
+   "summary": "When an element's type changes from a React.lazy wrapper to the plain component it resolved to, React remounts it and discards its state (e.g. RSC client components later rendered from plain JSX).",
+   "pinnedBy": [
+    "mastodon/mastodon",
+    "langgenius/dify",
+    "immich-app/immich"
+   ],
+   "evidence": "nitedani (reporter): \"Bundle this with react and react-dom 19.3.1 ... It prints `plain -> lazy: 1, lazy -> plain: 0, lazy -> plain in an array: 0`\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "next",
+   "version": "16.3.8",
+   "issue": "vercel/next.js#87737",
+   "title": "Turbopack generates external module references with hashes that don't match installed packages when node_modules structure differs",
+   "url": "https://github.com/vercel/next.js/issues/87737",
+   "summary": "Turbopack production builds reference external modules by hashed aliases (e.g. require-in-the-middle-<hash>) that fail with \"Cannot find module\" when node_modules is reinstalled or laid out differently at runtime; next build --webpack works.",
+   "pinnedBy": [
+    "Kilo-Org/kilocode",
+    "twentyhq/twenty"
+   ],
+   "evidence": "almateu (comment): \"It still reproduces on **16.3.8** (current latest)\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "node-fetch",
+   "version": "3.3.2",
+   "issue": "node-fetch/node-fetch#1801",
+   "title": "Unhandled 'error' event when using AbortSignal to cancel requests",
+   "url": "https://github.com/node-fetch/node-fetch/issues/1801",
+   "summary": "Aborting a node-fetch request with a body via AbortSignal can crash the process with an unhandled 'error' event, because the request body stream has no error listener when destroyed.",
+   "pinnedBy": [
+    "continuedev/continue",
+    "dubinc/dub",
+    "lobehub/lobehub"
+   ],
+   "evidence": "AleCaste (reporter): '| node-fetch | 3.3.2' with the unhandled 'error' event trace",
+   "workaroundInThread": true
+  },
+  {
+   "package": "@phosphor-icons/react",
+   "version": "2.1.10",
+   "issue": "phosphor-icons/react#135",
+   "title": "Import issues with ESM and CJS",
+   "url": "https://github.com/phosphor-icons/react/issues/135",
+   "summary": "Recent releases mislabel the CommonJS build as ESM (type: module with a .js CJS file), so tools such as Vitest, Playwright and Sanity fail with \"ReferenceError: exports is not defined\"; 2.1.8 works.",
+   "pinnedBy": [
+    "mastodon/mastodon",
+    "shadcn-ui/ui",
+    "Significant-Gravitas/AutoGPT"
+   ],
+   "evidence": "samtsai (reporter): \"@phosphor-icons/react v2.1.10 ... \u26a0\ufe0f A require call resolved to an ESM JavaScript file\" plus \"ReferenceError: exports is not defined\" when running vitest; \"downgrading to `2.1.8` works.\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "vite",
+   "version": "8.0.16",
+   "issue": "vitejs/vite#21903",
+   "title": "CSS cascade order differs between dev and production when using auto-imported component styles",
+   "url": "https://github.com/vitejs/vite/issues/21903",
+   "summary": "Production builds can link auto-imported component CSS chunks in a different order than dev (e.g. a component stylesheet before index.css), so the CSS cascade differs between dev and production and the wrong rules win.",
+   "pinnedBy": [
+    "OpenHands/OpenHands",
+    "twentyhq/twenty"
+   ],
+   "evidence": "robertsLando (comment): \"We retested after updating to Vite `8.0.16`, and the issue is still reproducible with Vuetify/component CSS.\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "@modelcontextprotocol/sdk",
+   "version": "1.32.1",
+   "issue": "modelcontextprotocol/typescript-sdk#2721",
+   "title": "outputSchema always emitted as JSON Schema draft-07, breaking clients that only accept 2020-12",
+   "url": "https://github.com/modelcontextprotocol/typescript-sdk/issues/2721",
+   "summary": "McpServer always emits tool `outputSchema` as JSON Schema draft-07 with no way to choose 2020-12, so clients that accept only 2020-12 reject every tool that declares an outputSchema.",
+   "pinnedBy": [
+    "shadcn-ui/ui",
+    "lobehub/lobehub"
+   ],
+   "evidence": "clash-90: 'Still reproducible on SDK 1.32.1 ... Checked against the installed package' (toJsonSchemaCompat returns draft-07 $schema)",
+   "workaroundInThread": true
+  },
+  {
+   "package": "pytube",
+   "version": "15.0.0",
+   "issue": "pytube/pytube#1678",
+   "title": "pytube.exceptions.RegexMatchError: get_throttling_function_name: could not find match for multiple",
+   "url": "https://github.com/pytube/pytube/issues/1678",
+   "summary": "pytube raises `RegexMatchError: get_throttling_function_name: could not find match for multiple` when fetching streams because its regex no longer matches YouTube's player JS.",
+   "pinnedBy": [
+    "crewAIInc/crewAI"
+   ],
+   "evidence": "deepaerial: 'Experiencing same issue on `pytube` version `15.0.0`.'",
+   "workaroundInThread": true
+  },
+  {
+   "package": "react-data-grid",
+   "version": "7.0.0-beta.47",
+   "issue": "Comcast/react-data-grid#3463",
+   "title": "Header cell collapses when resizable set to true and promoted to staging environment",
+   "url": "https://github.com/Comcast/react-data-grid/issues/3463",
+   "summary": "In production builds, react-data-grid header cells collapse when columns are resizable, sortable or frozen, because the minifier merges its nested `@layer` CSS rules.",
+   "pinnedBy": [
+    "supabase/supabase",
+    "vercel/chatbot"
+   ],
+   "evidence": "PrabeenGautam: 'still happening as of version 7.0.0-beta.47.'",
+   "workaroundInThread": true
+  },
+  {
+   "package": "next",
+   "version": "16.4.0",
+   "issue": "vercel/next.js#82117",
+   "title": "Duplicate Location and x-nextjs-stale-time in Header using redirect/permanentRedirect alongside dynamic 'force-static'",
+   "url": "https://github.com/vercel/next.js/issues/82117",
+   "summary": "Next.js emits duplicate `Location` headers for `redirect()`/`permanentRedirect()` on static/ISR routes, which some proxies and clients turn into a broken `/target,/target` redirect.",
+   "pinnedBy": [
+    "documenso/documenso"
+   ],
+   "evidence": "f0rr0: 'Additional standalone reproduction on Next.js 16.2.6 and 16.4.0' (2 Location fields on cache MISS)",
+   "workaroundInThread": true
+  },
+  {
+   "package": "exceljs",
+   "version": "4.4.0",
+   "issue": "exceljs/exceljs#683",
+   "title": "Getting 'sharredString's when trying to parse XSLX in the streaming mode",
+   "url": "https://github.com/exceljs/exceljs/issues/683",
+   "summary": "The streaming XLSX reader sometimes returns { sharedString: n } placeholder objects instead of the actual cell strings.",
+   "pinnedBy": [
+    "cline/cline",
+    "QwenLM/qwen-code"
+   ],
+   "evidence": "gerpedrosa (comment): \"This bug is still present in version 4.4.0.\"",
+   "workaroundInThread": true
+  },
+  {
+   "package": "@tanstack/react-table",
+   "version": "9.2.4",
+   "issue": "TanStack/table#6601",
+   "title": "[v9] Data update from external source doesn't trigger rerenders in components with table object references",
+   "url": "https://github.com/TanStack/table/issues/6601",
+   "summary": "In TanStack Table v9 with React Compiler, replacing `data` from an external source does not re-render components built with `createTableHook`, so they keep showing stale rows.",
+   "pinnedBy": [
+    "fastapi/full-stack-fastapi-template"
+   ],
+   "evidence": "davidmateita (reporter): 'TanStack Table version v9.2.4'; Bhavani2016: 'I reproduced this locally with React Compiler enabled on 9.2.4'",
+   "workaroundInThread": true
+  }
+ ]
+}

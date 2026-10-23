@@ -1,0 +1,875 @@
+{
+ "scanned": "2026-10-23",
+ "landmine": "0.2.1 (commit 48e3846 plus the share fix)",
+ "repos": [
+  {
+   "repo": "cline/cline",
+   "sha": "1619168bdeb570aa233d0f0a9af1d332d83a2816",
+   "lockfiles": [
+    "bun.lock"
+   ],
+   "deps": 330,
+   "depsWithIssues": 124,
+   "issues": 616,
+   "runtimeIssues": 490,
+   "armed": 465,
+   "workarounds": 170,
+   "top": [
+    [
+     "exceljs@4.4.0",
+     88
+    ],
+    [
+     "typescript@5.9.3",
+     36
+    ],
+    [
+     "date-fns@4.1.0",
+     32
+    ]
+   ],
+   "skippedDirs": [
+    "evals",
+    "evals/analysis"
+   ]
+  },
+  {
+   "repo": "continuedev/continue",
+   "sha": "5522c6f44ca0ac3528b37244818fbfa39b5af470",
+   "lockfiles": [
+    "package-lock.json",
+    "binary/package-lock.json",
+    "core/package-lock.json",
+    "docs-site/package-lock.json",
+    "extensions/cli/package-lock.json",
+    "extensions/intellij/package-lock.json",
+    "extensions/vscode/package-lock.json",
+    "gui/package-lock.json",
+    "packages/config-types/package-lock.json",
+    "packages/config-yaml/package-lock.json",
+    "packages/continue-sdk/package-lock.json",
+    "packages/continue-sdk/typescript/package-lock.json",
+    "packages/fetch/package-lock.json",
+    "packages/llm-info/package-lock.json",
+    "packages/terminal-security/package-lock.json",
+    "packages/openai-adapters/package-lock.json"
+   ],
+   "deps": 341,
+   "depsWithIssues": 129,
+   "issues": 670,
+   "runtimeIssues": 297,
+   "armed": 423,
+   "workarounds": 165,
+   "top": [
+    [
+     "prettier@3.6.2",
+     41
+    ],
+    [
+     "sqlite3@5.1.7",
+     39
+    ],
+    [
+     "typescript@5.9.3",
+     34
+    ]
+   ],
+   "skippedDirs": [
+    "manual-testing-sandbox"
+   ]
+  },
+  {
+   "repo": "anomalyco/opencode",
+   "sha": "2a3e7c0f349ba0e9454fa0529ec041cf57e53cb8",
+   "lockfiles": [
+    "bun.lock",
+    "github/bun.lock",
+    "packages/console/resource/bun.lock",
+    "sdks/vscode/bun.lock"
+   ],
+   "deps": 236,
+   "depsWithIssues": 92,
+   "issues": 306,
+   "runtimeIssues": 161,
+   "armed": 216,
+   "workarounds": 87,
+   "top": [
+    [
+     "prettier@3.6.2",
+     41
+    ],
+    [
+     "typescript@5.8.3",
+     27
+    ],
+    [
+     "react-dom@18.2.0",
+     17
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "Kilo-Org/kilocode",
+   "sha": "f29df226d712fd65b24820d8fbc3026f18e4a058",
+   "lockfiles": [
+    "bun.lock",
+    "packages/kilo-docs/pnpm-lock.yaml"
+   ],
+   "deps": 257,
+   "depsWithIssues": 94,
+   "issues": 444,
+   "runtimeIssues": 290,
+   "armed": 327,
+   "workarounds": 145,
+   "top": [
+    [
+     "@xterm/xterm@6.0.0",
+     42
+    ],
+    [
+     "next@16.3.8",
+     42
+    ],
+    [
+     "prettier@3.6.2",
+     41
+    ]
+   ],
+   "skippedDirs": [
+    "artifacts/glm52-rise-video"
+   ]
+  },
+  {
+   "repo": "google-gemini/gemini-cli",
+   "sha": "a713410aba5d594594e20d5c822e3aab8f822089",
+   "lockfiles": [
+    "package-lock.json"
+   ],
+   "deps": 153,
+   "depsWithIssues": 50,
+   "issues": 275,
+   "runtimeIssues": 137,
+   "armed": 178,
+   "workarounds": 59,
+   "top": [
+    [
+     "typescript@5.9.3",
+     36
+    ],
+    [
+     "ajv@8.17.1",
+     25
+    ],
+    [
+     "typescript@5.8.3",
+     25
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "QwenLM/qwen-code",
+   "sha": "03ea964d380d23519af7d57c2bdddfade1db3754",
+   "lockfiles": [
+    "pnpm-lock.yaml",
+    "packages/cua-driver/python/uv.lock",
+    "packages/desktop/package-lock.json",
+    "packages/live-host/package-lock.json",
+    "packages/mobile-mcp/package-lock.json"
+   ],
+   "deps": 262,
+   "depsWithIssues": 95,
+   "issues": 558,
+   "runtimeIssues": 389,
+   "armed": 401,
+   "workarounds": 155,
+   "top": [
+    [
+     "exceljs@4.4.0",
+     88
+    ],
+    [
+     "@xterm/xterm@6.0.0",
+     42
+    ],
+    [
+     "typescript@5.9.3",
+     36
+    ]
+   ],
+   "skippedDirs": [
+    "integration-tests/concurrent-runner"
+   ]
+  },
+  {
+   "repo": "OpenHands/OpenHands",
+   "sha": "801a3c72886f731ffb7c4af130b46d10e1906e4c",
+   "lockfiles": [
+    "package-lock.json"
+   ],
+   "deps": 94,
+   "depsWithIssues": 49,
+   "issues": 300,
+   "runtimeIssues": 122,
+   "armed": 245,
+   "workarounds": 79,
+   "top": [
+    [
+     "typescript@6.0.3",
+     67
+    ],
+    [
+     "@xterm/xterm@6.0.0",
+     42
+    ],
+    [
+     "react-dom@19.3.0",
+     29
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "Aider-AI/aider",
+   "sha": "5dc9490bb35f9729ef2c95d00a19ccd30c26339c",
+   "lockfiles": [
+    "requirements.txt",
+    "requirements/requirements-browser.txt",
+    "requirements/requirements-dev.txt",
+    "requirements/requirements-help.txt",
+    "requirements/requirements-playwright.txt",
+    "requirements/requirements-browser.txt",
+    "requirements/requirements-dev.txt",
+    "requirements/requirements-help.txt",
+    "requirements/requirements-playwright.txt"
+   ],
+   "deps": 188,
+   "depsWithIssues": 76,
+   "issues": 435,
+   "runtimeIssues": 399,
+   "armed": 335,
+   "workarounds": 103,
+   "top": [
+    [
+     "sympy@1.14.0",
+     62
+    ],
+    [
+     "torch@2.10.0",
+     56
+    ],
+    [
+     "pandas@2.3.3",
+     29
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "openai/codex",
+   "sha": "e6ebdfe00b520e21ed50ac0362656f32dd64d2fc",
+   "lockfiles": [
+    "pnpm-lock.yaml",
+    ".github/actions/publish-dotslash/requirements.txt",
+    ".github/actions/setup-python-release-tools/uv.lock",
+    "scripts/uv.lock",
+    "scripts/codex_package/smoke_tests/uv.lock",
+    "sdk/python/uv.lock",
+    "sdk/python-runtime/uv.lock"
+   ],
+   "deps": 29,
+   "depsWithIssues": 19,
+   "issues": 206,
+   "runtimeIssues": 81,
+   "armed": 124,
+   "workarounds": 60,
+   "top": [
+    [
+     "prettier@3.6.2",
+     41
+    ],
+    [
+     "openai-codex-cli-bin@0.153.4",
+     36
+    ],
+    [
+     "ts-node@10.9.2",
+     24
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "aaif-goose/goose",
+   "sha": "e970eea8ac23067eb5f3bbad767e51cfaf917a91",
+   "lockfiles": [
+    "documentation/package-lock.json",
+    "scripts/provider-error-proxy/uv.lock",
+    "services/ask-ai-bot/bun.lock",
+    "ui/pnpm-lock.yaml"
+   ],
+   "deps": 137,
+   "depsWithIssues": 78,
+   "issues": 426,
+   "runtimeIssues": 162,
+   "armed": 335,
+   "workarounds": 126,
+   "top": [
+    [
+     "typescript@7.0.2",
+     63
+    ],
+    [
+     "@hey-api/openapi-ts@0.99.0",
+     48
+    ],
+    [
+     "typescript@5.9.3",
+     36
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "browser-use/browser-use",
+   "sha": "3df5806a0d097a1546d92c49bcf1b28c9972c3bd",
+   "lockfiles": [],
+   "deps": 0,
+   "depsWithIssues": 0,
+   "issues": 0,
+   "runtimeIssues": 0,
+   "armed": 0,
+   "workarounds": 0,
+   "top": [],
+   "skippedDirs": []
+  },
+  {
+   "repo": "excalidraw/excalidraw",
+   "sha": "b7de45e88111f5680ae4bb3c3f3541c7d3b279fe",
+   "lockfiles": [
+    "yarn.lock"
+   ],
+   "deps": 86,
+   "depsWithIssues": 27,
+   "issues": 192,
+   "runtimeIssues": 38,
+   "armed": 112,
+   "workarounds": 52,
+   "top": [
+    [
+     "typescript@5.9.3",
+     36
+    ],
+    [
+     "prettier@2.6.2",
+     26
+    ],
+    [
+     "prettier@2.8.8",
+     19
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "calcom/cal.diy",
+   "sha": "0f19cc46ef6b6426ee398c670575b3c96be7af9e",
+   "lockfiles": [
+    "yarn.lock"
+   ],
+   "deps": 329,
+   "depsWithIssues": 104,
+   "issues": 428,
+   "runtimeIssues": 285,
+   "armed": 272,
+   "workarounds": 134,
+   "top": [
+    [
+     "typescript@5.9.3",
+     36
+    ],
+    [
+     "ts-node@10.9.2",
+     24
+    ],
+    [
+     "date-fns@3.6.0",
+     21
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "supabase/supabase",
+   "sha": "60b51d74d53c788d120b6dd656f137828a8cc9e3",
+   "lockfiles": [
+    "pnpm-lock.yaml"
+   ],
+   "deps": 363,
+   "depsWithIssues": 132,
+   "issues": 645,
+   "runtimeIssues": 500,
+   "armed": 481,
+   "workarounds": 173,
+   "top": [
+    [
+     "typescript@7.0.2",
+     67
+    ],
+    [
+     "dayjs@1.11.13",
+     66
+    ],
+    [
+     "next@16.3.6",
+     29
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "mastodon/mastodon",
+   "sha": "8179db49adb98060baa7037b95c196c555ba4257",
+   "lockfiles": [
+    "yarn.lock"
+   ],
+   "deps": 134,
+   "depsWithIssues": 61,
+   "issues": 250,
+   "runtimeIssues": 118,
+   "armed": 201,
+   "workarounds": 49,
+   "top": [
+    [
+     "typescript@7.0.2",
+     67
+    ],
+    [
+     "vite@8.3.4",
+     17
+    ],
+    [
+     "history@4.10.1",
+     12
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "shadcn-ui/ui",
+   "sha": "3d98900e9b73c45f035f8109e9d41ba6a51685e7",
+   "lockfiles": [
+    "pnpm-lock.yaml"
+   ],
+   "deps": 147,
+   "depsWithIssues": 56,
+   "issues": 273,
+   "runtimeIssues": 239,
+   "armed": 195,
+   "workarounds": 64,
+   "top": [
+    [
+     "prettier@3.6.2",
+     41
+    ],
+    [
+     "date-fns@4.1.0",
+     32
+    ],
+    [
+     "next@16.4.2",
+     23
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "crewAIInc/crewAI",
+   "sha": "fa6d7121abaa432899b68b58a1be16488f545e13",
+   "lockfiles": [
+    "uv.lock"
+   ],
+   "deps": 97,
+   "depsWithIssues": 42,
+   "issues": 318,
+   "runtimeIssues": 318,
+   "armed": 241,
+   "workarounds": 84,
+   "top": [
+    [
+     "pytube@15.0.0",
+     85
+    ],
+    [
+     "pandas@2.2.3",
+     49
+    ],
+    [
+     "chromadb@1.5.9",
+     37
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "Significant-Gravitas/AutoGPT",
+   "sha": "9eefeb9a586c8f616ef434e3fa9153ab5bc34556",
+   "lockfiles": [
+    "autogpt_platform/autogpt_libs/poetry.lock",
+    "autogpt_platform/backend/poetry.lock",
+    "autogpt_platform/frontend/pnpm-lock.yaml",
+    "autogpt_platform/swap_proxy/poetry.lock",
+    "classic/poetry.lock"
+   ],
+   "deps": 301,
+   "depsWithIssues": 133,
+   "issues": 689,
+   "runtimeIssues": 498,
+   "armed": 505,
+   "workarounds": 171,
+   "top": [
+    [
+     "prettier@3.6.2",
+     41
+    ],
+    [
+     "typescript@5.9.3",
+     36
+    ],
+    [
+     "date-fns@4.1.0",
+     32
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "fastapi/full-stack-fastapi-template",
+   "sha": "b1125d8839482cb7bbae603ddc6d0081bf87532e",
+   "lockfiles": [
+    "bun.lock",
+    "uv.lock"
+   ],
+   "deps": 65,
+   "depsWithIssues": 41,
+   "issues": 292,
+   "runtimeIssues": 120,
+   "armed": 256,
+   "workarounds": 59,
+   "top": [
+    [
+     "typescript@6.0.3",
+     67
+    ],
+    [
+     "react-dom@19.3.0",
+     29
+    ],
+    [
+     "@biomejs/biome@2.5.14",
+     20
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "vercel/chatbot",
+   "sha": "c2f8235e1f3ea903ad8b7f61447c4f74164b5c58",
+   "lockfiles": [
+    "pnpm-lock.yaml"
+   ],
+   "deps": 66,
+   "depsWithIssues": 29,
+   "issues": 298,
+   "runtimeIssues": 207,
+   "armed": 238,
+   "workarounds": 115,
+   "top": [
+    [
+     "babel-plugin-react-compiler@1.0.0",
+     57
+    ],
+    [
+     "drizzle-orm@0.45.2",
+     53
+    ],
+    [
+     "postgres@3.4.9",
+     47
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "langgenius/dify",
+   "sha": "44564a1dec7d183b44a959a7f5fb531988132d2e",
+   "lockfiles": [
+    "pnpm-lock.yaml",
+    "api/uv.lock",
+    "dify-agent/uv.lock"
+   ],
+   "deps": 353,
+   "depsWithIssues": 151,
+   "issues": 647,
+   "runtimeIssues": 438,
+   "armed": 533,
+   "workarounds": 170,
+   "top": [
+    [
+     "typescript@7.0.2",
+     67
+    ],
+    [
+     "@hey-api/openapi-ts@0.99.0",
+     48
+    ],
+    [
+     "echarts@6.1.0",
+     33
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "immich-app/immich",
+   "sha": "1cf5bb41153478c180b65c6d93106fce5802b474",
+   "lockfiles": [
+    "pnpm-lock.yaml",
+    "machine-learning/uv.lock"
+   ],
+   "deps": 232,
+   "depsWithIssues": 120,
+   "issues": 709,
+   "runtimeIssues": 419,
+   "armed": 539,
+   "workarounds": 151,
+   "top": [
+    [
+     "typescript@7.0.2",
+     67
+    ],
+    [
+     "rknn-toolkit-lite2@2.3.2",
+     63
+    ],
+    [
+     "onnxruntime@1.30.0",
+     54
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "outline/outline",
+   "sha": "cfdb04e3e2a11887300a1e8632ae68b4e9f4ca78",
+   "lockfiles": [
+    "yarn.lock"
+   ],
+   "deps": 220,
+   "depsWithIssues": 84,
+   "issues": 364,
+   "runtimeIssues": 255,
+   "armed": 278,
+   "workarounds": 77,
+   "top": [
+    [
+     "typescript@7.0.2",
+     67
+    ],
+    [
+     "react-is@19.3.0",
+     28
+    ],
+    [
+     "date-fns@3.6.0",
+     21
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "dubinc/dub",
+   "sha": "20ca8994950f83d5aedab88b802b55b7243c89b6",
+   "lockfiles": [
+    "pnpm-lock.yaml",
+    ".deepsec/pnpm-lock.yaml",
+    "packages/stripe-app/package-lock.json"
+   ],
+   "deps": 217,
+   "depsWithIssues": 71,
+   "issues": 285,
+   "runtimeIssues": 169,
+   "armed": 183,
+   "workarounds": 86,
+   "top": [
+    [
+     "date-fns@4.1.0",
+     32
+    ],
+    [
+     "prettier@3.2.5",
+     28
+    ],
+    [
+     "ts-node@10.9.2",
+     24
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "documenso/documenso",
+   "sha": "8707e33c124e4b1a68dde92d5e05178c9aabd0be",
+   "lockfiles": [
+    "package-lock.json"
+   ],
+   "deps": 209,
+   "depsWithIssues": 70,
+   "issues": 323,
+   "runtimeIssues": 239,
+   "armed": 262,
+   "workarounds": 122,
+   "top": [
+    [
+     "next@16.4.0",
+     34
+    ],
+    [
+     "@babel/core@7.29.7",
+     22
+    ],
+    [
+     "date-fns@3.6.0",
+     21
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "lobehub/lobehub",
+   "sha": "c52ddde4082a59742a9d9717e578b66c9233ccf7",
+   "lockfiles": [
+    "apps/desktop/pnpm-lock.yaml"
+   ],
+   "deps": 129,
+   "depsWithIssues": 54,
+   "issues": 313,
+   "runtimeIssues": 107,
+   "armed": 245,
+   "workarounds": 70,
+   "top": [
+    [
+     "typescript@6.0.3",
+     67
+    ],
+    [
+     "happy-dom@20.14.5",
+     38
+    ],
+    [
+     "vitest@5.0.3",
+     17
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "twentyhq/twenty",
+   "sha": "8c1a920d7c6e52fe89c1516a1e3400646b660049",
+   "lockfiles": [
+    "yarn.lock"
+   ],
+   "deps": 418,
+   "depsWithIssues": 171,
+   "issues": 717,
+   "runtimeIssues": 420,
+   "armed": 524,
+   "workarounds": 210,
+   "top": [
+    [
+     "babel-plugin-react-compiler@1.0.0",
+     51
+    ],
+    [
+     "ts-node@10.9.1",
+     43
+    ],
+    [
+     "next@16.3.8",
+     42
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "open-webui/open-webui",
+   "sha": "91ea4e3421d1d8069f13d4a463fcb5986d94ea60",
+   "lockfiles": [
+    "package-lock.json",
+    "uv.lock",
+    "backend/requirements-slim.txt",
+    "backend/requirements.txt"
+   ],
+   "deps": 226,
+   "depsWithIssues": 96,
+   "issues": 532,
+   "runtimeIssues": 459,
+   "armed": 391,
+   "workarounds": 155,
+   "top": [
+    [
+     "langchain-text-splitters@1.1.2",
+     45
+    ],
+    [
+     "@xterm/xterm@6.0.0",
+     42
+    ],
+    [
+     "chromadb@1.5.9",
+     37
+    ]
+   ],
+   "skippedDirs": []
+  },
+  {
+   "repo": "n8n-io/n8n",
+   "sha": "9184012fc569c5d969b061be3c3ea834f6f712ae",
+   "lockfiles": [
+    "pnpm-lock.yaml",
+    ".github/scripts/pnpm-lock.yaml",
+    "packages/@n8n/task-runner-python/uv.lock"
+   ],
+   "deps": 563,
+   "depsWithIssues": 205,
+   "issues": 839,
+   "runtimeIssues": 659,
+   "armed": 540,
+   "workarounds": 180,
+   "top": [
+    [
+     "dayjs@1.11.10",
+     83
+    ],
+    [
+     "typescript@7.0.2",
+     67
+    ],
+    [
+     "kafkajs@2.2.4",
+     50
+    ]
+   ],
+   "skippedDirs": []
+  }
+ ],
+ "distinctIssues": 6622,
+ "distinctArmed": 4788,
+ "notes": [
+  "browser-use/browser-use commits no lockfile, so there was nothing to scan.",
+  "Folders that do not ship were left out: evals, sandboxes, scratch artifacts, integration-test projects (listed per repo in skippedDirs).",
+  "Counts follow `landmine scan`: weak mentions and non-bugs are left out, and an issue counts once per repo even when several packages or lockfiles pin it.",
+  "runtimeIssues: issues in dependencies the lockfile does not mark as dev-only. armed: issues tied to specific APIs, which the pre-edit hook watches."
+ ]
+}
