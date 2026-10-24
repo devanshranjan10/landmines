@@ -46,16 +46,50 @@ export function createRemoteHandler(env: RemoteEnv) {
   return createMcpHandler(() => createRemoteServer(env), { responseMode: 'json' });
 }
 
-/** Lookups cached at the edge for a day, keyed by the analyser version so a release re-analyses. */
-export function edgeCache(cache: { match(req: Request): Promise<Response | undefined>; put(req: Request, res: Response): Promise<void> }): LookupCache {
+/** The slice of a Workers KV namespace the lookup cache uses. */
+export interface LookupKv {
+  get(key: string, type: 'json'): Promise<unknown>;
+  put(key: string, value: string, opts?: { expirationTtl?: number }): Promise<void>;
+}
+
+const DAY_MS = 86_400_000;
+
+/**
+ * Lookups cached for a day, keyed by the analyser version so a release re-analyses. The Cache API is per data centre;
+ * the optional KV namespace is global and keeps each result for 30 days, so when GitHub rate-limits a traffic spike
+ * the last good result is served instead of an error.
+ */
+export function edgeCache(
+  cache: { match(req: Request): Promise<Response | undefined>; put(req: Request, res: Response): Promise<void> },
+  kv?: LookupKv,
+): LookupCache {
   const req = (key: string) => new Request(`https://landmine.tech/__lookup/${VERSION}/${key}`);
+  const res = (value: LookupResult, maxAge: number) =>
+    new Response(JSON.stringify(value), { headers: { 'Content-Type': 'application/json', 'Cache-Control': `public, max-age=${maxAge}` } });
+  const stored = async (key: string): Promise<{ v: string; r: LookupResult } | undefined> => {
+    try {
+      return ((await kv?.get(`lookup/${key}`, 'json')) as { v: string; r: LookupResult } | null) ?? undefined;
+    } catch {
+      return undefined;
+    }
+  };
   return {
     async get(key) {
-      const res = await cache.match(req(key));
-      return res ? ((await res.json()) as LookupResult) : undefined;
+      const hit = await cache.match(req(key));
+      if (hit) return (await hit.json()) as LookupResult;
+      const s = await stored(key);
+      const left = s ? DAY_MS - (Date.now() - Date.parse(s.r.fetchedAt)) : 0;
+      if (!s || s.v !== VERSION || !(left > 0)) return undefined;
+      await cache.put(req(key), res(s.r, Math.ceil(left / 1000)));
+      return s.r;
     },
     async put(key, value) {
-      await cache.put(req(key), new Response(JSON.stringify(value), { headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=86400' } }));
+      await cache.put(req(key), res(value, DAY_MS / 1000));
+      // KV writes have a daily quota; past it the per-data-centre cache still works.
+      await kv?.put(`lookup/${key}`, JSON.stringify({ v: VERSION, r: value }), { expirationTtl: 30 * 86_400 }).catch(() => undefined);
+    },
+    async stale(key) {
+      return (await stored(key))?.r;
     },
   };
 }
@@ -85,6 +119,9 @@ export interface PublicLookup {
   summary: string;
   total: number;
   issues: PublicIssue[];
+  /** When GitHub was asked; with `stale`, an older result served because a fresh lookup failed. */
+  fetchedAt: string;
+  stale?: boolean;
 }
 
 /** The site's live lookup: up to 5 specs, the top issues of each, as JSON. */
@@ -95,7 +132,7 @@ export async function lookupForSite(env: RemoteEnv, specs: string[], perPackage 
   for (const spec of specs.slice(0, 5)) {
     const t = parseSpec(spec);
     if ('error' in t) {
-      out.push({ spec, status: 'not-found', name: spec, version: '', detail: t.error, summary: t.error, total: 0, issues: [] });
+      out.push({ spec, status: 'not-found', name: spec, version: '', detail: t.error, summary: t.error, total: 0, issues: [], fetchedAt: new Date().toISOString() });
       continue;
     }
     const r = await lookupPackage(t, deps);
@@ -107,6 +144,8 @@ export async function lookupForSite(env: RemoteEnv, specs: string[], perPackage 
       ...(r.latest ? { latest: true } : {}),
       ...(r.repo ? { repo: r.repo } : {}),
       ...(r.detail ? { detail: r.detail } : {}),
+      ...(r.stale ? { stale: true } : {}),
+      fetchedAt: r.fetchedAt,
       summary: lookupSummary(r),
       total: r.landmines.length,
       issues: r.landmines.slice(0, perPackage).map((l) => ({

@@ -36,11 +36,15 @@ export interface LookupResult {
   /** Reportable issues (weak mentions and non-bugs left out), one per issue, most relevant first. */
   landmines: Landmine[];
   fetchedAt: string;
+  /** True when a fresh lookup failed (GitHub busy) and an older result was served instead; fetchedAt says when. */
+  stale?: boolean;
 }
 
 export interface LookupCache {
   get(key: string): Promise<LookupResult | undefined>;
   put(key: string, value: LookupResult): Promise<void>;
+  /** A result of any age, served when a fresh lookup fails. */
+  stale?(key: string): Promise<LookupResult | undefined>;
 }
 
 export interface LookupOptions {
@@ -156,8 +160,12 @@ export async function lookupPackage(target: LookupTarget, opts: LookupOptions): 
 
   const result = await fetchLookup({ ...target, version }, maxIssues, opts, base);
   if (latest) result.latest = true;
-  // Errors (rate limits, registry blips) are not cached: the next call should try again.
-  if (result.status !== 'error') {
+  if (result.status === 'error') {
+    // Errors (rate limits, registry blips) are not cached: the next call should try again. Meanwhile an older
+    // result beats an error.
+    const old = await opts.cache?.stale?.(key);
+    if (old) return { ...old, stale: true, ...(latest ? { latest } : {}) };
+  } else {
     const { latest: _latest, ...stored } = result;
     await opts.cache?.put(key, stored);
   }
@@ -232,8 +240,9 @@ export function lookupSummary(r: LookupResult): string {
   if (r.status === 'no-repo') return `${label(r)}: ${r.detail ?? 'no GitHub repository found'}, so landmine has no issues to check.`;
   const n = r.landmines.length;
   const armed = r.landmines.filter(isArmed).length;
-  if (n === 0) return `${label(r, r.repo)}: no open GitHub issue verified as filed against this exact version.`;
-  return `${label(r, r.repo)}: ${n} open GitHub issue${n === 1 ? '' : 's'} filed against this exact version${armed ? `, ${armed} naming a specific API` : ''}.`;
+  const asOf = r.stale ? ` (GitHub didn't answer, so this is the last good lookup, from ${r.fetchedAt.slice(0, 10)})` : '';
+  if (n === 0) return `${label(r, r.repo)}: no open GitHub issue verified as filed against this exact version${asOf}.`;
+  return `${label(r, r.repo)}: ${n} open GitHub issue${n === 1 ? '' : 's'} filed against this exact version${armed ? `, ${armed} naming a specific API` : ''}${asOf}.`;
 }
 
 /** Plain text for a tool result: a summary line per package, then the top issues in full. */

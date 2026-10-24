@@ -4,7 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { GitHubClient } from '../src/github/client.js';
 import { type Http, fakeHttp, replayHttp } from '../src/http.js';
 import { type LookupResult, formatLookups, lookupPackage, lookupSummary, parseSpec } from '../src/lookup.js';
-import { createRemoteHandler, createRemoteServer } from '../src/remote.js';
+import { createRemoteHandler, createRemoteServer, edgeCache } from '../src/remote.js';
+import { VERSION } from '../src/version.js';
 
 const HTTP_DIR = fileURLToPath(new URL('./fixtures/http/scan-demo/', import.meta.url));
 const textOf = (r: unknown): string => ((r as { content: Array<{ text: string }> }).content[0]?.text ?? '');
@@ -63,6 +64,16 @@ describe('lookupPackage', () => {
     const failed = await lookupPackage({ ecosystem: 'npm', name: 'zod', version: '9.9.9' }, { ...deps(offline), cache });
     expect(failed.status).toBe('error');
     expect(store.size).toBe(1);
+  });
+
+  it('serves the last good result, marked stale, when a fresh lookup fails', async () => {
+    const old = await lookupPackage({ ecosystem: 'npm', name: 'drizzle-orm', version: '0.36.0' }, deps());
+    const cache = { get: () => Promise.resolve(undefined), put: () => Promise.resolve(), stale: () => Promise.resolve(old) };
+    const offline = fakeHttp(() => Promise.reject(new Error('network is off')));
+    const r = await lookupPackage({ ecosystem: 'npm', name: 'drizzle-orm', version: '0.36.0' }, { ...deps(offline), cache });
+    expect(r).toMatchObject({ status: 'ok', stale: true, fetchedAt: old.fetchedAt });
+    expect(r.landmines.length).toBe(old.landmines.length);
+    expect(lookupSummary(r)).toContain("GitHub didn't answer, so this is the last good lookup");
   });
 
   it('a bare name uses the registry latest; an unknown package is not-found', async () => {
@@ -147,5 +158,51 @@ describe('hosted MCP server (landmine.tech/mcp)', () => {
     const body = await res.text();
     expect(body).toContain('"name":"landmine"');
     expect(body).toContain('"instructions"');
+  });
+});
+
+describe('edgeCache', () => {
+  function stores() {
+    const local = new Map<string, string>();
+    const kv = new Map<string, string>();
+    const cache = {
+      match: (req: Request) => Promise.resolve(local.has(req.url) ? new Response(local.get(req.url)) : undefined),
+      put: async (req: Request, res: Response) => void local.set(req.url, await res.text()),
+    };
+    const kvNs = {
+      get: (k: string) => Promise.resolve(kv.has(k) ? (JSON.parse(kv.get(k) ?? '') as unknown) : null),
+      put: (k: string, v: string) => Promise.resolve(void kv.set(k, v)),
+    };
+    return { local, kv, cache, kvNs };
+  }
+  const result = (fetchedAt: string): LookupResult => ({ ecosystem: 'npm', name: 'x', version: '1.0.0', status: 'ok', landmines: [], fetchedAt });
+
+  it('writes both tiers; another data centre reads a fresh result from KV', async () => {
+    const a = stores();
+    await edgeCache(a.cache, a.kvNs).put('k', result(new Date().toISOString()));
+    expect(a.local.size).toBe(1);
+    expect(a.kv.size).toBe(1);
+    const elsewhere = { ...stores(), kvNs: a.kvNs };
+    expect(await edgeCache(elsewhere.cache, elsewhere.kvNs).get('k')).toMatchObject({ name: 'x' });
+    expect(elsewhere.local.size).toBe(1);
+  });
+
+  it('treats a day-old or other-version KV entry as a miss but still serves it as stale', async () => {
+    const s = stores();
+    s.kv.set('lookup/old', JSON.stringify({ v: VERSION, r: result(new Date(Date.now() - 2 * 86_400_000).toISOString()) }));
+    s.kv.set('lookup/prev', JSON.stringify({ v: '0.0.1', r: result(new Date().toISOString()) }));
+    const c = edgeCache(s.cache, s.kvNs);
+    expect(await c.get('old')).toBeUndefined();
+    expect(await c.get('prev')).toBeUndefined();
+    expect(await c.stale?.('old')).toMatchObject({ name: 'x' });
+    expect(await c.stale?.('prev')).toMatchObject({ name: 'x' });
+  });
+
+  it('keeps working when KV is missing or over its write quota', async () => {
+    const s = stores();
+    const full = { get: s.kvNs.get, put: () => Promise.reject(new Error('KV put() limit exceeded for the day')) };
+    await edgeCache(s.cache, full).put('k', result(new Date().toISOString()));
+    expect(await edgeCache(s.cache).get('k')).toMatchObject({ name: 'x' });
+    expect(await edgeCache(s.cache).stale?.('k')).toBeUndefined();
   });
 });

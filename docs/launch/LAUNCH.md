@@ -33,9 +33,10 @@ Re-render the video: `CHROME=… PLAYWRIGHT_CORE=… node scripts/video/render.m
 
 ## Released
 
-0.2.1 is out (2026-10-23): npm, GitHub release, GitHub Packages, Homebrew tap, and the
-[official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=landmines) (active, 0.2.1).
-The plugin pins 0.2.1. Next release: bump `package.json`, `server.json` and the plugin pins, add a CHANGELOG section,
+0.2.2 is out (2026-10-24): npm, GitHub release, GitHub Packages, Homebrew tap, and the
+[official MCP Registry](https://registry.modelcontextprotocol.io/v0.1/servers?search=landmine) as
+`tech.landmine/landmine` (active, 0.2.2, with the hosted remote https://landmine.tech/mcp). The plugin pins 0.2.2.
+Before a launch, run `node scripts/site/warm.mjs` so popular lookups come from the cache, not GitHub. Next release: bump `package.json`, `server.json` and the plugin pins, add a CHANGELOG section,
 push main, then `sh scripts/release.sh` (npm asks for browser approval).
 
 What's left is the directory submissions below (they need your logins).
@@ -56,7 +57,7 @@ Use the same text everywhere:
 
 | Directory | How | Status |
 |---|---|---|
-| Official MCP Registry | automatic from the `v0.2.1` tag (`server.json`) | listed, 0.2.1 |
+| Official MCP Registry | automatic from the version tag (`server.json`) | listed, 0.2.2 as `tech.landmine/landmine` |
 | PulseMCP | ingests the official registry | automatic (check in a few days) |
 | Glama | glama.ai/mcp/servers → Add Server (repo has `glama.json`) | needs your login |
 | awesome-mcp-servers (punkpeye) | PR adding one line under Developer Tools, with the Glama badge; their rule for agent-made PRs is to end the title with 🤖🤖🤖 | after Glama |

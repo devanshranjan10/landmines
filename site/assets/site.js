@@ -512,7 +512,9 @@ if (lookupForm) {
       if (r.repo) head.append(el('span', 'repo', `${r.repo}${r.latest ? ' · latest' : ''}`));
       head.append(el('span', `count${r.total ? '' : ' none'}`, r.status === 'ok' ? `${r.total} open issue${r.total === 1 ? '' : 's'}` : r.status.replace('-', ' ')));
       pkg.append(head);
-      if (r.status !== 'ok' || r.total === 0) pkg.append(el('p', 'why', r.summary));
+      if (r.status === 'error') pkg.append(el('p', 'why', `GitHub didn't answer just now, usually a rate limit when lots of people are trying this. Try again in a minute, or run npx landmines lookup ${r.spec} with your own GitHub login.`));
+      else if (r.status !== 'ok' || r.total === 0) pkg.append(el('p', 'why', r.summary));
+      else if (r.stale) pkg.append(el('p', 'why', `GitHub didn't answer just now, so this is the last good lookup, from ${r.fetchedAt.slice(0, 10)}.`));
       for (const i of r.issues) {
         const a = el('a', 'issue');
         a.href = i.url; a.target = '_blank'; a.rel = 'noopener nofollow';

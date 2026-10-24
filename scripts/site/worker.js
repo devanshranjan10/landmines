@@ -83,7 +83,7 @@ function remoteEnv(env) {
   return {
     githubToken: env.GITHUB_TOKEN,
     http: { fetch: (url, init) => fetch(url, { signal: AbortSignal.timeout(15_000), ...init }) },
-    cache: edgeCache(caches.default),
+    cache: edgeCache(caches.default, env.LOOKUPS),
   };
 }
 

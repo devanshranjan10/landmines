@@ -18,7 +18,9 @@
     { "pattern": "www.landmine.tech", "custom_domain": true }
   ],
   "workers_dev": true,
-  // 60 MCP requests a minute per IP; lookups are cached at the edge for a day.
+  // 60 MCP and lookup requests a minute per IP; lookups are cached for a day.
   "ratelimits": [{ "name": "MCP_LIMIT", "namespace_id": "1001", "simple": { "limit": 60, "period": 60 } }],
+  // Lookup results, global, kept 30 days: served when GitHub rate-limits a spike (src/remote.ts edgeCache).
+  "kv_namespaces": [{ "binding": "LOOKUPS", "id": "10f1fd50d73f42108472274002e6e0c4" }],
   "observability": { "enabled": true }
 }
