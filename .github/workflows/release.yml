@@ -41,14 +41,14 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: MCP Registry
         run: |
-          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.2/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          curl -fsSL "https://github.com/modelcontextprotocol/registry/releases/download/v1.8.4/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
           ./mcp-publisher login http --domain landmine.tech --private-key "$MCP_REGISTRY_PRIVATE_KEY"
           # A re-run (workflow_dispatch) finds this version already listed; that's fine.
           ./mcp-publisher publish || curl -fsS "https://registry.modelcontextprotocol.io/v0.1/servers?search=tech.landmine/landmine" | grep -q "\"version\":\"$VERSION\""
           # 0.2.1 was listed as io.github.devanshranjan10/landmines; keep that name deprecated in favour of this one.
           ./mcp-publisher login github-oidc
           for i in 1 2 3; do
-            ./mcp-publisher status --status deprecated --all-versions --message "Moved to tech.landmine/landmine" io.github.devanshranjan10/landmines && break
+            ./mcp-publisher status --status deprecated --message "Moved to tech.landmine/landmine" io.github.devanshranjan10/landmines 0.2.1 && break
             sleep 10
           done || true
         env:
