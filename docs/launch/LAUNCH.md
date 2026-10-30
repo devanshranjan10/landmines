@@ -1,4 +1,4 @@
-# Launch kit (drafts only: nothing here has been posted)
+# Launch kit (social posts are drafts; directory submissions are tracked below)
 
 Every number below was measured: the benchmark in `docs/BENCHMARK.md`, the scans and their audit in
 `docs/showcase/`. Don't round up, and keep the caveat lines: the honesty is part of the pitch.
@@ -58,16 +58,25 @@ Use the same text everywhere:
 | Directory | How | Status |
 |---|---|---|
 | Official MCP Registry | automatic from the version tag (`server.json`) | listed, 0.2.2 as `tech.landmine/landmine` |
+| Glama connectors (remote) | imported from the official registry | listed, rated A: glama.ai/mcp/connectors/tech.landmine/landmine |
+| awesome-remote-mcp-servers (punkpeye) | PR, needs the Glama connector badge and a star on the list | PR #3422 open (2026-10-31), CI: endpoint-ok, has-connector |
+| Docker MCP Catalog | PR adding `servers/landmine` (remote) | docker/mcp-registry#6387 open (2026-10-31), validator passes |
+| ToolSDK MCP Registry | PR with npm + remote JSON | toolsdk-ai/toolsdk-mcp-registry#1182 open (2026-10-31), checks pass |
+| mcp.so | issue on chatmcp/mcpso | chatmcp/mcpso#6470 open (2026-10-31) |
+| TensorBlock MCP Index | issue form | TensorBlock/awesome-mcp-servers#5033 open (2026-10-31) |
+| awesome-mcp-list (MobinX) | PR, one bullet | #1037 open (2026-10-31) |
+| Awesome-LLMOps (tensorchord) | PR, Code AI | #1086 open (2026-10-31), DCO sign-off added |
+| Awesome-AITools (ikaijua) | PR, EN + CN + CHANGELOG | #1513 open (2026-10-31) |
 | PulseMCP | ingests the official registry | automatic (check in a few days) |
-| Glama | glama.ai/mcp/servers → Add Server (repo has `glama.json`) | needs your login |
-| awesome-mcp-servers (punkpeye) | PR adding one line under Developer Tools, with the Glama badge; their rule for agent-made PRs is to end the title with 🤖🤖🤖 | after Glama |
+| Glama (repo, for the main awesome list) | glama.ai/mcp/servers → Add Server (repo has `glama.json`) | needs your login |
+| awesome-mcp-servers (punkpeye) | PR under Developer Tools with the Glama *server* badge; agent PRs end the title with 🤖🤖🤖 | blocked on the Glama repo listing |
 | Smithery | smithery.ai → Publish (stdio, `npx -y landmines mcp`) | needs your login |
 | LobeHub MCP | already auto-listed; claim it with `lhm login`, then `lhm plugin claim devanshranjan10-landmines` | needs your login |
 | cursor.directory | Submit → MCP (reads the root `.mcp.json`) | needs your login |
-| mcp.so, mcpservers.org, MCP Market, mcp.directory | each has a submit form; use the text above | needs your email |
-| Cline MCP marketplace | issue form on cline/mcp-marketplace with `logo-400.png` and `llms-install.md`; test it in Cline first | needs a Cline test |
+| mcpservers.org (wong2 list), MCP Market, mcp.directory | each has a submit form; use the text above | needs your email |
 | Claude Code plugin directory | claude.ai/directory/manage (the repo is already a marketplace) | needs your account |
-| awesome-claude-code | their web form only, not PRs | eligible about 2026-11-04 |
+| awesome-claude-code (hesreallyhim) | their web form only, not PRs | eligible about 2026-11-04 |
+| Skipped | jqueryscript/awesome-claude-code, ccplugins, YuzeHao2023, awesome-ai-devtools, cline/mcp-marketplace | no outside PRs merged recently |
 
 ## Hacker News
 
