@@ -19,7 +19,7 @@ landmine reads your lockfile, finds the open GitHub issues filed against the exa
 • a pre-edit hook for 20 agents that pauses a risky edit once, with the workaround
 • an MCP server, local (npx -y landmines mcp) or hosted at https://landmine.tech/mcp
 
-Measured on our own benchmark (landmine-bench): Claude Sonnet 5.5 went from 72/84 to 83/84 (86% → 99%) on 21 held-out traps built from bugs filed after its training cutoff. With web search (36/42) or Context7 (35/42) available, it never used them in 84 sessions.
+Measured on our own benchmark (landmine-bench): Claude Sonnet 5.5 went from 72/84 to 83/84 (86% → 99%) on 21 held-out traps built from bugs filed after its training cutoff. In a same-run comparison: landmine 42/42, web search 36/42, Context7 35/42, no help 35/42. With web search or Context7 available, it never used them in 84 sessions.
 Caveats: it's our own benchmark; every trap was a bug landmine had already indexed, so it measures whether it helps once a bug is known, not recall; only Claude Code was benchmarked.
 
 Across 28 popular open-source repos, the median lockfile pins 395 open GitHub issues filed against its exact versions. 30 of 40 random ones checked out by hand (about 75%).
