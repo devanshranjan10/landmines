@@ -166,6 +166,8 @@ a.chip:hover { border-color: var(--ink-4); color: var(--ink); }
 .hero .sub { margin: 22px auto 0; max-width: 40em; }
 .hero .ctas { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin-top: 34px; }
 .hero .note { margin-top: 14px; font-size: 13.5px; color: var(--ink-3); }
+.hero .ph { margin-top: 18px; }
+.hero .ph img { display: block; width: 250px; height: 54px; margin-inline: auto; }
 
 /* the live lookup: an accent slab with a dotted rim around the white console */
 .console { position: relative; margin: 56px auto 0; max-width: 860px; text-align: left; padding: 6px; border-radius: 34px; background: var(--frame); border: 1px solid var(--frame-line); }
