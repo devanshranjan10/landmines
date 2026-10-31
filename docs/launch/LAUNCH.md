@@ -8,6 +8,7 @@ Every number below was measured: the benchmark in `docs/BENCHMARK.md`, the scans
 | Asset | Where | Use |
 |---|---|---|
 | 50 s demo video (1920×1080, MP4) | https://landmine.tech/media/landmine-demo.mp4 | X/LinkedIn native upload, HN comment, newsletters |
+| Product Hunt page | https://www.producthunt.com/products/landmine | link from the site footer, README badge; launch post goes live on the scheduled day |
 | 68 s launch video (YouTube, public) | https://youtu.be/CncibEdYCDc | Product Hunt video field, YouTube-friendly places, newsletters |
 | Hook GIF (the real Claude Code session) | `docs/media/landmine-hook.gif` (top of the README) | Reddit, GitHub, Discord |
 | Video poster frame | https://landmine.tech/media/landmine-demo-poster.png | thumbnails |

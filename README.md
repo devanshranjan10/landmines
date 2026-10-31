@@ -5,6 +5,7 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 [![landmine-bench](https://img.shields.io/badge/landmine--bench-86%25%E2%86%9299%25-3987e5)](docs/BENCHMARK.md)
 [![website](https://img.shields.io/badge/web-landmine.tech-111110)](https://landmine.tech)
+[![Product Hunt](https://img.shields.io/badge/Product%20Hunt-landmine-da552f?logo=producthunt&logoColor=white)](https://www.producthunt.com/products/landmine)
 
 Website and docs: [landmine.tech](https://landmine.tech) · For AI agents: [llms.txt](https://landmine.tech/llms.txt) · Cite: [`CITATION.cff`](CITATION.cff)
 
