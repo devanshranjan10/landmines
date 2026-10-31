@@ -101,7 +101,7 @@ URL field: https://landmine.tech (or the GitHub repo). Don't link Product Hunt f
 - Description: the 246-character description from `ph-copy.md`.
 - Logo: `thumbnail/thumbnail-240.png` (or `../assets/logo-400.png` if it asks for larger).
 - Images: `gallery/01-hook.png`, `02-how-it-works.png`, `06-benchmark.png`, `08-install.png`.
-- Video: the YouTube link. Categories: Developer Tools, AI, Open Source. Pricing: Free.
+- Video: https://youtu.be/CncibEdYCDc. Categories: Developer Tools, AI, Open Source. Pricing: Free.
 
 ## Uneed (uneed.best)
 

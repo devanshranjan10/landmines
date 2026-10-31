@@ -1,5 +1,7 @@
 # YouTube upload (for the Product Hunt video link)
 
+Uploaded and public: https://youtu.be/CncibEdYCDc
+
 File: `landmine-ph-launch.mp4` (1920×1080, 30 fps, H.264 + AAC, 68 s, loudness −14 LUFS for YouTube).
 Visibility: **Public** or **Unlisted** (Product Hunt embeds both; Private will not play). Category: Science & Technology.
 Thumbnail: YouTube picks a frame; for a custom one use `gallery/01-hook.png` (custom thumbnails need a verified

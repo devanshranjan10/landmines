@@ -28,7 +28,7 @@ Recommended: 2. It is the hook from the video and the gallery.
 - GitHub: https://github.com/devanshranjan10/landmines
 - npm: https://www.npmjs.com/package/landmines
 - Hosted MCP: https://landmine.tech/mcp (MCP Registry: `tech.landmine/landmine`)
-- Video: the YouTube link once you upload `landmine-ph-launch.mp4` (see `youtube.md`)
+- Video: https://youtu.be/CncibEdYCDc (uploaded, public)
 
 ## Topics
 

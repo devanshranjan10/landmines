@@ -10,7 +10,7 @@ Website and docs: [landmine.tech](https://landmine.tech) · For AI agents: [llms
 
 [![A real Claude Code session: landmine pauses an edit that uses drizzle-orm's $client.end(), cites issue #3402 and the workaround from the thread, and the agent switches to its own pg.Pool](docs/media/landmine-hook.gif)](https://landmine.tech/media/landmine-demo.mp4)
 
-<sub>A real Claude Code session, replayed from its transcript (`docs/e2e`). Full 50-second video: [landmine.tech/media/landmine-demo.mp4](https://landmine.tech/media/landmine-demo.mp4).</sub>
+<sub>A real Claude Code session, replayed from its transcript (`docs/e2e`). Full 50-second video: [landmine.tech/media/landmine-demo.mp4](https://landmine.tech/media/landmine-demo.mp4) · 68-second launch video: [YouTube](https://youtu.be/CncibEdYCDc).</sub>
 
 Your coding agent is about to write `await db.$client.end()`. Your lockfile pins
 drizzle-orm **0.36.0**, an open GitHub issue filed against exactly that version
