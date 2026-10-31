@@ -12,7 +12,7 @@ Platform limits below are as of this writing; check the upload form if something
 ## X / Twitter
 
 Files:
-- `x-landmine-16x9.mp4`: 1920×1080, 68 s (under the 2:20 limit), 13.8 MB, loudness −16 LUFS. Attach to post 1.
+- `x-landmine-16x9.mp4`: 1920×1080, 68 s (under the 2:20 limit), 15.2 MB, loudness −16 LUFS. Attach to post 1.
 - `x-card-1-hook.png`, `x-card-2-benchmark.png`, `x-card-3-28-repos.png`, `x-card-4-install.png`: 1200×675 each.
 
 Thread:
@@ -36,7 +36,7 @@ Thread:
 ## LinkedIn
 
 Files:
-- `linkedin-landmine-1x1.mp4`: 1080×1080, 68 s, 4.4 MB, −16 LUFS. The 16:9 video in a square frame with a header
+- `linkedin-landmine-1x1.mp4`: 1080×1080, 68 s, 3.1 MB, −16 LUFS. The 16:9 video in a square frame with a header
   and footer, for the feed.
 - `linkedin-1200x627.png` (product) and `linkedin-benchmark-1200x627.png` (the number): link or image posts.
 
@@ -57,7 +57,7 @@ Post:
 Files:
 - `reddit-hook-session.gif`: 1280×720, 12.6 s, 10 fps, 11.9 MB (Reddit's image/GIF limit is 20 MB). The real Claude
   Code session: the hook pauses the edit and the agent switches to its own `pg.Pool`. Autoplays in the feed.
-- `reddit-landmine-720p.mp4`: 1280×720, 68 s, 3.7 MB (video limit 1 GB / 15 min). The full launch video.
+- `reddit-landmine-720p.mp4`: 1280×720, 68 s, 2.9 MB (video limit 1 GB / 15 min). The full launch video.
 
 Post the GIF (or the MP4) natively and put the link in the text, not the title.
 
