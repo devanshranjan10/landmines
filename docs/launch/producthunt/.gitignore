@@ -1,0 +1,3 @@
+# Large launch media stays local (upload it directly; see README.md)
+*.mp4
+platforms/reddit-hook-session.gif
