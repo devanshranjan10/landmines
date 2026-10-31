@@ -65,10 +65,11 @@ Use the same text everywhere:
 | Docker MCP Catalog | PR adding `servers/landmine` (remote) | docker/mcp-registry#6387 open (2026-10-31), validator passes |
 | ToolSDK MCP Registry | PR with npm + remote JSON | toolsdk-ai/toolsdk-mcp-registry#1182 open (2026-10-31), checks pass |
 | mcp.so | issue on chatmcp/mcpso | chatmcp/mcpso#6470 open (2026-10-31) |
-| TensorBlock MCP Index | issue form | TensorBlock/awesome-mcp-servers#5033 open (2026-10-31) |
+| TensorBlock MCP Index | issue form | **listed**: merged in TensorBlock/awesome-mcp-servers#5034 (2026-10-31) |
 | awesome-mcp-list (MobinX) | PR, one bullet | #1037 open (2026-10-31) |
 | Awesome-LLMOps (tensorchord) | PR, Code AI | #1086 open (2026-10-31), DCO sign-off added |
-| Awesome-AITools (ikaijua) | PR, EN + CN + CHANGELOG | #1513 open (2026-10-31) |
+| Awesome-AITools (ikaijua) | PR, EN + CN + CHANGELOG | #1513 open; maintainer asked about usage, benchmark independence, false positives and hosted limits; answered 2026-10-31 |
+| awesome-generative-ai (steven2358) | PR to DISCOVERIES.md, Coding > Developer tools (main list needs 1k followers; FIFO queue of ~200 PRs) | #1967 open (2026-10-31) |
 | PulseMCP | ingests the official registry | automatic (check in a few days) |
 | Glama (repo, for the main awesome list) | glama.ai/mcp/servers → Add Server (repo has `glama.json`) | needs your login |
 | awesome-mcp-servers (punkpeye) | PR under Developer Tools with the Glama *server* badge; agent PRs end the title with 🤖🤖🤖 | blocked on the Glama repo listing |
@@ -78,7 +79,7 @@ Use the same text everywhere:
 | mcpservers.org (wong2 list), MCP Market, mcp.directory | each has a submit form; use the text above | needs your email |
 | Claude Code plugin directory | claude.ai/directory/manage (the repo is already a marketplace) | needs your account |
 | awesome-claude-code (hesreallyhim) | their web form only, not PRs | eligible about 2026-11-04 |
-| Skipped | jqueryscript/awesome-claude-code, ccplugins, YuzeHao2023, awesome-ai-devtools, cline/mcp-marketplace | no outside PRs merged recently |
+| Skipped | jqueryscript/awesome-claude-code, ccplugins, YuzeHao2023, awesome-ai-devtools, cline/mcp-marketplace, awesome-ai-coding-tools, awesome-vibe-coding, e2b awesome-ai-agents, wong2 (form only), awesome-cursorrules, Awesome-LLM | no outside PRs merged this month; sourcegraph/awesome-code-ai and appcypher/awesome-mcp-servers are archived |
 
 ## Hacker News
 
